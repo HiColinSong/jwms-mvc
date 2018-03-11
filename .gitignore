@@ -1,0 +1,6 @@
+bower_components
+node_modules
+/target/
+.project
+.DS_Store
+js/.DS_Store
