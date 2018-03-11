@@ -1,0 +1,32 @@
+{
+  "name": "bxapi",
+  "version": "1.0.0",
+  "description": "build RESTFUL api app for bxweb",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Biosensors/bxapi.git"
+  },
+  "keywords": [
+    "Biosensors",
+    "bx",
+    "api"
+  ],
+  "author": "Yadong Zhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Biosensors/bxapi/issues"
+  },
+  "homepage": "https://github.com/Biosensors/bxapi#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mssql": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  }
+}
