@@ -13,6 +13,9 @@ app.get('/', function (req, res) {
     return res.send({ error: true, message: 'hello, Biosensors bxapi!' })
 });
  
+var pickingHandler = require('./controllers/packingHandler');
+app.get('/bxapi/transOrder/:orderNo.json',pickingHandler.getTransOrder);
+
 // port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
 app.listen(8080, function () {
     console.log('Node app is running on port 8080');
