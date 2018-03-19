@@ -41,7 +41,9 @@ exports.getOrder=function(orderNo,type){
 };
 
 exports.getItem=function(serialNo){
-	item.serialNo=serialNo;
-	return item;
+	var clone={};
+	 Object.assign(clone,item);
+	clone.serialNo=serialNo;
+	return clone;
 };
 
