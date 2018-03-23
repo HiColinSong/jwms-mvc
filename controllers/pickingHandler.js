@@ -41,8 +41,9 @@ exports.removeItem=function(req,res){
 
 exports.setStatus=function(req,res){
 	order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
+	var status=req.params.status;
 	if (order){
-		order.pickingStatus=req.params.status
+		order.pickingStatus=(status!=='reset')?status:undefined;
 		return res.status(200).send(order);
 	} else {
 		return res.status(200).send({error:true,message:"order "+orderNo+" doesn't exist!"});
