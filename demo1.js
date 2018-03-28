@@ -34,8 +34,7 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  // console.log('Invoking BAPI_USER_GET_DETAIL');
-  console.log('Invoking ZIM_BX_STOCK_UPDATE');
+  console.log('Invoking BAPI_USER_GET_DETAIL');
   // client.invoke('BAPI_USER_GET_DETAIL',
   //   { USERNAME: 'yd.zhu' },
   //   function(err, res) {
@@ -44,20 +43,22 @@ client.connect(function(err) {
   //     }
   //     console.log(res);
   //   });
+  console.log('Invoking ZIM_BX_STOCK_UPDATE');
     client.invoke('ZIM_BX_STOCK_UPDATE',
     {
-      IT_BX_STOCK:{
-        TRANS: 'PGI',
+      IT_BX_STOCK:[{
+        // TRANS: 'PGI', //decrease
+        TRANS: 'PGR', //increase
         WERKS:'2100',
         MATNR:'BFR1-3019',
         CHARG: 'W16120115',
-        SERIAL:'SN100012',
+        SERIAL:'SN100023',
         DOCNO: '1111',
         ENDCUST:'12333',
         BXDATE:'20180101',
         BXTIME:'000000',
         BXUSER:'yadong'
-      }
+      }]
     },
     function(err, res) {
       if (err) {
