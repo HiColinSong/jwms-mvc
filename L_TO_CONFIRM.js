@@ -36,7 +36,7 @@ client.connect(function(err) {
 
   console.log('Invoking L_TO_CONFIRM');
   client.invoke('L_TO_CONFIRM',
-    { USERNAME: 'yd.zhu' },
+    {I_LGNUM : 'Z01',I_TANUM:'2000178240'},
     function(err, res) {
       if (err) {
         return console.error('Error invoking L_TO_CONFIRM:', err);

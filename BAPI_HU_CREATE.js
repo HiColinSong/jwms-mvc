@@ -34,12 +34,12 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking BAPI_USER_GET_DETAIL');
-  client.invoke('BAPI_USER_GET_DETAIL',
+  console.log('Invoking BAPI_HU_CREATE');
+  client.invoke('BAPI_HU_CREATE',
     { USERNAME: 'yd.zhu' },
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_USER_GET_DETAIL:', err);
+        return console.error('Error invoking BAPI_HU_CREATE:', err);
       }
       console.log(res);
     });

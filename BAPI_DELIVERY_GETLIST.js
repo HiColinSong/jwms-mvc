@@ -44,12 +44,13 @@ client.connect(function(err) {
     {
       IS_DLV_DATA_CONTROL:{
         HEAD_STATUS:"X",
-        ITEM:"X"
+        ITEM:"X",
+        HU_DATA:"X"
       },
        IT_VBELN:[{
         SIGN:"I",
         OPTION:"EQ",
-        DELIV_NUMB_LOW:"0800379625" //add leading 0
+        DELIV_NUMB_LOW:"0800379646" //add leading 0
        }]
     },
     function(err, res) {

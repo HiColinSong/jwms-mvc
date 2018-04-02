@@ -1,0 +1,11 @@
+{
+	"bitLdapConfig":{
+		"url": "ldap://SGDC06.bitsg.bsi.corp",
+        "baseDN": "DC=bitsg,DC=bsi,DC=corp"
+	},
+	"authorizedUsers":[
+		"bitsg\\yd.zhu",
+		"bitsg\\ch.tan",
+		"bitsg\\mia.ali"
+	]
+}
