@@ -11,7 +11,7 @@ exports.checkLoginStatus=function(req,res){
 			return res.status(200).send(data);
 		}
 	  else
-	    	return res.sendStatus(401);
+	    	return res.sendStatus(200);
 };
 
 exports.authCheck=function(req, res, next) {
@@ -32,7 +32,7 @@ exports.login=function(req, res) {
 	ad.authenticate(loginUsername, req.body.password, function(err, auth) {
 	  if (err) {
 	    console.log('ERROR: '+JSON.stringify(err));
-	    return res.status(401).send({message:"incorrect username or password!"});
+	    return res.status(403).send({message:"incorrect username or password!"});
 	  }
 	  
 	  if (auth) {
@@ -49,12 +49,12 @@ exports.login=function(req, res) {
 			session.user = userObj;
 			res.status(200).send({loginUser:{username:loginUsername}});
 		} else{
-			res.status(401).send({message:"You are not authorized to use BX, please contact to IT department."});
+			res.status(403).send({message:"You are not authorized to use BX, please contact to IT department."});
 		}
 	  }
 	  else {
 	    console.log('Authentication failed!');
-	    return res.status(401).send({message:"incorrect username or password!"});
+	    return res.status(403).send({message:"incorrect username or password!"});
 	  }
 	});
 
@@ -64,7 +64,7 @@ exports.login=function(req, res) {
 exports.logout=function(req, res) {
 	req.session.user=undefined;
 	req.session.destroy();
-  	res.send("logout success!");
+  	return res.status(200).send({loginStatus:"logout"});
 };
 
 

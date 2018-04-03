@@ -11,6 +11,29 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
+// [‎02-‎Apr-‎18 5:43 PM]  Christian Kosasih Tan:  
+// GR1 GR - PO
+// GR1X  GR - PO - Cancellation
+// GR2 GR - Production
+// GR2X  GR - Production - Cancellation
+// RSV Reservation
+// RSVX  Reservation - Cancellation
+// PIK Picking
+// PIKX  Picking Cancellation
+// PAK Packing
+// PAKX  Packing Cancellation
+// PGI PGI
+// PGIX  PGI Cancellation
+// PGR PGR
+// PGRX  PGR Cancellation
+// CFI Consignment fill up
+// CPI Consignment pick up
+// CRE Consignment Return
+// CREX  Consignment Return Cancellation
+// CIS Consignment Issue
+// CISX  Consignment Issue Cancellation 
+ 
+
 
 "use strict";
 
