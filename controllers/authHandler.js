@@ -9,7 +9,7 @@ exports.checkLoginStatus=function(req,res){
 			return res.status(200).send(data);
 		}
 	  else
-	    	return res.sendStatus(401);
+	    	return res.sendStatus(200);
 };
 
 exports.authCheck=function(req, res, next) {
