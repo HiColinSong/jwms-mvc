@@ -23,10 +23,13 @@
   },
   "homepage": "https://github.com/Biosensors/bxapi#readme",
   "dependencies": {
+    "activedirectory": "^0.7.2",
     "body-parser": "^1.18.2",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "mssql": "^4.1.0"
+    "mssql": "^4.1.0",
+    "node-rfc": "^0.1.13"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
