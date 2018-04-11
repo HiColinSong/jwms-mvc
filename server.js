@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const session = require("express-session");
-const cors = require('cors');
 
  
 app.use(bodyParser.json());
@@ -10,25 +9,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-//cors
-var originsWhitelist = [
-  'http://localhost.bx.com',      //this is my front-end url for development
-   'http://www.myproductionurl.com'
-];
 
-var corsOptions = {
-  origin: function(origin, callback){
-        var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
-        callback(null, isWhitelisted);
-  },
-  credentials:true
-}
-app.use(cors(corsOptions));
-//  app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
  app.use(session({
  	secret:"bxuser",

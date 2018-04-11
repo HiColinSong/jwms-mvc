@@ -1,14 +1,16 @@
 'use strict';
 
 const util = require('../config/util');
-var order;
+const sapSvc =require('../config/sapService');
+var order,promise;
 exports.getOrder=function(req,res){
-	order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
-	if (order){
-		return res.status(200).send(order);
-	} else {
-		return res.status(200).send({error:true,message:"order "+orderNo+" doesn't exist!"});
-	}
+	// order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
+	promise = sapSvc.getDeliveryOrder(req.params.orderNo);
+	promise.then(function(data){
+		return res.status(200).send(util.cleanObject(data));
+	},function (err){
+		return res.status(200).send({error:true,message:err});
+	})
 };
 
 exports.addItem=function(req,res){

@@ -46,4 +46,15 @@ exports.getItem=function(serialNo){
 	clone.serialNo=serialNo;
 	return clone;
 };
+ 
+ exports.cleanObject = function (object){
+ 	for (var key in object) {
+	    if (object.hasOwnProperty(key)) {
+		        if (Array.isArray(object[key])&&object[key].length===0){
+		        	object[key]=undefined;
+		        }
+		    }
+		}
+		return object;
+ }
 
