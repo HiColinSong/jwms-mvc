@@ -41,7 +41,8 @@ client.connect(function(err) {
 
   console.log('Invoking BAPI_PO_GETDETAIL');
   client.invoke('BAPI_PO_GETDETAIL',
-    {PURCHASEORDER : '6000000900'},
+    {PURCHASEORDER : ' 7000001025'},
+    // {PURCHASEORDER : ' 7000001024'},
     function(err, res) {
       if (err) {
         return console.error('Error invoking BAPI_PO_GETDETAIL:', err);

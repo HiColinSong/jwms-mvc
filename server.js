@@ -40,6 +40,7 @@ app.get('/bxapi/packing/add-item-to-hu/:orderNo/:huNo/:serialNo.json',auth.authC
 app.get('/bxapi/packing/remove-item-from-hu/:orderNo/:huNo/:serialNo.json',auth.authCheck,packingHandler.removeItemtoHu);
 
 var pickingHandler = require('./controllers/pickingHandler');
+app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
 app.get('/bxapi/picking/get-order/:orderNo.json',auth.authCheck,pickingHandler.getOrder);
 app.get('/bxapi/picking/add-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.addItem);
 app.get('/bxapi/picking/remove-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.removeItem);

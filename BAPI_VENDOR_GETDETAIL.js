@@ -11,10 +11,14 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
+//TCODE: SE16 (Table browser)
+//TCODE: EKKO (Header)
+//TCODE: EKPO (Item)
+//SE37: Check BAPI
+
 
 "use strict";
 
-//var rfc = require('rfc');
 var rfc = require('node-rfc');
 
 var connParams = {
@@ -25,10 +29,9 @@ var connParams = {
   client: '200'
 };
 
-var client = new rfc.Client(connParams);
+var client = new rfc.Client(connParams, true);
 
 console.log('Client Version: ', client.getVersion());
-console.log('Are we connected?', client.ping());
 
 console.log('Connecting...');
 client.connect(function(err) {
@@ -36,16 +39,15 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking BAPI_WHSE_TO_GET_DETAIL');
-  client.invoke('BAPI_WHSE_TO_GET_DETAIL',
-    // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000167887'},
-    // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178282'},
-    {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178283'},
+  console.log('Invoking BAPI_VENDOR_GETDETAIL');
+  client.invoke('BAPI_VENDOR_GETDETAIL',
+    {VENDORNO:'0000032501'},
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_WHSE_TO_GET_DETAIL:', err);
+        return console.error('Error invoking BAPI_VENDOR_GETDETAIL:', err);
       }
       console.log(res);
     });
+  
 });
 
