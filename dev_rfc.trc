@@ -1,0 +1,9 @@
+
+**** Trace file opened at 2018-04-19, 21:31:20 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: F:\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 15 Step 6), Operating_system: Windows NT 6.1
+ Hostname: YADONG-WIN7, IP address: 172.32.200.106, IPv6 address: 172.32.200.106
+
+The function module "WS_REVERSE_GOODS_ISSUE" cannot be used for 'remote' calls.
