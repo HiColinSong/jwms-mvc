@@ -36,7 +36,10 @@ client.connect(function(err) {
 
   console.log('Invoking BAPI_HU_CREATE');
   client.invoke('BAPI_HU_CREATE',
-    { USERNAME: 'yd.zhu' },
+    {
+      HEADERPROPOSAL:{ PACK_MAT:"C-10832-000", EXT_ID_HU_2:"20 digits BX HUNo" },
+     HUITEM:{ PACK_QTY:10, MATERIAL:"BMXP-2208"}
+    },
     function(err, res) {
       if (err) {
         return console.error('Error invoking BAPI_HU_CREATE:', err);
