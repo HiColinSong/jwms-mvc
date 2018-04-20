@@ -6,7 +6,7 @@ exports.checkLoginStatus=function(req,res){
 	if (req.session&&req.session.user){
 			var data={
 				loginUser:{
-					username:req.session.user.username
+					username:req.session.user
 			}};
 			return res.status(200).send(data);
 		}

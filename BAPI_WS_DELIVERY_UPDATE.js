@@ -39,14 +39,14 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking BAPI_WS_DELIVERY_UPDATE - for PGI');
-  client.invoke('BAPI_WS_DELIVERY_UPDATE',
-   { VBKOK_WA:{vbeln_vl: "0800401130",wabuc: "X",wadat_ist: 20180420},
-     commit:"X",
-     Delivery:"0800401130"},
+  console.log('Invoking WS_DELIVERY_UPDATE - for PGI');
+  client.invoke('WS_DELIVERY_UPDATE',
+   { VBKOK_WA:{VBELN_VL: "0800401130",WABUC: "X",WADAT_IST: 20180420},
+     COMMIT:"X",
+     DELIVERY:"0800401130"},
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_WS_DELIVERY_UPDATE:', err);
+        return console.error('Error invoking WS_DELIVERY_UPDATE:', err);
       }
       console.log(res);
     });

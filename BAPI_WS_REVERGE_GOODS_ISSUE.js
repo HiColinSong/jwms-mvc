@@ -41,7 +41,7 @@ client.connect(function(err) {
 
   console.log('Invoking WS_REVERSE_GOODS_ISSUE - PGI REVERSAL');
   client.invoke('WS_REVERSE_GOODS_ISSUE',
-   {I_VBELN:'0800401130',I_BUDAT:'20180420',I_BUDAT:'J',I_COUNT:"001",I_TCODE:"VL09"},
+   {I_VBELN:'0800401130',I_BUDAT:20180420,I_BUDAT:'J',I_COUNT:'001',I_TCODE:'VL09'},
     function(err, res) {
       if (err) {
         return console.error('Error invoking WS_REVERSE_GOODS_ISSUE:', err);

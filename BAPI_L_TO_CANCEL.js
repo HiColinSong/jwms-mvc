@@ -39,12 +39,12 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking BAPI_VENDOR_GETDETAIL');
-  client.invoke('BAPI_VENDOR_GETDETAIL',
+  console.log('Invoking L_TO_CANCEL');
+  client.invoke('L_TO_CANCEL',
    {I_LGNUM:'Z01',I_TANUM:'2000178283',I_COMMIT_WORK:'x'},
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_VENDOR_GETDETAIL:', err);
+        return console.error('Error invoking L_TO_CANCEL:', err);
       }
       console.log(res);
     });

@@ -38,7 +38,17 @@ client.connect(function(err) {
   client.invoke('BAPI_HU_CREATE',
     {
       HEADERPROPOSAL:{ PACK_MAT:"C-10832-000", EXT_ID_HU_2:"20 digits BX HUNo" },
-     HUITEM:{ PACK_QTY:10, MATERIAL:"BMXP-2208"}
+     HUITEM:[{ PACK_QTY:10, MATERIAL:"BMXP-2208"}]
+    },
+    function(err, res) {
+      if (err) {
+        return console.error('Error invoking BAPI_HU_CREATE:', err);
+      }
+      console.log(res);
+    });
+   client.invoke('BAPI_TRANSACTION_COMMIT',
+    {
+     WAIT:'x'
     },
     function(err, res) {
       if (err) {
