@@ -13,17 +13,14 @@ const sapSvc =require('../config/sapService');
 var order,promise,orderNo,orderType,huNo,serialNo;
 
 exports.getOrder=function(req,res){
-	// orderNo = req.params.orderNo;
-	// orderType = orderNo.substring(0,2);
-	// order = util.getOrder(orderNo,orderType);
-	// if (order){
-	// 	return res.status(200).send(order);
-	// } else {
-	// 	return res.status(200).send({error:true,message:"order "+orderNo+" doesn't exist!"});
-	// }
 	promise = sapSvc.getDeliveryOrder(req.params.orderNo);
 	promise.then(function(data){
-		return res.status(200).send(data);
+		order = util.deliveryOrderConverter(data);
+		if (order&&order.DONumber){
+			return res.status(200).send(order);
+		} else {
+			return res.status(200).send({error:true,message:"The Delivery Order "+req.params.orderNo+" doesn't exist!"});
+		}
 		// return res.status(200).send(util.cleanObject(data));
 	},function (err){
 		return res.status(200).send({error:true,message:err});

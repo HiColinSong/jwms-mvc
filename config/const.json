@@ -4,8 +4,8 @@
         "baseDN": "DC=bitsg,DC=bsi,DC=corp"
 	},
 	"authorizedUsers":[
-		"bitsg\\yd.zhu",
-		"bitsg\\ch.tan",
-		"bitsg\\mia.ali"
+		"BITSG\\yd.zhu",
+		"BITSG\\ch.tan",
+		"BITSG\\mia.ali"
 	]
 }

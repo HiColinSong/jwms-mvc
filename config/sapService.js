@@ -2,7 +2,7 @@
 
  var rfc = require('node-rfc');
  var Promise = require('Promise').default;
-
+ const util = require('./util');
 var connParams = {
   user: 'yd.zhu',
   passwd: 'yadong123',

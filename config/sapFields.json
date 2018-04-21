@@ -1,0 +1,22 @@
+{
+    "deliveryOrderHeaderFields": {
+       "DONumber":"VBELN",
+       "DOCreationUser":"ERNAM",
+       "DOCreationDate":"ERDAT",
+       "ShipToCustomer":"KUNNR",
+       "plant":"WERKS",
+       "warehouseNo":"LGNUM"
+    },
+    "deliveryOrderItemFields": {
+        "DONumber":"VBELN",
+        "MaterialCode":"MATNR",
+        "BatchNo":"CHARG",
+        "VendorBatch":"LICHN",
+        "DOItemNumber":"POSNR",
+        "DOQuantity":"LFIMG",
+        "ProductHierarchy":"PRODH",
+        "EANCode":"EAN11"
+     },
+    "transferOrderFields":{},
+    "purchaseOrderFields":{}
+}
