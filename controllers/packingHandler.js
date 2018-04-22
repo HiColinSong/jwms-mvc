@@ -10,21 +10,24 @@
 
 const util = require('../config/util');
 const sapSvc =require('../config/sapService');
-var order,promise,orderNo,orderType,huNo,serialNo;
+var sapOrder, order,promise,orderNo,orderType,huNo,serialNo;
 
 exports.getOrder=function(req,res){
-	promise = sapSvc.getDeliveryOrder(req.params.orderNo);
-	promise.then(function(data){
-		order = util.deliveryOrderConverter(data);
-		if (order&&order.DONumber){
-			return res.status(200).send(order);
-		} else {
-			return res.status(200).send({error:true,message:"The Delivery Order "+req.params.orderNo+" doesn't exist!"});
+	(async function () {
+		try {
+			sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			order = util.deliveryOrderConverter(sapOrder);
+			util.removeIncompleteItem(order.items);
+			if (order&&order.DONumber){
+				return res.status(200).send(order);
+			} else {
+				return res.status(200).send({error:true,message:"The Delivery Order "+req.params.orderNo+" doesn't exist!"});
+			}
+		} catch (error) {
+			return res.status(200).send({error:true,message:error});
 		}
-		// return res.status(200).send(util.cleanObject(data));
-	},function (err){
-		return res.status(200).send({error:true,message:err});
-	})
+	})()
+
 };
 
 exports.addHuToOrder=function(req,res){

@@ -16,3 +16,40 @@ NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 
  Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
 
 The function module "WS_REVERSE_GOODS_ISSUE" cannot be used for 'remote' calls.
+
+**** Trace file opened at 2018-04-21, 19:23:26 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.200.101, IPv6 address: 172.32.200.101
+
+Error during connect: 
+LOCATION    CPIC (TCP/IP) on local host BITLT0470 with Unicode
+ERROR       hostname '172.32.70.670' unknown
+TIME        Sat Apr 21 19:23:26 2018
+RELEASE     753
+COMPONENT   NI (network interface)
+VERSION     40
+RC          -2
+MODULE      D:/depot/bas/753_REL/src/base/ni/ninti.c
+LINE        898
+DETAIL      NiPGetHostByName: '172.32.70.670' not found
+SYSTEM CALL getaddrinfo
+COUNTER     3
+
+
+Error during connect: 
+LOCATION    CPIC (TCP/IP) on local host with Unicode
+ERROR       hostname '172.32.70.670' unknown
+TIME        Sat Apr 21 19:24:18 2018
+RELEASE     753
+COMPONENT   NI (network interface)
+VERSION     40
+RC          -2
+MODULE      D:/depot/bas/753_REL/src/base/ni/nixxhl.cpp
+LINE        198
+DETAIL      NiHLGetNodeAddr: hostname cached as unknown
+COUNTER     3
+
+

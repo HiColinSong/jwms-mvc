@@ -58,7 +58,7 @@ exports.getItem=function(serialNo){
 		return object;
  }
 
-//  var deliveryOrder = require('./do.json');
+//  conver SAP Delivery Order into BX friendly DO, i.e. only output necessary fields with meaningful field name
  var sapFields = require('./sapFields.json');
  exports.deliveryOrderConverter = function (deliveryOrder){
 	 var _do = {items:[]};
@@ -83,4 +83,17 @@ exports.getItem=function(serialNo){
 	 }
 	 return _do;
  }
+
+ //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
+exports.removeIncompleteItem = function (items){
+	if (items.length>0){
+		for (let i = 0; i < items.length;) {
+			if (!items[i].BatchNo||!items[i].MaterialCode||!items[i].DOQuantity===0){
+				items.splice(i,1);
+			} else {
+				i++;
+			}
+		}
+	}
+}
 
