@@ -11,11 +11,6 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
-//TCODE: SE16 (Table browser)
-//TCODE: EKKO (Header)
-//TCODE: EKPO (Item)
-//SE37: Check BAPI
-
 
 "use strict";
 
@@ -41,13 +36,15 @@ client.connect(function(err) {
 
   console.log('Invoking L_TO_CONFIRM');
   client.invoke('L_TO_CONFIRM',
-    {I_LGNUM : 'Z01',I_TANUM:'2000178283'},
+    {I_LGNUM : 'Z01',I_TANUM:'2000178282',
+      T_LTAP_CONF : [{ TANUM:"2000178282", TAPOS:"0001", SQUIT:"X"}],
+      I_UPDATE_TASK:"X"
+    },
     function(err, res) {
       if (err) {
         return console.error('Error invoking L_TO_CONFIRM:', err);
       }
       console.log(res);
     });
-  
 });
 

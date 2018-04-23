@@ -4,9 +4,12 @@
        "DOCreationUser":"ERNAM",
        "DOCreationDate":"ERDAT",
        "ShipToCustomer":"KUNNR",
-       "plant":"WERKS",
-       "warehouseNo":"LGNUM"
+       "Plant":"WERKS",
+       "WarehouseNo":"LGNUM"
     },
+    "deliveryOrderHeaderSTSFields": {
+        "confirmStatus":"WBSTK"
+     },
     "deliveryOrderItemFields": {
         "DONumber":"VBELN",
         "MaterialCode":"MATNR",
@@ -16,6 +19,9 @@
         "DOQuantity":"LFIMG",
         "ProductHierarchy":"PRODH",
         "EANCode":"EAN11"
+     },
+    "deliveryOrderItemSTSFields": {
+        "PackingStatus":"PKSTA"
      },
     "transferOrderFields":{},
     "purchaseOrderFields":{}

@@ -53,3 +53,30 @@ DETAIL      NiHLGetNodeAddr: hostname cached as unknown
 COUNTER     3
 
 
+
+**** Trace file opened at 2018-04-23, 09:31:15 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: C:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Cannot be processed with this transaction.
+
+**** Trace file opened at 2018-04-23, 09:31:50 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: C:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Cannot be processed with this transaction.
+
+**** Trace file opened at 2018-04-23, 09:32:03 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: C:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Cannot be processed with this transaction.

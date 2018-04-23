@@ -7,7 +7,8 @@
         server: 'sgdevbx', 
         database: 'BIOTRACK' 
     };
-    const query = "INSERT INTO dbo.SAP_DODetail VALUES ('0800379646','do125','m123456','b123456','vb123456',20);"
+    // const query = "INSERT INTO dbo.SAP_DODetail VALUES ('0800379646','do125','m123456','b123456','vb123456',20);"
+    const query = "select * from dbo.SAP_DODetail";
     // connect to your database
     sql.connect(config, function (err) {
     
@@ -23,6 +24,7 @@
 
             // send records as a response
             console.log(recordset);
+            // res.send(recordset);
             
         });
     });

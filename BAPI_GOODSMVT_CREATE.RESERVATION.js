@@ -11,11 +11,6 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
-//TCODE: SE16 (Table browser)
-//TCODE: EKKO (Header)
-//TCODE: EKPO (Item)
-//SE37: Check BAPI
-
 
 "use strict";
 
@@ -39,20 +34,16 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking WS_DELIVERY_UPDATE - for PGI');
-  client.invoke('WS_DELIVERY_UPDATE',
-      {
-        VBKOK_WA:{VBELN : "0800379646", WABUC: "X", WADAT_IST:20180420}
-        ,COMMIT:"X"
-        , DELIVERY:"0925003431"
-      },
-
-  //  { VBKOK_WA:{VBELN_VL: "0800401130",WABUC: "X",WADAT_IST: 20180420},
-  //    COMMIT:"X",
-  //    DELIVERY:"0800401130"},
+  console.log('Invoking BAPI_GOODSMVT_CREATE');
+  client.invoke('BAPI_GOODSMVT_CREATE',
+    { GOODSMVT_HEADER:{PSTNG_DATE:"20180420"},
+      GOODSMVT_CODE:{GM_CODE:"06"},
+      GOODSMVT_ITEM: [
+        {PLANT:"2100",ENTRY_QNT:1, RESERV_NO: "0001687501", RES_ITEM: "0001"}        ]
+    },
     function(err, res) {
       if (err) {
-        return console.error('Error invoking WS_DELIVERY_UPDATE:', err);
+        return console.error('Error invoking BAPI_GOODSMVT_CREATE:', err);
       }
       console.log(res);
     });

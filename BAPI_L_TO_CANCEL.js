@@ -41,7 +41,7 @@ client.connect(function(err) {
 
   console.log('Invoking L_TO_CANCEL');
   client.invoke('L_TO_CANCEL',
-   {I_LGNUM:'Z01',I_TANUM:'2000178283',I_COMMIT_WORK:'x'},
+   {I_LGNUM:'Z01',I_TANUM:'2000178282',I_COMMIT_WORK:'X'},
     function(err, res) {
       if (err) {
         return console.error('Error invoking L_TO_CANCEL:', err);

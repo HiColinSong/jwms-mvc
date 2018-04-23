@@ -2,7 +2,6 @@
 
  var rfc = require('node-rfc');
  var Promise = require('Promise').default;
- const util = require('./util');
 var connParams = {
   user: 'yd.zhu',
   passwd: 'yadong123',
@@ -19,6 +18,7 @@ exports.getDeliveryOrder=function(orderNo){
 	var param = {
       IS_DLV_DATA_CONTROL:{
         HEAD_STATUS:"X",
+        ITEM_STATUS:"X",
         ITEM:"X",
         HU_DATA:"X"
       },

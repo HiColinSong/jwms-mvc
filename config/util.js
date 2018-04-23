@@ -63,12 +63,20 @@ exports.getItem=function(serialNo){
  exports.deliveryOrderConverter = function (deliveryOrder){
 	 var _do = {items:[]};
 	 var headerFields=sapFields.deliveryOrderHeaderFields;
+	 var headerSTSFields=sapFields.deliveryOrderHeaderSTSFields;
 	 var itemFields=sapFields.deliveryOrderItemFields;
+	 var itemSTSFields=sapFields.deliveryOrderItemSTSFields;
 	 var header,doItems,doItem;
 	 if (deliveryOrder.ET_DELIVERY_HEADER&&deliveryOrder.ET_DELIVERY_HEADER.length>0){
 		 header = deliveryOrder.ET_DELIVERY_HEADER[0];
 	 	for (let key in headerFields) {
 			_do[key]=header[headerFields[key]];
+		 }
+	 }
+	 if (deliveryOrder.ET_DELIVERY_HEADER_STS&&deliveryOrder.ET_DELIVERY_HEADER_STS.length>0){
+		 header = deliveryOrder.ET_DELIVERY_HEADER_STS[0];
+	 	for (let key in headerSTSFields) {
+			_do[key]=header[headerSTSFields[key]];
 		 }
 	 }
 	 if (deliveryOrder.ET_DELIVERY_ITEM&&deliveryOrder.ET_DELIVERY_ITEM.length>0){
@@ -78,6 +86,16 @@ exports.getItem=function(serialNo){
 			_do.items.push({});
 			for (let key in itemFields) {
 				 _do.items[i][key]=doItem[itemFields[key]];
+			}
+		}
+	 }
+	 if (deliveryOrder.ET_DELIVERY_ITEM_STS&&deliveryOrder.ET_DELIVERY_ITEM_STS.length>0){
+		 doItems = deliveryOrder.ET_DELIVERY_ITEM_STS;
+		for (let i = 0; i < doItems.length; i++) {
+			doItem = doItems[i];
+			_do.items.push({});
+			for (let key in itemSTSFields) {
+				 _do.items[i][key]=doItem[itemSTSFields[key]];
 			}
 		}
 	 }
