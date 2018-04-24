@@ -1,11 +1,11 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdateDO]    Script Date: 24-Apr-18 5:52:34 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePackHeader]    Script Date: 24-Apr-18 3:35:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[InsertOrUpdateDO] 
+ALTER PROCEDURE [dbo].[InsertOrUpdatePackHeader] 
 (
 	@DONumber varchar(12),
 	@DOCreationDate varchar(10),
@@ -44,8 +44,10 @@ DECLARE
     @BatchNumber varchar (10),
     @VendorBatch varchar (20),
     @DOQuantity varchar (22)
+    --@uncompleted bit;
 
 SET @nth=1
+    --@uncompleted='true';
     while 1=1
     BEGIN
         SET @DOItemNumber = (select dbo.nth_occur(@DOItemNumberList,',',@nth));
@@ -55,11 +57,18 @@ SET @nth=1
         SET @VendorBatch = (select dbo.nth_occur(@VendorBatchList,',',@nth));
         SET @DOQuantity = (select dbo.nth_occur(@DOQuantityList,',',@nth));
 
-		--delete old records and insert new one
-		DELETE FROM dbo.SAP_DODetail WHERE DONumber = @DONumber and DOItemNumber=@DOItemNumber
-
-        INSERT INTO dbo.SAP_DODetail(DONumber,DOItemNumber,MaterialCode,BatchNumber,VendorBatch,DOQuantity)
-            VALUES (@DONumber,@DOItemNumber,@MaterialCode,@BatchNumber,@VendorBatch, CAST(@DOQuantity AS NUMERIC(18,4)))
+        IF EXISTS (SELECT DONumber from dbo.SAP_DODetail where DONumber = @DONumber and DOItemNumber=@DOItemNumber)
+            BEGIN
+                UPDATE dbo.SAP_DODetail 
+                    SET MaterialCode = @MaterialCode ,
+                        BatchNumber = @BatchNumber ,
+                        VendorBatch = @VendorBatch ,
+                        DOQuantity	 = CAST(@DOQuantity AS NUMERIC(18,4)) 
+                WHERE	DONumber = @DONumber and DOItemNumber=@DOItemNumber
+            END
+        ELSE
+            INSERT INTO dbo.SAP_DODetail(DONumber,DOItemNumber,MaterialCode,BatchNumber,VendorBatch,DOQuantity)
+                VALUES (@DONumber,@DOItemNumber,@MaterialCode,@BatchNumber,@VendorBatch, CAST(@DOQuantity AS NUMERIC(18,4)))
 
 		SET @nth=@nth+1
         continue;

@@ -8,7 +8,7 @@ var info = {
     PackedOn:'20180423',
     FullScanCode:'20180423202018042320',
     Status:0,
-    Qty:1,
+    Qty:60,
 }
 
 var promise = dbsvc.packingScanItem(info);

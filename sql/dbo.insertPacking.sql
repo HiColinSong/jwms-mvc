@@ -1,3 +1,10 @@
+USE [BIOTRACK]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 24-Apr-18 6:24:25 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
 (
 	@DONumber varchar(12),
@@ -18,7 +25,7 @@ AS
     2. Check PackStatus in BX_PackHeader
     3. Check HandlingUnit exist in BX_PackHUnits
     4. if MaterialCode and BatchNo combination exists in SAP_DODetail
-    5. if Total BalanceQty of the M/B combination is less than the DOQuantity in SAP_DODetail
+    5. if Total ScanQty of the M/B combination is less than the DOQuantity in SAP_DODetail
     6. if SerialNo is not null,check if NOT EXIST in the table
 
     if Passed Check, do Insert/Update
@@ -37,18 +44,19 @@ BEGIN
                     16, -- Severity.  
                     1 -- State.  
                     );  
-        IF EXISTS (select * from dbo.BX_PackHeader where DONumber=@DONumber and PackStatus=1)
-            RAISERROR ('Error:Packing is already completed',16,1 );  
-        IF NOT EXISTS (select * from dbo.BX_PackHUnits where DONumber=@DONumber and HUNumber=@HUNumber)
-            RAISERROR ('Error:Handling Unit cannot be found.',16,1 );  
         IF NOT EXISTS (select * from dbo.SAP_DODetail 
                         where   DONumber=@DONumber and 
                                 MaterialCode=@MaterialCode and 
                                 BatchNumber=@BatchNo)
-            RAISERROR ('Error:Item cannot be found in Delivery order',16,1 );  
+            RAISERROR ('Error:Material/Batch cannot be found in Delivery order',16,1 ); 
+        IF EXISTS (select * from dbo.BX_PackHeader where DONumber=@DONumber and PackStatus=1)
+            RAISERROR ('Error:Packing is already completed',16,1 );  
+        IF NOT EXISTS (select * from dbo.BX_PackHUnits where DONumber=@DONumber and HUNumber=@HUNumber)
+            RAISERROR ('Error:Handling Unit cannot be found.',16,1 );  
+ 
 
         DECLARE @actualQty int,@planQty int
-        SET @actualQty =(select sum(BalanceQty) from dbo.BX_PackDetails  
+        SET @actualQty =(select sum(ScanQty) from dbo.BX_PackDetails  
                         where   DONumber=@DONumber and 
 								MaterialCode=@MaterialCode and 
                                 BatchNo=@BatchNo)
@@ -72,7 +80,7 @@ BEGIN
                             PackedOn=@PackedOn)
 		BEGIN
 			UPDATE dbo.BX_PackDetails 
-				SET BalanceQty = @Qty+ BalanceQty
+				SET ScanQty = @Qty+ ScanQty
 			WHERE	DONumber=@DONumber and 
                     HUNumber=@HUNumber and 
                     MaterialCode=@MaterialCode and 
