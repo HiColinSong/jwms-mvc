@@ -9,7 +9,7 @@
 // }
 
 const util = require('../config/util');
-const sapSvc =require('../config/sapService');
+const sapSvc =require('../dbservices/sapService');
 var sapOrder, order,promise,orderNo,orderType,huNo,serialNo;
 
 exports.getOrder=function(req,res){

@@ -1,0 +1,83 @@
+﻿var dbPackingSvc=require('./dbservices/dbPackingSvc')
+
+var params;
+
+var output = function(promise){
+    promise.then(function(result){
+        console.log(JSON.stringify(result,null,2));
+        // console.log(JSON.stringify(result.recordset,null,2));
+    },function(err){
+        console.error(err);
+    })
+}
+
+//test getMaterial Code.
+var testGetMaterialCode=function(){
+    output(dbPackingSvc.getMaterialCode("00812917020015"));
+}
+//end of getMaterial Code
+
+//test create HU
+var testCreateHandlingUnits=function(){
+    params={
+        DONumber:'0800379642',
+        HUNumberList:'2203456023750234522',
+        // HUNumberList:'22034560237502345126,22034560237502345127,22034560237502345128,22034560237502345129,22034560237502345030',
+        PackMaterial:'m123456',
+        CreatedBy:'yadong',
+        CreatedOn:'20180423'
+      }
+    output(dbPackingSvc.createHandlingUnits(params));
+}
+//end of test create HU
+
+
+//test delete HUNumber
+var testDeleteHandlingUnit=function(){
+    output(dbPackingSvc.deleteHandlingUnit("22034560237502345024"));
+}
+//end of test delete HUNumber
+
+//test deletePackingItem
+var testDeletePackingItem=function(){
+    params={
+        DONumber:'0800379642',
+        HUNumber:'HU111',
+        MaterialCode:'m123-11',
+        BatchNo:'batch001',
+        PackBy:'sean',
+        PackedOn:'20180422'
+        }
+    output(dbPackingSvc.deletePackingItem(params));
+}
+//end of deletePackingItem
+
+// test insert the scan item for packing
+var testInsertScanItem=function(){
+    params = {
+        DONumber:'0800379642',
+        HUNumber:'HU111',
+        MaterialCode:'m123-11',
+        BatchNo:'batch001',
+        PackBy:'yadong',
+        PackedOn:'20180422',
+        FullScanCode:'20180423202018042320',
+        Status:0,
+        Qty:2,
+    }
+    output(dbPackingSvc.InsertScanItem(params));
+}
+// end of test insert the scan item for packing
+//test getMaterial Code.
+var testGetScannedItems=function(){
+    output(dbPackingSvc.getScannedItems("0800379642"));
+}
+//end of getMaterial Code
+//test getPkgMaterial list.
+var testGetPkgMtl=function(){
+    output(dbPackingSvc.getPkgMtlList());
+}
+//end of GetPkgMaterial list
+
+//run from command line: node testCases.js
+testGetPkgMtl();
