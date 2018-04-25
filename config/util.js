@@ -61,7 +61,7 @@ exports.getItem=function(serialNo){
 //  conver SAP Delivery Order into BX friendly DO, i.e. only output necessary fields with meaningful field name
  var sapFields = require('./sapFields.json');
  exports.deliveryOrderConverter = function (deliveryOrder){
-	 var _do = {items:[]};
+	 var _do = {plannedItems:[]};
 	 var headerFields=sapFields.deliveryOrderHeaderFields;
 	 var headerSTSFields=sapFields.deliveryOrderHeaderSTSFields;
 	 var itemFields=sapFields.deliveryOrderItemFields;
@@ -83,9 +83,9 @@ exports.getItem=function(serialNo){
 		 doItems = deliveryOrder.ET_DELIVERY_ITEM;
 		for (let i = 0; i < doItems.length; i++) {
 			doItem = doItems[i];
-			_do.items.push({});
+			_do.plannedItems.push({});
 			for (let key in itemFields) {
-				 _do.items[i][key]=doItem[itemFields[key]];
+				 _do.plannedItems[i][key]=doItem[itemFields[key]];
 			}
 		}
 	 }
@@ -93,9 +93,9 @@ exports.getItem=function(serialNo){
 		 doItems = deliveryOrder.ET_DELIVERY_ITEM_STS;
 		for (let i = 0; i < doItems.length; i++) {
 			doItem = doItems[i];
-			_do.items.push({});
+			_do.plannedItems.push({});
 			for (let key in itemSTSFields) {
-				 _do.items[i][key]=doItem[itemSTSFields[key]];
+				 _do.plannedItems[i][key]=doItem[itemSTSFields[key]];
 			}
 		}
 	 }

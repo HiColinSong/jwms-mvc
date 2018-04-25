@@ -1,6 +1,6 @@
 'use strict';
 const util = require('../config/util');
-const sapSvc =require('../config/sapService');
+const sapSvc =require('../dbservices/sapService');
 exports.getOrder=function(req,res){
 	promise = sapSvc.getPurchaseOrder(req.params.orderNo);
 	promise.then(function(data){

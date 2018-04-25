@@ -7,7 +7,11 @@ const sqlSvc=require("./sqlService");
     let paramValues={EANCode:EANCode};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
-
+  //get getPkgMtlList
+  exports.getPkgMtlList=function(){
+    var stmt = "select MaterialCode,MaterialDesc from dbo.SAPPkgMaterials";
+    return sqlSvc.sqlQuery(stmt);
+  }
 
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};

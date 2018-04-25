@@ -1,4 +1,5 @@
 ﻿var dbPackingSvc=require('./dbservices/dbPackingSvc')
+var dbCommonSvc=require('./dbservices/dbCommonSvc')
 
 var params;
 
@@ -79,5 +80,13 @@ var testGetPkgMtl=function(){
 }
 //end of GetPkgMaterial list
 
+var testGetPackHUnits=function(){
+    output(dbPackingSvc.getPackHUnits('0800379646'));
+}
+
+var testGetPackDetails=function(){
+    output(dbPackingSvc.getPackDetails('0800379646'));
+}
+
 //run from command line: node testCases.js
-testGetPkgMtl();
+testGetPackDetails();

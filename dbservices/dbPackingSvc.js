@@ -94,10 +94,13 @@ exports.InsertScanItem=function(info){
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
   //get PackHUnits
-  exports.getPkgMtlList=function(){
-    var stmt = "select MaterialCode,MaterialDesc from dbo.SAPPkgMaterials";
-    return sqlSvc.sqlQuery(stmt);
+  exports.getPackDetails=function(DONumber){
+    var stmt = "select * from dbo.BX_PackDetails where DONumber=@DONumber";
+    let paramTypes={DONumber:'sql.VarChar(12)'};
+    let paramValues={DONumber:DONumber};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
+
 
 
 

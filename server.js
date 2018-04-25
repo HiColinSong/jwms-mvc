@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
  	resave:true,
  	saveUninitialized:true,
  	cookie:{
- 		maxAge:300000 //5 miniutes
+ 		maxAge:3600000 //5 miniutes
  	}
 
  }))
@@ -34,7 +34,8 @@ app.get('/bxapi/logout.json',auth.logout);
 
 var packingHandler = require('./controllers/packingHandler');
 app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);
-app.get('/bxapi/packing/add-hu-to-order/:orderNo/:huNo.json',auth.authCheck,packingHandler.addHuToOrder);
+app.get('/bxapi/packing/get-pkg-material-list.json',auth.authCheck,packingHandler.getPkgMtlList);
+app.post('/bxapi/packing/add-new-hu.json',auth.authCheck,packingHandler.addNewHu);
 app.get('/bxapi/packing/remove-hu-from-order/:orderNo/:huNo.json',auth.authCheck,packingHandler.removeHuFromOrder);
 app.get('/bxapi/packing/add-item-to-hu/:orderNo/:huNo/:serialNo.json',auth.authCheck,packingHandler.addItemtoHu);
 app.get('/bxapi/packing/remove-item-from-hu/:orderNo/:huNo/:serialNo.json',auth.authCheck,packingHandler.removeItemtoHu);

@@ -1,7 +1,7 @@
 'use strict';
 
 const util = require('../config/util');
-const sapSvc =require('../config/sapService');
+const sapSvc =require('../dbservices/sapService');
 var order,promise;
 exports.getOrder=function(req,res){
 	// order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
