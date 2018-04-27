@@ -51,7 +51,7 @@ client.connect(function(err) {
        IT_VBELN:[{
         SIGN:"I",
         OPTION:"EQ",
-        DELIV_NUMB_LOW:"0925003431" //add leading 0
+        DELIV_NUMB_LOW:"0800401131" //add leading 0
         // DELIV_NUMB_LOW:"0800379646" //add leading 0
        }]
     },

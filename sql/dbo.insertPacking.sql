@@ -1,16 +1,24 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 24-Apr-18 6:24:25 PM ******/
+
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 27-Apr-18 9:36:04 AM ******/
+DROP PROCEDURE [dbo].[InsertOrUpdatePacking]
+GO
+
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 27-Apr-18 9:36:04 AM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
+
+CREATE PROCEDURE [dbo].[InsertOrUpdatePacking] 
 (
 	@DONumber varchar(12),
+	@DOItemNumber char(6),
 	@HUNumber varchar(20),
     @MaterialCode varchar(18),
-    @BatChNo varchar(20),
+    @BatchNo varchar(20),
     @SerialNo varchar(8)=NULL,
     @PackBy varchar(20),
     @PackedOn varchar(10),
@@ -58,10 +66,12 @@ BEGIN
         DECLARE @actualQty int,@planQty int
         SET @actualQty =(select sum(ScanQty) from dbo.BX_PackDetails  
                         where   DONumber=@DONumber and 
+								DOItemNumber=@DOItemNumber and 
 								MaterialCode=@MaterialCode and 
                                 BatchNo=@BatchNo)
         SET @planQty=(select DOQuantity from dbo.SAP_DODetail 
                         where   DONumber=@DONumber and 
+                                DOItemNumber=@DOItemNumber and
 								MaterialCode=@MaterialCode and 
                                 BatchNumber=@BatchNo)
 
@@ -73,15 +83,18 @@ BEGIN
 
         IF EXISTS (SELECT DONumber from dbo.BX_PackDetails 
                     WHERE	DONumber=@DONumber and 
+                            DOItemNumber=@DOItemNumber and
                             HUNumber=@HUNumber and 
                             MaterialCode=@MaterialCode and 
                             BatchNo=@BatchNo and 
                             PackBy=@PackBy and
-                            PackedOn=@PackedOn)
+                            PackedOn=@PackedOn and 
+							SerialNo is NULL)
 		BEGIN
 			UPDATE dbo.BX_PackDetails 
 				SET ScanQty = @Qty+ ScanQty
 			WHERE	DONumber=@DONumber and 
+                    DOItemNumber=@DOItemNumber and
                     HUNumber=@HUNumber and 
                     MaterialCode=@MaterialCode and 
                     BatchNo=@BatchNo and 
@@ -90,7 +103,7 @@ BEGIN
 		END
 	ELSE
 		INSERT INTO dbo.BX_PackDetails
-			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty)
+			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty,@DOItemNumber)
 
     END TRY  
     BEGIN CATCH  
@@ -111,5 +124,11 @@ BEGIN
                 @ErrorState -- State.  
                 );  
     END CATCH; 
+	--return freshed items detail
+	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
+
 END
+
+GO
+
 

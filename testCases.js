@@ -14,7 +14,7 @@ var output = function(promise){
 
 //test getMaterial Code.
 var testGetMaterialCode=function(){
-    output(dbPackingSvc.getMaterialCode("00812917020015"));
+    output(dbCommonSvc.getMaterialCode("08888893016139"));
 }
 //end of getMaterial Code
 
@@ -35,7 +35,7 @@ var testCreateHandlingUnits=function(){
 
 //test delete HUNumber
 var testDeleteHandlingUnit=function(){
-    output(dbPackingSvc.deleteHandlingUnit("22034560237502345024"));
+    output(dbPackingSvc.deleteHandlingUnit("0800379647","HU123"));
 }
 //end of test delete HUNumber
 
@@ -89,4 +89,4 @@ var testGetPackDetails=function(){
 }
 
 //run from command line: node testCases.js
-testGetPackDetails();
+testDeleteHandlingUnit();

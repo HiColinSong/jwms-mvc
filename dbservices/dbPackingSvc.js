@@ -5,7 +5,8 @@ const dbSvc=require("./dbCommonSvc");
 //when retrieving the DO from SAP, initialze the BX db
 exports.InsertScanItem=function(info){
   var params={
-    DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
+    DONumber:{type:'sql.VarChar(12)',value:info.DONumber},
+    DOItemNumber:{type:'sql.Char(6)',value:info.DOItemNumber},
     HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
     MaterialCode:{type:'sql.VarChar(18)',value:info.MaterialCode},
     BatchNo:{type:'sql.VarChar(20)',value:info.BatchNo},
@@ -16,7 +17,7 @@ exports.InsertScanItem=function(info){
     Qty:{type:'sql.Int',value:info.Qty}
   }
   if (info.SerialNo){
-    params.SerialNo=info.SerialNo;
+    params.SerialNo={type:'sql.VarChar(8)',value:info.SerialNo};
   }
   return sqlSvc.callStoredProcedure("dbo.InsertOrUpdatePacking",params)
 }
@@ -27,7 +28,7 @@ exports.InsertScanItem=function(info){
       DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
       DOCreationDate:{type:'sql.VarChar(10)',value:info.DOCreationDate},
       DOCreationUser:{type:'sql.VarChar(20)',value:info.DOCreationUser},
-      Plant:{type:'sql.VarChar(4)',value:info.Plant},
+      Plant:{type:'sql.VarChar(4)',value:info.ShippingPoint},
       ShipToCustomer:{type:'sql.VarChar(8)',value:info.ShipToCustomer},
       DOStatus:{type:'sql.Char(1)',value:info.DOStatus},
       DOItemNumberList:{type:'sql.VarChar(3500)',value:info.DOItemNumberList},
@@ -50,11 +51,12 @@ exports.InsertScanItem=function(info){
     return sqlSvc.callStoredProcedure("dbo.InsertHandlingUnits",params)
   }
   //Delete a Handling Unit
-  exports.deleteHandlingUnit=function(HUNumber){
-    var stmt = "delete from dbo.BX_PackHUnits where HUNumber=@HUNumber";
-    let paramTypes={HUNumber:'sql.VarChar(20)'};
-    let paramValues={HUNumber:HUNumber};
-    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  exports.deleteHandlingUnit=function(info){
+    var params={
+      DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
+      HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber}
+    }
+    return sqlSvc.callStoredProcedure("dbo.DeleteHandlingUnit",params)
   }
   //update quantity in BX_PackDetail --this is bad operation because user can update to more than planned qty
   exports.updateScanQty=function(info){
@@ -70,6 +72,11 @@ exports.InsertScanItem=function(info){
       stmt += " is null";
     }
     return sqlSvc.sqlQuery(stmt,dbSvc.getParamTypes(),info)
+  }
+  //Delete packing detail item
+  exports.deletePackingItemByKey=function(RowKey){
+    var stmt = "delete from dbo.BX_PackDetails WHERE RowKey='"+RowKey+"'";
+    return sqlSvc.sqlQuery(stmt)
   }
 
   //get scanned items for packing

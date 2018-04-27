@@ -5,7 +5,9 @@
        "DOCreationDate":"ERDAT",
        "ShipToCustomer":"KUNNR",
        "Plant":"WERKS",
-       "WarehouseNo":"LGNUM"
+       "WarehouseNo":"LGNUM",
+       "ShippingPoint":"VSTEL"
+
     },
     "deliveryOrderHeaderSTSFields": {
         "confirmStatus":"WBSTK"
@@ -18,7 +20,8 @@
         "DOItemNumber":"POSNR",
         "DOQuantity":"LFIMG",
         "ProductHierarchy":"PRODH",
-        "EANCode":"EAN11"
+        "EANCode":"EAN11",
+        "Plant":"WERKS"
      },
     "deliveryOrderItemSTSFields": {
         "PackingStatus":"PKSTA"

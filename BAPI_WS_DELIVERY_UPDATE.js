@@ -44,7 +44,7 @@ client.connect(function(err) {
       {
         VBKOK_WA:{VBELN : "0800379646", WABUC: "X", WADAT_IST:20180420}
         ,COMMIT:"X"
-        , DELIVERY:"0925003431"
+        , DELIVERY:"0800379646"
       },
 
   //  { VBKOK_WA:{VBELN_VL: "0800401130",WABUC: "X",WADAT_IST: 20180420},

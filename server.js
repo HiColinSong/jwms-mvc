@@ -35,10 +35,10 @@ app.get('/bxapi/logout.json',auth.logout);
 var packingHandler = require('./controllers/packingHandler');
 app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);
 app.get('/bxapi/packing/get-pkg-material-list.json',auth.authCheck,packingHandler.getPkgMtlList);
+app.post('/bxapi/packing/add-item.json',auth.authCheck,packingHandler.addItem);
 app.post('/bxapi/packing/add-new-hu.json',auth.authCheck,packingHandler.addNewHu);
-app.get('/bxapi/packing/remove-hu-from-order/:orderNo/:huNo.json',auth.authCheck,packingHandler.removeHuFromOrder);
-app.get('/bxapi/packing/add-item-to-hu/:orderNo/:huNo/:serialNo.json',auth.authCheck,packingHandler.addItemtoHu);
-app.get('/bxapi/packing/remove-item-from-hu/:orderNo/:huNo/:serialNo.json',auth.authCheck,packingHandler.removeItemtoHu);
+app.post('/bxapi/packing/remove-hu.json',auth.authCheck,packingHandler.removeHu);
+app.post('/bxapi/packing/remove-item.json',auth.authCheck,packingHandler.removeItem);
 
 var pickingHandler = require('./controllers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
@@ -56,6 +56,9 @@ var spoReceiptsHandler = require('./controllers/spoReceiptsHandler');
 app.get('/bxapi/sporeceipts/get-order/:orderNo.json',auth.authCheck,spoReceiptsHandler.getOrder);
 app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
 app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
+
+var commonHandler = require('./controllers/commonHandler');
+app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);
 
 
 app.get('*', function(req, res){
