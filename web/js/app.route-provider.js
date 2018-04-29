@@ -70,11 +70,14 @@
                 templateUrl: 'partials/packing.html',
                 controller: 'packingCtrl',
                 resolve:{
-                    order:['$q','$route','bxService',
-                        function($q,$route,apiSvc){
+                    order:['$q','$route','bxService','utilSvc',
+                        function($q,$route,apiSvc,utilSvc){
                             var deferred = $q.defer();
                             if ($route.current.params.DONumber){
-                                apiSvc.getOrderForPacking({param1:$route.current.params.DONumber}).$promise.then(function(data){
+                                apiSvc.getOrderForPacking(
+                                    {orderNo:$route.current.params.DONumber,
+                                     PackStart:utilSvc.formatDate()}
+                                ).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);
                                     } else {

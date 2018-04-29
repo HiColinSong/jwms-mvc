@@ -46,7 +46,8 @@ app.post('/bxapi/login.json',auth.login);
 app.get('/bxapi/logout.json',auth.logout);
 
 var packingHandler = require('./api/handlers/packingHandler');
-app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);
+// app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);
+app.post('/bxapi/packing/get-order.json',auth.authCheck,packingHandler.getOrder);
 app.get('/bxapi/packing/refresh-hu/:orderNo.json',auth.authCheck,packingHandler.refreshHu);
 app.get('/bxapi/packing/get-pkg-material-list.json',auth.authCheck,packingHandler.getPkgMtlList);
 app.post('/bxapi/packing/add-item.json',auth.authCheck,packingHandler.addItem);

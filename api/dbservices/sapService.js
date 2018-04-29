@@ -61,12 +61,12 @@ exports.confirmPacking=function(order){
           );
       }
     }
-    return new Promise(function(resolve,reject){
-      // resolve("success");
-      // resolve("fail");
-      reject("unknown issue");
-    })
-    // return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
+    // return new Promise(function(resolve,reject){
+    //   resolve("success");
+    //   // resolve("fail");
+    //   // reject("unknown issue");
+    // })
+    return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
 };
 
 exports.getPurchaseOrder=function(orderNo){

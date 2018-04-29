@@ -161,11 +161,10 @@
 
             //start packing api
             getOrderForPacking:{ //  /bxapi/transOrder/xxxxxx.json
-                method: 'GET',
+                method: 'POST',
                 params: {
                     type: 'packing',
-                    subtype: 'get-order',
-                    param1:'@param1'
+                    subtype: 'get-order'
                 },
                 cache:false
             },

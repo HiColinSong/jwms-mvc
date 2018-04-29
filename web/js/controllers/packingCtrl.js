@@ -171,7 +171,7 @@
                     )
                 }
                 $scope.confirmPacking = function() {
-                    apiSvc.confirmOperation({type:"packing"},{order:order}).$promise.
+                    apiSvc.confirmOperation({type:"packing"},{order:order,PackComplete:utilSvc.formatDate()}).$promise.
                     then(function(data){
                         if (data&&data.confirm==='success'){
                             $scope.confirm={

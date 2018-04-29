@@ -40,7 +40,7 @@ var getUpdatedHuAndScanItemList=function(orderNo){
 exports.getOrder=function(req,res){
 	(async function () {
 		try {
-			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
 			//todo: check status 
 			
@@ -50,14 +50,15 @@ exports.getOrder=function(req,res){
 					throw new Error("Invalid Order Status. Order Status is "+order.confirmStatus);
 				}
 	
-				//insertOrUpdateDo
+				//insertOrUpdateDo, PackStart will be set if the HU List is empty, or ignore
 				var params={
 					DONumber:order.DONumber,
 					DOCreationDate:order.DOCreationDate,
 					DOCreationUser:order.DOCreationUser,
 					Plant:order.ShippingPoint,
 					ShipToCustomer:order.ShipToCustomer,
-					DOStatus:order.DOStatus
+					DOStatus:order.DOStatus,
+					PackStart:req.body.PackStart
 				}
 				var DOItemNumberList=[];
 				var MaterialCodeList=[];
@@ -220,6 +221,7 @@ exports.confirmPacking=function(req,res){
 		try {
 			var confirmStatus = await sapSvc.confirmPacking(req.body.order);
 			if (confirmStatus){
+				await dbPackingSvc.confirmPacking(req.body.order.DONumber,req.body.PackComplete);
 				return res.status(200).send({confirm:"success"});
 			} else {
 				return res.status(200).send({confirm:"fail"});

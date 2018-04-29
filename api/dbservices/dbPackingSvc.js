@@ -32,6 +32,7 @@ exports.InsertScanItem=function(info){
       Plant:{type:'sql.VarChar(4)',value:info.ShippingPoint},
       ShipToCustomer:{type:'sql.VarChar(8)',value:info.ShipToCustomer},
       DOStatus:{type:'sql.Char(1)',value:info.DOStatus},
+      PackStart:{type:'sql.VarChar(10)',value:info.PackStart},
       DOItemNumberList:{type:'sql.VarChar(3500)',value:info.DOItemNumberList},
       MaterialCodeList:{type:'sql.VarChar(8000)',value:info.MaterialCodeList},
       BatchNumberList:{type:'sql.VarChar(5500)',value:info.BatchNumberList},
@@ -117,7 +118,12 @@ exports.InsertScanItem=function(info){
     return sqlSvc.callStoredProcedure("dbo.BX_GetHandlingUnitAndScannedItems",params)
   }
 
-
+  exports.confirmPacking=function(DONumber,PackComplete){
+    var stmt = "update dbo.BX_PackHeader Set PackComplete=Convert(datetime,@PackComplete),PackStatus=2,Push2SAPStatus=1 where DONumber=@DONumber";
+    let paramTypes={DONumber:'sql.VarChar(12)',PackComplete:'sql.VarChar(10)'};
+    let paramValues={DONumber:DONumber,PackComplete:PackComplete};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
 
 
 
