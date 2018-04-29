@@ -108,6 +108,14 @@ exports.InsertScanItem=function(info){
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
+  
+  exports.getHuAndPackDetails=function(DONumber){
+    var params={
+      DONumber:{type:"sql.VarChar(12)",value:DONumber}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_GetHandlingUnitAndScannedItems",params)
+  }
+
 
 
 

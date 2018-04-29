@@ -13,6 +13,33 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.sqlQuery(stmt);
   }
 
+  //user profile
+  exports.getUserProfile=function(userId){
+    var stmt = "select * from dbo.BX_UserProfile where UserID=@UserID";
+    let paramTypes={UserID:'sql.VarChar(20)'};
+    let paramValues={UserID:userId};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
+
+  //user profile
+  exports.deleteUserProfile=function(userId){
+    var stmt = "delete from dbo.BX_UserProfile where UserID=@UserID";
+    let paramTypes={UserID:'sql.VarChar(20)'};
+    let paramValues={UserID:userId};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
+  //update user profile
+  exports.insertOrUpdateUserProfile=function(user){
+    var params={
+      UserID:{type:'sql.VarChar(20)',value:user.UserID},
+      DefaultWH:{type:'sql.VarChar(3)',value:user.DefaultWH},
+      Domain:{type:'sql.VarChar(20)',value:user.Domain},
+      UserRole:{type:'sql.VarChar(20)',value:user.UserRole},
+      isActive:{type:'sql.Char(1)',value:user.isActive}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateUserProfile",params);
+  }
+
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};
     paramTypes.DONumber='sql.VarChar(12)';

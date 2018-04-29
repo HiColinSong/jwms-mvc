@@ -26,6 +26,30 @@
     "deliveryOrderItemSTSFields": {
         "PackingStatus":"PKSTA"
      },
-    "transferOrderFields":{},
+    "transferOrderFields":{
+        "TONumber":"TRANSFERORDERNO",
+        "TOItemNumber":"TRANSFERORDERITEM",
+        "Warehouse":"WHSENUMBER"
+    },
+    "transferOrderHeaderFields":{
+        "TOCreationDate":"TO_DATE",
+        "TOCreationUser":"TO_USER",
+        "Warehouse":"WHSENUMBER",
+        "PickConfirmStatus":"PICK_CNFMD",
+        "Plant":"",
+        "DONumber":"",
+        "ShipToCustomer":""
+    },
+    "transferOrderItemFields":{
+        "TOItemNumber":"TO_ITEM",
+        "Warehouse":"WHSENUMBER",
+        "DOItemNumber":"",
+        "MaterialCode":"MATERIAL",
+        "BatchNo":"BATCH",
+        "VendorBatch":"",
+        "TOQuantity":"",
+        "Plant":"PLANT",
+        "PickConfirmStatus":"PICK_CNFMD"
+    },
     "purchaseOrderFields":{}
 }

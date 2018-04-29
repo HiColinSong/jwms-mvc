@@ -1,17 +1,15 @@
 'use strict';
-var session,userObj,loginUsername;
+var session,fullUsername;
 var ActiveDirectory = require('activedirectory');
 const constants=require('./../config/const.json');
+const dbCommonSvc=require('../dbservices/dbCommonSvc');
 exports.checkLoginStatus=function(req,res){
 	if (req.session&&req.session.user){
-			var data={
-				loginUser:{
-					username:req.session.user
-			}};
+			var data={loginUser:req.session.user};
 			return res.status(200).send(data);
 		}
 	  else
-	    	return res.sendStatus(200);
+	    return res.sendStatus(200).send({status:"Not Loggedin!"});
 };
 
 exports.authCheck=function(req, res, next) {
@@ -22,62 +20,38 @@ exports.authCheck=function(req, res, next) {
 };
 exports.login=function(req, res) {
 	session=req.session;
-	loginUsername=req.body.domain+"\\"+req.body.username;
-	userObj=undefined;
+	fullUsername=req.body.domain+"\\"+req.body.username;
 
 	//do user authentication against Active Directory via LDAP
-	var ad = new ActiveDirectory(constants.bitLdapConfig);
+	var ad = new ActiveDirectory(constants[req.body.domain.toLowerCase()+'LdapConfig']);
 	console.log('call Active Directory Authentication!');
 
-	ad.authenticate(loginUsername, req.body.password, function(err, auth) {
+	ad.authenticate(fullUsername, req.body.password, function(err, auth) {
 	  if (err) {
 	    console.log('ERROR: '+JSON.stringify(err));
-	    return res.status(403).send({message:"incorrect username or password!"});
+	    return res.status(403).send({message:"incorrect domain, username or password!"});
 	  }
-	  
-	  if (auth) {
-	    console.log('Authenticated!:'+ loginUsername);
-		//find username from userList
-		var userList=constants.authorizedUsers;
-		for (var i = 0; i < userList.length; i++) {
-		    if (userList[i].toLowerCase() === loginUsername.toLowerCase()) {
-		      userObj = userList[i];
-		      break;
-		    }
-		}
-		if (userObj){
-			session.user = userObj;
-			res.status(200).send({loginUser:{username:loginUsername}});
-		} else{
-			res.status(403).send({message:"You are not authorized to use BX, please contact to IT department."});
-		}
-	  }
-	  else {
-	    console.log('Authentication failed!');
-	    return res.status(403).send({message:"incorrect username or password!"});
-	  }
+		
+		(async function () {
+			if (auth) {
+				console.log('Authenticated!:'+ req.body.username);
+				try {
+					//get user profile from db
+				var userProfile = await dbCommonSvc.getUserProfile(req.body.username);
+				if (userProfile){
+					session.user = userProfile.recordset[0];
+					res.status(200).send({loginUser:userProfile.recordset[0]});
+				} else{
+					res.status(403).send({message:"You are not an authorized user."});
+				}
+			} catch (error) {
+				return res.status(200).send({error:true,message:error});
+			}
+		}})()
 	});
-
-
-
 };
 exports.logout=function(req, res) {
 	req.session.user=undefined;
 	req.session.destroy();
   	return res.status(200).send({loginStatus:"logout"});
 };
-
-
-// const userList = [
-// 	{
-// 		username:"yadong",
-// 		password:"yadong"
-// 	},
-// 	{
-// 		username:"ali",
-// 		password:"ali"
-// 	},{
-// 		username:"devin",
-// 		password:"devin"
-// 	},
-// ]

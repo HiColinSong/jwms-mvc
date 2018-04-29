@@ -1,7 +1,11 @@
 {
-	"bitLdapConfig":{
+	"bitsgLdapConfig":{
 		"url": "ldap://SGDC06.bitsg.bsi.corp",
         "baseDN": "DC=bitsg,DC=bsi,DC=corp"
+	},
+	"besaLdapConfig":{
+		"url": "ldap://SGDC06.besa.bsi.corp",
+        "baseDN": "DC=besa,DC=bsi,DC=corp"
 	},
 	"authorizedUsers":[
 		"BITSG\\yd.zhu",

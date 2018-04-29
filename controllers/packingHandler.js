@@ -1,19 +1,11 @@
 'use strict';
 
-// exports.getTransOrder=function(req,res){
-// 	var data={};
-// 	data.error=false;
-// 	data.requestType="get";
-// 	data.message='hello, packingHandler:'+req.params.orderNo+'';
-// 	return res.status(200).send(data);
-// }
-
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const sqlSvc =require('../dbservices/sqlService');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
-const dbCommonSvc=require('../dbservices/dbCommonSvc')
-var sapOrder, order,promise,orderNo,orderType,huNo,serialNo;
+const dbCommonSvc=require('../dbservices/dbCommonSvc');
+var Promise = require('Promise').default;
 
 var addScannedItemsToHUList=function(huList,scannedItems){
 	for (let i=0;i<huList.length;i++){
@@ -26,13 +18,30 @@ var addScannedItemsToHUList=function(huList,scannedItems){
 	}	
 	return huList;
 }
-
+var getUpdatedHuAndScanItemList=function(orderNo){
+	return new Promise(function(resolve,reject){
+		dbPackingSvc.getHuAndPackDetails(orderNo)
+		.then(function(result){
+			var huList,scannedItems;
+			if (result&&result.recordsets.length>0){
+				huList=result.recordsets[0],scannedItems;
+				if (result.recordsets.length>1){
+					scannedItems=result.recordsets[1];
+					huList=addScannedItemsToHUList(huList,scannedItems)
+				}
+			}
+			resolve(huList||[]);
+		},function(err){
+			reject(err);
+		});
+	});
+}
 
 exports.getOrder=function(req,res){
 	(async function () {
 		try {
-			sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
-			order = util.deliveryOrderConverter(sapOrder);
+			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			var order = util.deliveryOrderConverter(sapOrder);
 			//todo: check status 
 			
 			if (order&&order.DONumber){
@@ -69,13 +78,7 @@ exports.getOrder=function(req,res){
 				params.DOQuantityList = DOQuantityList.join(',');
 				await dbPackingSvc.InsertOrUpdateDO(params);
 	
-				// order=util.getOrder(req.params.orderNo,"do");
-				var huList = await dbPackingSvc.getPackHUnits(order.DONumber);
-				huList=huList.recordset;
-				var scannedItems = await dbPackingSvc.getPackDetails(order.DONumber);
-				scannedItems=scannedItems.recordset;
-	
-				order.HUList = addScannedItemsToHUList(huList,scannedItems);
+				order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);
 				return res.status(200).send(order);
 			} else {
 				return res.status(200).send({error:true,message:"The Delivery Order "+req.params.orderNo+" doesn't exist!"});
@@ -142,7 +145,6 @@ exports.removeHu=function(req,res){
 			huList=huList.recordset;
 			var scannedItems = await dbPackingSvc.getPackDetails(req.body.DONumber);
 			scannedItems=scannedItems.recordset;
-			
 			huList=addScannedItemsToHUList(huList,scannedItems);
 			return res.status(200).send(huList);
 		} catch (error) {
@@ -171,9 +173,8 @@ exports.addItem=function(req,res){
 		try {
 			var scannedItems = await dbPackingSvc.InsertScanItem(params);
 			scannedItems=scannedItems.recordset;
-			var huList = await dbPackingSvc.getPackHUnits(order.DONumber);
-			huList=huList.recordset;
-			addScannedItemsToHUList(huList,scannedItems)
+			var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
+			huList = addScannedItemsToHUList(huList.recordset,scannedItems);
 			if (huList){
 				return res.status(200).send(huList);
 			} else {
@@ -189,11 +190,7 @@ exports.removeItem=function(req,res){
 	(async function () {
 		try {
 			await dbPackingSvc.deletePackingItemByKey(req.body.RowKey);
-			var scannedItems = await dbPackingSvc.getPackDetails(req.body.orderNo);
-			scannedItems=scannedItems.recordset;
-			var huList = await dbPackingSvc.getPackHUnits(req.body.orderNo);
-			huList=huList.recordset;
-			huList=addScannedItemsToHUList(huList,scannedItems);
+			var huList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			return res.status(200).send(huList);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
@@ -201,14 +198,10 @@ exports.removeItem=function(req,res){
 	})()
 };
 
-exports.refresh=function(req,res){
+exports.refreshHu=function(req,res){
 	(async function () {
 		try {
-			var scannedItems = await dbPackingSvc.getPackDetails(req.params.orderNo);
-			scannedItems=scannedItems.recordset;
-			var huList = await dbPackingSvc.getPackHUnits(req.params.orderNo);
-			huList=huList.recordset;
-			huList=addScannedItemsToHUList(huList,scannedItems)
+			var huList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			if (huList){
 				return res.status(200).send(huList);
 			} else {
@@ -216,6 +209,21 @@ exports.refresh=function(req,res){
 			}
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
+
+exports.confirmPacking=function(req,res){
+	(async function () {
+		try {
+			var confirmStatus = await sapSvc.confirmPacking(req.body.order);
+			if (confirmStatus){
+				return res.status(200).send({confirm:"success"});
+			} else {
+				return res.status(200).send({confirm:"fail"});
+			}
+		} catch (error) {
+			return res.status(200).send({error:true,message:error});
 		}
 	})()
 };

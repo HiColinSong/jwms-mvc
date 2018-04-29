@@ -34,11 +34,13 @@ app.get('/bxapi/logout.json',auth.logout);
 
 var packingHandler = require('./controllers/packingHandler');
 app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);
+app.get('/bxapi/packing/refresh-hu/:orderNo.json',auth.authCheck,packingHandler.refreshHu);
 app.get('/bxapi/packing/get-pkg-material-list.json',auth.authCheck,packingHandler.getPkgMtlList);
 app.post('/bxapi/packing/add-item.json',auth.authCheck,packingHandler.addItem);
 app.post('/bxapi/packing/add-new-hu.json',auth.authCheck,packingHandler.addNewHu);
 app.post('/bxapi/packing/remove-hu.json',auth.authCheck,packingHandler.removeHu);
 app.post('/bxapi/packing/remove-item.json',auth.authCheck,packingHandler.removeItem);
+app.post('/bxapi/packing/confirm.json',auth.authCheck,packingHandler.confirmPacking);
 
 var pickingHandler = require('./controllers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
@@ -62,7 +64,7 @@ app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMat
 
 
 app.get('*', function(req, res){
-   res.send('Sorry, this is an invalid URL.');
+   res.send({ERROR:'Sorry, this is an invalid URL.'});
 });
 // port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
 app.listen(8080, function () {

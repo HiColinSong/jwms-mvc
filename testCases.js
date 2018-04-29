@@ -73,6 +73,9 @@ var testInsertScanItem=function(){
 var testGetScannedItems=function(){
     output(dbPackingSvc.getScannedItems("0800379642"));
 }
+var testGetHuAndPackDetails=function(){
+    output(dbPackingSvc.getHuAndPackDetails("0800401204"));
+}
 //end of getMaterial Code
 //test getPkgMaterial list.
 var testGetPkgMtl=function(){
@@ -88,5 +91,23 @@ var testGetPackDetails=function(){
     output(dbPackingSvc.getPackDetails('0800379646'));
 }
 
+var testGetUserProfile=function(){
+    output(dbCommonSvc.getUserProfile('yd.zhu'));
+}
+
+var testDeleteUserProfile=function(){
+    output(dbCommonSvc.deleteUserProfile('yd.zhu1'));
+}
+var testInsertOrUpdateUserProfile=function(){
+    let user={
+        UserID:'yd.zhu1',
+        DefaultWH:'Z01',
+        Domain:'BITSG',
+        UserRole:'superAdmin',
+        isActive:1
+    }
+    output(dbCommonSvc.insertOrUpdateUserProfile(user));
+}
+
 //run from command line: node testCases.js
-testDeleteHandlingUnit();
+testDeleteUserProfile();
