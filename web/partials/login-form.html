@@ -1,0 +1,33 @@
+
+	<form role="form" name="loginForm">
+		<div class="alert alert-danger" ng-show="login.errMsg">
+			<i class="glyphicon glyphicon-warning-sign" style="color:red"></i>
+			{{login.errMsg}}
+		</div>
+	  <div class="form-group">
+	  	<label class="block" for="domain">Please Select Domain</label>
+	    <div class="col-sm-4 no-padding-x margin-bottom">
+			<select class="chosen-select col-sm-12 form-control"
+					ng-model="login.domain"
+					name="domain"
+					ng-options="item as item for item in ['BITSG','BESA']"
+					>
+					<option value="">Select Domain</option>
+			</select>
+		</div>
+		</div>
+		<div class="form-group">
+	    <label class="block clearboth" for="username">Username</label>
+	    <input type="text" class="form-control" id="username" placeholder="Username" ng-model="login.username" autocomplete="off">
+	  </div>
+	  <div class="form-group">
+	    <label for="password">Password</label>
+	    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="login.password"  autocomplete="off">
+	  </div>
+	  <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!login.domain||!login.username||!login.password">Submit</button>
+	</form>
+
+	<pre ng-show="debug">login:{{login | json}}</pre>	
+
+
+

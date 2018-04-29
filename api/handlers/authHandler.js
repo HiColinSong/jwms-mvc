@@ -14,7 +14,7 @@ exports.checkLoginStatus=function(req,res){
 
 exports.authCheck=function(req, res, next) {
 	  if (req.session&&req.session.user)
-	    return next();
+	   next();
 	  else
 	    return res.sendStatus(401);
 };

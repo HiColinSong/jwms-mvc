@@ -1,7 +1,4 @@
-Client Version:  [ 7500, 0, 0 ]
-Are we connected? false
-Connecting...
-Invoking BAPI_WHSE_TO_GET_DETAIL
+
 { TRANSFERORDERITEM: '0000',
   TRANSFERORDERNO: '2000178282',
   WHSENUMBER: 'Z01',

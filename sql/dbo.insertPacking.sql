@@ -1,30 +1,25 @@
 USE [BIOTRACK]
 GO
-
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 27-Apr-18 9:36:04 AM ******/
-DROP PROCEDURE [dbo].[InsertOrUpdatePacking]
-GO
-
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 27-Apr-18 9:36:04 AM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 29-Apr-18 5:34:37 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[InsertOrUpdatePacking] 
+ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
 (
 	@DONumber varchar(12),
 	@DOItemNumber char(6),
 	@HUNumber varchar(20),
     @MaterialCode varchar(18),
     @BatchNo varchar(20),
-    @SerialNo varchar(8)=NULL,
+	@BinNumber varchar(20),
+    @SerialNo varchar(8) = NULL,
     @PackBy varchar(20),
     @PackedOn varchar(10),
     @Status char(1),
     @FullScanCode varchar(60),
-    @Qty int=1
+    @Qty int = 1
 )
 AS
 /**insert or update for table BX_PackDetails
@@ -87,9 +82,10 @@ BEGIN
                             HUNumber=@HUNumber and 
                             MaterialCode=@MaterialCode and 
                             BatchNo=@BatchNo and 
+							BinNumber=@BinNumber and 
                             PackBy=@PackBy and
                             PackedOn=@PackedOn and 
-							SerialNo is NULL)
+							SerialNo is NULL) AND (@SerialNo is NULL)
 		BEGIN
 			UPDATE dbo.BX_PackDetails 
 				SET ScanQty = @Qty+ ScanQty
@@ -98,12 +94,13 @@ BEGIN
                     HUNumber=@HUNumber and 
                     MaterialCode=@MaterialCode and 
                     BatchNo=@BatchNo and 
+					BinNumber=@BinNumber and 
                     PackBy=@PackBy and
                     PackedOn=@PackedOn
 		END
 	ELSE
 		INSERT INTO dbo.BX_PackDetails
-			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty,@DOItemNumber)
+			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty,@DOItemNumber,@BinNumber)
 
     END TRY  
     BEGIN CATCH  
@@ -128,7 +125,4 @@ BEGIN
 	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
 
 END
-
-GO
-
 

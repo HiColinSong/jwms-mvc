@@ -1,0 +1,45 @@
+	<div class="" style="padding:30px;margin-top:20px">
+	  <h2 class="text-center">Post Sterile Receipts</h2>
+	</div>
+<section ng-if="!receipts.categoryId">
+	<div class="col-sm-6 col-sm-offset-3 margin-top">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('bit')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Receive @BIT
+		</button>
+	</div>
+	<div class="clearboth"></div>
+	<div class="col-sm-6 col-sm-offset-3 margin-top-20">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('besa')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Receive @BESA
+		</button>
+	</div>
+	<div class="clearboth"></div>
+	<div class="col-sm-6 col-sm-offset-3 margin-top-20">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('qas')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> QA Sample
+		</button>
+	</div>
+</section>
+<section ng-if="receipts.categoryId">
+	  <ul class="nav nav-tabs " role="tablist">
+	    <li role="presentation" class="active"><a class="cursor-pointer">{{receipts.categoryId|dispCategoryName}}</a></li>
+	  </ul>
+	  <div scan-items items="receipts.items" type="spoReceipts" info="info">
+    	
+    </div>
+    <!--confirm button-->
+  	<div class="col-sm-3 col-xs-12 no-padding-x text-right margin-top">
+	  	<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm receipt" ng-click="confirmReceipt()" ng-disabled="!receipts.items||receipts.items.length===0">
+		  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Receipt
+		</button>
+	</div>
+	<div class="clearboth"></div>
+</section>
+
+
+<pre ng-show="debug">bInfo:{{info.bInfo | json}}</pre>	
+<pre ng-show="debug">itemInfo:{{info.itemInfo | json}}</pre>	
+<pre ng-show="debug">receipts:{{receipts | json}}</pre>	

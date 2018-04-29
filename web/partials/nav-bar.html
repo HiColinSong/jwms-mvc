@@ -1,0 +1,148 @@
+<nav class="navbar  navbar-fixed-top" role="navigation" scroll ng-controller="navCtrl">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header navbar-inverse" ng-init="menu={showSub:''}">
+
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="navbar-brand primary">
+        <span class="block pull-left company-logo"></span> 
+        <span class="tangerine pull-left block margin-left">
+          <span class="highlight-letter">B</span>
+          <span class="letter">iotrack e</span>
+          <span class="highlight-letter">X</span>
+          <span class="letter">tension</span>
+        </span> 
+        </div> 
+
+      </div>
+    
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-inverse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed=true">
+      
+        <ul class="nav navbar-nav" ng-hide="boolChangeClass"> 
+          <li>{{scroll}}</li>
+
+          <li> 
+            <a href="#/home" active-link="active"> 
+              <span class="fa fa-home fa-lg"></span>
+              Home
+              </a> 
+          </li>
+          <li> 
+            <a href="#/receiving" active-link="active" 
+               ng-mouseenter="menu.showSub='receiving'"
+               ng-mouseleave="menu.showSub=''"
+               > 
+              Receiving
+            </a> 
+          </li>
+          <li> 
+            <a href="#/fulfillment" active-link="active"
+                ng-mouseenter="menu.showSub='fulfillment'"
+                ng-mouseleave="menu.showSub=''"
+            > 
+              Fulfillment
+            </a> 
+          </li>
+        
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+
+           <li ng-show="!authUser"> 
+            <a class="cursor-pointer" ng-click="login()">
+              <span class="fa fa-sign-in fa-lg"></span>
+              login
+            </a>
+          </li>
+           <li ng-show="authUser"> 
+            <a title="{{authUser.DefaultWH}}">
+              <span class="fa fa-user-circle-o fa-lg" title="{{authUser.DefaultWH}}"></span>
+              {{authUser.UserID}}
+            </a>
+          </li>
+          <li ng-show="authUser">
+            <a href="#/home" ng-click="logout()">
+              <span class="fa fa-sign-out fa-lg"></span>
+              log out
+            </a>
+          </li>
+          <!--removeIf(qa)-->
+          <!--removeIf(production)-->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+
+              <li>
+                <a role="button" ng-href="" ng-click="toggleDebug()">
+                  Debug
+                  <span class="glyphicon glyphicon-ok pull-right text-muted" ng-show="debug"></span> 
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--endRemoveIf(production)-->
+          <!--endRemoveIf(qa)-->
+        </ul>
+            
+
+      </div><!-- /.navbar-collapse -->
+
+      <div class="subnav pull-left full-width" 
+            ng-show="menu.showSub==='receiving'||(menu.showSub===''&&(currentUrl.indexOf('/receiving')!=-1))"
+                ng-mouseenter="menu.showSub='receiving'"
+               ng-mouseleave="menu.showSub=''"
+            >
+        <ul class="nav navbar-nav"> 
+          <li> 
+            <a href="#/receiving/spoReceipts" active-link="active"> 
+              <!-- <span class="fa fa-file-text-o fa-lg"></span> -->
+              Subcon PO Receipts
+            </a> 
+          </li>
+          <li> 
+            <a href="#/receiving/rtgReceipts" active-link="active"> 
+              <!-- <span class="fa fa-file-text-o fa-lg"></span> -->
+              RGA Receipts
+            </a> 
+          </li>
+        </ul>
+      </div>
+      <div class="subnav pull-left full-width" 
+            ng-show="menu.showSub==='fulfillment'||(menu.showSub===''&&(currentUrl.indexOf('/fulfillment')!=-1))"
+            ng-mouseenter="menu.showSub='fulfillment'"
+            ng-mouseleave="menu.showSub=''"
+            >
+        <ul class="nav navbar-nav"> 
+           <li> 
+            <a href="#/fulfillment/picking" active-link="active">Picking</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/tools/picking-reversals" active-link="active">Picking Reversals</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/packing" active-link="active">Packing</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/tools/packing-reversals" active-link="active">Packing Reversals</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/tools/pgi" active-link="active">PGI</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/tools/reversals-pgi" active-link="active">PGI Reversals</a> 
+          </li>
+           <li> 
+            <a href="#/fulfillment/tools/reservation" active-link="active">Reservation</a> 
+          </li>
+        </ul>
+      </div>
+      <div class="padding-x padding-y-5" style="padding-top:35px">
+        <alert ng-repeat="alert in pageParts.alerts" type="{{alert.type}}" close="closeAlert($index)">
+          {{alert.msg}}
+        </alert>
+      </div>
+    </nav>

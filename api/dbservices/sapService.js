@@ -45,7 +45,7 @@ exports.confirmPacking=function(order){
             DELIV_NUMB: order.DONumber, 
             HDL_UNIT_EXID:hu.HUNumber, 
             HDL_UNIT_EXID_TY:"F",
-            SHIP_MAT:"C-10832-000", 
+            SHIP_MAT:hu.PackMaterial, 
             PLANT:order.Plant
           }
       );

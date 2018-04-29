@@ -1,0 +1,69 @@
+<div class="modal-header dialog-header-success">
+  <button type="button" class="close" ng-click="$dismiss()">
+    <i class="fa fa-times fa-lg"></i>
+  </button>
+  <div class="modal-title">
+    <span class="fa fa-university"></span>
+    <span>Add New HU</span>
+  </div>
+</div>
+<form class="form-horizontal" role="form" name="myForm" novalidate class="bx" ng-class="{submitted:submitted}">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-7 col-sm-offset-3 error ng-binding" ng-if='error'>
+          <i class="fa fa-minus-circle"></i> {{error.text}}
+        </div>
+        
+        <div class="form-group" ng-init="temp={}">
+          <label class="col-sm-3 control-label no-padding-right field-required" for="name"> Packaging Material </label>
+          <div class="col-sm-6" ng-class="{'has-error':(temp.material&&!temp.material.MaterialCode)}">
+               <input type='text' class='col-sm-12 form-control'
+                               name='material'
+                               ng-required="true"
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted,'error':(temp.material&&!temp.material.MaterialCode)}"
+                               ng-model="temp.material"
+                               typeahead="mtl as mtl.MaterialCode for mtl in pkgMtlList|filter:$viewValue|limitTo:12"
+                               placeholder="Please scan/enter material"
+                               autocomplete="off">
+          </div>
+        </div><div class="form-group" ng-init="temp={}">
+          <label class="col-sm-3 control-label no-padding-right field-required" for="name"> Number of New HU </label>
+          <div class="col-sm-6">
+               <input type='number' class='col-sm-6 form-control'
+                               max="500"
+                               min="1"
+                               name='newHuNo'
+                               ng-required="true"
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted}"
+                               ng-model="temp.newHuNo"
+                               placeholder="No. of HU to be created">
+          </div>
+        </div>
+        <div class="clearboth"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer text-center">
+    <button type="submit" class="btn btn-primary" ng-click="addNewHu()" ng-disabled="!temp.material.MaterialCode||!temp.newHuNo">
+      Submit
+    </button>
+    <button type="button" class="btn btn-default" ng-click="submitted=false;temp.material=undefined;temp.newHuNo=undefined;">
+      Reset
+    </button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">
+      Cancel
+    </button>
+  </div>
+</form>
+<pre ng-show="debug">
+
+{{transOrder|json}}
+{{temp|json}}
+{{pkgMtlList|json}}
+
+</pre >

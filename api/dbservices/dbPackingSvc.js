@@ -10,6 +10,7 @@ exports.InsertScanItem=function(info){
     HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
     MaterialCode:{type:'sql.VarChar(18)',value:info.MaterialCode},
     BatchNo:{type:'sql.VarChar(20)',value:info.BatchNo},
+    BinNumber:{type:'sql.VarChar(20)',value:info.BinNumber},
     PackBy:{type:'sql.VarChar(20)',value:info.PackBy},
     PackedOn:{type:'sql.VarChar(10)',value:info.PackedOn},
     FullScanCode:{type:'sql.VarChar(60)',value:info.FullScanCode},

@@ -118,7 +118,7 @@ exports.addNewHu=function(req,res){
 			DONumber:req.body.DONumber,
 			HUNumberList:newHu.join(','),
 			PackMaterial:req.body.MaterialCode,
-			CreatedBy:req.session.user,
+			CreatedBy:req.session.user.UserID,
 			CreatedOn:req.body.createdOn
 		}
 		try {
@@ -161,14 +161,16 @@ exports.addItem=function(req,res){
 		params.MaterialCode=info.MaterialCode;
 		params.BatchNo=info.BatchNo;
 		params.DOItemNumber=info.itemNumber;
+		params.Qty = info.Qty;
 		if (info.SerialNo){
 			params.SerialNo=info.SerialNo;
-		}
-		params.PackBy=req.session.user;
+			params.Qty = 1;
+		} 
+		params.PackBy=req.session.user.UserID;
 		params.PackedOn=info.scannedOn;
 		params.Status = info.Status
-		params.Qty = info.Qty;
 		params.FullScanCode = info.FullScanCode;
+		params.BinNumber = info.BinNumber;
 
 		try {
 			var scannedItems = await dbPackingSvc.InsertScanItem(params);

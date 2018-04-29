@@ -1,0 +1,103 @@
+<form role="form" name="labelBarcode">
+	<accordion close-others="false" >
+		<div accordion-group class="panel-primary scan-panel text-center"  is-open="true" is-disabled="false" >
+		<accordion-heading>
+			Scan Panel
+		</accordion-heading>
+		<table class="table table-striped border scan-item">
+			<thead ng-show="temp.barcodeInfo.errMsg">
+				<tr>
+					<th class="error" colspan="2">
+						<div>{{temp.barcodeInfo.errMsg}}</div>
+					</th>
+				</tr>
+			</thead>
+				<tbody> 
+					<tr ng-if="type==='picking'||type==='packing'" class="form-group" ng-class="{'has-error':temp.barcodeInfo.error.binNumber}">
+						<td width="35%" class="padding-top ">
+							<label for="binNumber" class="block margin-top">Scan/Enter Bin No:</label>		
+						</td>
+						<td width="65%">	
+							<input type="text" class="form-control full-width" id="binNumber" placeholder="Scan/Enter Bin No" 
+							ng-model="temp.barcodeInfo.binNo" autocomplete="off">
+						</td>
+					</tr>
+					<tr class="form-group" ng-class="{'has-error':temp.barcodeInfo.error.barcode1}">
+						<td width="35%" class="padding-top">
+							<label for="barcode1" class="block margin-top">Scan/Enter Barcode1:</label>		
+						</td>
+						<td width="65%">	
+							 <div class="form-group" ng-class="{'has-error':temp.barcodeInfo.isValid===false}">
+									<input type="text" class="form-control full-width" id="barcode1" placeholder="Scan/Enter barcode1" 
+													ng-model="temp.barcodeInfo.barcode1" autocomplete="off">
+							</div>
+					</tr>
+					</tr>
+					<tr class="form-group" ng-class="{'has-error':temp.barcodeInfo.isValid===false}" 
+																ng-show="(temp.barcodeInfo.isValid&&
+																(!temp.barcodeInfo.EANCode||
+																!temp.barcodeInfo.expiry||
+																!temp.barcodeInfo.batchNo||
+																!temp.barcodeInfo.serialNo))||
+																temp.barcodeInfo.barcode2">
+						<td width="35%" class="padding-top">
+							<label for="barcode2" class="block margin-top">Scan/Enter Barcode2:</label>		
+						</td>
+						<td width="65%">	
+							 <div class="form-group" ng-class="{'has-error':temp.barcodeInfo.isValid===false}">
+								<input type="text" class="form-control full-width" id="barcode2" placeholder="Scan/Enter barcode2" 
+												ng-model="temp.barcodeInfo.barcode2" autocomplete="off">
+							</div>
+						</td>
+					</tr>
+					<tr class="form-group" ng-class="{'has-error':temp.barcodeInfo.isValid&&
+																						!temp.barcodeInfo.serialNo&&
+																						(!temp.barcodeInfo.quantity||temp.barcodeInfo.quantity<1)}"
+																ng-show="(temp.barcodeInfo.isValid&&!temp.barcodeInfo.serialNo)" 
+					>
+						<td width="35%" class="padding-top">
+							<label for="quantity" class="block margin-top">Enter Quantity:</label>		
+						</td>
+						<td width="65%">	
+								<div class="form-group">
+									<input type="number" class="form-control full-width" id="quantity" placeholder="Enter Qty" 
+												ng-model="temp.barcodeInfo.quantity" min="0" autocomplete="off">
+							</div>
+						</td>
+					</tr>
+					<tr class="form-group" ng-class="{'has-error':temp.barcodeInfo.isValid&&!temp.barcodeInfo.material}">
+						<td width="35%" class="padding-top">
+							<label for="materialCode" class="block margin-top">Material Code:</label>		
+						</td>
+						<td width="65%">	
+							<div class="form-group">
+									<input type="text" class="form-control" id="materialCode" placeholder="Material Code" ng-model="temp.barcodeInfo.material">
+							</div>
+						</td>
+					</tr>
+					<tr class="form-group" ng-class="{'has-error':temp.barcodeInfo.error.batchNo}">
+						<td width="35%" class="padding-top">
+							<label for="batchNo" class="block margin-top">Batch No:</label>
+						</td>
+						<td width="65%">	
+								<div class="form-group">
+										<input type="text" class="form-control col-sm-8" id="batchNo" placeholder="Batch No" 
+											 ng-model="temp.barcodeInfo.batchNo">
+										</div>
+						</td>
+					</tr>
+				</tbody> 
+				<tfoot>
+					<tr>
+						<td colspan="2" class="text-center">
+								<button type="submit" class="btn btn-default margin-top" ng-click="findItem()" 
+											ng-disabled="!temp.barcodeInfo.barcode1||((type==='picking'||type==='packing')&&!temp.barcodeInfo.binNo)">Submit</button>
+								<button type="button" class="btn btn-default margin-top" ng-click="resetScanInput()">Reset</button>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+ </accordion>
+</form>
+

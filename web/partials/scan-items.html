@@ -1,0 +1,146 @@
+
+				<div ng-include src="'partials/scan-input.html'"></div>
+
+    	<!-- <form ng-show="items&&items.length>0" class="margin-top">
+		    <div class="form-group">
+		      <div class="input-group">
+		        <div class="input-group-addon"><i class="fa fa-search"></i></div>
+		        <input type="text" class="form-control" placeholder="Search item" ng-model="searchItem">
+		      </div>      
+		    </div>
+			</form> -->
+			
+			<div>
+				
+					<div class="margin-top-20 panel-head">
+								<div class="col-sm-3">Item No</div>
+								<div class="col-sm-3">Material</div>
+								<div class="col-sm-3">Batch No</div>
+								<div class="col-sm-3">Scanned/Planned</div>
+					</div>
+					<div class="clearboth"></div>
+					<accordion close-others="true" >
+
+						<div accordion-group class="panel-default scan-item"  
+								ng-class="{'full':plannedItem.ScanQty===plannedItem.DOQuantity}"
+								is-open="false" is-disabled="false" 
+								 ng-repeat="(pidx,plannedItem) in order.plannedItems" >
+							<accordion-heading>
+								<table class="full-width">
+									<tr>
+										<td width="25%" class="text-center">{{plannedItem[itemNoFieldName]}}</td>
+										<td width="25%" class="text-center">{{plannedItem.MaterialCode}}</td>
+										<td width="25%" class="text-center">{{plannedItem.BatchNo}}</td>
+										<td width="25%" class="text-center">{{plannedItem.ScanQty||0}}/{{plannedItem.DOQuantity}}</td>
+									</tr>
+								</table>
+								<!-- <scan width="33%">{{item.MaterialCode}}</scan>
+								<scan width="33%">{{item.BatchNo}}</scan>
+								<scan width="33%">0/{{item.DOQuantity}}</scan> -->
+							</accordion-heading>
+							<table class="table table-striped border scan-item">
+									<thead ng-show="plannedItem.ScanQty"> 
+										<tr>
+											<!-- <td>Line No</td> -->
+											<td>
+												<a class="cursor-pointer" ng-click="sortType = 'BinNumber'; sortReverse = !sortReverse">
+													Bin Number
+													<span ng-show="sortType == 'BinNumber' && !sortReverse" class="fa fa-caret-down"></span>
+													<span ng-show="sortType == 'BinNumber' && sortReverse" class="fa fa-caret-up"></span>
+												</a>
+											</td>
+											<td>
+												<a class="cursor-pointer" ng-click="sortType = 'serialNo'; sortReverse = !sortReverse">
+													Serials No
+													<span ng-show="sortType == 'serialNo' && !sortReverse" class="fa fa-caret-down"></span>
+													<span ng-show="sortType == 'serialNo' && sortReverse" class="fa fa-caret-up"></span>
+												</a>
+											</td>
+											<td>
+												<a class="cursor-pointer" ng-click="sortType = 'qty'; sortReverse = !sortReverse">
+													Qty
+													<span ng-show="sortType == 'qty' && !sortReverse" class="fa fa-caret-down"></span>
+													<span ng-show="sortType == 'qty' && sortReverse" class="fa fa-caret-up"></span>
+												</a>
+											</td>
+												<td>
+													<a class="cursor-pointer" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
+													{{createdByFieldDisplay}}
+														<span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
+														<span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
+													</a>
+												</td>
+												<!-- <td>
+													<a class="cursor-pointer" ng-click="sortType = 'packedOn'; sortReverse = !sortReverse">
+													Packed On 
+														<span ng-show="sortType == 'packedOn' && !sortReverse" class="fa fa-caret-down"></span>
+														<span ng-show="sortType == 'packedOn' && sortReverse" class="fa fa-caret-up"></span>
+													</a>
+												</td> -->
+												<td width="10%" class="text-center">Action</td>
+											
+										</tr>
+									</thead> 
+									<tbody> 
+										<tr ng-if="items&&items.length>0" 
+											 ng-repeat="(idx,item) in items | orderBy:sortType:sortReverse | filter:plannedItem.MaterialCode| filter:plannedItem.BatchNo|filter:plannedItem.DOItemNumber">
+					
+										<!-- <td width="20%">{{idx+1}}</td> -->
+										<td width="25%">{{item.BinNumber}}</td>
+										<td  width="30%">{{item.SerialNo||'-'}}</td>
+										<td  width="15%">{{item.ScanQty||1}}</td>
+										<td  width="20%">{{item[createdByFieldName]}}</td>
+										<!-- <td>{{item.PackedOn}}</td> -->
+										<td width="10%" class="text-center">
+											<a class="cursor-pointer margin-left-20 text-danger"  confirm-required="the item {{item.serialNo}}" ng-click="removeItem(item)">
+																								 <!-- Remove  -->
+																								 <i class="text-danger fa fa-times-circle fa-lg"></i>
+																							</a>
+										</td>
+					
+									</tr>
+									<tr ng-show="!plannedItem.ScanQty">
+										<td colspan="5" class='empty-message text-center'>No scan item.</td>
+									</tr>
+									</tbody> 
+								</table>
+						</div>
+						<!-- <div accordion-group >
+						
+						</div>
+						<div accordion-group >
+						
+						</div>
+						<div accordion-group >
+						
+						</div> -->
+						<!-- <div accordion-group class="panel-default" heading="{{group.title}}" ng-repeat="group in groups">
+							{{group.content}}
+						</div>
+						<div accordion-group class="panel-default" heading="Dynamic Body Content">
+							<p>The body of the accordion group grows to fit the contents</p>
+							<button type="button" class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
+							<div ng-repeat="item in items">{{item}}</div>
+						</div> -->
+						<!-- <div accordion-group class="panel-default" heading="Custom template" template-url="group-template.html">
+							Hello
+						</div>
+						<div accordion-group class="panel-default" is-open="status.isCustomHeaderOpen" template-url="group-template.html">
+							<accordion-heading>
+								Custom template with custom header template <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+							</accordion-heading>
+							World
+						</div> -->
+						<!-- <div accordion-group class="panel-danger" heading="Delete account">
+							<p>Please, to delete your account, click the button below</p>
+							<button class="btn btn-danger">Delete</button>
+						</div> -->
+						<dir class="clearboth"></dir>
+					</accordion>
+				</div>
+
+
+		  <!--  -->
+    	
+
+

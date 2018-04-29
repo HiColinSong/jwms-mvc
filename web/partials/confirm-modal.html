@@ -1,0 +1,21 @@
+    <div class="modal-header dialog-header-confirm">
+      <button type="button" class="close" ng-click="$dismiss()">
+        ×
+      </button>
+      <h4 class="modal-title">
+        <span class="glyphicon glyphicon-check">
+        </span>
+        Please Confirm
+      </h4>
+    </div>
+    <div class="modal-body font-16 text-info">
+      Are you sure to {{actionOperate}} <span ng-if="itemName">"{{itemName}}"</span>?
+    </div>
+    <div class="modal-footer text-center">
+      <button type="button" class="btn btn-default" ng-click="yes()">
+        Confirm
+      </button>
+      <button type="button" class="btn btn-primary" ng-click="$dismiss()">
+         Cancel
+      </button>
+    </div>
