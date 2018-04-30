@@ -90,8 +90,13 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
 		    function(err, res) {
 		      if (err) {
 		        // return console.error('Error invoking BAPI_PO_GETDETAIL:', err);
-		        reject(err);
-		      }
+            reject(err);
+            transactionCommit=false;
+          }
+          if (res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
+            reject(res.RETURN[0].MESSAGE);
+            transactionCommit=false;
+          }
           console.log("Invoking "+bapiName+" successfully");
           if (transactionCommit){
             console.log("Invoking BAPI_TRANSACTION_COMMIT");

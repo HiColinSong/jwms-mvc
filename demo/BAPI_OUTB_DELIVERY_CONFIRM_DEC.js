@@ -41,32 +41,45 @@ client.connect(function(err) {
 
   console.log('Invoking BAPI_OUTB_DELIVERY_CONFIRM_DEC');
   client.invoke('BAPI_OUTB_DELIVERY_CONFIRM_DEC',
-    {
-      HEADER_DATA:{DELIV_NUMB:"0800401159"},
-      HEADER_CONTROL:{DELIV_NUMB:"0800401159"},
-      HANDLING_UNIT_HEADER:
-        [{ DELIV_NUMB: "0800401159", 
-           HDL_UNIT_EXID:"20180423210000000004", 
-           HDL_UNIT_EXID_TY:"F",
-           SHIP_MAT:"C-10832-000", 
-           PLANT:"2100"},
-          {DELIV_NUMB: "0800401159",
-           HDL_UNIT_EXID:"20180423210000000003",
-            HDL_UNIT_EXID_TY:"F",
-            SHIP_MAT:"C-10832-000", 
-            PLANT:"2100"}
-        ],
-        HANDLING_UNIT_ITEM:
-        [{ DELIV_NUMB: "0800401159", 
-           DELIV_ITEM:"000001",
-           HDL_UNIT_EXID_INTO:"20180423210000000004", 
-           PACK_QTY:1},
-          { DELIV_NUMB: "0800401159",
-            DELIV_ITEM:"000001",
-          HDL_UNIT_EXID_INTO:"20180423210000000003", 
-          PACK_QTY:2}
-        ]
+  {
+    "HEADER_DATA": {
+      "DELIV_NUMB": "0800401131"
     },
+    "HEADER_CONTROL": {
+      "DELIV_NUMB": "0800401131"
+    },
+    "HANDLING_UNIT_HEADER": [
+      {
+        "DELIV_NUMB": "0800401131",
+        "HDL_UNIT_EXID": "15249880572540",
+        "HDL_UNIT_EXID_TY": "F",
+        "SHIP_MAT": "pkgm124",
+        "PLANT": ""
+      },
+      {
+        "DELIV_NUMB": "0800401131",
+        "HDL_UNIT_EXID": "15249880572541",
+        "HDL_UNIT_EXID_TY": "F",
+        "SHIP_MAT": "pkgm124",
+        "PLANT": ""
+      },
+      {
+        "DELIV_NUMB": "0800401131",
+        "HDL_UNIT_EXID": "15249880572542",
+        "HDL_UNIT_EXID_TY": "F",
+        "SHIP_MAT": "pkgm124",
+        "PLANT": ""
+      }
+    ],
+    "HANDLING_UNIT_ITEM": [
+      {
+        "DELIV_NUMB": "0800401131",
+        "DELIV_ITEM": "000001",
+        "HDL_UNIT_EXID_INTO": "15249880572540",
+        "PACK_QTY": 2
+      }
+    ]
+  },
     function(err, res) {
       if (err) {
         return console.error('Error invoking BAPI_OUTB_DELIVERY_CONFIRM_DEC:', err);

@@ -37,7 +37,7 @@
         "Warehouse":"WHSENUMBER",
         "PickConfirmStatus":"PICK_CNFMD",
         "Plant":"",
-        "DONumber":"",
+        "DONumber":"SD_DOC",
         "ShipToCustomer":""
     },
     "transferOrderItemFields":{

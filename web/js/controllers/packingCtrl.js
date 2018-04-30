@@ -184,6 +184,11 @@
                                 type:"warn",
                                 message:"The delivery order is invalid, confirmation is failed!",
                             }
+                        } else if(data&&data.error&&data.message){
+                            $scope.confirm={
+                                type:"danger",
+                                message:data.message,
+                            }
                         } else {
                             $scope.confirm={
                                 type:"danger",
@@ -192,7 +197,7 @@
                         }
                         confirmSubmit.do($scope);
                     },function(err){
-                        console.err(err);
+                        console.error(err);
                         $scope.confirm={
                             type:"danger",
                             message:"System error, confirmation is failed!",
