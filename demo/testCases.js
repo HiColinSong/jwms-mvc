@@ -1,5 +1,5 @@
-﻿var dbPackingSvc=require('./dbservices/dbPackingSvc')
-var dbCommonSvc=require('./dbservices/dbCommonSvc')
+﻿var dbPackingSvc=require('./../api/dbservices/dbPackingSvc')
+var dbCommonSvc=require('./../api/dbservices/dbCommonSvc')
 
 var params;
 
@@ -22,10 +22,10 @@ var testGetMaterialCode=function(){
 var testCreateHandlingUnits=function(){
     params={
         DONumber:'0800379642',
-        HUNumberList:'2203456023750234522',
-        // HUNumberList:'22034560237502345126,22034560237502345127,22034560237502345128,22034560237502345129,22034560237502345030',
+        NumToCreate:3,
         PackMaterial:'m123456',
-        CreatedBy:'yadong',
+        CreatedBy:'yd.zhu',
+        Domain:'BITSG',
         CreatedOn:'20180423'
       }
     output(dbPackingSvc.createHandlingUnits(params));
@@ -100,9 +100,9 @@ var testDeleteUserProfile=function(){
 }
 var testInsertOrUpdateUserProfile=function(){
     let user={
-        UserID:'yd.zhu1',
+        UserID:'d.pesce',
         DefaultWH:'Z01',
-        Domain:'BITSG',
+        Domain:'BESA',
         UserRole:'superAdmin',
         isActive:1
     }
@@ -110,4 +110,4 @@ var testInsertOrUpdateUserProfile=function(){
 }
 
 //run from command line: node testCases.js
-testDeleteUserProfile();
+testCreateHandlingUnits();

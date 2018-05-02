@@ -117,9 +117,11 @@ exports.addNewHu=function(req,res){
 		}
 		var params={
 			DONumber:req.body.DONumber,
-			HUNumberList:newHu.join(','),
+			// HUNumberList:newHu.join(','),
+			NumToCreate:req.body.NumOfHu,
 			PackMaterial:req.body.MaterialCode,
 			CreatedBy:req.session.user.UserID,
+			Domain:req.session.user.Domain,
 			CreatedOn:req.body.createdOn
 		}
 		try {
@@ -159,10 +161,11 @@ exports.addItem=function(req,res){
 		var info=req.body,params={};
 		params.DONumber=info.orderNo;
 		params.HUNumber=info.HUNumber;
+		params.EANCode=info.EANCode;
 		params.MaterialCode=info.MaterialCode;
 		params.BatchNo=info.BatchNo;
-		params.DOItemNumber=info.itemNumber;
-		params.Qty = info.Qty;
+		// params.DOItemNumber=info.itemNumber;
+		params.Qty = info.Qty||1;
 		if (info.SerialNo){
 			params.SerialNo=info.SerialNo;
 			params.Qty = 1;
@@ -219,10 +222,12 @@ exports.refreshHu=function(req,res){
 exports.confirmPacking=function(req,res){
 	(async function () {
 		try {
-			var confirmStatus = await sapSvc.confirmPacking(req.body.order);
-			if (confirmStatus){
+			var res = await sapSvc.confirmPacking(req.body.order);
+			if (res&&(!res.RETURN||res.RETURN&&res.RETURN.length===0)){
 				await dbPackingSvc.confirmPacking(req.body.order.DONumber,req.body.PackComplete);
 				return res.status(200).send({confirm:"success"});
+			} else if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){
+				return res.status(200).send({confirm:"fail",error:true,message:res.RETURN[0].MESSAGE});
 			} else {
 				return res.status(200).send({confirm:"fail"});
 			}

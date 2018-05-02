@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on 14 April 2018 12:44:59 GMT-0400 (EDT)
+//command: node node_modules\karma\bin\karma start
 
 module.exports = function(config) {
   config.set({
@@ -23,18 +24,18 @@ module.exports = function(config) {
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
         'bower_components/angular-mocks/angular-mocks.js',
-        'js/mock/app-mock.js',
-        'js/app.js',
-        'js/app.http-provider.js',
-        'js/app.local-storage-service-provider.js',
-        'js/app.route-provider.js',
-        'js/app.run.js',
-         'js/controllers/**/*.js',
-         'js/directives/**/*.js',
-         'js/filters/**/*.js',
-         'js/services/**/*.js',
-         'js/mock/**/*.js',
-          'tests/*.js'
+        'web/js/mock/app-mock.js',
+        'web/js/app.js',
+        'web/js/app.http-provider.js',
+        'web/js/app.local-storage-service-provider.js',
+        'web/js/app.route-provider.js',
+        'web/js/app.run.js',
+         'web/js/controllers/**/*.js',
+         'web/js/directives/**/*.js',
+         'web/js/filters/**/*.js',
+         'web/js/services/**/*.js',
+         'web/js/mock/**/*.js',
+          'web/test/*.js'
     ],
 
 

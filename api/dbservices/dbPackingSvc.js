@@ -6,7 +6,7 @@ const dbSvc=require("./dbCommonSvc");
 exports.InsertScanItem=function(info){
   var params={
     DONumber:{type:'sql.VarChar(12)',value:info.DONumber},
-    DOItemNumber:{type:'sql.Char(6)',value:info.DOItemNumber},
+    EANCode:{type:'sql.VarChar(16)',value:info.EANCode},
     HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
     MaterialCode:{type:'sql.VarChar(18)',value:info.MaterialCode},
     BatchNo:{type:'sql.VarChar(20)',value:info.BatchNo},
@@ -45,9 +45,10 @@ exports.InsertScanItem=function(info){
   exports.createHandlingUnits=function(info){
     var params={
       DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
-      HUNumberList:{type:'sql.VarChar(8000)',value:info.HUNumberList},
+      NumToCreate:{type:'sql.Int',value:info.NumToCreate},
       PackMaterial:{type:'sql.VarChar(18)',value:info.PackMaterial},
-      CreatedBy:{type:'sql.VarChar(4)',value:info.CreatedBy},
+      CreatedBy:{type:'sql.VarChar(20)',value:info.CreatedBy},
+      BUnit:{type:'sql.VarChar(10)',value:info.Domain},
       CreatedOn:{type:'sql.VarChar(8)',value:info.CreatedOn}
     }
     return sqlSvc.callStoredProcedure("dbo.InsertHandlingUnits",params)

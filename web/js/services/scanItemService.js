@@ -3,133 +3,135 @@
     'use strict';
     angular.module('bx.services')
     .service('scanItemSvc',['bxService','utilSvc',function(apiSvc,utilSvc){
-        var ascii29 = String.fromCharCode(29);
-        var resolver = function(code,bInfo){ 
-            bInfo=bInfo||{isValid:true};
-            if (code.legnth<3){
-                bInfo.isValid=false;
-                return bInfo;
-            }
-            var marker= code.substring(0,2);
-            if (marker==="01"||marker==="02"){
-                if (code.length>=16){
-                    bInfo.EANCode=code.substring(2,16);
-                    if (code.length>16){
-                        return resolver(code.substring(16),bInfo);
-                    } else {
-                        bInfo.isValid=true;
-                        return bInfo;
-                    }
-                } else {
-                    bInfo.isValid=false;
-                    return bInfo;
-                }
-            } else if (marker==="17"){
-                if (code.length>=6){
-                    bInfo.expiry=code.substring(2,8);
-                    if (code.length>8){
-                        return resolver(code.substring(8),bInfo);
-                    } else {
-                        bInfo.isValid=true;
-                        return bInfo;
-                    }
-                } else {
-                    bInfo.isValid=false;
-                    return bInfo;
-                }
-            } else if (marker==="10"||marker==="21"||marker==="30"||marker==="37"){
-                var prop;
+        // var ascii29 = String.fromCharCode(29);
+        // var resolver = function(code,bInfo){ 
+        //     bInfo=bInfo||{isValid:true};
+        //     if (code.length<3){
+        //         bInfo.isValid=false;
+        //         return bInfo;
+        //     }
+        //     var marker= code.substring(0,2);
+        //     if (marker==="01"||marker==="02"){
+        //         if (code.length>=16){
+        //             bInfo.EANCode=code.substring(2,16);
+        //             if (code.length>16){
+        //                 return resolver(code.substring(16),bInfo);
+        //             } else {
+        //                 bInfo.isValid=true;
+        //                 return bInfo;
+        //             }
+        //         } else {
+        //             bInfo.isValid=false;
+        //             return bInfo;
+        //         }
+        //     } else if (marker==="17"){
+        //         if (code.length>=6){
+        //             bInfo.expiry=code.substring(2,8);
+        //             if (code.length>8){
+        //                 return resolver(code.substring(8),bInfo);
+        //             } else {
+        //                 bInfo.isValid=true;
+        //                 return bInfo;
+        //             }
+        //         } else {
+        //             bInfo.isValid=false;
+        //             return bInfo;
+        //         }
+        //     } else if (marker==="10"||marker==="21"||marker==="30"||marker==="37"){
+        //         var prop;
 
-                switch(marker){
-                    case "10":
-                        prop="batchNo";
-                        break;
-                    case "21":
-                        prop="serialNo";
-                        break;
-                    default:
-                        prop="info"+marker
-                }
+        //         switch(marker){
+        //             case "10":
+        //                 prop="batchNo";
+        //                 break;
+        //             case "21":
+        //                 prop="serialNo";
+        //                 break;
+        //             default:
+        //                 prop="info"+marker
+        //         }
 
 
-                //try to find ascii29
-                var stopPosition=code.length;
-                for (var i=0;i<code.length;i++){
-                    if (code.charAt(i)===ascii29){
-                        stopPosition=i;
-                        break;
-                    }
-                }
-                bInfo[prop]=code.substring(2,stopPosition);
-                if (code.length>stopPosition+1){
-                    return resolver(code.substring(stopPosition+1),bInfo);
-                } else {
-                    bInfo.isValid=true;
-                    return bInfo;
-                }
-            } else {
-                bInfo.isValid=false;
-                return bInfo;
-            }
-        }
+        //         //try to find ascii29
+        //         var stopPosition=code.length;
+        //         for (var i=0;i<code.length;i++){
+        //             if (code.charAt(i)===ascii29){
+        //                 stopPosition=i;
+        //                 break;
+        //             }
+        //         }
+        //         bInfo[prop]=code.substring(2,stopPosition);
+        //         if (code.length>stopPosition+1){
+        //             return resolver(code.substring(stopPosition+1),bInfo);
+        //         } else {
+        //             bInfo.isValid=true;
+        //             return bInfo;
+        //         }
+        //     } else {
+        //         bInfo.isValid=false;
+        //         return bInfo;
+        //     }
+        // }
         return {
-            resolveBarcode:function(barcodeInfo){
-                /**
-                    Barcode contains any number of the following parts
-                    1. EAN Code:start with "01" or "02" followed by 14 chars
-                    2. Expiry: start with "17" followed by 6 chars
-                    3. BatchNo: start with "10" and end before the ASCII code 29 (Group Separator) or all the way to the end of barcode
-                    4. SerialNo: start with "21" and end before the ASCII code 29 (Group Separator) or all the way to the end of barcode
-                */
-                var _bInfo=resolver(barcodeInfo.barcode1,barcodeInfo);
-                if (barcodeInfo.barcode2){
-                    _bInfo=resolver(barcodeInfo.barcode2,barcodeInfo);
-                }
-                return _bInfo; 
+            getBarcodeObj:function(){
+                return new Barcode();
             },
-            isValidToAddToOrder:function(info,plannedItems){
-                    var valid=true,errMsg,found=false;
-                    if (!info.material) {valid=false;errMsg="Material Code is required"}
-                    if (!info.batchNo)  {valid=false;errMsg="Batch No is required"}
-                    if (!info.expiry)  {valid=false;errMsg="Expiry is required"};
-                    if (!info.serialNo&&(!info.quantity||info.quantity<1))  {valid=false;}
-                    //check material/batch combination
-                    if (info.material&&info.batchNo){
-                        for (var i=0;i<plannedItems.length;i++){
-                            if (plannedItems[i].MaterialCode===info.material&&plannedItems[i].BatchNo===info.batchNo){
-                                found=true;
-                                break;
-                            }
-                        }
-                        if (!found){
-                            {valid=false;errMsg="Material/Batch Combination not found"}
-                        }
-                    }
-                    if (!info.itemNumber) {valid=false;errMsg=errMsg||"Items are fully scanned!"}
-                    info.valid=valid;
-                    info.errMsg=errMsg;
-                    //not check the unique of the serial No. it will be checked Stored Procedure
-                    return valid
-            },
-            insertScanItem:function(info,type,callback){
+            // resolveBarcode:function(barcodeInfo){
+            //     /**
+            //         Barcode contains any number of the following parts
+            //         1. EAN Code:start with "01" or "02" followed by 14 chars
+            //         2. Expiry: start with "17" followed by 6 chars
+            //         3. BatchNo: start with "10" and end before the ASCII code 29 (Group Separator) or all the way to the end of barcode
+            //         4. SerialNo: start with "21" and end before the ASCII code 29 (Group Separator) or all the way to the end of barcode
+            //     */
+            //     var _bInfo=resolver(barcodeInfo.barcode1,barcodeInfo);
+            //     if (barcodeInfo.barcode2){
+            //         _bInfo=resolver(barcodeInfo.barcode2,barcodeInfo);
+            //     }
+            //     return _bInfo; 
+            // },
+            // isValidToAddToOrder:function(info,plannedItems){
+            //         var valid=true,errMsg,found=false;
+            //         if (!info.material) {valid=false;errMsg="Material Code is required"}
+            //         if (!info.batchNo)  {valid=false;errMsg="Batch No is required"}
+            //         if (!info.expiry)  {valid=false;errMsg="Expiry is required"};
+            //         if (!info.serialNo&&(!info.quantity||info.quantity<1))  {valid=false;}
+            //         //check material/batch combination
+            //         if (info.material&&info.batchNo){
+            //             for (var i=0;i<plannedItems.length;i++){
+            //                 if (plannedItems[i].MaterialCode===info.material&&plannedItems[i].BatchNo===info.batchNo){
+            //                     found=true;
+            //                     break;
+            //                 }
+            //             }
+            //             if (!found){
+            //                 {valid=false;errMsg="Material/Batch Combination not found"}
+            //             }
+            //         }
+            //         if (!info.itemNumber) {valid=false;errMsg=errMsg||"Items are fully scanned!"}
+            //         info.valid=valid;
+            //         info.errMsg=errMsg;
+            //         //not check the unique of the serial No. it will be checked Stored Procedure
+            //         return valid
+            // },
+            insertScanItem:function(barcode,type,orderNo,HUNumber,callback){
                 let params={};
-                params.orderNo=info.orderNo;
-                params.itemNumber=info.itemNumber;
-                params.MaterialCode=info.material;
-                params.BatchNo=info.batchNo;
+                params.orderNo=orderNo;
+                params.EANCode=barcode.eanCode;
+                params.MaterialCode=barcode.materialCode;
+                params.BatchNo=barcode.batchNo;
                 params.scannedOn=utilSvc.formatDate();
-                params.FullScanCode=info.barcode1+(info.barcode2||"");
-                params.Qty=info.quantity||1;
+                params.FullScanCode=barcode.getFullBarcode();
+                params.Qty=barcode.quantity||1;
                 params.Status=0;
-                if (info.serialNo){
-                    params.SerialNo=info.serialNo
+                if (barcode.serialNo){
+                    params.SerialNo=barcode.serialNo
                 }
                 if (type==="packing"){
-                    params.HUNumber=info.showHU.HUNumber;
+                    params.HUNumber=HUNumber;
                 }
-                if (type==="packing"||type==="picking"){
-                    params.BinNumber=info.binNo;
-                }
+                params.BinNumber=barcode.binNo;
+
                 apiSvc.insertScanItem({type:type},params).$promise.then(
                     function(data){
                         console.log(data);
@@ -187,17 +189,17 @@
                 }
             } //end of function
             ,
-            findItemNumber:function(MaterialCode,BatchNo,plannedItems,itemNumberField){
-                for (let i = 0; i < plannedItems.length; i++) {
-                    if (MaterialCode===plannedItems[i].MaterialCode&&
-                        BatchNo===plannedItems[i].BatchNo&&
-                        plannedItems[i].DOQuantity>plannedItems[i].ScanQty){
-                            return plannedItems[i][itemNumberField];
-                        }
+            // findItemNumber:function(MaterialCode,BatchNo,plannedItems,itemNumberField){
+            //     for (let i = 0; i < plannedItems.length; i++) {
+            //         if (MaterialCode===plannedItems[i].MaterialCode&&
+            //             BatchNo===plannedItems[i].BatchNo&&
+            //             plannedItems[i].DOQuantity>plannedItems[i].ScanQty){
+            //                 return plannedItems[i][itemNumberField];
+            //             }
                     
-                }
-                return undefined;
-            } //end of function
+            //     }
+            //     return undefined;
+            // } //end of function
 
         }
 

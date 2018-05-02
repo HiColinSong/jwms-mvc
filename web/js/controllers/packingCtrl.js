@@ -22,6 +22,7 @@
             $scope.createdByFieldName = "PackBy";
             $scope.itemNoFieldName = "DOItemNumber";
             $scope.type = "packing";
+            $scope.barcode = itemSvc.getBarcodeObj();
 
             $scope.$watchCollection( "temp.showHU", function( hu ) {
                 if (hu){
@@ -94,58 +95,77 @@
                 };
                 //findItem
                 $scope.findItem=function(){
-                    itemSvc.resolveBarcode($scope.temp.barcodeInfo);
-                    $scope.temp.barcodeInfo.orderNo=order.DONumber;
-                    $scope.temp.barcodeInfo.showHU=$scope.temp.showHU;
-                    $scope.temp.barcodeInfo.itemNumber=
-                        itemSvc.findItemNumber($scope.temp.barcodeInfo.material,$scope.temp.barcodeInfo.batchNo,order.plannedItems,"DOItemNumber");
-                    if ($scope.temp.barcodeInfo.isValid&&$scope.temp.barcodeInfo.EANCode&&!$scope.temp.barcodeInfo.material){
-                        //find material by EAN code if material is empty, if user already keys in, do not refrensh material
-                        apiSvc.findMaterialByEAN({param1:$scope.temp.barcodeInfo.EANCode})
-                        .$promise.then(function(material){
-                            if (material){
-                                $scope.temp.barcodeInfo.material=material.MaterialCode;
-                                $scope.temp.barcodeInfo.itemNumber=
-                                itemSvc.findItemNumber($scope.temp.barcodeInfo.material,$scope.temp.barcodeInfo.batchNo,order.plannedItems,"DOItemNumber");
-                                    if (itemSvc.isValidToAddToOrder($scope.temp.barcodeInfo,order.plannedItems)){
-                                        itemSvc.insertScanItem($scope.temp.barcodeInfo,"packing",function(err,data){
-                                            if (err&&err.message){
-                                                $scope.temp.barcodeInfo.errMsg=err.message
-                                            } else if(data){
-                                                $scope.order.HUList = data;
-                                                $scope.resetScanInput();
-                                            }
-                                        })
-                                        return;
-                                    } else if (!$scope.temp.barcodeInfo.serialNo){
-                                        $scope.temp.barcodeInfo.quantity=1;
-                                        }
-                                } else {
-                                    console.warn("The Material can't be found for EANCode:"+scope.temp.barcodeInfo.EANCode);
-                                    $scope.temp.barcodeInfo.errMsg="The Material can't be found,please manually input";
-                                }
-                            },
-                                function(err){
-                                    console.error(err);
-                                }) 
-                     } else if (itemSvc.isValidToAddToOrder($scope.temp.barcodeInfo,order.plannedItems)){
-                        itemSvc.insertScanItem($scope.temp.barcodeInfo,"packing",function(err,data){
-                            if (err&&err.message){
-                                $scope.temp.barcodeInfo.errMsg=err.message
-                            } else if(data){
-                                $scope.order.HUList = data;
-                                $scope.resetScanInput();
-                            }
-                        })
+                    $scope.barcode.parseBarcode();
+                    if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
                         return;
-                    } else if (!$scope.temp.barcodeInfo.serialNo){
-                        $scope.temp.barcodeInfo.quantity=1;
-                     }
+                    }
+
+                    itemSvc.insertScanItem($scope.barcode,"packing",order.DONumber,$scope.temp.showHU.HUNumber,
+                    function(err,data){
+                        if (err&&err.message){
+                            if (err.message==='Material Code cannot be found'){
+                                $scope.barcode.materialRequired=true;
+                            }
+                            $scope.barcode.errMsg.push(err.message)
+                        } else if(data){
+                            $scope.order.HUList = data;
+                            $scope.barcode.reset();
+                        }
+                    })
+
+
+                    // itemSvc.resolveBarcode($scope.temp.barcodeInfo);
+                    // $scope.temp.barcodeInfo.orderNo=order.DONumber;
+                    // $scope.temp.barcodeInfo.showHU=$scope.temp.showHU;
+                    // $scope.temp.barcodeInfo.itemNumber=
+                    //     itemSvc.findItemNumber($scope.temp.barcodeInfo.material,$scope.temp.barcodeInfo.batchNo,order.plannedItems,"DOItemNumber");
+                    // if ($scope.temp.barcodeInfo.isValid&&$scope.temp.barcodeInfo.EANCode&&!$scope.temp.barcodeInfo.material){
+                    //     //find material by EAN code if material is empty, if user already keys in, do not refrensh material
+                    //     apiSvc.findMaterialByEAN({param1:$scope.temp.barcodeInfo.EANCode})
+                    //     .$promise.then(function(material){
+                    //         if (material){
+                    //             $scope.temp.barcodeInfo.material=material.MaterialCode;
+                    //             $scope.temp.barcodeInfo.itemNumber=
+                    //             itemSvc.findItemNumber($scope.temp.barcodeInfo.material,$scope.temp.barcodeInfo.batchNo,order.plannedItems,"DOItemNumber");
+                    //                 if (itemSvc.isValidToAddToOrder($scope.temp.barcodeInfo,order.plannedItems)){
+                    //                     itemSvc.insertScanItem($scope.temp.barcodeInfo,"packing",function(err,data){
+                    //                         if (err&&err.message){
+                    //                             $scope.temp.barcodeInfo.errMsg=err.message
+                    //                         } else if(data){
+                    //                             $scope.order.HUList = data;
+                    //                             $scope.resetScanInput();
+                    //                         }
+                    //                     })
+                    //                     return;
+                    //                 } else if (!$scope.temp.barcodeInfo.serialNo){
+                    //                     $scope.temp.barcodeInfo.quantity=1;
+                    //                     }
+                    //             } else {
+                    //                 console.warn("The Material can't be found for EANCode:"+scope.temp.barcodeInfo.EANCode);
+                    //                 $scope.temp.barcodeInfo.errMsg="The Material can't be found,please manually input";
+                    //             }
+                    //         },
+                    //             function(err){
+                    //                 console.error(err);
+                    //             }) 
+                    //  } else if (itemSvc.isValidToAddToOrder($scope.temp.barcodeInfo,order.plannedItems)){
+                    //     itemSvc.insertScanItem($scope.temp.barcodeInfo,"packing",function(err,data){
+                    //         if (err&&err.message){
+                    //             $scope.temp.barcodeInfo.errMsg=err.message
+                    //         } else if(data){
+                    //             $scope.order.HUList = data;
+                    //             $scope.resetScanInput();
+                    //         }
+                    //     })
+                    //     return;
+                    // } else if (!$scope.temp.barcodeInfo.serialNo){
+                    //     $scope.temp.barcodeInfo.quantity=1;
+                    //  }
                 };
-                $scope.resetScanInput=function(){
-                    if ($scope.temp.barcodeInfo)
-                        $scope.temp.barcodeInfo={binNo:$scope.temp.barcodeInfo.binNo};
-                }
+                // $scope.resetScanInput=function(){
+                //     if ($scope.temp.barcodeInfo)
+                //         $scope.temp.barcodeInfo={binNo:$scope.temp.barcodeInfo.binNo};
+                // }
                 $scope.removeItem=function(item){
                     apiSvc.removeScanItem({type:"packing"},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
                         then(function(data){
@@ -232,7 +252,8 @@
                     utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" doesn't exist!", "fail", false);
             }
             $scope.submitForm = function() {
-                $location.path("/fulfillment/packing/"+$scope.order.DONumber);
+                //add leading 0 to the scanned order no
+                $location.path("/fulfillment/packing/0"+$scope.order.DONumber);
             }
         }
 

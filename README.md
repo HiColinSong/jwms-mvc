@@ -6,4 +6,7 @@ Get started:
 2. npm install
 3. bower -f install
 
+Test Angular:
+node node_modules\karma\bin\karma start
+
 
