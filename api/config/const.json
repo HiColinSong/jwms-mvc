@@ -4,9 +4,14 @@
         "baseDN": "DC=bitsg,DC=bsi,DC=corp"
 	},
 	"besaLdapConfig":{
-		"url": "ldap://SGDC06.besa.bsi.corp",
+		"url": "ldap://modc6.besa.bsi.corp ",
         "baseDN": "DC=besa,DC=bsi,DC=corp"
 	},
+	"bbvLdapConfig":{
+		"url": "ldap://bbvdc01.bbv.bsi.corp",
+        "baseDN": "DC=bbv,DC=bsi,DC=corp"
+	},
+	"effectiveBatch":180601,
 	"authorizedUsers":[
 		"BITSG\\yd.zhu",
 		"BITSG\\ch.tan",
