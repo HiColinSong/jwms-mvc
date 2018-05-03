@@ -55,6 +55,7 @@ app.post('/bxapi/packing/add-new-hu.json',auth.authCheck,packingHandler.addNewHu
 app.post('/bxapi/packing/remove-hu.json',auth.authCheck,packingHandler.removeHu);
 app.post('/bxapi/packing/remove-item.json',auth.authCheck,packingHandler.removeItem);
 app.post('/bxapi/packing/confirm.json',auth.authCheck,packingHandler.confirmPacking);
+app.get('/bxapi/packing/reversal/:orderNo.json',auth.authCheck,packingHandler.reversal);
 
 var pickingHandler = require('./api/handlers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);

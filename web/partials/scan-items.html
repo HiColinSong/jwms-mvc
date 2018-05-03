@@ -181,10 +181,10 @@
 									</td>
 				
 								</tr>
-								<tr ng-if="items&&items.length>0">
+								<!-- <tr ng-if="items&&items.length>0">
 									<td>Total Qty:</td>
-									<td colspan="5">{{totalQty}}</td>
-								</tr>
+									<td colspan="5">{{temp.showHU.scanQty}}</td>
+								</tr> -->
 								<tr ng-if="!items||items.length==0">
 									<td colspan="6" class='empty-message'>No item.</td>
 								</tr>
@@ -197,30 +197,4 @@
 					  <div class="clearboth"></div>
 					</div>
 				  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    	<!-- <form ng-show="items&&items.length>0" class="margin-top">
-		    <div class="form-group">
-		      <div class="input-group">
-		        <div class="input-group-addon"><i class="fa fa-search"></i></div>
-		        <input type="text" class="form-control" placeholder="Search item" ng-model="searchItem">
-		      </div>      
-		    </div>
-			</form> -->
 			

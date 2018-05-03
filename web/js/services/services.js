@@ -43,7 +43,19 @@
                   type: '@type', //sporeceipts,rtgreceipts,picking,packing
                   subtype:'confirm'
                 }
-              },//start sporeceipts api
+              },
+              //reverse  picking, packing,PGI
+              reverseOperation:{
+                method: 'GET',
+                headers: {'Accept': 'application/json'},
+                params:{
+                  type: '@type', // picking,packing,PGI
+                  subtype:'reversal',
+                  param1:'@param1'
+                }
+              },
+              
+              //start sporeceipts api
             getSubconPurchaseOrder: { //  /bxapi/sporder/xxxxxx.json
                 method: 'GET',
                 params: {

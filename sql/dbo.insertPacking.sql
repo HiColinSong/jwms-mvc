@@ -72,23 +72,30 @@ BEGIN
                 FROM dbo.SAP_DODetail
                 WHERE DONumber = @DONumber and MaterialCode = @MaterialCode and BatchNumber = @BatchNo
 
-            IF NOT EXISTS (SELECT * from @temp_item)
+            IF NOT EXISTS (SELECT 1 from @temp_item)
             RAISERROR ('Error:Material/Batch cannot be found in Delivery order',16,1 ); 
 
-            --update the temp table with the actual scanned qty by sum in the BX_packDetails
-            UPDATE m
-            SET m.ActualQty = c.scanSum
-            FROM @temp_item m,
-            (
-            SELECT SUM(ScanQty) scanSum
-            FROM dbo.BX_PackDetails a, dbo.SAP_DODetail b
-            Where a.DOItemNumber=b.DOItemNumber and a.DONumber=b.DONumber and a.BatchNo = b.BatchNumber and a.MaterialCode=b.MaterialCode
-            and a.DONumber = @DONumber and a.BatchNo = @BatchNo and a.MaterialCode = (select top 1 MaterialCode from @temp_item)
-            GROUP BY a.DOItemNumber	
-            ) c 
+            -- Find DOItemNumber
+             DECLARE @actualQty int = 0,@planQty int
+			 
+			 WHILE EXISTS (SELECT 1 from @temp_item)
+			 BEGIN
+				SELECT TOP 1 @DOItemNumber = DOItemNumber,@planQty = PlanQTY,@MaterialCode=MaterialCode  from @temp_item
+				SELECT @actualQty = sum(ScanQty) from BX_PackDetails 
+				where DONumber = @DONumber and BatchNo = @BatchNo and MaterialCode = @MaterialCode and DOItemNumber = @DOItemNumber
+				SELECT @actualQty=ISNULL(@actualQty,0)
+				
+                -- if the scanned qty plus new qty exceed the plan qty, delete the top 1 record and loop again
+				IF(@actualQty+@Qty>@planQty) 
+					BEGIN
+						DELETE TOP (1) FROM @temp_item 
+						SET @DOItemNumber = NULL
+					END
+				ELSE
+					BREAK  --found DOItemNumber, no need to loop
+				 CONTINUE
+			 END
 
-            --find the first available DOItemNumber that can be used for inserting the scan item
-            SET @DOItemNumber = (select top 1 DOItemNumber from @temp_item where PlanQty>=ActualQty+@Qty)
             if (@DOItemNumber is NULL)
                 RAISERROR ('Error:Exceed planned quantity.',16,1 );  
 
@@ -110,16 +117,17 @@ BEGIN
         IF EXISTS (select * from dbo.BX_PackDetails where SerialNo=@SerialNo)
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
-        IF EXISTS (SELECT DONumber from dbo.BX_PackDetails 
-                    WHERE	DONumber=@DONumber and 
+        IF (@SerialNo is NULL) AND 
+            EXISTS (SELECT DONumber from dbo.BX_PackDetails 
+                    WHERE	SerialNo is NULL AND
+                            DONumber=@DONumber and 
                             DOItemNumber=@DOItemNumber and
                             HUNumber=@HUNumber and 
                             MaterialCode=@MaterialCode and 
                             BatchNo=@BatchNo and 
 							BinNumber=@BinNumber and 
                             PackBy=@PackBy and
-                            PackedOn=@PackedOn and 
-							SerialNo is NULL) AND (@SerialNo is NULL)
+                            PackedOn=@PackedOn)
 		BEGIN
 			UPDATE dbo.BX_PackDetails 
 				SET ScanQty = @Qty+ ScanQty

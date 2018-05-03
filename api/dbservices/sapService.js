@@ -69,6 +69,11 @@ exports.confirmPacking=function(order){
     return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
 };
 
+exports.packingReversal = function(orderNo,HUNumber){
+  var param ={DELIVERY:orderNo,HUKEY:HUNumber};
+    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param);
+}
+
 exports.getPurchaseOrder=function(orderNo){
 	var param ={PURCHASEORDER : orderNo};
     return invokeBAPI("BAPI_PO_GETDETAIL",param);

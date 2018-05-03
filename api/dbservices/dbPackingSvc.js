@@ -126,5 +126,12 @@ exports.InsertScanItem=function(info){
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
+  exports.packingReversal=function(DONumber){
+    var params={
+      DONumber:{type:"sql.VarChar(12)",value:DONumber}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_PackingReversal",params)
+  }
+
 
 

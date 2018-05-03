@@ -3,8 +3,8 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('toolsCtrl',['$scope', '$location','$routeParams',
-    	function($scope,$location,$routeParams){
+    .controller('toolsCtrl',['$scope', '$location','$routeParams','bxService','modalConfirmSubmit',
+    	function($scope,$location,$routeParams,apiSvc,confirmSubmit){
     		$scope.toolType=$routeParams.toolType;
     		if ($routeParams.toolType){
 	    		$scope.info={type:$routeParams.toolType};
@@ -34,6 +34,60 @@
 
 	    	$scope.gotoTool=function(toolType){
 	    		$location.path("/tools/"+toolType);
-	    	}
+			}
+			$scope.submitForm=function(){
+				
+				switch ($scope.info.type){
+	    			case "picking-reversals":
+	    				break;
+	    			case "packing-reversals":
+						apiSvc.reverseOperation({type:'packing',param1:$scope.info.orderNo}).$promise.then(resultHandler,errorHandler);
+	    				break;
+	    			case "reservation":
+	    				break;
+	    			case "pgi":
+	    				break;
+	    			case "reversals-pgi":
+	    				break;
+				}		
+					
+			}
+			const resultHandler = function(data){
+				if (data&&data.confirm==='success'){
+					$scope.confirm={
+						type:"success",
+						modalHeader: 'Operation Success',
+						message:"The operation is confirmed successfully!",
+					}
+				} else if(data&&data.error&&data.message){
+					$scope.confirm={
+						type:"danger",
+						modalHeader: 'Operation Fail',
+						message:data.message,
+					}
+				} else if(data&&data.confirm==='fail'){
+					$scope.confirm={
+						type:"damger",
+						modalHeader: 'Operation Fail',
+						message:"The operaton is failed!",
+					}
+				} else {
+					$scope.confirm={
+						type:"danger",
+						modalHeader: 'Operation Fail',
+						message:"Unknown error, confirmation is failed!",
+					}
+				}
+				confirmSubmit.do($scope);
+			}
+			const errorHandler=function(err){
+				console.error(err);
+				$scope.confirm={
+					type:"danger",
+					modalHeader: 'Operation Fail',
+					message:"System error, Operation is failed!",
+				}
+				confirmSubmit.do($scope);
+			}
     }])
  }())

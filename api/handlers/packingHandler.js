@@ -222,12 +222,39 @@ exports.refreshHu=function(req,res){
 exports.confirmPacking=function(req,res){
 	(async function () {
 		try {
-			var res = await sapSvc.confirmPacking(req.body.order);
-			if (res&&(!res.RETURN||res.RETURN&&res.RETURN.length===0)){
+			var ret = await sapSvc.confirmPacking(req.body.order);
+			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
 				await dbPackingSvc.confirmPacking(req.body.order.DONumber,req.body.PackComplete);
 				return res.status(200).send({confirm:"success"});
-			} else if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:res.RETURN[0].MESSAGE});
+			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
+			} else {
+				return res.status(200).send({confirm:"fail"});
+			}
+		} catch (error) {
+			return res.status(200).send({error:true,message:error});
+		}
+	})()
+};
+exports.reversal=function(req,res){
+	var ret;
+	(async function () {
+		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			if (sapOrder.ET_HU_HEADER&&sapOrder.ET_HU_HEADER.length>0){
+				for (let i = 0; i < sapOrder.ET_HU_HEADER.length; i++) {
+					const hu = sapOrder.ET_HU_HEADER[i];
+					if (hu.EXIDV){
+						ret = await sapSvc.packingReversal(req.params.orderNo,hu.EXIDV);
+					}
+				}
+			}
+			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
+				//delete from dbo.BX_PackDetails,dbo.BX_PackHeader,dbo.BX_PackUnits,dbo.SAP_DODetail,dbo.SAP_DOHeader
+				await dbPackingSvc.packingReversal(req.body.order.DONumber);
+				return res.status(200).send({confirm:"success"});
+			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
 			} else {
 				return res.status(200).send({confirm:"fail"});
 			}
