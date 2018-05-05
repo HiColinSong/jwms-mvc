@@ -36,7 +36,8 @@
     "angular-loader": "1.5.7",
     "angular-smart-table": "~1.4.3",
     "crypto-js": "^3.1.9",
-    "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0"
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
+    "angular-audio": "^1.7.4"
   },
   "resolutions": {
     "angular": "1.5.7"

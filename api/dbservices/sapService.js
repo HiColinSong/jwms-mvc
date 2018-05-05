@@ -74,6 +74,38 @@ exports.packingReversal = function(orderNo,HUNumber){
     return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param);
 }
 
+exports.pgiUpdate = function(orderNo,currentDate){
+  var param ={ 
+      VBKOK_WA:{vbeln_vl:orderNo,wabuc: "X",wadat_ist: currentDate},
+      commit:'X',
+      Delivery:orderNo
+    };
+    return invokeBAPI("WS_DELIVERY_UPDATE",param);
+}
+
+exports.pgiReversal = function(orderNo,currentDate){
+  var param ={
+      I_VBELN:orderNo,
+      I_BUDAT:currentDate,
+      I_BUDAT:'J',
+      I_COUNT:'001',
+      I_TCODE:'VL09',
+      I_COMMIT:'X'
+    }
+    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param);
+}
+
+exports.reservation = function(ordero,currentDate){
+  var param ={ 
+      GOODSMVT_HEADER:{PSTNG_DATE:currentDate},
+      GOODSMVT_CODE:{GM_CODE:"06"},
+      GOODSMVT_ITEM: [
+        {PLANT:order.plant,ENTRY_QNT:order.quantity, RESERV_NO: order.orderNo, RES_ITEM: order.itemNo}        
+      ]
+  }
+    return invokeBAPI("BAPI_GOODSMVT_CREATE",param);
+}
+
 exports.getPurchaseOrder=function(orderNo){
 	var param ={PURCHASEORDER : orderNo};
     return invokeBAPI("BAPI_PO_GETDETAIL",param);

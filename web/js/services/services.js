@@ -88,12 +88,20 @@
               //end sporeceipts api
 
             //start rtgreceipt api
+            //@deprecated
             getRtgDeliveryOrder:{ //  /bxapi/rtgreceipts/get-order/:orderNo.json
                 method: 'GET',
                 params: {
                     type: 'rtgreceipts',
                     subtype: 'get-order',
                     param1:'@param1' //orderNo
+                }
+            },
+            getRtgDeliveryOrder:{ //  /bxapi/rtgreceipts/get-order.json
+                method: 'POST',
+                params: {
+                    type: 'rtgreceipts',
+                    subtype: 'get-order'
                 }
             }
             //@deprecated
@@ -106,6 +114,7 @@
                     param2:'@param2' //Item Serial No
                 }
             },
+              //@deprecate
               removeItemFromRtgDo:{
                 method: 'GET',
                 params:{
@@ -265,6 +274,20 @@
                   param1:'@param1'
                 },
                 isArray:true
+              },
+              pgiUpdate:{
+                method: 'POST',
+                params:{
+                  type: 'pgi',
+                  subtype:'update'
+                }
+              },
+              pgiUpdate:{
+                method: 'POST',
+                params:{
+                  type: 'pgi',
+                  subtype:'update'
+                }
               }
         }
       }
@@ -363,6 +386,19 @@
               if (day.length < 2) day = '0' + day;
           
               return [year, month, day].join(separator||"");
+          },
+          formalizeOrderNo:function(orderNo) {
+              if (orderNo&&orderNo.length>0&&orderNo.length<10){
+                return "0".repeat(10-orderNo.length)+orderNo;
+              }
+              return orderNo;
+          },
+          pageLoading:function(arg){
+              if (arg==="start"){
+                $rootScope.pageLoading=true;
+              } else {
+                $rootScope.pageLoading=false;
+              }
           }
         }
     }])

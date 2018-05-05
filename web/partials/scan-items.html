@@ -6,8 +6,9 @@
 					<ul class="nav nav-tabs " role="tablist">
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='groupView'||order.HUList.length===0}"><a class="cursor-pointer" 
 								  ng-click="showScanItemTab='groupView'">Group View</a></li>
-						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0"><a class="cursor-pointer" 
-								  ng-click="showScanItemTab='itemView'">Item View</a></li>
+						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0||order.scannedItems">
+									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Item View</a>
+						  </li>
 					</ul>
 				  
 					<!-- Tab panes -->
@@ -45,11 +46,12 @@
 												<tr>
 													<!-- <td>Line No</td> -->
 													<td>
-														<a class="cursor-pointer" ng-click="sortType = 'BinNumber'; sortReverse = !sortReverse">
+														<!-- <a class="cursor-pointer" ng-click="sortType = 'BinNumber'; sortReverse = !sortReverse">
 															Bin Number
 															<span ng-show="sortType == 'BinNumber' && !sortReverse" class="fa fa-caret-down"></span>
 															<span ng-show="sortType == 'BinNumber' && sortReverse" class="fa fa-caret-up"></span>
-														</a>
+														</a> -->
+														Line No
 													</td>
 													<td>
 														<a class="cursor-pointer" ng-click="sortType = 'serialNo'; sortReverse = !sortReverse">
@@ -87,8 +89,8 @@
 												<tr ng-if="items&&items.length>0" 
 														ng-repeat="(idx,item) in items | orderBy:sortType:sortReverse | filter:plannedItem.MaterialCode| filter:plannedItem.BatchNo|filter:plannedItem.DOItemNumber">
 							
-												<!-- <td width="20%">{{idx+1}}</td> -->
-												<td width="25%">{{item.BinNumber}}</td>
+												<td width="20%">{{idx+1}}</td>
+												<!-- <td width="25%">{{item.BinNumber}}</td> -->
 												<td  width="30%">{{item.SerialNo||'-'}}</td>
 												<td  width="15%">{{item.ScanQty||1}}</td>
 												<td  width="20%">{{item[createdByFieldName]}}</td>

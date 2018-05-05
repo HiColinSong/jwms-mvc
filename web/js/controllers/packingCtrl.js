@@ -3,12 +3,11 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('packingCtrl', ['$scope','$location','$routeParams','$modal','order','utilSvc','scanItemSvc','bxService','modalConfirmSubmit','hotkeys',
-    		function($scope,$location,$routeParams,$modal,order,utilSvc,itemSvc,apiSvc,confirmSubmit,hotkeys){
-
+    .controller('packingCtrl', ['$scope','$location','$routeParams','$modal','order',
+                'utilSvc','scanItemSvc','bxService','modalConfirmSubmit','hotkeys','soundSvc',
+            function($scope,$location,$routeParams,$modal,order,
+                     utilSvc,itemSvc,apiSvc,confirmSubmit,hotkeys,soundSvc){
                     $scope.temp={};
-                    // $scope.info={DONumber:$routeParams.DONumber};
-                    // $scope.categories=constants.categories;
 
         if (order&&order.DONumber&&(!order.status||order.status==='valid')){
             // $scope.info={itemInfo:{orderNo:order.DONumber,temp:$scope.temp,order:$scope.order,type:"packing"}};
@@ -103,13 +102,18 @@
                     itemSvc.insertScanItem($scope.barcode,"packing",order.DONumber,$scope.temp.showHU.HUNumber,
                     function(err,data){
                         if (err&&err.message){
-                            if (err.message==='Material Code cannot be found'){
+                            if (err.message==='Error:Material Code cannot be found'){
                                 $scope.barcode.materialRequired=true;
                             }
+                            if (err.message==='Error:Serial Number is required'){
+                                $scope.barcode.serialNoRequired=true;
+                            }
                             $scope.barcode.errMsg.push(err.message)
+                            soundSvc.play("badSound");
                         } else if(data){
                             $scope.order.HUList = data;
                             $scope.barcode.reset();
+                            soundSvc.play("goodSound");
                         }
                     })
                 };
@@ -205,7 +209,7 @@
             }
             $scope.submitForm = function() {
                 //add leading 0 to the scanned order no
-                $location.path("/fulfillment/packing/0"+$scope.order.DONumber);
+                $location.path("/fulfillment/packing/"+utilSvc.formalizeOrderNo($scope.order.DONumber));
             }
         }
 

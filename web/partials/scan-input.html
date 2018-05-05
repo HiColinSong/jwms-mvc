@@ -22,30 +22,30 @@
 							ng-model="barcode.binNo" autocomplete="off">
 						</td>
 					</tr> -->
-					<tr class="form-group" ng-class="{'has-error':barcode.error.barcode1}">
+					<tr class="form-group" ng-class="{'has-error':barcode.valid===false}">
 						<td width="35%" class="padding-top">
 							<label for="barcode1" class="block margin-top">Scan/Enter Barcode:</label>		
 						</td>
 						<td width="65%">	
-							 <div class="form-group" ng-class="{'has-error':barcode.valid===false}">
+							 <div class="form-group">
 									<input type="text" class="form-control full-width" id="barcode1" placeholder="Scan/Enter barcode1" 
 													ng-model="barcode.barcode1" autocomplete="off">
 							</div>
 					</tr>
 					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.valid===false}" 
-											ng-show="(barcode.valid&&!barcode.infoComplete)||barcode.barcode2">
+											ng-show="(barcode.valid&&!barcode.infoComplete)||barcode.barcode2||barcode.serialNoRequired">
 						<td width="35%" class="padding-top">
 							<label for="barcode2" class="block margin-top">Scan/Enter Barcode2:</label>		
 						</td>
 						<td width="65%">	
-							 <div class="form-group" ng-class="{'has-error':barcode.valid===false}">
+							 <div class="form-group">
 								<input type="text" class="form-control full-width" id="barcode2" placeholder="Scan/Enter barcode2" 
 												ng-model="barcode.barcode2" autocomplete="off">
 							</div>
 						</td>
 					</tr>
-					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
+					<!-- <tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
 										   ng-show="(barcode.valid&&!barcode.infoComplete)" >
 						<td width="35%" class="padding-top">
 							<label for="quantity" class="block margin-top">Enter Quantity:</label>		
@@ -56,7 +56,7 @@
 												ng-model="barcode.quantity" min="1" autocomplete="off">
 							</div>
 						</td>
-					</tr>
+					</tr> -->
 					<tr class="form-group" ng-class="{'has-error':barcode.materialRequired&&!barcode.materialCode}"
 										   ng-show="barcode.materialRequired||barcode.materialCode">
 						<td width="35%" class="padding-top">

@@ -44,6 +44,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
         'bower_components/angular-hotkeys/build/hotkeys.min.js',
+        'bower_components/angular-audio/app/angular.audio.js',
         //minify js place holder
         'js/app.js'
         ],function(){
@@ -68,6 +69,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
             'js/services/modalConfirmSubmit.js',
             'js/services/scanItemService.js',
             'js/services/barcode.js',
+            'js/services/soundService.js',
     	      'js/filters/filters.js',
             'js/directives/directives.js',
             'js/directives/scanItemDirective.js'
@@ -88,6 +90,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
   <div ng-include src="'partials/nav-bar.html'"></div>
   
   <div ng-view class="main-view"></div>
+  <img src="media/Page-loading.gif" alt="" class="page-loading" ng-show="pageLoading">
 
   <div class="footer ubuntu text-muted" ng-controller="footerCtrl">
     <span>&copy; {{currentDate| date:'yyyy'}} Biosensors Interventional Technologies Pte Ltd</span>

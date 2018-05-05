@@ -82,7 +82,7 @@ exports.getOrder=function(req,res){
 				order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);
 				return res.status(200).send(order);
 			} else {
-				return res.status(200).send({error:true,message:"The Delivery Order "+req.params.orderNo+" doesn't exist!"});
+				return res.status(200).send({error:true,message:"The Delivery Order "+req.body.orderNo+" doesn't exist!"});
 			}
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});

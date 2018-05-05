@@ -3,8 +3,8 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('toolsCtrl',['$scope', '$location','$routeParams','bxService','modalConfirmSubmit',
-    	function($scope,$location,$routeParams,apiSvc,confirmSubmit){
+    .controller('toolsCtrl',['$scope', '$location','$routeParams','bxService','modalConfirmSubmit','utilSvc',
+    	function($scope,$location,$routeParams,apiSvc,confirmSubmit,utilSvc){
     		$scope.toolType=$routeParams.toolType;
     		if ($routeParams.toolType){
 	    		$scope.info={type:$routeParams.toolType};
@@ -36,18 +36,21 @@
 	    		$location.path("/tools/"+toolType);
 			}
 			$scope.submitForm=function(){
+				var orderNo = utilSvc.formalizeOrderNo($scope.info.orderNo);
 				
 				switch ($scope.info.type){
 	    			case "picking-reversals":
-	    				break;
-	    			case "packing-reversals":
-						apiSvc.reverseOperation({type:'packing',param1:$scope.info.orderNo}).$promise.then(resultHandler,errorHandler);
-	    				break;
-	    			case "reservation":
-	    				break;
-	    			case "pgi":
-	    				break;
+						break;
+					case "packing-reversals":
+						apiSvc.reverseOperation({type:'packing',param1:orderNo}).$promise.then(resultHandler,errorHandler);
+						break;
+					case "reservation":
+						break;
+					case "pgi":
+						apiSvc.pgiUpdate({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
+						break;
 	    			case "reversals-pgi":
+						apiSvc.pgiReversal({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
 	    				break;
 				}		
 					

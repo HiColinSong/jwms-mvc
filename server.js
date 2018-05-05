@@ -65,9 +65,10 @@ app.get('/bxapi/picking/remove-item/:orderNo/:serialNo.json',auth.authCheck,pick
 app.get('/bxapi/picking/set-status/:orderNo/:status.json',auth.authCheck,pickingHandler.setStatus);
 
 var rtgReceiptsHandler = require('./api/handlers/rtgReceiptsHandler');
-app.get('/bxapi/rtgreceipts/get-order/:orderNo.json',auth.authCheck,rtgReceiptsHandler.getOrder);
-app.get('/bxapi/rtgreceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,rtgReceiptsHandler.addItem);
-app.get('/bxapi/rtgreceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,rtgReceiptsHandler.removeItem);
+app.post('/bxapi/rtgreceipts/get-order.json',auth.authCheck,rtgReceiptsHandler.getOrder);
+app.post('/bxapi/rtgreceipts/add-item.json',auth.authCheck,rtgReceiptsHandler.addItem);
+app.post('/bxapi/rtgreceipts/remove-item.json',auth.authCheck,rtgReceiptsHandler.removeItem);
+app.post('/bxapi/rtgreceipts/confirm.json',auth.authCheck,rtgReceiptsHandler.confirmRga);
 
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
 app.get('/bxapi/sporeceipts/get-order/:orderNo.json',auth.authCheck,spoReceiptsHandler.getOrder);
@@ -76,6 +77,8 @@ app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);
+app.post('/bxapi/pgi/update.json',auth.authCheck,commonHandler.pgiUpdate);
+app.post('/bxapi/pgi/reversal.json',auth.authCheck,commonHandler.pgiReversal);
 
 
 app.get('*', function(req, res){

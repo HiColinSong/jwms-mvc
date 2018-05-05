@@ -1,7 +1,5 @@
 /*bx - services.js - Yadong Zhu 2017*/ 
-function Barcode(effectiveBatch){
-    this.effectiveBatch = effectiveBatch||180601;
-}
+function Barcode(){}
 Barcode.prototype.checkInfoComplete=function(){
     var self = this;
     if (!self.valid) {
@@ -12,27 +10,27 @@ Barcode.prototype.checkInfoComplete=function(){
     self.infoComplete = true;
     if (!self.eanCode){
         self.infoComplete = false;
-        self.errMsg.push("Missing EAN Code")
+        self.errMsg.push("EAN Code is required")
     }
     if (!self.expiry){
         self.infoComplete = false;
-        self.errMsg.push("Missing expiry")
+        self.errMsg.push("Expiry is required")
     }
     if (!self.batchNo||self.batchNo.legnth<7){
         self.infoComplete = false;
-        self.errMsg.push("Missing Batch No")
+        self.errMsg.push("Batch No is required")
     }
-    if (!self.serialNo){
-        //check if the batch is after the effective batch
-        var batchDate=0;
-        if (self.batchNo&&self.batchNo.length>7){
-            batchDate = parseInt(self.batchNo.substring(1,7));
-        }
-        if (batchDate>=self.effectiveBatch&&!self.serialNo){
-            self.infoComplete = false;
-            self.errMsg.push("Missing Serial No")
-        }
-    }
+    // if (!self.serialNo){
+    //     //check if the batch is after the effective batch
+    //     var batchDate=0;
+    //     if (self.batchNo&&self.batchNo.length>7){
+    //         batchDate = parseInt(self.batchNo.substring(1,7));
+    //     }
+    //     if (batchDate>=self.effectiveBatch&&!self.serialNo){
+    //         self.infoComplete = false;
+    //         self.errMsg.push("Missing Serial No")
+    //     }
+    // }
 
 };
 Barcode.prototype.reset=function(){
@@ -47,6 +45,7 @@ Barcode.prototype.reset=function(){
     this.errMsg=undefined;
     this.materialCode = undefined;
     this.materialRequired = undefined;
+    this.serialNoRequired = undefined;
 }
 Barcode.prototype.parseBarcode=function(){
     var self = this;

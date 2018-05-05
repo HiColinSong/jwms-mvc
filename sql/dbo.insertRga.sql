@@ -1,38 +1,20 @@
-/**insert or update for table BX_PackDetails
-    do the following check
-    1. Check DOStatus in SAP_DOHeader
-    2. Check PackStatus in BX_PackHeader
-    3. Check HandlingUnit exist in BX_PackHUnits
-    4. if MaterialCode and BatchNo combination exists in SAP_DODetail
-    5. if Total ScanQty of the M/B combination is less than the DOQuantity in SAP_DODetail
-    6. if SerialNo is not null,check if NOT EXIST in the table
-
-    if Passed Check, do Insert/Update
-    else return error message
-    if Exist (DONumber=@DONumber,HUNumber=@HUNumber,BatchNo=@BatchNo,PackBy=@PackBy,
-              PackedOn=@PackedOn,SerialNo=null,@SerialNo=null)
-              Update BalancedQty
-    else  insert record.
-*/
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 03-May-18 2:52:50 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 05-May-18 3:19:08 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
+CREATE PROCEDURE [dbo].[BX_InsertOrUpdateRga] 
 (
 	@DONumber varchar(12),
 	@EANCode varchar(16),
-	@HUNumber varchar(20),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
-	@BinNumber varchar(20) = NULL,
     @SerialNo varchar(8) = NULL,
-    @PackBy varchar(20),
-    @PackedOn varchar(10),
+    @ReceiptBy varchar(20),
+    @ReceivedOn varchar(10),
     @Status char(1),
     @FullScanCode varchar(60),
     @Qty int = 1
@@ -41,14 +23,13 @@ AS
 DECLARE @effectiveBatch int = 180601 --change this if the effective batch changes
 
 DECLARE @DOItemNumber char(6),@batchDate int,@isSerialNoRequired char(1)
-IF (@BinNumber IS NULL)
-	SET @BinNumber = 'DEFAULT BIN'
+
 BEGIN
     BEGIN TRY  
 		
         --if material code is not passed in and it can't be found in table SAP_EANCodes per the passed EANCode
         IF (@MaterialCode is NULL) AND NOT EXISTS (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
-        RAISERROR ('Material Code cannot be found',16,1 );  
+        RAISERROR ('Error:Material Code cannot be found',16,1 );  
 
         --find material code and assign the value
         IF (@MaterialCode is NULL) 
@@ -84,7 +65,7 @@ BEGIN
 			 WHILE EXISTS (SELECT 1 from @temp_item)
 			 BEGIN
 				SELECT TOP 1 @DOItemNumber = DOItemNumber,@planQty = PlanQTY,@MaterialCode=MaterialCode  from @temp_item
-				SELECT @actualQty = sum(ScanQty) from BX_PackDetails 
+				SELECT @actualQty = sum(ScanQty) from dbo.BX_RgaDetails 
 				where DONumber = @DONumber and BatchNo = @BatchNo and MaterialCode = @MaterialCode and DOItemNumber = @DOItemNumber
 				SELECT @actualQty=ISNULL(@actualQty,0)
 				
@@ -108,7 +89,7 @@ BEGIN
                 --check if the the serial no is enabled for the material
                 SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
                 IF (@isSerialNoRequired='X')
-                     RAISERROR ('Error:Serial Number is required.',16,1 );
+                     RAISERROR ('Error:Serial Number is required',16,1 );
             END
 
         IF EXISTS (select * from dbo.SAP_DOHeader where DONumber=@DONumber and DOStatus=1)
@@ -119,42 +100,32 @@ BEGIN
                     1 -- State.  
                     );  
         
-        IF EXISTS (select * from dbo.BX_PackHeader where DONumber=@DONumber and PackStatus=2)
-            RAISERROR ('Error:Packing is already completed',16,1 );  
-        IF NOT EXISTS (select * from dbo.BX_PackHUnits where DONumber=@DONumber and HUNumber=@HUNumber)
-            RAISERROR ('Error:Handling Unit cannot be found.',16,1 );  
- 
-
-        IF EXISTS (select * from dbo.BX_PackDetails where SerialNo=@SerialNo)
+        IF EXISTS (select * from dbo.BX_RgaDetails where SerialNo=@SerialNo)
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
         IF (@SerialNo is NULL) AND 
-            EXISTS (SELECT DONumber from dbo.BX_PackDetails 
+            EXISTS (SELECT DONumber from dbo.BX_RgaDetails 
                     WHERE	SerialNo is NULL AND
                             DONumber=@DONumber and 
                             DOItemNumber=@DOItemNumber and
-                            HUNumber=@HUNumber and 
                             MaterialCode=@MaterialCode and 
                             BatchNo=@BatchNo and 
-							BinNumber=@BinNumber and 
-                            PackBy=@PackBy and
-                            PackedOn=@PackedOn)
+                            ReceiptBy=@ReceiptBy and
+                            ReceivedOn=@ReceivedOn)
 		BEGIN
-			UPDATE dbo.BX_PackDetails 
+			UPDATE dbo.BX_RgaDetails 
 				SET ScanQty = @Qty+ ScanQty
 			WHERE	DONumber=@DONumber and 
                     DOItemNumber=@DOItemNumber and
-                    HUNumber=@HUNumber and 
                     MaterialCode=@MaterialCode and 
                     BatchNo=@BatchNo and 
-					BinNumber=@BinNumber and 
-                    PackBy=@PackBy and
-                    PackedOn=@PackedOn and 
+                    ReceiptBy=@ReceiptBy and
+                    ReceivedOn=@ReceivedOn and 
 					SerialNo is NULL
 		END
 	ELSE
-		INSERT INTO dbo.BX_PackDetails
-			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty,@DOItemNumber,@BinNumber)
+		INSERT INTO dbo.BX_RgaDetails
+			VALUES (newid(),@DONumber,@MaterialCode,@BatchNo,@SerialNo,@ReceiptBy,Convert(datetime,@ReceivedOn),@Status,@FullScanCode,@Qty,@DOItemNumber)
 
     END TRY  
     BEGIN CATCH  
@@ -176,7 +147,7 @@ BEGIN
                 );  
     END CATCH; 
 	--return freshed items detail
-	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
+	SELECT * FROM dbo.BX_RgaDetails where DONumber=@DONumber
 
 END
 

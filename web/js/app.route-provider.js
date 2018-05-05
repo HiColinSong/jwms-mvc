@@ -18,25 +18,30 @@
                 templateUrl: 'partials/spoReceipts.html',
                 controller: 'spoReceiptsCtrl'
             })
-            .when('/receiving/rtgReceipts/:orderNo?', {
+            .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',
                 controller: 'rtgReceiptsCtrl',
                 resolve:{
-                    order:['$q','$route','bxService',
-                        function($q,$route,apiSvc){
+                    order:['$q','$route','utilSvc','bxService',
+                        function($q,$route,utilSvc,apiSvc){
                             var deferred = $q.defer();
-                            if ($route.current.params.orderNo){
-                                apiSvc.getRtgDeliveryOrder({param1:$route.current.params.orderNo}).$promise.then(function(data){
+                            if ($route.current.params.DONumber){
+                                utilSvc.pageLoading("start");
+                                apiSvc.getRtgDeliveryOrder({orderNo:$route.current.params.DONumber}).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);
+                                        utilSvc.pageLoading("stop");
                                     } else {
                                         deferred.resolve(undefined);
+                                        utilSvc.pageLoading("stop");
                                     }
                                 },function(err){
                                     deferred.reject(err);
+                                    utilSvc.pageLoading("stop");
                                 })
                             } else {
                                 deferred.resolve(undefined)
+                                utilSvc.pageLoading("stop");
                             }
                             return deferred.promise;
                         }]
@@ -46,21 +51,26 @@
                 templateUrl: 'partials/picking.html',
                 controller: 'pickingCtrl',
                 resolve:{
-                    order:['$q','$route','bxService',
-                        function($q,$route,apiSvc){
+                    order:['$q','$route','utilSvc','bxService',
+                        function($q,$route,util,apiSvc){
                             var deferred = $q.defer();
                             if ($route.current.params.orderNo){
+                                uti.pageLoading("start");
                                 apiSvc.getOrderForPicking({param1:$route.current.params.orderNo}).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);
+                                        util.pageLoading("stop");
                                     } else {
                                         deferred.resolve(undefined);
+                                        util.pageLoading("stop");
                                     }
                                 },function(err){
                                     deferred.reject(err);
+                                    util.pageLoading("stop");
                                 })
                             } else {
                                 deferred.resolve(undefined)
+                                util.pageLoading("stop");
                             }
                             return deferred.promise;
                         }]
@@ -74,20 +84,25 @@
                         function($q,$route,apiSvc,utilSvc){
                             var deferred = $q.defer();
                             if ($route.current.params.DONumber){
+                                utilSvc.pageLoading("start");
                                 apiSvc.getOrderForPacking(
                                     {orderNo:$route.current.params.DONumber,
                                      PackStart:utilSvc.formatDate()}
                                 ).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);
+                                        utilSvc.pageLoading("stop");
                                     } else {
                                         deferred.resolve(undefined);
+                                        utilSvc.pageLoading("stop");
                                     }
                                 },function(err){
                                     deferred.reject(err);
+                                    utilSvc.pageLoading("stop");
                                 })
                             } else {
                                 deferred.resolve(undefined)
+                                utilSvc.pageLoading("stop");
                             }
                             return deferred.promise;
                         }]

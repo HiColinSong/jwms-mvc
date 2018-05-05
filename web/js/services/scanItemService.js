@@ -177,8 +177,9 @@
             } //end of function
             ,
             calculateScannedQty:function(scannedItems,plannedItems){
+                var confirmReady=true;
                 for (let i = 0; i < plannedItems.length; i++) {
-                    plannedItems[i].ScanQty=plannedItems[i].ScanQty||0;
+                    plannedItems[i].ScanQty=0;
                     for (let j = 0; j < scannedItems.length; j++) {
                         if (scannedItems[j].MaterialCode===plannedItems[i].MaterialCode&&
                             scannedItems[j].BatchNo===plannedItems[i].BatchNo&&
@@ -186,7 +187,11 @@
                                 plannedItems[i].ScanQty+=scannedItems[j].ScanQty;
                             }
                     }
+                    if (plannedItems[i].ScanQty<plannedItems[i].DOQuantity){
+                        confirmReady=false;
+                    }
                 }
+                return confirmReady
             } //end of function
             ,
             // findItemNumber:function(MaterialCode,BatchNo,plannedItems,itemNumberField){

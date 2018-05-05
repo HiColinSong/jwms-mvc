@@ -6,6 +6,11 @@ html,body {
 .nav .dropdown{
 	margin-right:15px;
 }
+.bx .page-loading{
+	position: absolute;
+    top: 30%;
+    left: 40%;
+}
 .bx .navbar-inverse .navbar-collapse, 
 .bx .navbar-inverse .navbar-form{
 	background-color: #337ab7;
@@ -185,7 +190,7 @@ form.form select{
         display: block;
     }
 .bx .company-logo{
-	background-image: url("/images/logo.bsi.long.svg");
+	background-image: url("/media/logo.bsi.long.svg");
 	width: 26px;
     height: 26px;
     background-color: #FFF;

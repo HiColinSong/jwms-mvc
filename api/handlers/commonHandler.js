@@ -47,103 +47,38 @@ exports.getPkgMtlList=function(req,res){
 
 };
 
-
-
-exports.addNewHu=function(req,res){
+exports.pgiUpdate=function(req,res){
 	(async function () {
-		var date,newHu=[];
-		for (var i=0;i<req.body.NumOfHu;i++){
-			date=new Date();
-			newHu.push(date.getTime()+i.toString())
-		}
-		var params={
-			DONumber:req.body.DONumber,
-			HUNumberList:newHu.join(','),
-			PackMaterial:req.body.MaterialCode,
-			CreatedBy:req.session.user,
-			CreatedOn:req.body.createdOn
-		}
 		try {
-			var huList = await dbPackingSvc.createHandlingUnits(params);
-			if (huList&&huList.recordset){
-				return res.status(200).send(huList.recordset);
+			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
+			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
+				return res.status(200).send({confirm:"success"});
+			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
 			} else {
-				return res.status(200).send({error:true,message:"The new handling units cannot be loaded"});
+				return res.status(200).send({confirm:"fail"});
 			}
 		} catch (error) {
 			return res.status(200).send({error:true,message:error});
 		}
 	})()
-
-
-	// orderNo = req.params.orderNo;
-	// orderType = orderNo.substring(0,2);
-	// order = util.getOrder(orderNo,orderType);
-	// if (order){
-	// 	huNo = req.params.huNo
-	// 	order.HUList = order.HUList||[];
-	// 	order.HUList.push({name:huNo,barcode:huNo,items:[]})
-	// 	return res.status(200).send(order);
-	// } else {
-	// 	return res.status(200).send({error:true,message:"HU "+huNo+" can't be added to Order"});
-	// }
 };
 
-exports.removeHuFromOrder=function(req,res){
-	orderNo = req.params.orderNo;
-	orderType = orderNo.substring(0,2);
-	order = util.getOrder(orderNo,orderType);
-	if (order){
-		huNo = req.params.huNo
-		order.HUList = order.HUList||[];
-		for (var i = 0; i < order.HUList.length; i++) {
-          if (order.HUList[i].barcode === huNo) {
-            order.HUList.splice(i, 1);
-            break;
-          }
-        }
-		return res.status(200).send(order);
-	} else {
-		return res.status(200).send({error:true,message:"HU "+huNo+" can't be removed from the Order"});
-	}
+exports.pgiReversal=function(req,res){
+	(async function () {
+		try {
+			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
+			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
+				return res.status(200).send({confirm:"success"});
+			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
+			} else {
+				return res.status(200).send({confirm:"fail"});
+			}
+		} catch (error) {
+			return res.status(200).send({error:true,message:error});
+		}
+	})()
 };
 
-exports.addItemtoHu=function(req,res){
-	order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
-	var hu,item;
-	if (order){
-		huNo = req.params.huNo;
-		for (var i = 0; i < order.HUList.length; i++) {
-	        if (order.HUList[i].barcode === huNo) {
-	            hu=order.HUList[i];
-	          }
-          }
-        item = util.getItem(req.params.serialNo);
-		hu.items.push(item);
-		return res.status(200).send(order);
-	} else {
-		return res.status(200).send({error:true,message:"Item "+serialNo+" can't be added to hu"});
-	}
-};
 
-exports.removeItemtoHu=function(req,res){
-	order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
-	var hu,item;
-	if (order){
-		huNo = req.params.huNo;
-		for (var i = 0; i < order.HUList.length; i++) {
-	        if (order.HUList[i].barcode === huNo) {
-	            hu=order.HUList[i];
-	          }
-          }
-        for (var i = 0; i < hu.items.length; i++) {
-          if (hu.items[i].serialNo === req.params.serialNo) {
-            hu.items.splice(i, 1);
-            break;
-          }
-        };
-		return res.status(200).send(order);
-	} else {
-		return res.status(200).send({error:true,message:"Item "+serialNo+" can't be added to hu"});
-	}
-};
