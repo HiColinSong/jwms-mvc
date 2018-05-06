@@ -108,6 +108,17 @@ var testInsertOrUpdateUserProfile=function(){
     }
     output(dbCommonSvc.insertOrUpdateUserProfile(user));
 }
+var testUpdateDOStatus=function(){
+    let info={
+        DONumber:'11223344',
+        PackStart:'20180501',
+        PackComplete:'20180505',
+        Push2SAPStatus:'R',
+        PackStatus:2,
+        DOStatus:'R',
+    }
+    output(dbCommonSvc.UpdateDOStatus(info));
+}
 
 //run from command line: node testCases.js
-testCreateHandlingUnits();
+testUpdateDOStatus();

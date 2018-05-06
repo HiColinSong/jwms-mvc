@@ -76,14 +76,6 @@ exports.InsertScanItem=function(info){
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
-  exports.confirmRga=function(DONumber){
-    var stmt = "update dbo.SAP_DOHeader Set DOStatus='C'where DONumber=@DONumber";
-    let paramTypes={DONumber:'sql.VarChar(12)'};
-    let paramValues={DONumber:DONumber};
-    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
-  }
-
-
 
 
 

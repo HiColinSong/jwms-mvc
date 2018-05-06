@@ -224,7 +224,15 @@ exports.confirmPacking=function(req,res){
 		try {
 			var ret = await sapSvc.confirmPacking(req.body.order);
 			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				await dbPackingSvc.confirmPacking(req.body.order.DONumber,req.body.PackComplete);
+				//update DO status
+				var info={
+					DONumber:req.body.order.DONumber,
+					PackComplete:req.body.PackComplete,
+					Push2SAPStatus:'C',
+					PackStatus:2,
+					DOStatus:'C',
+				}
+				await dbCommonSvc.UpdateDOStatus(info);
 				return res.status(200).send({confirm:"success"});
 			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
 				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
@@ -250,8 +258,14 @@ exports.reversal=function(req,res){
 				}
 			}
 			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				//delete from dbo.BX_PackDetails,dbo.BX_PackHeader,dbo.BX_PackUnits,dbo.SAP_DODetail,dbo.SAP_DOHeader
-				await dbPackingSvc.packingReversal(req.body.order.DONumber);
+				//update DO status
+				var info={
+					DONumber:req.params.orderNo,
+					Push2SAPStatus:'R',
+					PackStatus:0,
+					DOStatus:'R',
+				}
+				await dbCommonSvc.UpdateDOStatus(info);
 				return res.status(200).send({confirm:"success"});
 			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
 				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});

@@ -39,6 +39,26 @@ const sqlSvc=require("./sqlService");
     }
     return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateUserProfile",params);
   }
+  //update DO status
+  exports.UpdateDOStatus=function(info){
+    var params={
+      DONumber:{type:'sql.VarChar(12)',value:info.DONumber},
+    }
+    if (info.DOStatus)
+      params.DOStatus={type:'sql.Char(1)',value:info.DOStatus};
+    if (info.PackStart)
+      params.PackStart={type:'sql.VarChar(10)',value:info.PackStart};
+    if (info.PackComplete)
+      params.PackComplete={type:'sql.VarChar(10)',value:info.PackComplete};
+    if (info.PackStatus)
+      params.PackStatus={type:'sql.Char(1)',value:info.PackStatus};
+    if (info.Push2SAPStatus)
+      params.Push2SAPStatus={type:'sql.Char(1)',value:info.Push2SAPStatus};
+    if (info.SAPRefNo)
+      params.SAPRefNo={type:'sql.NVarChar(20)',value:info.SAPRefNo};
+
+      return sqlSvc.callStoredProcedure("dbo.BX_UpdateDOStatus",params);
+  }
 
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};

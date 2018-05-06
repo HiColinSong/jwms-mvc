@@ -20,10 +20,11 @@ app.use(bodyParser.urlencoded({
 
  app.use(session({
  	secret:"bxuser",
- 	resave:true,
+	 resave:true,
+	 rolling:true,//reset expiration to the original maxAage on every response
  	saveUninitialized:true,
  	cookie:{
- 		maxAge:3600000 //1 hour
+ 		maxAge:1000*60*10 //ten mins
  	}
 
  }))

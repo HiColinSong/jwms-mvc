@@ -103,7 +103,13 @@ exports.confirmRga=function(req,res){
 		try {
 			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
 			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				await dbRtgReceiptSvc.confirmRga(req.body.orderNo);
+				//update DO status
+				var info={
+					DONumber:req.body.orderNo,
+					DOStatus:'C',
+				}
+				await dbCommonSvc.UpdateDOStatus(info);
+				// await dbRtgReceiptSvc.confirmRga(req.body.orderNo);
 				return res.status(200).send({confirm:"success"});
 			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
 				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});

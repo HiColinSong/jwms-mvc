@@ -120,7 +120,7 @@ exports.InsertScanItem=function(info){
   }
 
   exports.confirmPacking=function(DONumber,PackComplete){
-    var stmt = "update dbo.BX_PackHeader Set PackComplete=Convert(datetime,@PackComplete),PackStatus=2,Push2SAPStatus=1 where DONumber=@DONumber";
+    var stmt = "update dbo.BX_PackHeader Set PackComplete=Convert(datetime,@PackComplete),PackStatus=2,Push2SAPStatus='C' where DONumber=@DONumber";
     let paramTypes={DONumber:'sql.VarChar(12)',PackComplete:'sql.VarChar(10)'};
     let paramValues={DONumber:DONumber,PackComplete:PackComplete};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
