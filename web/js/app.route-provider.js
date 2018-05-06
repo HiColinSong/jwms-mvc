@@ -12,8 +12,8 @@
                 resolve:{
                 }
             })
-            .when('/receiving', {templateUrl: 'partials/empty.html'})
-            .when('/fulfillment', {templateUrl: 'partials/empty.html'})
+            .when('/receiving', {templateUrl: 'partials/receving.html'})
+            .when('/fulfillment', {templateUrl: 'partials/fulfillment.html'})
             .when('/receiving/spoReceipts/:categoryId?', {
                 templateUrl: 'partials/spoReceipts.html',
                 controller: 'spoReceiptsCtrl'

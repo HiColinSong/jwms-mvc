@@ -8,8 +8,9 @@ html,body {
 }
 .bx .page-loading{
 	position: absolute;
-    top: 30%;
-    left: 40%;
+	top: 40%;
+	left: 50%;
+	max-width: 70px;
 }
 .bx .navbar-inverse .navbar-collapse, 
 .bx .navbar-inverse .navbar-form{

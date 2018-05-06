@@ -96,27 +96,25 @@
                 ng-mouseenter="menu.showSub='receiving'"
                ng-mouseleave="menu.showSub=''"
             >
-        <ul class="nav navbar-nav"> 
+        <!-- <ul class="nav navbar-nav"> 
           <li> 
             <a href="#/receiving/spoReceipts" active-link="active"> 
-              <!-- <span class="fa fa-file-text-o fa-lg"></span> -->
               Subcon PO Receipts
             </a> 
           </li>
           <li> 
             <a href="#/receiving/rtgReceipts" active-link="active"> 
-              <!-- <span class="fa fa-file-text-o fa-lg"></span> -->
               RGA Receipts
             </a> 
           </li>
-        </ul>
+        </ul> -->
       </div>
       <div class="subnav pull-left full-width" 
             ng-show="menu.showSub==='fulfillment'||(menu.showSub===''&&(currentUrl.indexOf('/fulfillment')!=-1))"
             ng-mouseenter="menu.showSub='fulfillment'"
             ng-mouseleave="menu.showSub=''"
             >
-        <ul class="nav navbar-nav"> 
+        <!-- <ul class="nav navbar-nav"> 
            <li> 
             <a href="#/fulfillment/picking" active-link="active">Picking</a> 
           </li>
@@ -138,9 +136,9 @@
            <li> 
             <a href="#/fulfillment/tools/reservation" active-link="active">Reservation</a> 
           </li>
-        </ul>
+        </ul> -->
       </div>
-      <div class="padding-x padding-y-5" style="padding-top:35px">
+      <div class="padding-x padding-y-5">
         <alert ng-repeat="alert in pageParts.alerts" type="{{alert.type}}" close="closeAlert($index)">
           {{alert.msg}}
         </alert>

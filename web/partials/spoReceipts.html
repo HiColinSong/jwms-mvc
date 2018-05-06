@@ -9,13 +9,13 @@
 		</button>
 	</div>
 	<div class="clearboth"></div>
-	<div class="col-sm-6 col-sm-offset-3 margin-top-20">
+	<!-- <div class="col-sm-6 col-sm-offset-3 margin-top-20">
 	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
 	  			ng-click="scanReceipt('besa')"> 
 	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Receive @BESA
 		</button>
 	</div>
-	<div class="clearboth"></div>
+	<div class="clearboth"></div> -->
 	<div class="col-sm-6 col-sm-offset-3 margin-top-20">
 	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
 	  			ng-click="scanReceipt('qas')"> 
@@ -24,12 +24,10 @@
 	</div>
 </section>
 <section ng-if="receipts.categoryId">
-	  <ul class="nav nav-tabs " role="tablist">
+	  <ul class="nav nav-tabs margin-bottom" role="tablist">
 	    <li role="presentation" class="active"><a class="cursor-pointer">{{receipts.categoryId|dispCategoryName}}</a></li>
 	  </ul>
-	  <div scan-items items="receipts.items" type="spoReceipts" info="info">
-    	
-    </div>
+		<div scan-items order="receipts" type="sporeceipts" barcode="barcode" order-no="na"></div>
     <!--confirm button-->
   	<div class="col-sm-3 col-xs-12 no-padding-x text-right margin-top">
 	  	<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm receipt" ng-click="confirmReceipt()" ng-disabled="!receipts.items||receipts.items.length===0">
