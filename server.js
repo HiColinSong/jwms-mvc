@@ -60,7 +60,6 @@ app.get('/bxapi/packing/reversal/:orderNo.json',auth.authCheck,packingHandler.re
 
 var pickingHandler = require('./api/handlers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
-app.get('/bxapi/picking/get-order/:orderNo.json',auth.authCheck,pickingHandler.getOrder);
 app.get('/bxapi/picking/add-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.addItem);
 app.get('/bxapi/picking/remove-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.removeItem);
 app.get('/bxapi/picking/set-status/:orderNo/:status.json',auth.authCheck,pickingHandler.setStatus);

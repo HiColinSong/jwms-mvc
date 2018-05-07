@@ -43,40 +43,87 @@ client.connect(function(err) {
   client.invoke('BAPI_OUTB_DELIVERY_CONFIRM_DEC',
   {
     "HEADER_DATA": {
-      "DELIV_NUMB": "0800401131"
+      "DELIV_NUMB": "0800401206"
     },
     "HEADER_CONTROL": {
-      "DELIV_NUMB": "0800401131"
+      "DELIV_NUMB": "0800401206"
     },
     "HANDLING_UNIT_HEADER": [
       {
-        "DELIV_NUMB": "0800401131",
-        "HDL_UNIT_EXID": "15249880572540",
+        "DELIV_NUMB": "0800401206",
+        "HDL_UNIT_EXID": "118050700000",
         "HDL_UNIT_EXID_TY": "F",
-        "SHIP_MAT": "pkgm124",
-        "PLANT": ""
+        "SHIP_MAT": "P-PA2.9010",
+        "PLANT": "2100"
       },
       {
-        "DELIV_NUMB": "0800401131",
-        "HDL_UNIT_EXID": "15249880572541",
+        "DELIV_NUMB": "0800401206",
+        "HDL_UNIT_EXID": "118050700002",
         "HDL_UNIT_EXID_TY": "F",
-        "SHIP_MAT": "pkgm124",
-        "PLANT": ""
-      },
-      {
-        "DELIV_NUMB": "0800401131",
-        "HDL_UNIT_EXID": "15249880572542",
-        "HDL_UNIT_EXID_TY": "F",
-        "SHIP_MAT": "pkgm124",
+        "SHIP_MAT": "P-PA2.9010",
         "PLANT": ""
       }
     ],
     "HANDLING_UNIT_ITEM": [
       {
-        "DELIV_NUMB": "0800401131",
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000002",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
         "DELIV_ITEM": "000001",
-        "HDL_UNIT_EXID_INTO": "15249880572540",
-        "PACK_QTY": 2
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000001",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000002",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000001",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000001",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000001",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000002",
+        "HDL_UNIT_EXID_INTO": "118050700000",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000002",
+        "HDL_UNIT_EXID_INTO": "118050700002",
+        "PACK_QTY": 1
+      },
+      {
+        "DELIV_NUMB": "0800401206",
+        "DELIV_ITEM": "000002",
+        "HDL_UNIT_EXID_INTO": "118050700002",
+        "PACK_QTY": 1
       }
     ]
   },

@@ -223,7 +223,7 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		try {
 			var ret = await sapSvc.confirmPacking(req.body.order);
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
+			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0||ret.RETURN.TYPE==="")){
 				//update DO status
 				var info={
 					DONumber:req.body.order.DONumber,

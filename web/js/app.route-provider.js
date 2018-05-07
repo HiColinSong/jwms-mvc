@@ -47,16 +47,16 @@
                         }]
                 }
             })
-            .when('/fulfillment/picking/:orderNo?', {
+            .when('/fulfillment/picking/:TONumber?', {
                 templateUrl: 'partials/picking.html',
                 controller: 'pickingCtrl',
                 resolve:{
                     order:['$q','$route','utilSvc','bxService',
                         function($q,$route,util,apiSvc){
                             var deferred = $q.defer();
-                            if ($route.current.params.orderNo){
-                                uti.pageLoading("start");
-                                apiSvc.getOrderForPicking({param1:$route.current.params.orderNo}).$promise.then(function(data){
+                            if ($route.current.params.TONumber){
+                                util.pageLoading("start");
+                                apiSvc.getOrderForPicking({orderNo:$route.current.params.TONumber}).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);
                                         util.pageLoading("stop");

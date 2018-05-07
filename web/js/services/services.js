@@ -136,12 +136,11 @@
 
               //start of picking api
             getOrderForPicking:{ //  /bxapi/picking/get-order/xxxxxx.json
-                method: 'GET',
+                method: 'POST',
                 params: {
                     type: 'picking',
                     subtype: 'get-order',
-                    param1:'@param1'
-                }
+                },
             },
             setPickingStatus:{
                 method: 'GET',

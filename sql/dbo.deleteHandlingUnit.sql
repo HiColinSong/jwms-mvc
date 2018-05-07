@@ -1,19 +1,13 @@
 USE [BIOTRACK]
 GO
-
-/****** Object:  StoredProcedure [dbo].[DeleteHandlingUnit]    Script Date: 27-Apr-18 11:43:33 AM ******/
-DROP PROCEDURE [dbo].[DeleteHandlingUnit]
-GO
-
-/****** Object:  StoredProcedure [dbo].[DeleteHandlingUnit]    Script Date: 27-Apr-18 11:43:33 AM ******/
+/****** Object:  StoredProcedure [dbo].[DeleteHandlingUnit]    Script Date: 08-May-18 12:12:14 AM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[DeleteHandlingUnit] 
+ALTER PROCEDURE [dbo].[DeleteHandlingUnit] 
 (
 	@DONumber varchar(12),
 	@HUNumber varchar(20)
@@ -25,40 +19,21 @@ AS
    
 */
 BEGIN
+    BEGIN TRANSACTION;
+    SAVE TRANSACTION MySavePoint;
     BEGIN TRY  
-        IF EXISTS (select * from dbo.BX_PackDetails where DONumber=@DONumber and HUNumber=@HUNumber)
-            -- RAISERROR with severity 11-19 will cause execution to   
-            -- jump to the CATCH block.  
-            RAISERROR ('Error: Handling Unit is not empty!', -- Message text.  
-                    16, -- Severity.  
-                    1 -- State.  
-                    );  
-
-		DELETE FROM dbo.BX_PackHUnits where HUNumber=@HUNumber
+        DELETE from dbo.BX_PackDetails where DONumber=@DONumber and HUNumber=@HUNumber
+		DELETE FROM dbo.BX_PackHUnits where HUNumber=@HUNumber;
     END TRY  
-    BEGIN CATCH  
-        DECLARE @ErrorMessage NVARCHAR(4000);  
-        DECLARE @ErrorSeverity INT;  
-        DECLARE @ErrorState INT;  
-
-        SELECT   
-            @ErrorMessage = ERROR_MESSAGE(),  
-            @ErrorSeverity = ERROR_SEVERITY(),  
-            @ErrorState = ERROR_STATE();  
-
-        -- Use RAISERROR inside the CATCH block to return error  
-        -- information about the original error that caused  
-        -- execution to jump to the CATCH block.  
-        RAISERROR (@ErrorMessage, -- Message text.  
-                @ErrorSeverity, -- Severity.  
-                @ErrorState -- State.  
-                );  
-    END CATCH; 
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION MySavePoint; -- rollback to MySavePoint
+        END
+    END CATCH
+    COMMIT TRANSACTION 
 	--return freshed items detail
 	SELECT * FROM dbo.BX_PackHUnits where DONumber=@DONumber
-
+    --SELECT * from dbo.BX_PackDetails where DONumber=@DONumber and HUNumber=@HUNumber
 END
-
-GO
-
 

@@ -136,6 +136,35 @@ exports.getItem=function(serialNo){
 	 }
 	 return _do;
  }
+ exports.transferOrderConverter = function (transferOrder){
+	 var _to = {plannedItems:[]};
+	 var transferOrderFields=sapFields.transferOrderFields;
+	 var headerFields=sapFields.transferOrderHeaderFields;
+	 var itemFields=sapFields.transferOrderItemFields;
+	 var header,items,item;
+	 if (transferOrder){
+	 	for (let key in transferOrderFields) {
+			_to[key]=transferOrder[transferOrderFields[key]];
+		 }
+	 }
+	 if (transferOrder.TOHEADERDATA&&transferOrder.TOHEADERDATA.length>0){
+		 header = transferOrder.TOHEADERDATA[0];
+	 	for (let key in headerFields) {
+			_to[key]=header[headerFields[key]];
+		 }
+	 }
+	 if (transferOrder.TOITEMDATA&&transferOrder.TOITEMDATA.length>0){
+		 items = transferOrder.TOITEMDATA;
+		for (let i = 0; i < items.length; i++) {
+			item = items[i];
+			_to.plannedItems.push({});
+			for (let key in itemFields) {
+				 _to.plannedItems[i][key]=item[itemFields[key]];
+			}
+		}
+	 }
+	 return _to;
+ }
 
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
 exports.removeIncompleteItem = function (items){

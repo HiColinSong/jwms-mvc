@@ -39,25 +39,20 @@ client.connect(function(err) {
     return console.error('could not connect to server', err);
   }
 
-  console.log('Invoking BAPI_DELIVERY_GETLIST');
-  client.invoke('BAPI_DELIVERY_GETLIST',
+  console.log('Invoking RV_ORDER_FLOW_INFORMATION');
+  client.invoke('RV_ORDER_FLOW_INFORMATION',
     {
-      IS_DLV_DATA_CONTROL:{
-        HEAD_STATUS:"X",
-        ITEM_STATUS:"X",
-        ITEM:"X",
-        HU_DATA:"X"
-      },
-       IT_VBELN:[{
-        SIGN:"I",
-        OPTION:"EQ",
-        DELIV_NUMB_LOW:"0800401206" //add leading 0
-        // DELIV_NUMB_LOW:"0800379646" //add leading 0
-       }]
+      AUFBEREITUNG:'2',
+      BELEGTYP:'',
+      COMWA:{VBELN:'0800401206'},
+      NACHFOLGER : 'X',
+      N_STUFEN : '50',
+      VORGAENGER:'X',
+      V_STUFEN:'50'
     },
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_DELIVERY_GETLIST:', err);
+        return console.error('Error invoking RV_ORDER_FLOW_INFORMATION:', err);
       }
       console.log(res);
     });

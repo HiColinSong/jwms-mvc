@@ -119,6 +119,13 @@ var testUpdateDOStatus=function(){
     }
     output(dbCommonSvc.UpdateDOStatus(info));
 }
+var testCheckMUltipleTStatus=function(){
+    let info=[
+        '111111','111113','111114','111114','111115','111117'
+    ]
+        
+    output(dbCommonSvc.CheckMultipleTOStatus(info));
+}
 
 //run from command line: node testCases.js
-testUpdateDOStatus();
+testCheckMUltipleTStatus();

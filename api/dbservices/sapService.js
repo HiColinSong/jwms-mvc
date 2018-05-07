@@ -46,7 +46,7 @@ exports.confirmPacking=function(order){
             HDL_UNIT_EXID:hu.HUNumber, 
             HDL_UNIT_EXID_TY:"F",
             SHIP_MAT:hu.PackMaterial, 
-            PLANT:order.Plant
+            PLANT:order.plannedItems[0].Plant
           }
       );
       for (let j = 0; j < hu.scannedItems.length; j++) {
@@ -56,16 +56,13 @@ exports.confirmPacking=function(order){
                 DELIV_NUMB: order.DONumber, 
                 DELIV_ITEM:scannedItem.DOItemNumber,
                 HDL_UNIT_EXID_INTO:scannedItem.HUNumber, 
-                PACK_QTY:scannedItem.ScanQty
+                PACK_QTY:scannedItem.ScanQty,
+                MATERIAL:scannedItem.MaterialCode,
+                BATCH:scannedItem.BatchNo
               }
           );
       }
     }
-    // return new Promise(function(resolve,reject){
-    //   resolve("success");
-    //   // resolve("fail");
-    //   // reject("unknown issue");
-    // })
     return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
 };
 

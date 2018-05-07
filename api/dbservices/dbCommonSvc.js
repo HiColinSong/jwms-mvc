@@ -59,6 +59,33 @@ const sqlSvc=require("./sqlService");
 
       return sqlSvc.callStoredProcedure("dbo.BX_UpdateDOStatus",params);
   }
+  //update TO status
+  exports.UpdateTOStatus=function(info){
+    var params={
+      TONumber:{type:'sql.VarChar(12)',value:info.TONumber},
+    }
+    if (info.PickConfirmStatus)
+      params.PickConfirmStatus={type:'sql.Char(1)',value:info.PickConfirmStatus};
+    if (info.PickStart)
+      params.PickStart={type:'sql.VarChar(10)',value:info.PickStart};
+    if (info.PickComplete)
+      params.PickComplete={type:'sql.VarChar(10)',value:info.PickComplete};
+    if (info.PickStatus)
+      params.PickStatus={type:'sql.Char(1)',value:info.PickStatus};
+    if (info.Push2SAPStatus)
+      params.Push2SAPStatus={type:'sql.Char(1)',value:info.Push2SAPStatus};
+    if (info.SAPRefNo)
+      params.SAPRefNo={type:'sql.NVarChar(20)',value:info.SAPRefNo};
+
+      return sqlSvc.callStoredProcedure("dbo.BX_UpdateTOStatus",params);
+  }
+  //check TOs status
+  exports.CheckMultipleTOStatus=function(TONumberList){
+    var params={
+      TONumberList:{type:'sql.VarChar(1200)',value:TONumberList.join(',')},
+    }
+      return sqlSvc.callStoredProcedure("dbo.BX_CheckMultipleTOStatus",params);
+  }
 
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};
