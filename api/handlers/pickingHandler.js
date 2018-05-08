@@ -43,7 +43,15 @@ exports.getOrder=function(req,res){
 				params.BatchNumberList = BatchNumberList.join(',');
 				params.VendorBatchList = VendorBatchList.join(',');
 				params.TOQuantityList = TOQuantityList.join(',');
-				await dbPickingSvc.InsertOrUpdateTO(params);
+				let ret=await dbPickingSvc.InsertOrUpdateTO(params);
+				ret = ret.recordset;
+				if (ret.length>0){
+					order.PickStart = ret[0].PickStart;
+					order.PickComplete = ret[0].PickComplete||undefined;
+					order.PickStatus = ret[0].PickStatus||undefined;
+					order.Push2SAPStatus = ret[0].Push2SAPStatus||undefined;
+					order.SAPRefNo = ret[0].SAPRefNo||undefined;
+				}
 	
 				return res.status(200).send(order);
 			} else {
@@ -85,13 +93,25 @@ exports.removeItem=function(req,res){
 };
 
 exports.setStatus=function(req,res){
-	order = util.getOrder(req.params.orderNo,req.params.orderNo.substring(0,2));
-	var status=req.params.status;
-	if (order){
-		order.pickingStatus=(status!=='reset')?status:undefined;
-		return res.status(200).send(order);
-	} else {
-		return res.status(200).send({error:true,message:"order "+orderNo+" doesn't exist!"});
-	}
+	(async function () {
+		try {
+			var params={
+				TONumber:req.body.TONumber,
+				PickStart:req.body.PickStart||undefined,
+				PickComplete:req.body.PickComplete||undefined,
+				PickStatus:req.body.PickStatus||undefined,
+				Push2SAPStatus:req.body.Push2SAPStatus||undefined,
+				SAPRefNo:req.body.SAPRefNo||undefined,
+			} 
+			if (params.Push2SAPStatus==='C'){
+				await sapSvc.confirmPicking(req.body.TONumber,req.session.user.DefaultWH,req.body.items);
+			}
+			var ret = await dbPickingSvc.setStatus(params);
+			ret = ret.recordset[0];
+			return res.status(200).send(ret);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
 };
 

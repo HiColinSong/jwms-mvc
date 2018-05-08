@@ -18,52 +18,55 @@
                 
 
                 $scope.changePickingStatus=function(status){
-                	apiSvc.setPickingStatus({param1:$scope.TONumber, param2:status})
+                    var params={TONumber:$scope.TONumber}
+                    params[status]=utilSvc.formatDate();
+                    if ('Push2SAPStatus'===status){
+                        params.Push2SAPStatus='C';
+                        params.items=order.plannedItems;
+                    }
+                	apiSvc.setPickingStatus(params)
                             .$promise.then(
                                 function(data){
                                     if (data){
-                                        // $scope.order.pickingStatus=data.pickingStatus;
-                                        $scope.order.PickConfirmStatus=order.PickConfirmStatus=data.PickConfirmStatus;
-                                        if ($scope.order.pickingStatus==="start"){
-                                            $scope.temp.showTab="serialNos";
-                                        } else if (!$scope.order.pickingStatus){
-                                            $scope.temp.showTab="picking";
-                                        }
+                                        angular.extend($scope.order, data)
                                     } else {
                                         utilSvc.addAlert("Fail to change the picking status", "fail", false);
                                     }
                                 },
                                 function(err){
-                                    utilSvc.addAlert("Fail to change the picking status", "fail", false);
+                                    if (err.data&&err.data.message)
+                                        utilSvc.addAlert(err.data.message, "fail", false);
+                                    else
+                                        utilSvc.addAlert("Fail to change the picking status", "fail", false);
                                 }) 
                 };
 
-                $scope.confirmPick = function() {
-                    apiSvc.checkOrderStatus({type:"picking",param1:order.TONumber}).$promise.then(function(data){
-                        if (data.status==="valid"){
-                            apiSvc.confirmOperation({type:"picking"},$scope.order).$promise.then(function(data){
-                                if (data){
-                                    $scope.confirm=data;
-                                    confirmSubmit.do($scope);
-                                }
-                            },function(err){
-                                console.err(err);
-                            });
-                        } else if(data.status==="invalid"){ //invalid status
-                           $scope.confirm={
-                                type:"danger",
-                                message:"The transfer order is invalid, operation failed!",
-                                resetPath:"/picking"
-                            }
-                            confirmSubmit.do($scope);
-                        } else { //order not found
-                            utilSvc.addAlert("The Deliver order "+$routeParams.TONumber+" no longer exists!", "fail", false);
-                        }
-                    },function(err){
-                        utilSvc.addAlert("Unknown issue!", "fail", false);
-                        console.err(err);
-                    })
-                }
+                // $scope.confirmPick = function() {
+                //     apiSvc.checkOrderStatus({type:"picking",param1:order.TONumber}).$promise.then(function(data){
+                //         if (data.status==="valid"){
+                //             apiSvc.confirmOperation({type:"picking"},$scope.order).$promise.then(function(data){
+                //                 if (data){
+                //                     $scope.confirm=data;
+                //                     confirmSubmit.do($scope);
+                //                 }
+                //             },function(err){
+                //                 console.err(err);
+                //             });
+                //         } else if(data.status==="invalid"){ //invalid status
+                //            $scope.confirm={
+                //                 type:"danger",
+                //                 message:"The transfer order is invalid, operation failed!",
+                //                 resetPath:"/picking"
+                //             }
+                //             confirmSubmit.do($scope);
+                //         } else { //order not found
+                //             utilSvc.addAlert("The Deliver order "+$routeParams.TONumber+" no longer exists!", "fail", false);
+                //         }
+                //     },function(err){
+                //         utilSvc.addAlert("Unknown issue!", "fail", false);
+                //         console.err(err);
+                //     })
+                // }
 
         } else {
             $scope.order={};    

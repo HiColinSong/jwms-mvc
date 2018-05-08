@@ -20,7 +20,8 @@ exports.getDeliveryOrder=function(orderNo){
         HEAD_STATUS:"X",
         ITEM_STATUS:"X",
         ITEM:"X",
-        HU_DATA:"X"
+        HU_DATA:"X",
+        HEAD_PARTNER:"X"
       },
        IT_VBELN:[{
         SIGN:"I",
@@ -113,6 +114,25 @@ exports.getTransferOrder=function(orderNo,warehouseNo){
     return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
 };
 
+exports.confirmPicking=function(orderNo,warehouseNo,items){
+	var param={
+        I_LGNUM : warehouseNo,
+        I_TANUM:orderNo,
+        // T_LTAP_CONF : [{ TANUM:orderNo, TAPOS:"0001", SQUIT:"X"}],
+        I_UPDATE_TASK:"X",
+        I_COMMIT_WORK:"X"
+      };
+      param.T_LTAP_CONF=[];
+      for (let i = 0; i < items.length; i++) {
+        param.T_LTAP_CONF.push({
+          TANUM:orderNo,
+          TAPOS:items[i].TOItemNumber,
+          SQUIT:"X"
+        });
+      }
+    return invokeBAPI("L_TO_CONFIRM",param);
+};
+
 var invokeBAPI = function(bapiName,param,transactionCommit){
 	return new Promise(function(resolve,reject){
 	    client.connect(function(err) {
@@ -127,7 +147,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
             reject(err);
             transactionCommit=false;
           }
-          if (res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
+          if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             resolve(res);
             // reject(res.RETURN[0].MESSAGE);
             transactionCommit=false;

@@ -46,7 +46,8 @@ client.connect(function(err) {
         HEAD_STATUS:"X",
         ITEM_STATUS:"X",
         ITEM:"X",
-        HU_DATA:"X"
+        HU_DATA:"X",
+        HEAD_PARTNER:"X"
       },
        IT_VBELN:[{
         SIGN:"I",

@@ -143,12 +143,10 @@
                 },
             },
             setPickingStatus:{
-                method: 'GET',
+                method: 'POST',
                 params:{
                   type: 'picking',
-                  subtype: 'set-status',
-                  param1:'@param1',//order number
-                  param2:'@param2'//status
+                  subtype: 'set-status'
                 }
               },
               // checkPickingStatus:{
@@ -287,6 +285,14 @@
                   type: 'pgi',
                   subtype:'update'
                 }
+              },
+              updateSubconReturn:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'update-return'
+                },
+                isArray:true
               }
         }
       }

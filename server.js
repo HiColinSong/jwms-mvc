@@ -62,7 +62,7 @@ var pickingHandler = require('./api/handlers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
 app.get('/bxapi/picking/add-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.addItem);
 app.get('/bxapi/picking/remove-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.removeItem);
-app.get('/bxapi/picking/set-status/:orderNo/:status.json',auth.authCheck,pickingHandler.setStatus);
+app.post('/bxapi/picking/set-status.json',auth.authCheck,pickingHandler.setStatus);
 
 var rtgReceiptsHandler = require('./api/handlers/rtgReceiptsHandler');
 app.post('/bxapi/rtgreceipts/get-order.json',auth.authCheck,rtgReceiptsHandler.getOrder);
@@ -71,9 +71,10 @@ app.post('/bxapi/rtgreceipts/remove-item.json',auth.authCheck,rtgReceiptsHandler
 app.post('/bxapi/rtgreceipts/confirm.json',auth.authCheck,rtgReceiptsHandler.confirmRga);
 
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
-app.get('/bxapi/sporeceipts/get-order/:orderNo.json',auth.authCheck,spoReceiptsHandler.getOrder);
-app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
-app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
+app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandler.updateReturn);
+// app.get('/bxapi/sporeceipts/get-order/:orderNo.json',auth.authCheck,spoReceiptsHandler.getOrder);
+// app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
+// app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);

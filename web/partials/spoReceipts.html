@@ -26,8 +26,9 @@
 <section ng-if="receipts.categoryId">
 	  <ul class="nav nav-tabs margin-bottom" role="tablist">
 	    <li role="presentation" class="active"><a class="cursor-pointer">{{receipts.categoryId|dispCategoryName}}</a></li>
-	  </ul>
-		<div scan-items order="receipts" type="sporeceipts" barcode="barcode" order-no="na"></div>
+		</ul>
+		<div ng-include src="'partials/scan-items.html'"></div>
+		<!-- <div scan-items order="receipts" type="sporeceipts" barcode="barcode" order-no="na"></div> -->
     <!--confirm button-->
   	<div class="col-sm-3 col-xs-12 no-padding-x text-right margin-top">
 	  	<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm receipt" ng-click="confirmReceipt()" ng-disabled="!receipts.items||receipts.items.length===0">
@@ -38,6 +39,4 @@
 </section>
 
 
-<pre ng-show="debug">bInfo:{{info.bInfo | json}}</pre>	
-<pre ng-show="debug">itemInfo:{{info.itemInfo | json}}</pre>	
-<pre ng-show="debug">receipts:{{receipts | json}}</pre>	
+<pre ng-show="debug">barcode:{{barcode | json}}</pre>	

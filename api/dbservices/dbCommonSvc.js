@@ -86,6 +86,17 @@ const sqlSvc=require("./sqlService");
     }
       return sqlSvc.callStoredProcedure("dbo.BX_CheckMultipleTOStatus",params);
   }
+  exports.updateSubConReturns=function(args){
+    var params={
+      sFullScanCode:{type:'sql.VarChar(60)',value:args.sFullScanCode},
+      sReturnToTarget:{type:'sql.VarChar(3)',value:args.sReturnToTarget},
+      sLogonUser:{type:'sql.VarChar(20)',value:args.sLogonUser},
+      sQACategory:{type:'sql.VarChar(12)',value:args.sQACategory},
+      dCurrDate:{type:'sql.DateTime',value:new Date()}
+      // dCurrDate:{type:'sql.DateTime',value:args.dCurrDate}
+    }
+      return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
+  }
 
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};

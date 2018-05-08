@@ -88,7 +88,7 @@
 				$scope.confirm={
 					type:"danger",
 					modalHeader: 'Operation Fail',
-					message:"System error, Operation is failed!",
+					message:err.data.message||"System error, Operation is failed!",
 				}
 				confirmSubmit.do($scope);
 			}

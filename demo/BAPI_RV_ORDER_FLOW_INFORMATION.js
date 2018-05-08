@@ -40,15 +40,16 @@ client.connect(function(err) {
   }
 
   console.log('Invoking RV_ORDER_FLOW_INFORMATION');
-  client.invoke('RV_ORDER_FLOW_INFORMATION',
+  client.invoke('Z_RV_ORDER_FLOW_INFORMATION',
     {
       AUFBEREITUNG:'2',
       BELEGTYP:'',
-      COMWA:{VBELN:'0800401206'},
+      COMWA:{VBELN:'0800401130'},
       NACHFOLGER : 'X',
-      N_STUFEN : '50',
-      VORGAENGER:'X',
-      V_STUFEN:'50'
+      N_STUFEN : '50'
+      // ,
+      // VORGAENGER:'X',
+      // V_STUFEN:'50'
     },
     function(err, res) {
       if (err) {

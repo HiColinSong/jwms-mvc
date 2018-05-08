@@ -50,6 +50,12 @@ exports.getPkgMtlList=function(req,res){
 exports.pgiUpdate=function(req,res){
 	(async function () {
 		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			if (sapOrder.ET_DELIVERY_HEADER_STS&&
+				sapOrder.ET_DELIVERY_HEADER_STS.length>0&&
+				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK!=='C'||sapOrder.ET_DELIVERY_HEADER_STS[0].FKSTK!=='C')){
+					throw new Error("Please confirm the picking and packing of the order!");
+				}
 			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
 			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
 				return res.status(200).send({confirm:"success"});
@@ -59,7 +65,7 @@ exports.pgiUpdate=function(req,res){
 				return res.status(200).send({confirm:"fail"});
 			}
 		} catch (error) {
-			return res.status(200).send({error:true,message:error});
+			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
 };
@@ -76,7 +82,7 @@ exports.pgiReversal=function(req,res){
 				return res.status(200).send({confirm:"fail"});
 			}
 		} catch (error) {
-			return res.status(200).send({error:true,message:error});
+			return res.status(400).send({error:true,message:error});
 		}
 	})()
 };

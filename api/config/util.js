@@ -134,6 +134,15 @@ exports.getItem=function(serialNo){
 			}
 		}
 	 }
+	 //find enduser code
+	 if (deliveryOrder.ET_DELIVERY_PARTNER&&deliveryOrder.ET_DELIVERY_PARTNER.length>0){
+		doItems = deliveryOrder.ET_DELIVERY_PARTNER;
+		for (let i = 0; i < doItems.length; i++) {
+			if(doItems[i].PARVW==="ZE"){
+				_do.endUser=doItems[i].KUNNR;
+			}
+		}
+	 }
 	 return _do;
  }
  exports.transferOrderConverter = function (transferOrder){

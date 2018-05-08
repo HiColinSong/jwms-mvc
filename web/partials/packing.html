@@ -110,13 +110,17 @@
 		  			<td >Shipping Point</td> 
 		  			<td>{{order.ShippingPoint}}</td>
 		  		</tr> 
-		  		<!-- <tr> 
+		  		<tr> 
 		  			<td >Plant</td> 
-		  			<td>{{order.Plant}}</td>
-		  		</tr>  -->
+		  			<td>{{order.plannedItems[0].Plant}}</td>
+		  		</tr> 
 		  		<tr> 
 		  			<td >Warehouse Number</td> 
 		  			<td>{{order.WarehouseNo}}</td>
+		  		</tr> 
+		  		<tr> 
+		  			<td >End User</td> 
+		  			<td>{{order.endUser}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Number of Items</td> 

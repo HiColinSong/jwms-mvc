@@ -74,6 +74,18 @@
 		  			<td >Number of Items</td> 
 		  			<td>{{order.plannedItems.length}}</td>
 		  		</tr> 
+		  		<tr ng-show="order.PickStart"> 
+		  			<td >Pick Start </td> 
+		  			<td>{{order.PickStart}}</td>
+		  		</tr> 
+		  		<tr ng-show="order.PickComplete"> 
+		  			<td >Pik Complete</td> 
+		  			<td>{{order.PickComplete}}</td>
+		  		</tr> 
+		  		<tr ng-show="order.Push2SAPStatus"> 
+		  			<td >Pick Confirm</td> 
+		  			<td>{{order.Push2SAPStatus}}</td>
+		  		</tr> 
 		  	</tbody> 
 		  </table>
     </div>
@@ -87,28 +99,28 @@
   <div class="button-group margin-top-20">
   	<div class="col-sm-3 col-xs-12 margin-top">
 	  	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="start pick"
-	  			ng-class="{'btn-primary':!order.pickingStatus,
-	  						'btn-success':order.pickingStatus}"
-	  			ng-disabled="order.pickingStatus"
-	  			ng-click="changePickingStatus('start')"> 
+	  			ng-class="{'btn-primary':!order.PickStart,
+	  						'btn-success':order.PickStart}"
+	  			ng-disabled="order.PickStart"
+	  			ng-click="changePickingStatus('PickStart')"> 
 	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Start Pick
 		</button>
   	</div>
-<!--   	<div class="col-sm-3 col-xs-12 text-center margin-top">
+  	<div class="col-sm-3 col-xs-12 text-center margin-top">
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="complete pick"
-  			ng-class="{'btn-primary':order.pickingStatus==='start',
-  						'btn-success':order.pickingStatus==='complete'||order.pickingStatus==='confirm'}"
-  			ng-disabled="order.pickingStatus!=='start'"
-  			ng-click="changePickingStatus('complete')">
+  			ng-class="{'btn-primary':order.PickStart,
+  						'btn-success':order.PickComplete||order.Push2SAPStatus}"
+  			ng-disabled="!order.PickStart||order.PickComplete||order.Push2SAPStatus"
+  			ng-click="changePickingStatus('PickComplete')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Pick Complete
 	</button>
-	</div> -->
+	</div>
   	<div class="col-sm-3 col-xs-12 text-right margin-top">
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="comfirm pick"
-  			ng-class="{'btn-primary':order.pickingStatus==='start',
-  						'btn-success':order.pickingStatus==='confirm'}"
-  			ng-disabled="order.pickingStatus!=='start'"
-			ng-click="confirmPick()">
+  			ng-class="{'btn-primary':order.PickComplete,
+  						'btn-success':order.Push2SAPStatus}"
+  			ng-disabled="!order.PickStart||!order.PickComplete||order.Push2SAPStatus"
+			ng-click="changePickingStatus('Push2SAPStatus')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Pick
 	</button>
 	</div>
