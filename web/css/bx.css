@@ -53,11 +53,6 @@ html,body {
     border-bottom: 1px solid #EEE;
 }
 
-
-
-
-
-
 .main-view {
   padding:60px 10px 0 10px;
   width:100%;
@@ -239,11 +234,25 @@ form.form select{
 .bx .scan-item .panel-heading:hover{
 	background-color:#DDD;
 }
-
+/* .bx .form-group input{
+	height:50px;
+} */
 
 @media only screen and (max-width: 1180px) {
 	.bx .letter{display:none;}
 	.bx .highlight-letter {
 		margin-left:-5px;
+	}
+} 
+
+@media only screen and (max-width: 768px) {
+	.bx .nav.navbar-nav{
+		font-size:20px;
+	}
+	.bx table.scan-item tr.form-group td.lable{
+		width:25%;
+	}
+	.bx table.scan-item tr.form-group td.input{
+		width:75%;
 	}
 } 

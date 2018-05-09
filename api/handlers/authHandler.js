@@ -38,7 +38,7 @@ exports.login=function(req, res) {
 				try {
 					//get user profile from db
 				var userProfile = await dbCommonSvc.getUserProfile(req.body.username);
-				if (userProfile){
+				if (userProfile&&userProfile.recordset.length>0){
 					session.user = userProfile.recordset[0];
 					res.status(200).send({loginUser:userProfile.recordset[0]});
 				} else{

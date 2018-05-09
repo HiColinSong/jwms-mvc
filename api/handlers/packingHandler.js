@@ -1,6 +1,9 @@
 'use strict';
 
 const util = require('../config/util');
+// var logger = require("winston");
+var logger = require("../config/logger");
+
 const sapSvc =require('../dbservices/sapService');
 const sqlSvc =require('../dbservices/sqlService');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
@@ -221,26 +224,54 @@ exports.refreshHu=function(req,res){
 
 exports.confirmPacking=function(req,res){
 	(async function () {
+		var args,info,ret;
 		try {
-			var ret = await sapSvc.confirmPacking(req.body.order);
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0||ret.RETURN.TYPE==="")){
-				//update DO status
-				var info={
-					DONumber:req.body.order.DONumber,
-					PackComplete:req.body.PackComplete,
-					Push2SAPStatus:'C',
-					PackStatus:2,
-					DOStatus:'C',
+			ret = await sapSvc.confirmPacking(req.body.order);
+			//update all serial no with SAP
+			args = {IT_BX_STOCK:[]};
+			for (let i = 0; i < req.body.order.HUList.length; i++) {
+				const hu = req.body.order.HUList[i];
+				for (let j = 0; j < hu.scannedItems.length; j++) {
+					const item = hu.scannedItems[j];
+					if (item.SerialNo){
+						args.IT_BX_STOCK.push({
+							TRANS:'PAK',
+							WERKS:req.body.order.plannedItems[0].Plant,
+							MATNR:item.MaterialCode,
+							CHARG: item.BatchNo,
+							SERIAL:item.SerialNo,
+							DOCNO: item.HUNumber,
+							ENDCUST:req.body.order.endUser,
+							BXDATE:util.formatDateTime(item.PackedOn).date,
+							BXTIME:util.formatDateTime(item.PackedOn).time,
+							BXUSER:item.PackBy
+						});
+					}
 				}
-				await dbCommonSvc.UpdateDOStatus(info);
-				return res.status(200).send({confirm:"success"});
-			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			} else {
-				return res.status(200).send({confirm:"fail"});
 			}
+			ret = await sapSvc.serialNoUpdate(args);
+
+			//update DO status
+			var info={
+				DONumber:req.body.order.DONumber,
+				PackComplete:req.body.PackComplete,
+				Push2SAPStatus:'C',
+				PackStatus:2,
+				DOStatus:'C',
+			}
+			await dbCommonSvc.UpdateDOStatus(info);
+			return res.status(200).send({confirm:"success"});
+			// if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0||ret.RETURN.TYPE==="")){
+			// } else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+			// 	return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
+			// } else {
+			// 	return res.status(200).send({confirm:"fail"});
+			// }
 		} catch (error) {
-			return res.status(200).send({error:true,message:error});
+			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
+			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			return res.status(400).send({error:true,message:error});
 		}
 	})()
 };
@@ -257,21 +288,21 @@ exports.reversal=function(req,res){
 					}
 				}
 			}
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				//update DO status
-				var info={
-					DONumber:req.params.orderNo,
-					Push2SAPStatus:'R',
-					PackStatus:0,
-					DOStatus:'R',
-				}
-				await dbCommonSvc.UpdateDOStatus(info);
-				return res.status(200).send({confirm:"success"});
-			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			} else {
-				return res.status(200).send({confirm:"fail"});
+			//update DO status
+			var info={
+				DONumber:req.params.orderNo,
+				Push2SAPStatus:'R',
+				PackStatus:0,
+				DOStatus:'R',
 			}
+			await dbCommonSvc.UpdateDOStatus(info);
+			return res.status(200).send({confirm:"success"});
+			// if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
+			// } else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
+			// 	return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
+			// } else {
+			// 	return res.status(200).send({confirm:"fail"});
+			// }
 		} catch (error) {
 			return res.status(200).send({error:true,message:error});
 		}

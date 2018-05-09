@@ -3,26 +3,29 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('spoReceiptsCtrl', ['$scope','$location','$routeParams','utilSvc',
+    .controller('spoReceiptsCtrl', ['$scope','$location','$routeParams','$filter','utilSvc','list',
                 'bxService','constants','modalConfirmSubmit','scanItemSvc','soundSvc',
-            function($scope,$location,$routeParams,utilSvc,
+            function($scope,$location,$routeParams,$filter,utilSvc,pendingList,
                      apiSvc,constants,confirmSubmit,itemSvc,soundSvc){
 
                     $scope.receipts={};
-                    $scope.categories=constants.categories;
+                    // $scope.categories=constants.categories;
 
-        if ($routeParams.categoryId){
-            $scope.receipts={plannedItems:[],scannedItems:[],orderNo:'na',categoryId:$routeParams.categoryId};
+        if ($routeParams.shipToTarget){
+            $scope.list=pendingList;
+            $scope.uniqueSubconPo=$filter("unique")(pendingList,"subConPo")
+            $scope.shipToTarget = $routeParams.shipToTarget;
+            $scope.receipts={plannedItems:[],scannedItems:[],orderNo:'na',shipToTarget:$routeParams.shipToTarget};
             $scope.categories=constants.categories;
             $scope.barcode = itemSvc.getBarcodeObj();
                 $scope.findItem=function(){
                     var param = {sFullScanCode:$scope.barcode.barcode1,dCurrDate:new Date()};
-                    if ($routeParams.categoryId==='bit'){
-                        param.sReturnToTarget = "SGW";
-                    } else {
-                        param.sReturnToTarget = "SGQ";
-                        sQACategory = "";
-                    }
+                    param.sReturnToTarget = $routeParams.shipToTarget;
+                    // if ($routeParams.shipToTarget==='bit'){
+                    // } else {
+                    //     param.sReturnToTarget = "SGQ";
+                    //     sQACategory = "";
+                    // }
                     apiSvc.updateSubconReturn(param).$promise.then(
                         function(data){
                             console.log(JSON.stringify(data,null,2));
@@ -46,8 +49,8 @@
                             });
                 }
         } else {
-            $scope.scanReceipt = function(categoryId) {
-                $location.path("/receiving/spoReceipts/"+categoryId);
+            $scope.scanReceipt = function(shipToTarget) {
+                $location.path("/receiving/spoReceipts/"+shipToTarget);
             }
         }
     }])

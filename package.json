@@ -31,7 +31,8 @@
     "express-session": "^1.15.6",
     "mssql": "^4.1.0",
     "node-rfc": "^0.1.14",
-    "tedious": "2.2.4"
+    "tedious": "2.2.4",
+    "winston": "^2.4.2"
   },
   "devDependencies": {
     "mocha": "^5.1.1",

@@ -28,6 +28,14 @@ const sqlSvc=require("./sqlService");
     let paramValues={UserID:userId};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
+
+  //user profile
+  exports.getSubconPendingList=function(args){
+    var stmt = "select * from dbo.BX_SubconShipments where shipToTarget=@sShip2Target";
+    let paramTypes={sShip2Target:'sql.VarChar(3)'};
+    let paramValues={sShip2Target:args.sShip2Target};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
   //update user profile
   exports.insertOrUpdateUserProfile=function(user){
     var params={

@@ -81,7 +81,14 @@ exports.getItem=function(serialNo){
 	clone.serialNo=serialNo;
 	return clone;
 };
- 
+
+exports.formatDateTime=function(dateString){
+	let d=new Date(dateString);
+	let formatDate =  d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2);
+	let formatTime = ("0"+d.getHours()).slice(-2)+("0"+d.getMinutes()).slice(-2)+("0"+d.getSeconds()).slice(-2);
+	return {date:formatDate,time:formatTime}
+}
+
  exports.cleanObject = function (object){
  	for (let key in object) {
 	    if (object.hasOwnProperty(key)) {
@@ -92,7 +99,6 @@ exports.getItem=function(serialNo){
 		}
 		return object;
  }
-
 //  conver SAP Delivery Order into BX friendly DO, i.e. only output necessary fields with meaningful field name
  var sapFields = require('./sapFields.json');
  exports.deliveryOrderConverter = function (deliveryOrder){

@@ -58,12 +58,17 @@
               login
             </a>
           </li>
-           <li ng-show="authUser"> 
-            <a title="{{authUser.DefaultWH}}">
-              <span class="fa fa-user-circle-o fa-lg" title="{{authUser.DefaultWH}}"></span>
-              {{authUser.UserID}}
-            </a>
-          </li>
+          <li class="dropdown" ng-show="authUser">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="fa fa-user-circle-o fa-lg" title="{{authUser.DefaultWH}}"></span>
+                  {{authUser.UserID}}
+              </a>
+              <ul class="dropdown-menu user-profile">
+                <li class="text-center">Domain: <strong>{{authUser.Domain}}</strong></li>
+                <li class="text-center">User ID: <strong>{{authUser.UserID}}</strong></li>
+                <li class="text-center">Warehouse: <strong>{{authUser.DefaultWH}}</strong></li>
+              </ul>
+            </li>
           <li ng-show="authUser">
             <a href="#/home" ng-click="logout()">
               <span class="fa fa-sign-out fa-lg"></span>

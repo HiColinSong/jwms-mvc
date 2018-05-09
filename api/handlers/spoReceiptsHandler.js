@@ -1,13 +1,23 @@
 'use strict';
 const util = require('../config/util');
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
-exports.getOrder=function(req,res){
-	promise = sapSvc.getPurchaseOrder(req.params.orderNo);
-	promise.then(function(data){
-		return res.status(200).send(util.cleanObject(data));
-	},function (err){
-		return res.status(200).send({error:true,message:err});
-	})
+exports.getPendingList=function(req,res){
+	(async function () {
+		try {
+			var param={
+					sShip2Target:req.body.sShip2Target,
+					sQACategory:req.body.sQACategory
+				}
+			var list = await dbCommonSvc.getSubconPendingList(param);
+			if (list&&list.recordset){
+				return res.status(200).send(list.recordset);
+			} else {
+				return res.status(200).send([{error:true,message:"Operation Failed!"}]);
+			}
+		} catch (error) {
+			return res.status(400).send([{error:true,message:error.message}]);
+		}
+	})()
 };
 
 exports.updateReturn=function(req,res){

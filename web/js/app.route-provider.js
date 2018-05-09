@@ -12,11 +12,32 @@
                 resolve:{
                 }
             })
-            .when('/receiving', {templateUrl: 'partials/receving.html'})
+            .when('/receiving', {templateUrl: 'partials/receiving.html'})
             .when('/fulfillment', {templateUrl: 'partials/fulfillment.html'})
-            .when('/receiving/spoReceipts/:categoryId?', {
+            .when('/receiving/spoReceipts/:shipToTarget?', {
                 templateUrl: 'partials/spoReceipts.html',
-                controller: 'spoReceiptsCtrl'
+                controller: 'spoReceiptsCtrl',
+                resolve:{
+                    list:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.shipToTarget){
+                            apiSvc.getSubconPendingList({sShip2Target:$route.current.params.shipToTarget})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                            },function(err){
+                                deferred.reject(err);
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
             })
             .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',

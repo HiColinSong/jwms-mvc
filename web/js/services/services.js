@@ -293,6 +293,14 @@
                   subtype:'update-return'
                 },
                 isArray:true
+              },
+              getSubconPendingList:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-pending-list'
+                },
+                isArray:true
               }
         }
       }
@@ -410,15 +418,15 @@
     .value('constants', {
       categories:[
         {
-          id:"bit",
+          id:"SGW",
           display:"BIT"
         },
         {
-          id:"besa",
+          id:"CHW",
           display:"BESA"
         },
         {
-          id:"qas",
+          id:"SGQ",
           display:"QA Sample"
         }
       ],

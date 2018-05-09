@@ -1,13 +1,5 @@
 'use strict';
 
-// exports.getTransOrder=function(req,res){
-// 	var data={};
-// 	data.error=false;
-// 	data.requestType="get";
-// 	data.message='hello, packingHandler:'+req.params.orderNo+'';
-// 	return res.status(200).send(data);
-// }
-
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const sqlSvc =require('../dbservices/sqlService');
@@ -53,17 +45,11 @@ exports.pgiUpdate=function(req,res){
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			if (sapOrder.ET_DELIVERY_HEADER_STS&&
 				sapOrder.ET_DELIVERY_HEADER_STS.length>0&&
-				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK!=='C'||sapOrder.ET_DELIVERY_HEADER_STS[0].FKSTK!=='C')){
+				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK!=='C'||sapOrder.ET_DELIVERY_HEADER_STS[0].PKSTK!=='C')){
 					throw new Error("Please confirm the picking and packing of the order!");
 				}
 			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				return res.status(200).send({confirm:"success"});
-			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			} else {
-				return res.status(200).send({confirm:"fail"});
-			}
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
 		}
@@ -74,13 +60,7 @@ exports.pgiReversal=function(req,res){
 	(async function () {
 		try {
 			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				return res.status(200).send({confirm:"success"});
-			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			} else {
-				return res.status(200).send({confirm:"fail"});
-			}
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error});
 		}

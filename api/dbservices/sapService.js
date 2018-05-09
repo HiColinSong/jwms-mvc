@@ -133,6 +133,10 @@ exports.confirmPicking=function(orderNo,warehouseNo,items){
     return invokeBAPI("L_TO_CONFIRM",param);
 };
 
+exports.serialNoUpdate=function(param){
+    return invokeBAPI("ZIM_BX_STOCK_UPDATE",param);
+};
+
 var invokeBAPI = function(bapiName,param,transactionCommit){
 	return new Promise(function(resolve,reject){
 	    client.connect(function(err) {
@@ -148,8 +152,8 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
             transactionCommit=false;
           }
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
-            resolve(res);
-            // reject(res.RETURN[0].MESSAGE);
+            // resolve(res);
+            reject(res.RETURN[0].MESSAGE);
             transactionCommit=false;
           }
           console.log("Invoking "+bapiName+" successfully");

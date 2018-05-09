@@ -8,8 +8,7 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getTransferOrder(req.body.orderNo,req.session.user.DefaultWH);
 			var order = util.transferOrderConverter(sapOrder);
-			//todo: check status 
-			
+			//check status 
 			if (order&&order.TONumber){
 				if (order.PickConfirmStatus!=="A"&&order.PickConfirmStatus){
 					throw new Error("Invalid Order Status. Order Status is "+order.PickConfirmStatus);
@@ -58,7 +57,7 @@ exports.getOrder=function(req,res){
 				return res.status(200).send({error:true,message:"The Delivery Order "+req.body.orderNo+" doesn't exist!"});
 			}
 		} catch (error) {
-			return res.status(200).send({error:true,message:error.message});
+			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
 };

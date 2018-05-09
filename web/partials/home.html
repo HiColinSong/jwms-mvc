@@ -25,19 +25,37 @@
   <div class="well">
   		<h2 class="text-center">Welcome to Biosensors BX system</h2>
   </div>
-  <h3>Guide for User Interface Experience Test</h3>
+  <!-- <h3>Guide for User Interface Experience Test</h3> -->
   <ol class="guide" style="font-size: 20px">
-  	<li>Mock url: <a href="http://sgdevbx/mock.html">http://sgdevbx/mock.html</a></li>
+  	<li>url: <a href="http://sgdevbx:8080">http://sgdevbx:8080</a></li>
   	<li>Login
 	  <ul>
-	  	<li>domain: "BITSG"</li>
-	  	<li>username: "yadong"</li>
-	  	<li>password: "yadong"</li>
+	  	<li>domain: Choose your domain</li>
+	  	<li>username: Your system username</li>
+	  	<li>password: Your system password</li>
 	  	<li>Click Submit</li>
 	  </ul>
-  	</li>
-  	<li>dummy order number: o123456</li>
-    <li style="font-size: 22px"> 
+    </li>
+    <li>
+      <a href="#/receiving">Receiving</a>  
+      <ul>
+        <li><a href="#/receiving/spoReceipts">Subcon PO Receipts</a> </li>
+        <li><a href="#/receiving/rtgReceipts">RGA Receipts</a> </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#/fulfillment">Fulfillment</a>  
+      <ul>
+        <li><a href="#/fulfillment/picking">Picking</a></li>
+        <li><a href="#/fulfillment/tools/picking-reversals">Picking Reversals</a></li>
+        <li><a href="#/fulfillment/packing">Packing</a></li>
+        <li><a href="#/fulfillment/tools/packing-reversals">Packing Reversals</a></li>
+        <li><a href="#/fulfillment/tools/pgi">PGI</a></li>
+        <li><a href="#/fulfillment/tools/reversals-pgi">PGI Reversals</a></li>
+        <li><a href="#/fulfillment/tools/reservation">Reversation</a></li>
+      </ul>
+    </li>
+    <!-- <li style="font-size: 22px"> 
       <div>Anatomy of the Barcode</div>
       <span class="marker">01</span><span class="ean-code">08888893016399</span><span class="marker">17</span><span class="expiry">141113</span><span class="marker">10</span><span class="batchNo">W131004584</span><span class="marker">21</span><span class="serialNo">1803W189</span>
       <div style="border:1px solid #FFF;opacity: 1">
@@ -60,7 +78,7 @@
           <li>010888889301649817141113 (MaterialCode is BMXP-3533)</li>
           <li>10W131004584</li>
         </ul>
-      </li>
+      </li> -->
 
   	
     <!-- <li>A barcode is a composition of any combinations and sequence of the following segments:
@@ -72,7 +90,7 @@
       </ul>
     </li> -->
 
-      <li>
+      <!-- <li>
         <div>EANcode+expiry+M30+GS+batchNo+GS+serialNo</div>
         <div class="code pull-left">{{EANCode}}{{expiry}}{{batchNo}}{{ascii29}}3001{{ascii29}}{{serialNo}}</div>
       </li>
@@ -128,6 +146,6 @@
           <li>DO number: 0800379646</li>
         </ul>
 
-      </li>
+      </li> -->
   </ol>
 </div>
