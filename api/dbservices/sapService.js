@@ -41,27 +41,29 @@ exports.confirmPacking=function(order){
   };
   for (let i = 0; i < order.HUList.length; i++) {
       const hu = order.HUList[i];
-      params.HANDLING_UNIT_HEADER.push(
-          { 
-            DELIV_NUMB: order.DONumber, 
-            HDL_UNIT_EXID:hu.HUNumber, 
-            HDL_UNIT_EXID_TY:"F",
-            SHIP_MAT:hu.PackMaterial, 
-            PLANT:order.plannedItems[0].Plant
-          }
-      );
-      for (let j = 0; j < hu.scannedItems.length; j++) {
-        const scannedItem = hu.scannedItems[j];
-          params.HANDLING_UNIT_ITEM.push(
-              { 
-                DELIV_NUMB: order.DONumber, 
-                DELIV_ITEM:scannedItem.DOItemNumber,
-                HDL_UNIT_EXID_INTO:scannedItem.HUNumber, 
-                PACK_QTY:scannedItem.ScanQty,
-                MATERIAL:scannedItem.MaterialCode,
-                BATCH:scannedItem.BatchNo
-              }
-          );
+      if (hu.scannedItems&&hu.scannedItems.length>0){ //confirm not an empty HU
+        params.HANDLING_UNIT_HEADER.push(
+            { 
+              DELIV_NUMB: order.DONumber, 
+              HDL_UNIT_EXID:hu.HUNumber, 
+              HDL_UNIT_EXID_TY:"F",
+              SHIP_MAT:hu.PackMaterial, 
+              PLANT:order.plannedItems[0].Plant
+            }
+        );
+        for (let j = 0; j < hu.scannedItems.length; j++) {
+          const scannedItem = hu.scannedItems[j];
+            params.HANDLING_UNIT_ITEM.push(
+                { 
+                  DELIV_NUMB: order.DONumber, 
+                  DELIV_ITEM:scannedItem.DOItemNumber,
+                  HDL_UNIT_EXID_INTO:scannedItem.HUNumber, 
+                  PACK_QTY:scannedItem.ScanQty,
+                  MATERIAL:scannedItem.MaterialCode,
+                  BATCH:scannedItem.BatchNo
+                }
+            );
+        }
       }
     }
     return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
@@ -69,14 +71,14 @@ exports.confirmPacking=function(order){
 
 exports.packingReversal = function(orderNo,HUNumber){
   var param ={DELIVERY:orderNo,HUKEY:HUNumber};
-    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param);
+    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true);
 }
 
 exports.pgiUpdate = function(orderNo,currentDate){
   var param ={ 
-      VBKOK_WA:{vbeln_vl:orderNo,wabuc: "X",wadat_ist: currentDate},
-      commit:'X',
-      Delivery:orderNo
+      VBKOK_WA:{VBELN_VL:orderNo,WABUC: "X",WADAT_IST: currentDate},
+      COMMIT:'X',
+      DELIVERY:orderNo
     };
     return invokeBAPI("WS_DELIVERY_UPDATE",param);
 }
@@ -85,7 +87,7 @@ exports.pgiReversal = function(orderNo,currentDate){
   var param ={
       I_VBELN:orderNo,
       I_BUDAT:currentDate,
-      I_BUDAT:'J',
+      I_VBTYP:'J',
       I_COUNT:'001',
       I_TCODE:'VL09',
       I_COMMIT:'X'
@@ -131,6 +133,25 @@ exports.confirmPicking=function(orderNo,warehouseNo,items){
         });
       }
     return invokeBAPI("L_TO_CONFIRM",param);
+};
+
+exports.PickingReversals=function(order,warehouseNo){
+	var param={
+      I_LGNUM:warehouseNo,
+      I_TANUM:order.TONumber,
+      T_LTAP_CANCL:[],
+      I_COMMIT_WORK:'X'
+    };
+    for (let i = 0; i < order.plannedItems.length; i++) {
+      const item = order.plannedItems[i];
+      if (item.reversal){
+        param.T_LTAP_CANCL.push({
+          TANUM:order.TONumber,
+          TAPOS:item.TOItemNumber
+        })
+      }
+    }
+    return invokeBAPI("L_TO_CANCEL",param);
 };
 
 exports.serialNoUpdate=function(param){

@@ -7,7 +7,6 @@
        "Plant":"WERKS",
        "WarehouseNo":"LGNUM",
        "ShippingPoint":"VSTEL"
-
     },
     "deliveryOrderHeaderSTSFields": {
         "confirmStatus":"PKSTK"
@@ -35,7 +34,7 @@
         "TOCreationDate":"TO_DATE",
         "TOCreationUser":"TO_USER",
         "Warehouse":"WHSENUMBER",
-        "PickConfirmStatus":"PICK_CNFMD",
+        "PickConfirmStatus":"CONF_IND",
         "Plant":"",
         "DONumber":"SD_DOC",
         "ShipToCustomer":""
@@ -48,8 +47,7 @@
         "BatchNo":"BATCH",
         "VendorBatch":"",
         "TOQuantity":"",
-        "Plant":"PLANT",
-        "PickConfirmStatus":"PICK_CNFMD"
+        "Plant":"PLANT"
     },
     "purchaseOrderFields":{}
 }

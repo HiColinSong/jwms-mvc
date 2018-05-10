@@ -58,11 +58,19 @@ app.post('/bxapi/packing/remove-item.json',auth.authCheck,packingHandler.removeI
 app.post('/bxapi/packing/confirm.json',auth.authCheck,packingHandler.confirmPacking);
 app.get('/bxapi/packing/reversal/:orderNo.json',auth.authCheck,packingHandler.reversal);
 
+app.post('/bxapi/pgi/update.json',auth.authCheck,packingHandler.pgiUpdate);
+app.post('/bxapi/pgi/reversals.json',auth.authCheck,packingHandler.pgiReversal);
+
 var pickingHandler = require('./api/handlers/pickingHandler');
 app.post('/bxapi/picking/get-order.json',auth.authCheck,pickingHandler.getOrder);
 app.get('/bxapi/picking/add-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.addItem);
 app.get('/bxapi/picking/remove-item/:orderNo/:serialNo.json',auth.authCheck,pickingHandler.removeItem);
 app.post('/bxapi/picking/set-status.json',auth.authCheck,pickingHandler.setStatus);
+// app.get('/bxapi/picking/reversal/:orderNo.json',auth.authCheck,pickingHandler.pickingReversals);
+
+var pickingReversalsHandler = require('./api/handlers/pickingReversalsHandler');
+app.post('/bxapi/picking-reversals/get-order.json',auth.authCheck,pickingReversalsHandler.getOrder);
+app.post('/bxapi/picking-reversals/reversals.json',auth.authCheck,pickingReversalsHandler.pickingReversals);
 
 var rtgReceiptsHandler = require('./api/handlers/rtgReceiptsHandler');
 app.post('/bxapi/rtgreceipts/get-order.json',auth.authCheck,rtgReceiptsHandler.getOrder);
@@ -73,13 +81,12 @@ app.post('/bxapi/rtgreceipts/confirm.json',auth.authCheck,rtgReceiptsHandler.con
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
 app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandler.updateReturn);
 app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getPendingList);
+app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceiptsHandler.getQASampleCategoryList);
 // app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
 // app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);
-app.post('/bxapi/pgi/update.json',auth.authCheck,commonHandler.pgiUpdate);
-app.post('/bxapi/pgi/reversal.json',auth.authCheck,commonHandler.pgiReversal);
 
 
 app.get('*', function(req, res){

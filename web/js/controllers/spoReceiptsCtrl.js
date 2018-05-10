@@ -8,27 +8,34 @@
             function($scope,$location,$routeParams,$filter,utilSvc,pendingList,
                      apiSvc,constants,confirmSubmit,itemSvc,soundSvc){
 
-                    $scope.receipts={};
                     // $scope.categories=constants.categories;
 
         if ($routeParams.shipToTarget){
+            if ($routeParams.shipToTarget==="SGQ"){
+                apiSvc.getQASampleCategoryList().$promise.then(function(data){
+                    $scope.qaSampleCategoryList = data;
+                },function(err){
+                    console.error(JSON.stringify(err,null,2));
+                })
+            }
             $scope.list=pendingList;
             $scope.uniqueSubconPo=$filter("unique")(pendingList,"subConPo")
+
+
             $scope.shipToTarget = $routeParams.shipToTarget;
-            $scope.receipts={plannedItems:[],scannedItems:[],orderNo:'na',shipToTarget:$routeParams.shipToTarget};
-            $scope.categories=constants.categories;
             $scope.barcode = itemSvc.getBarcodeObj();
                 $scope.findItem=function(){
                     var param = {sFullScanCode:$scope.barcode.barcode1,dCurrDate:new Date()};
                     param.sReturnToTarget = $routeParams.shipToTarget;
-                    // if ($routeParams.shipToTarget==='bit'){
-                    // } else {
-                    //     param.sReturnToTarget = "SGQ";
-                    //     sQACategory = "";
-                    // }
+                    if ( $scope.barcode.qaCategory){
+                        param.sQACategory =  $scope.barcode.qaCategory.QASampleID;
+                    }
                     apiSvc.updateSubconReturn(param).$promise.then(
                         function(data){
                             console.log(JSON.stringify(data,null,2));
+                            let removedSerialNo = data;
+                            utilSvc.removeItemById(removedSerialNo,$scope.list,"SerialNo")
+                            $scope.uniqueSubconPo=$filter("unique")($scope.lis,"subConPo")
                         },function(err){
                             // console.error(JSON.stringify(err,null,2));
                             if (err.data[0].message.trim())

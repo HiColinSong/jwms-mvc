@@ -10,8 +10,8 @@ exports.getOrder=function(req,res){
 			var order = util.transferOrderConverter(sapOrder);
 			//check status 
 			if (order&&order.TONumber){
-				if (order.PickConfirmStatus!=="A"&&order.PickConfirmStatus){
-					throw new Error("Invalid Order Status. Order Status is "+order.PickConfirmStatus);
+				if (order.PickConfirmStatus==="X"){
+					throw new Error("The TO has been confirmed!");
 				}
 	
 				//insertOrUpdateDo, PackStart will be set if the HU List is empty, or ignore
@@ -89,6 +89,31 @@ exports.removeItem=function(req,res){
 	} else {
 		return res.status(200).send({error:true,message:"Item "+serialNo+" can't be added to order"});
 	}
+};
+
+exports.pickingReversals=function(req,res){
+	(async function () {
+		try {
+			var sapOrder = await sapSvc.getTransferOrder(req.params.orderNo,req.session.user.DefaultWH);
+			var order = util.transferOrderConverter(sapOrder);
+			//check status 
+			if (order&&order.TONumber&&order.PickConfirmStatus==="X"){
+				throw new Error("Order has been confirmed and cannot be reversal!");
+			}
+			await sapSvc.PickingReversals(req.body.TONumber,req.session.user.DefaultWH);
+			
+			var params={
+				TONumber:req.body.TONumber,
+				PickStatus:"D",
+				Push2SAPStatus:"R"
+			} 
+			var ret = await dbPickingSvc.setStatus(params);
+			ret = ret.recordset[0];
+			return res.status(200).send(ret);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
 };
 
 exports.setStatus=function(req,res){

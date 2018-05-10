@@ -12,6 +12,11 @@ const sqlSvc=require("./sqlService");
     var stmt = "select MaterialCode,MaterialDesc from dbo.SAPPkgMaterials";
     return sqlSvc.sqlQuery(stmt);
   }
+  //get getQASampleCategoryList
+  exports.getQASampleCategoryList=function(){
+    var stmt = "select QASampleID,QASampleDesc from dbo.BX_QASampleCategory";
+    return sqlSvc.sqlQuery(stmt);
+  }
 
   //user profile
   exports.getUserProfile=function(userId){

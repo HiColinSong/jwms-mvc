@@ -194,3 +194,30 @@ exports.removeIncompleteItem = function (items){
 	}
 }
 
+//get SNUpdate Params
+exports.getTransParams = function(order,TRANS){
+	const HUList = order.HUList;
+	var args = {IT_BX_STOCK:[]};
+			for (let i = 0; i < HUList.length; i++) {
+				const hu = HUList[i];
+				for (let j = 0; j < hu.scannedItems.length; j++) {
+					const item = hu.scannedItems[j];
+					if (item.SerialNo){
+						args.IT_BX_STOCK.push({
+							TRANS:TRANS,
+							WERKS:order.plannedItems[0].Plant,
+							MATNR:item.MaterialCode,
+							CHARG: item.BatchNo,
+							SERIAL:item.SerialNo,
+							DOCNO: item.HUNumber,
+							ENDCUST:order.endUser,
+							BXDATE:util.formatDateTime(item.PackedOn).date,
+							BXTIME:util.formatDateTime(item.PackedOn).time,
+							BXUSER:item.PackBy
+						});
+					}
+				}
+			}
+	return args
+}
+

@@ -228,29 +228,7 @@ exports.confirmPacking=function(req,res){
 		try {
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
-			args = {IT_BX_STOCK:[]};
-			for (let i = 0; i < req.body.order.HUList.length; i++) {
-				const hu = req.body.order.HUList[i];
-				for (let j = 0; j < hu.scannedItems.length; j++) {
-					const item = hu.scannedItems[j];
-					if (item.SerialNo){
-						args.IT_BX_STOCK.push({
-							TRANS:'PAK',
-							WERKS:req.body.order.plannedItems[0].Plant,
-							MATNR:item.MaterialCode,
-							CHARG: item.BatchNo,
-							SERIAL:item.SerialNo,
-							DOCNO: item.HUNumber,
-							ENDCUST:req.body.order.endUser,
-							BXDATE:util.formatDateTime(item.PackedOn).date,
-							BXTIME:util.formatDateTime(item.PackedOn).time,
-							BXUSER:item.PackBy
-						});
-					}
-				}
-			}
-			ret = await sapSvc.serialNoUpdate(args);
-
+			ret = await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"PAK"));
 			//update DO status
 			var info={
 				DONumber:req.body.order.DONumber,
@@ -261,12 +239,6 @@ exports.confirmPacking=function(req,res){
 			}
 			await dbCommonSvc.UpdateDOStatus(info);
 			return res.status(200).send({confirm:"success"});
-			// if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0||ret.RETURN.TYPE==="")){
-			// } else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-			// 	return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			// } else {
-			// 	return res.status(200).send({confirm:"fail"});
-			// }
 		} catch (error) {
 			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
 			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
@@ -280,6 +252,11 @@ exports.reversal=function(req,res){
 	(async function () {
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			var order = util.deliveryOrderConverter(sapOrder);
+			//todo: check status 
+			if (order.confirmStatus!=="C"){
+				throw new Error("The Delivery Order hasn't been confirmed yet!");
+			}
 			if (sapOrder.ET_HU_HEADER&&sapOrder.ET_HU_HEADER.length>0){
 				for (let i = 0; i < sapOrder.ET_HU_HEADER.length; i++) {
 					const hu = sapOrder.ET_HU_HEADER[i];
@@ -288,6 +265,10 @@ exports.reversal=function(req,res){
 					}
 				}
 			}
+			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			order.HUList = HUList;
+			await sapSvc.serialNoUpdate(getTransParams(order,"PAKX"));
+
 			//update DO status
 			var info={
 				DONumber:req.params.orderNo,
@@ -304,7 +285,46 @@ exports.reversal=function(req,res){
 			// 	return res.status(200).send({confirm:"fail"});
 			// }
 		} catch (error) {
-			return res.status(200).send({error:true,message:error});
+			return res.status(200).send({error:true,message:(error.message||error)});
+		}
+	})()
+};
+
+exports.pgiUpdate=function(req,res){
+	(async function () {
+		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			if (sapOrder.ET_DELIVERY_HEADER_STS&&
+				sapOrder.ET_DELIVERY_HEADER_STS.length>0&&
+				(sapOrder.ET_DELIVERY_HEADER_STS[0].LVSTK!=='C'||sapOrder.ET_DELIVERY_HEADER_STS[0].PKSTK!=='C')){
+					throw new Error("Please confirm the picking and packing of the order!");
+				}
+			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
+			//update SN in sap
+			var order = util.deliveryOrderConverter(sapOrder);
+			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			order.HUList = HUList;
+			await sapSvc.serialNoUpdate(getTransParams(order,"PGI"));
+			return res.status(200).send({confirm:"success"});
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
+
+exports.pgiReversal=function(req,res){
+	(async function () {
+		try {
+			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
+			//update the SN in sap
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			var order = util.deliveryOrderConverter(sapOrder);
+			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			order.HUList = HUList;
+			await sapSvc.serialNoUpdate(getTransParams(order,"PGIX"));
+			return res.status(200).send({confirm:"success"});
+		} catch (error) {
+			return res.status(400).send({error:true,message:error});
 		}
 	})()
 };

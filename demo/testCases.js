@@ -81,6 +81,7 @@ var testGetHuAndPackDetails=function(){
 var testGetPkgMtl=function(){
     output(dbPackingSvc.getPkgMtlList());
 }
+
 //end of GetPkgMaterial list
 
 var testGetPackHUnits=function(){
@@ -126,6 +127,8 @@ var testCheckMUltipleTStatus=function(){
         
     output(dbCommonSvc.CheckMultipleTOStatus(info));
 }
-
+var tesGetQASampleCategoryList=function(){
+    output(dbCommonSvc.getQASampleCategoryList());
+}
 //run from command line: node testCases.js
-testCheckMUltipleTStatus();
+tesGetQASampleCategoryList();

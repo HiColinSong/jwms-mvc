@@ -39,7 +39,8 @@
 				var orderNo = utilSvc.formalizeOrderNo($scope.info.orderNo);
 				
 				switch ($scope.info.type){
-	    			case "picking-reversals":
+					case "picking-reversals":
+						apiSvc.reverseOperation({type:'picking',param1:orderNo}).$promise.then(resultHandler,errorHandler);
 						break;
 					case "packing-reversals":
 						apiSvc.reverseOperation({type:'packing',param1:orderNo}).$promise.then(resultHandler,errorHandler);
@@ -50,7 +51,7 @@
 						apiSvc.pgiUpdate({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
 						break;
 	    			case "reversals-pgi":
-						apiSvc.pgiReversal({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
+						apiSvc.pgiReversals({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
 	    				break;
 				}		
 					

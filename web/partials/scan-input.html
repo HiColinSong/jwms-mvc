@@ -22,6 +22,22 @@
 							ng-model="barcode.binNo" autocomplete="off">
 						</td>
 					</tr> -->
+					<tr class="form-group" ng-if="qaSampleCategoryList&&qaSampleCategoryList.length>0">
+						<td width="35%" class="padding-top">
+							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
+						</td>
+						<td width="65%">	
+							 <div class="form-group">
+									<select class="chosen-select col-sm-12 form-control"
+									ng-model="barcode.qaCategory"
+									name="qaCategory"
+									ng-options="item as item.QASampleDesc for item in qaSampleCategoryList track by item.QASampleID
+									"
+									>
+									<option value="">Select QA Sample Category</option>
+							</select>
+							</div>
+					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.valid===false}">
 						<td width="35%" class="padding-top">
 							<label for="barcode1" class="block margin-top">Scan/Enter Barcode:</label>		
@@ -31,7 +47,6 @@
 									<input type="text" class="form-control full-width" id="barcode1" placeholder="Scan/Enter barcode1" 
 													ng-model="barcode.barcode1" autocomplete="off">
 							</div>
-					</tr>
 					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.valid===false}" 
 											ng-show="(barcode.valid&&!barcode.infoComplete)||barcode.barcode2||barcode.serialNoRequired">

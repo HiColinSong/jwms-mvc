@@ -142,6 +142,22 @@
                     subtype: 'get-order',
                 },
             },
+              //start of picking api
+            getOrderForPickingReversals:{ //  /bxapi/picking/get-order/xxxxxx.json
+                method: 'POST',
+                params: {
+                    type: 'picking-reversals',
+                    subtype: 'get-order',
+                },
+            },
+              //start of picking api
+            pickingReversals:{ //  /bxapi/picking/get-order/xxxxxx.json
+                method: 'POST',
+                params: {
+                    type: 'picking-reversals',
+                    subtype: 'reversals',
+                },
+            },
             setPickingStatus:{
                 method: 'POST',
                 params:{
@@ -279,11 +295,11 @@
                   subtype:'update'
                 }
               },
-              pgiUpdate:{
+              pgiReversals:{
                 method: 'POST',
                 params:{
                   type: 'pgi',
-                  subtype:'update'
+                  subtype:'reversals'
                 }
               },
               updateSubconReturn:{
@@ -292,13 +308,21 @@
                   type: 'sporeceipts',
                   subtype:'update-return'
                 },
-                isArray:true
+                isArray:false
               },
               getSubconPendingList:{
                 method: 'POST',
                 params:{
                   type: 'sporeceipts',
                   subtype:'get-pending-list'
+                },
+                isArray:true
+              },
+              getQASampleCategoryList:{
+                method: 'GET',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-qa-category-list'
                 },
                 isArray:true
               }

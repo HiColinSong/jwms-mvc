@@ -37,7 +37,7 @@
                                     if (err.data&&err.data.message)
                                         utilSvc.addAlert(err.data.message, "fail", false);
                                     else
-                                        utilSvc.addAlert("Fail to change the picking status", "fail", false);
+                                        utilSvc.addAlert(JSON.stringify(err), "fail", false);
                                 }) 
                 };
 
