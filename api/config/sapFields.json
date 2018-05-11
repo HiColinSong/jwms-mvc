@@ -9,7 +9,8 @@
        "ShippingPoint":"VSTEL"
     },
     "deliveryOrderHeaderSTSFields": {
-        "confirmStatus":"PKSTK"
+        "confirmStatus":"PKSTK",
+        "pgiStatus":"WBSTK"
      },
     "deliveryOrderItemFields": {
         "DONumber":"VBELN",
@@ -47,7 +48,8 @@
         "BatchNo":"BATCH",
         "VendorBatch":"",
         "TOQuantity":"",
-        "Plant":"PLANT"
+        "Plant":"PLANT",
+        "Cancel":"CONFIRM_IND"
     },
     "purchaseOrderFields":{}
 }

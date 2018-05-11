@@ -243,7 +243,7 @@ exports.confirmPacking=function(req,res){
 			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
 			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
 			logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
-			return res.status(400).send({error:true,message:error});
+			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
 };
@@ -267,7 +267,7 @@ exports.reversal=function(req,res){
 			}
 			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(getTransParams(order,"PAKX"));
+			await sapSvc.serialNoUpdate(util.getTransParams(order,"PAKX"));
 
 			//update DO status
 			var info={
@@ -299,15 +299,20 @@ exports.pgiUpdate=function(req,res){
 				(sapOrder.ET_DELIVERY_HEADER_STS[0].LVSTK!=='C'||sapOrder.ET_DELIVERY_HEADER_STS[0].PKSTK!=='C')){
 					throw new Error("Please confirm the picking and packing of the order!");
 				}
+			if (sapOrder.ET_DELIVERY_HEADER_STS&&
+				sapOrder.ET_DELIVERY_HEADER_STS.length>0&&
+				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK==='C')){
+					throw new Error("The Document has been PGI!");
+				}
 			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
 			//update SN in sap
 			var order = util.deliveryOrderConverter(sapOrder);
-			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(getTransParams(order,"PGI"));
+			await sapSvc.serialNoUpdate(util.getTransParams(order,"PGI"));
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			return res.status(400).send({error:true,message:error.message});
+			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
 };
@@ -315,16 +320,21 @@ exports.pgiUpdate=function(req,res){
 exports.pgiReversal=function(req,res){
 	(async function () {
 		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			if (sapOrder.ET_DELIVERY_HEADER_STS&&
+				sapOrder.ET_DELIVERY_HEADER_STS.length>0&&
+				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK!=='C')){
+					throw new Error("The Document hasn't been PGI!");
+				}
 			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
 			//update the SN in sap
-			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
 			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(getTransParams(order,"PGIX"));
+			await sapSvc.serialNoUpdate(util.getTransParams(order,"PGIX"));
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			return res.status(400).send({error:true,message:error});
+			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
 };

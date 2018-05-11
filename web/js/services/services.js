@@ -54,6 +54,14 @@
                   param1:'@param1'
                 }
               },
+              rgaReversals:{
+                method: 'post',
+                headers: {'Accept': 'application/json'},
+                params:{
+                  type: 'rtgReceipts', 
+                  subtype:'reversal'
+                }
+              },
               
               //start sporeceipts api
             getSubconPurchaseOrder: { //  /bxapi/sporder/xxxxxx.json
@@ -308,7 +316,7 @@
                   type: 'sporeceipts',
                   subtype:'update-return'
                 },
-                isArray:false
+                isArray:true
               },
               getSubconPendingList:{
                 method: 'POST',

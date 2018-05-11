@@ -41,7 +41,20 @@ const sqlSvc=require("./sqlService");
     let paramValues={sShip2Target:args.sShip2Target};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
-  //update user profile
+ 
+  // exports.getSubconPendingList=function(args){
+  //   var stmt = "select * from dbo.BX_SubconShipments where shipToTarget=@sShip2Target";
+  //   let paramTypes={sShip2Target:'sql.VarChar(3)'};
+  //   let paramValues={sShip2Target:args.sShip2Target};
+  //   return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  // }
+  exports.getSubconPendingList=function(shipTotarget){
+    var params={
+      sShip2Target:{type:'sql.VarChar(3)',value:shipTotarget}
+    }
+    return sqlSvc.callStoredProcedure("dbo.SpGetPendingReceiptsSerials",params);
+  }
+  //update insertOrUpdateUserProfile 
   exports.insertOrUpdateUserProfile=function(user){
     var params={
       UserID:{type:'sql.VarChar(20)',value:user.UserID},

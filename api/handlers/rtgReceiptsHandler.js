@@ -81,7 +81,7 @@ exports.addItem=function(req,res){
 			var scannedItems = await dbRtgReceiptSvc.InsertScanItem(params);
 			return res.status(200).send(scannedItems.recordset);
 		} catch (error) {
-			return res.status(200).send([{error:true,message:error}]);
+			return res.status(400).send([{error:true,message:error}]);
 		}
 	})()
 };
@@ -93,7 +93,7 @@ exports.removeItem=function(req,res){
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			return res.status(200).send(scannedItems.recordset);
 		} catch (error) {
-			return res.status(200).send([{error:true,message:error}]);
+			return res.status(400).send([{error:true,message:error}]);
 		}
 	})()
 };
@@ -101,23 +101,38 @@ exports.removeItem=function(req,res){
 exports.confirmRga=function(req,res){
 	(async function () {
 		try {
-			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
-			if (ret&&(!ret.RETURN||ret.RETURN&&ret.RETURN.length===0)){
-				//update DO status
-				var info={
-					DONumber:req.body.orderNo,
-					DOStatus:'C',
-				}
-				await dbCommonSvc.UpdateDOStatus(info);
-				// await dbRtgReceiptSvc.confirmRga(req.body.orderNo);
-				return res.status(200).send({confirm:"success"});
-			} else if (ret&&ret.RETURN&&ret.RETURN.length>0&&ret.RETURN[0].TYPE==='E'){
-				return res.status(200).send({confirm:"fail",error:true,message:ret.RETURN[0].MESSAGE});
-			} else {
-				return res.status(200).send({confirm:"fail"});
+			var ret = await sapSvc.pgiUpdate(req.body.order.DONumber,req.body.currentDate);
+
+			await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"RGA"));
+
+			var info={
+				DONumber:req.body.orderNo,
+				DOStatus:'C',
 			}
+			await dbCommonSvc.UpdateDOStatus(info);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			return res.status(200).send({error:true,message:error});
+			return res.status(400).send({error:true,message:error.message|error});
 		}
 	})()
 };
+
+exports.rgaReversal=function(req,res){
+	(async function () {
+		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			var order = util.deliveryOrderConverter(sapOrder);
+			if (order.pgiStatus!=="C"){
+				throw new Error("The Document hasn't been PGR yet.");
+			}
+			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
+			//update the SN in sap
+			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
+			order.scannedItems = scannedItems.recordset;
+			await sapSvc.serialNoUpdate(util.getTransParams(order,"RGAX"));
+			return res.status(200).send({confirm:"success"});
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message||error});
+		}
+	})()
+}

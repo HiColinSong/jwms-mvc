@@ -5,7 +5,7 @@
     angular.module('bx.controllers')
     .controller('pickingReversalsCtrl', ['$scope','$location','$routeParams','order','utilSvc','bxService','modalConfirmSubmit',
     		function($scope,$location,$routeParams,order,utilSvc,apiSvc,confirmSubmit){
-        if (order&&order.TONumber&&(order.PickConfirmStatus==='X')){
+        if (order&&order.TONumber&&(order.PickConfirmStatus!=='X')){
             utilSvc.addAlert("The transfer order "+$routeParams.TONumber+" found", "success", true);
             order.scannedItems=order.scannedItems||[];
             $scope.order=order;

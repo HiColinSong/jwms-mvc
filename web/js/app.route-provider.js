@@ -68,6 +68,10 @@
                         }]
                 }
             })
+            .when('/receiving/rtgReceipts-reversals/:DONumber?', {
+                templateUrl: 'partials/rtgReceipts-reversals.html',
+                controller: 'rtgReceiptsReversalsCtrl'
+            })
             .when('/fulfillment/picking/:TONumber?', {
                 templateUrl: 'partials/picking.html',
                 controller: 'pickingCtrl',

@@ -22,18 +22,3 @@ exports.getMaterial=function(req,res){
 		}
 	})()
 };
-// exports.getPkgMtlList=function(req,res){
-// 	(async function () {
-// 		try {
-// 			var list = await dbCommonSvc.getPkgMtlList();
-// 			if (list&&list.recordset){
-// 				return res.status(200).send(list.recordset);
-// 			} else {
-// 				return res.status(200).send({error:true,message:"The Package Material list cannot be loaded"});
-// 			}
-// 		} catch (error) {
-// 			return res.status(200).send({error:true,message:error});
-// 		}
-// 	})()
-
-// };

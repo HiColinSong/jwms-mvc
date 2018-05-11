@@ -4,11 +4,7 @@ const dbCommonSvc=require('../dbservices/dbCommonSvc');
 exports.getPendingList=function(req,res){
 	(async function () {
 		try {
-			var param={
-					sShip2Target:req.body.sShip2Target,
-					sQACategory:req.body.sQACategory
-				}
-			var list = await dbCommonSvc.getSubconPendingList(param);
+			var list = await dbCommonSvc.getSubconPendingList(req.body.sShip2Target);
 			if (list&&list.recordset){
 				return res.status(200).send(list.recordset);
 			} else {
@@ -47,7 +43,7 @@ exports.updateReturn=function(req,res){
 				}
 			var list = await dbCommonSvc.updateSubConReturns(param);
 			if (list&&list.recordset){
-				return res.status(200).send(list.recordset[0][""][0]);//return serial number
+				return res.status(200).send(list.recordset);//return serial number
 			} else {
 				return res.status(200).send([{error:true,message:"Operation Failed!"}]);
 			}

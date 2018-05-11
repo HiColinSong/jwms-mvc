@@ -22,8 +22,10 @@
                 $scope.barcode = itemSvc.getBarcodeObj();
 
                 $scope.confirmReceipt = function() {
+                    utilSvc.pageLoading("start");
                     apiSvc.confirmOperation({type:"rtgreceipts"},{order:order,currentDate:utilSvc.formatDate()}).$promise.
                     then(function(data){
+                        utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
@@ -52,10 +54,12 @@
                         }
                         confirmSubmit.do($scope);
                     },function(err){
+                        utilSvc.pageLoading("stop");
                         console.error(err);
                         $scope.confirm={
                             type:"danger",
-                            message:"System error, confirmation is failed!",
+                            modalHeader: 'RGA Confirmation Fail',
+                            message:err.data.message||"System error, Operation is failed!",
                         }
                         confirmSubmit.do($scope);
                     });

@@ -90,7 +90,10 @@
 					<td>{{item.TOItemNumber}}</td>
 					<td>{{item.MaterialCode}}</td>
 					<td>{{item.BatchNo}}</td>
-					<td><input type="checkbox" ng-model="item.reversal" style="height:16px;width:20px;" ng-change="chooseReversal()"></td>
+					<td ng-if="item.Cancel!=='X'"><input type="checkbox" ng-model="item.reversal" style="height:16px;width:20px;" ng-change="chooseReversal()"></td>
+					<td ng-if="item.Cancel==='X'">
+						Cancelled
+					</td>
 				</tr>
 			</tbody>
 			<tfoot>

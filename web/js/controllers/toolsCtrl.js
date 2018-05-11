@@ -29,6 +29,10 @@
 	    				$scope.info.title="PGI Reversals";
 	    				$scope.info.order="DO";
 	    				break;
+	    			case "rga-reversals":
+	    				$scope.info.title="RGA Reversals";
+	    				$scope.info.order="DO";
+	    				break;
 	    		}
     		}
 
@@ -53,6 +57,9 @@
 	    			case "reversals-pgi":
 						apiSvc.pgiReversals({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
 	    				break;
+	    			case "rga-reversals":
+						apiSvc.pgiReversals({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
+						break;
 				}		
 					
 			}

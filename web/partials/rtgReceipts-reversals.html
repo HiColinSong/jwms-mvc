@@ -1,0 +1,19 @@
+
+
+	<h2 class="text-center" style="padding-top:60px">RGA Reversals</h2>
+	<div class="margin-top-20" ng-if="!DONumber">
+	 <form role="form" name="DONumberForm">
+
+	  <div class="form-group">
+	    <label class="block" for="DONumber">Please scan/enter DO Number:</label>
+	    
+	    <input type="text" class="form-control" id="DONumber" placeholder="scan/enter DO Number" ng-model="order.DONumber">
+	  </div>
+	  
+	  <button type="submit" class="btn btn-default" confirm-required action="comfirm RGA Reversals" ng-click="submitForm()" ng-disabled="!order.DONumber">Submit</button>
+	</form>
+  </div>
+  </div>
+
+<pre ng-show="debug">order:{{order | json}}</pre>
+

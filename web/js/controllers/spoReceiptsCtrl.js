@@ -32,11 +32,14 @@
                     }
                     apiSvc.updateSubconReturn(param).$promise.then(
                         function(data){
-                            console.log(JSON.stringify(data,null,2));
-                            let removedSerialNo = data;
+                            // console.log(JSON.stringify(data,null,2));
+                            soundSvc.play("goodSound");
+                            let removedSerialNo = data[0].SerialNo;
                             utilSvc.removeItemById(removedSerialNo,$scope.list,"SerialNo")
-                            $scope.uniqueSubconPo=$filter("unique")($scope.lis,"subConPo")
+                            $scope.uniqueSubconPo=$filter("unique")($scope.list,"subConPo");
+                            $scope.barcode.reset();
                         },function(err){
+                            soundSvc.play("badSound");
                             // console.error(JSON.stringify(err,null,2));
                             if (err.data[0].message.trim())
                                 utilSvc.addAlert(err.data[0].message, "fail", false);

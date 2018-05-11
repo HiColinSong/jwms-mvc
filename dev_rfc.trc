@@ -1,0 +1,124 @@
+
+**** Trace file opened at 2018-05-11, 13:36:51 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 14:04:09 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 14:46:28 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 14:49:18 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 15:07:05 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 15:17:51 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+Object requested is currently locked by user YD.ZHU
+
+**** Trace file opened at 2018-05-11, 15:21:05 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+
+ERROR       no conversation found with id 29324192
+TIME        Fri May 11 15:21:14 2018
+RELEASE     753
+COMPONENT   CPIC (TCP/IP) with Unicode
+VERSION     3
+RC          473
+MODULE      D:/depot/bas/753_REL/src/krn/si/cpic/r3cpic.c
+LINE        9780
+COUNTER     1
+
+
+**** Trace file opened at 2018-05-11, 15:23:09 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+
+LOCATION    CPIC (TCP/IP) on local host BITLT0470 with Unicode
+ERROR       no conversation found with id 29450822
+TIME        Fri May 11 15:23:30 2018
+RELEASE     753
+COMPONENT   CPIC (TCP/IP) with Unicode
+VERSION     3
+RC          473
+MODULE      D:/depot/bas/753_REL/src/krn/si/cpic/r3cpic.c
+LINE        9780
+COUNTER     2
+
+
+**** Trace file opened at 2018-05-11, 15:25:13 Malay Peninsula Standard Time
+NW RFC Library: SDK variant, Release 750 Patch Level 0, Compiled on Nov 24 2017 21:59:13
+ CPIC library: 753.2017.11.08 version 3, NI library: 40, Kernel Release: 753 Patch Level 0
+ Current working directory: c:\Users\yd.zhu\dev\bxapi, Program: node
+ Hardware: PC with Windows NT 4x AMD64 Level 6 (Mod 61 Step 4), Operating_system: Windows NT 10.0
+ Hostname: BITLT0470, IP address: 172.32.54.39, IPv6 address: 172.32.54.39
+
+Object requested is currently locked by user YD.ZHU
+
+ERROR       no conversation found with id 29581092
+TIME        Fri May 11 15:25:22 2018
+RELEASE     753
+COMPONENT   CPIC (TCP/IP) with Unicode
+VERSION     3
+RC          473
+MODULE      D:/depot/bas/753_REL/src/krn/si/cpic/r3cpic.c
+LINE        9780
+COUNTER     1
+

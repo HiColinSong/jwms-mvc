@@ -95,6 +95,10 @@ exports.pgiReversal = function(orderNo,currentDate){
     return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param);
 }
 
+exports.rgaReversal = function(orderNo,currentDate){
+     return pgiReversal(orderNo,currentDate);
+}
+
 exports.reservation = function(ordero,currentDate){
   var param ={ 
       GOODSMVT_HEADER:{PSTNG_DATE:currentDate},
@@ -170,12 +174,14 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
 		      if (err) {
 		        // return console.error('Error invoking BAPI_PO_GETDETAIL:', err);
             reject(err);
-            transactionCommit=false;
+            transactionCommit=true;
+            return
           }
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             // resolve(res);
             reject(res.RETURN[0].MESSAGE);
             transactionCommit=false;
+            return
           }
           console.log("Invoking "+bapiName+" successfully");
           if (transactionCommit){
