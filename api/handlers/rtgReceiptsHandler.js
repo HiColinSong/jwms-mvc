@@ -122,6 +122,11 @@ exports.rgaReversal=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
+			
+			if (!order.DONumber){
+				throw new Error("The Delivery order doesn't exist.");
+			}
+			
 			if (order.pgiStatus!=="C"){
 				throw new Error("The Document hasn't been PGR yet.");
 			}

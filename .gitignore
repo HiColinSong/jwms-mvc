@@ -7,3 +7,4 @@ js/.DS_Store
 .vscode
 package-lock.json
 /deploy/
+/db-config/

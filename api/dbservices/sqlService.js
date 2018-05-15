@@ -3,13 +3,8 @@
 var sql = require("mssql");
 var Promise = require('Promise').default;
 // config for your database
-var config = {
-    user: 'bxadmin',
-    password: 'Bx@admin',
-    server: 'sgdevbx', 
-    database: 'BIOTRACK' 
-};
-// var pool,request ;
+var config = require("../../db-config/.db-config.json").bxSqlConnParams;
+
 exports.callStoredProcedure=function(spName,inputParams,outParams){
   return new Promise(function(resolve,reject){
     var pool = new sql.ConnectionPool(config, err => {

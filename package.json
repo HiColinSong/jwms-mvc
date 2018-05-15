@@ -35,8 +35,6 @@
     "winston": "^2.4.2"
   },
   "devDependencies": {
-    "mocha": "^5.1.1",
-    "nodemon": "^1.17.3",
     "gulp": "^3.9.0",
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-clean": "latest",
@@ -50,13 +48,15 @@
     "gulp-remove-empty-lines": "0.0.2",
     "gulp-replace": "^0.5.2",
     "gulp-strip-line": "0.0.1",
-    "gulp-uglify": "^1.1.0",
+    "gulp-uglify-es": "^1.0.1",
     "gulp-util": "^3.0.3",
     "jasmine-core": "^3.1.0",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
     "minimist": "^1.1.1",
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.3",
     "reload": ">= 0.1.0",
     "yargs": "^11.0.0"
   }

@@ -2,15 +2,9 @@
 
  var rfc = require('node-rfc');
  var Promise = require('Promise').default;
-var connParams = {
-  user: 'yd.zhu',
-  passwd: 'yadong123',
-  ashost: '172.32.70.67',
-  sysnr: '02',
-  client: '200'
-};
+ var connParams =require("../../db-config/.db-config.json").sapConnParams;
 
-var client = new rfc.Client(connParams, true);
+ var client = new rfc.Client(connParams, true);
 
 console.log('Client Version: ', client.getVersion());
 
@@ -96,7 +90,7 @@ exports.pgiReversal = function(orderNo,currentDate){
 }
 
 exports.rgaReversal = function(orderNo,currentDate){
-     return pgiReversal(orderNo,currentDate);
+     return this.pgiReversal(orderNo,currentDate);
 }
 
 exports.reservation = function(ordero,currentDate){

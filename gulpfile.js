@@ -20,7 +20,7 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     concat = require('gulp-concat'),
     ngAnnotate = require('gulp-ng-annotate'),
-    uglify = require('gulp-uglify'),
+    uglify = require('gulp-uglify-es').default,
     cleanCss = require('gulp-clean-css'),
     minifyHtml = require('gulp-minify-html'),
     replace = require('gulp-replace'),
@@ -31,20 +31,23 @@ var gulp = require('gulp'),
     paths = {
         //the order matters for all app.xxx.js
         scripts: [
-            'js/app.js',
-            'js/app.route-provider.js',
-            'js/app.http-provider.js',
-            'js/app.local-storage-service-provider.js',
-            'js/app.run.js',
-            'js/controllers/*.js',
-            'js/directives/*.js',
-            'js/filters/*.js',
-            'js/services/*.js'],
-        css: ['css/*.css'],
+            // 'web/js/app.js',
+            // 'web/js/app.route-provider.js',
+            // 'web/js/app.http-provider.js',
+            // 'web/js/app.local-storage-service-provider.js',
+            // 'web/js/app.run.js',
+            // 'web/js/controllers/*.js',
+            // 'web/js/directives/*.js',
+            // 'web/js/filters/*.js',
+            // 'web/js/services/*.js'
+            'web/js/**',
+            '!web/js/mock/**'
+        ],
+        css: ['web/css/*.css'],
         // json: ['json/*.json'],
-	    htmlPartials: ['partials/*.html'],
-        unifiedjs:['deploy/js/bx.min.js','deploy/partials/templates.js'],
-        index:['index.html'],
+	    htmlPartials: ['web/partials/*.html'],
+        unifiedjs:['deploy/web/js/bx.min.js','deploy/web/partials/templates.js'],
+        index:['web/index.html'],
 	    jsCssLibrary: ['bower_components/*/*.*']
     },
     argv = require('yargs').argv,
@@ -76,14 +79,14 @@ gulp.task('scripts', ['clean'], function() {
         .pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest('deploy/js'));
+        .pipe(gulp.dest('deploy/web/js'));
 });
 
 gulp.task('css', ['clean'], function() {
     return gulp.src(paths.css)
         .pipe(cleanCss())
         .pipe(concat('bx.min.css'))
-        .pipe(gulp.dest('deploy/css'));
+        .pipe(gulp.dest('deploy/web/css'));
 });
 
 
@@ -98,16 +101,16 @@ gulp.task('template',['clean'], function() {
             }))
      .pipe(removeLines())
     .pipe(templateCache({
-        root:"partials/",
+        root:"web/partials/",
         module:"bx"
     }))
-    .pipe(gulp.dest('deploy/partials'));
+    .pipe(gulp.dest('deploy/web/partials'));
 });
 
 gulp.task('mergeJsWithPartials',['clean','scripts','template'], function() {
     return gulp.src(paths.unifiedjs)
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest('deploy/js'));
+        .pipe(gulp.dest('deploy/web/js'));
     });
 
 gulp.task('index', ['clean'], function() {
@@ -134,7 +137,7 @@ gulp.task('index', ['clean'], function() {
         .pipe(gulp.dest('deploy'));
 });
 gulp.task('remove-partials',['mergeJsWithPartials'], function() {
-    return gulp.src(['deploy/partials'])
+    return gulp.src(['deploy/web/partials'])
         .pipe(clean({force:true}));
 });
 gulp.task('watch', function() {
