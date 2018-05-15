@@ -20,6 +20,12 @@
             barcode.reset();
             console.log("barcode="+JSON.stringify(barcode,null,2));
         });
+        it ('scanItemSvc -> should trading product', function() {
+            barcode.barcode1 = '010454366001796517180630300110P2H40709A';
+            barcode.parseBarcode();
+            // barcode.checkInfoComplete();
+            console.log("barcode="+JSON.stringify(barcode,null,2));
+        });
 
     });
 })();

@@ -93,7 +93,7 @@ var testGetPackDetails=function(){
 }
 
 var testGetUserProfile=function(){
-    output(dbCommonSvc.getUserProfile('yd.zhu'));
+    output(dbCommonSvc.getUserProfile('se.teo'));
 }
 
 var testDeleteUserProfile=function(){
@@ -101,9 +101,9 @@ var testDeleteUserProfile=function(){
 }
 var testInsertOrUpdateUserProfile=function(){
     let user={
-        UserID:'d.pesce',
+        UserID:'se.teo',
         DefaultWH:'Z01',
-        Domain:'BESA',
+        Domain:'BITSG',
         UserRole:'superAdmin',
         isActive:1
     }
@@ -131,4 +131,4 @@ var tesGetQASampleCategoryList=function(){
     output(dbCommonSvc.getQASampleCategoryList());
 }
 //run from command line: node testCases.js
-tesGetQASampleCategoryList();
+testInsertOrUpdateUserProfile();

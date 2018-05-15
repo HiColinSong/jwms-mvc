@@ -143,8 +143,10 @@
                     )
                 }
                 $scope.confirmPacking = function() {
+                    utilSvc.pageLoading("start");
                     apiSvc.confirmOperation({type:"packing"},{order:order,PackComplete:utilSvc.formatDate()}).$promise.
                     then(function(data){
+                        utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
@@ -173,6 +175,7 @@
                         }
                         confirmSubmit.do($scope);
                     },function(err){
+                        utilSvc.pageLoading("stop");
                         console.error(err);
                         $scope.confirm={
                             type:"danger",

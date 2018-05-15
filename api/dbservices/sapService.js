@@ -168,13 +168,15 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
 		      if (err) {
 		        // return console.error('Error invoking BAPI_PO_GETDETAIL:', err);
             reject(err);
-            transactionCommit=true;
+            transactionCommit=false;
+            client.close();
             return
           }
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             // resolve(res);
             reject(res.RETURN[0].MESSAGE);
             transactionCommit=false;
+            client.close();
             return
           }
           console.log("Invoking "+bapiName+" successfully");
@@ -186,12 +188,15 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
                 if (err) {
                   // return console.error('Error invoking BAPI_TRANSACTION_COMMIT:', err);
                   reject(err);
+                  client.close();
                 }
                 console.log(res);
                 resolve(res);
+                client.close();
               });
           } else{
             resolve(res);
+            client.close();
           }
 		    });
 		  

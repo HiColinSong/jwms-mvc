@@ -41,7 +41,7 @@
 			}
 			$scope.submitForm=function(){
 				var orderNo = utilSvc.formalizeOrderNo($scope.info.orderNo);
-				
+				utilSvc.pageLoading("start");
 				switch ($scope.info.type){
 					case "picking-reversals":
 						apiSvc.reverseOperation({type:'picking',param1:orderNo}).$promise.then(resultHandler,errorHandler);
@@ -64,6 +64,7 @@
 					
 			}
 			const resultHandler = function(data){
+				utilSvc.pageLoading("stop");
 				if (data&&data.confirm==='success'){
 					$scope.confirm={
 						type:"success",
@@ -92,6 +93,7 @@
 				confirmSubmit.do($scope);
 			}
 			const errorHandler=function(err){
+				utilSvc.pageLoading("stop");
 				console.error(err);
 				$scope.confirm={
 					type:"danger",
