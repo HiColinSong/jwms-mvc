@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "qa": "nodemon server.js PORT=8081"
   },
   "repository": {
     "type": "git",

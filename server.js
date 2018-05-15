@@ -94,6 +94,6 @@ app.get('*', function(req, res){
    res.send({ERROR:'Sorry, this is an invalid URL.'});
 });
 // port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
-app.listen(8080, function () {
-    console.log('Node app is running on port 8080');
+app.listen(process.env.PORT||8080, function () {
+    console.log('Node app is running on port '+process.env.PORT||8080);
 });
