@@ -8,3 +8,4 @@ js/.DS_Store
 package-lock.json
 /deploy/
 /db-config/
+/logs/*
