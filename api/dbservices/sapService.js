@@ -114,8 +114,8 @@ exports.getTransferOrder=function(orderNo,warehouseNo){
     return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
 };
 
-exports.getVendorDetail=function(vendorNumber){
-    return invokeBAPI("BAPI_VENDOR_GETDETAIL",{VENDORNO:vendorNumber});
+exports.getCustomerDetail=function(customerNo){
+    return invokeBAPI("BAPI_CUSTOMER_GETDETAIL2",{CUSTOMERNO:customerNo});
 };
 
 exports.confirmPicking=function(orderNo,warehouseNo,items){

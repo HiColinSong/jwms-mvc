@@ -14,8 +14,8 @@ exports.getOrder=function(req,res){
 			var order = util.deliveryOrderConverter(sapOrder);
 			//find customer name
 			if (order.ShipToCustomer){
-				var customer = await sapSvc.getVendorDetail(order.ShipToCustomer);
-				order.ShipToCustomerName=customer.GENERALDETAIL.NAME;
+				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
 			}
 			//todo: check status 
 			

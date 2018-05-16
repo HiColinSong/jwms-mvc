@@ -13,8 +13,8 @@ exports.getOrder=function(req,res){
 			order.PlannedGoodsDeliveryDate = deliveryOrder.PlannedGoodsDeliveryDate;
 			order.ShipToCustomer=deliveryOrder.ShipToCustomer;
 			if (order.ShipToCustomer){
-				var customer = await sapSvc.getVendorDetail(order.ShipToCustomer);
-				order.ShipToCustomerName=customer.GENERALDETAIL.NAME;
+				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
 			}
 			//check status 
 			if (order&&order.TONumber){

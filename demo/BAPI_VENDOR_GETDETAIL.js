@@ -40,12 +40,12 @@ client.connect(function(err) {
   }
 
   console.log('Invoking BAPI_VENDOR_GETDETAIL');
-  client.invoke('BAPI_VENDOR_GETDETAIL',
-    {VENDORNO:'0000200070'},
+  client.invoke('BAPI_CUSTOMER_GETDETAIL2',
+    {CUSTOMERNO:'0000200070'},
     // {VENDORNO:'0000032501'},
     function(err, res) {
       if (err) {
-        return console.error('Error invoking BAPI_VENDOR_GETDETAIL:', err);
+        return console.error('Error invoking BAPI_CUSTOMER_GETDETAIL2:', err);
       }
       console.log(res);
     });
