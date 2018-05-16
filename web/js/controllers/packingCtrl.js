@@ -9,9 +9,13 @@
                      utilSvc,itemSvc,apiSvc,confirmSubmit,hotkeys,soundSvc){
                     $scope.temp={};
 
-        if (order&&order.DONumber&&(!order.status||order.status==='valid')){
+        if (order&&order.DONumber){
             // $scope.info={itemInfo:{orderNo:order.DONumber,temp:$scope.temp,order:$scope.order,type:"packing"}};
-            utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" found", "success", true);
+            if (order.confirmStatus!=='C'){
+                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" found", "success", true);
+            } else {
+                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" has been confirmed", "warning", false);
+            }
             $scope.order=order;
             order.HUList=order.HUList||[];
             $scope.temp.showHU=order.HUList[0];

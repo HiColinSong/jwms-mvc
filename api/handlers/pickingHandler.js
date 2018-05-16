@@ -10,9 +10,9 @@ exports.getOrder=function(req,res){
 			var order = util.transferOrderConverter(sapOrder);
 			//check status 
 			if (order&&order.TONumber){
-				if (order.PickConfirmStatus==="X"){
-					throw new Error("The TO has been confirmed!");
-				}
+				// if (order.PickConfirmStatus==="X"){
+				// 	throw new Error("The TO has been confirmed!");
+				// }
 	
 				//insertOrUpdateDo, PackStart will be set if the HU List is empty, or ignore
 				var params={

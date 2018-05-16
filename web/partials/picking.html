@@ -10,7 +10,8 @@
 	  </div> -->
 	  <div class="form-group">
 	    <label class="block" for="TONumber">Please enter a TO Number:</label>
-	    <input type="text" class="form-control" id="TONumber" placeholder="enter TO Number" ng-model="order.TONumber">
+			<input type="text" class="form-control" id="TONumber" placeholder="enter TO Number" 
+						 ng-model="order.TONumber" autofocus focus-me="true">
 	  </div>
 	  
 	  <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!order.TONumber">Submit</button>
@@ -101,7 +102,7 @@
 	  	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="start pick"
 	  			ng-class="{'btn-primary':!order.PickStart,
 	  						'btn-success':order.PickStart}"
-	  			ng-disabled="order.PickStart"
+	  			ng-disabled="order.PickStart||order.PickConfirmStatus==='X'"
 	  			ng-click="changePickingStatus('PickStart')"> 
 	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Start Pick
 		</button>
@@ -110,7 +111,7 @@
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="complete pick"
   			ng-class="{'btn-primary':order.PickStart,
   						'btn-success':order.PickComplete||order.Push2SAPStatus}"
-  			ng-disabled="!order.PickStart||order.PickComplete||order.Push2SAPStatus"
+  			ng-disabled="!order.PickStart||order.PickComplete||order.Push2SAPStatus||order.order.PickConfirmStatus==='X'"
   			ng-click="changePickingStatus('PickComplete')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Pick Complete
 	</button>
@@ -119,7 +120,7 @@
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="comfirm pick"
   			ng-class="{'btn-primary':order.PickComplete,
   						'btn-success':order.Push2SAPStatus}"
-  			ng-disabled="!order.PickStart||!order.PickComplete||order.Push2SAPStatus"
+  			ng-disabled="!order.PickStart||!order.PickComplete||order.Push2SAPStatus||order.PickConfirmStatus==='X'"
 			ng-click="changePickingStatus('Push2SAPStatus')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Pick
 	</button>

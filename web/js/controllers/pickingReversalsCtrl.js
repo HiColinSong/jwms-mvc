@@ -5,8 +5,12 @@
     angular.module('bx.controllers')
     .controller('pickingReversalsCtrl', ['$scope','$location','$routeParams','order','utilSvc','bxService','modalConfirmSubmit',
     		function($scope,$location,$routeParams,order,utilSvc,apiSvc,confirmSubmit){
-        if (order&&order.TONumber&&(order.PickConfirmStatus!=='X')){
-            utilSvc.addAlert("The transfer order "+$routeParams.TONumber+" found", "success", true);
+        if (order&&order.TONumber){
+            if (order.PickConfirmStatus!=='X'){
+                utilSvc.addAlert("The transfer order "+$routeParams.TONumber+" found", "success", true);
+            } else {
+                utilSvc.addAlert("The transfer order "+$routeParams.TONumber+" has been confirmed", "warning", true);
+            }
             order.scannedItems=order.scannedItems||[];
             $scope.order=order;
             $scope.TONumber=order.TONumber;

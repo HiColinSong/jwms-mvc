@@ -49,9 +49,9 @@ exports.getOrder=function(req,res){
 			
 			if (order&&order.DONumber){
 				util.removeIncompleteItem(order.plannedItems);
-				if (order.confirmStatus!=="A"&&order.confirmStatus){
-					throw new Error("Invalid Order Status. Order Status is "+order.confirmStatus);
-				}
+				// if (order.confirmStatus!=="A"&&order.confirmStatus){
+				// 	throw new Error("Invalid Order Status. Order Status is "+order.confirmStatus);
+				// }
 	
 				//insertOrUpdateDo, PackStart will be set if the HU List is empty, or ignore
 				var params={

@@ -7,7 +7,8 @@
 	  <div class="form-group">
 	    <label class="block" for="DONumber">Please scan/enter DO Number:</label>
 	    
-	    <input type="text" class="form-control" id="DONumber" placeholder="scan/enter DO Number" ng-model="order.DONumber">
+			<input type="text" class="form-control" id="DONumber" placeholder="scan/enter DO Number" 
+						 ng-model="order.DONumber" focus-me="true">
 	  </div>
 	  
 	  <button type="submit" class="btn btn-default" confirm-required action="comfirm RGA Reversals" ng-click="submitForm()" ng-disabled="!order.DONumber">Submit</button>

@@ -10,9 +10,9 @@ exports.getOrder=function(req,res){
 			var order = util.transferOrderConverter(sapOrder);
 			//check status 
 			if (order&&order.TONumber){
-				if (order.PickConfirmStatus==="X"){
-					throw new Error("The TO has been confirmed!");
-				}
+				// if (order.PickConfirmStatus==="X"){
+				// 	throw new Error("The TO has been confirmed!");
+				// }
 				return res.status(200).send(order);
 			} else {
 				return res.status(200).send({error:true,message:"The Transfer Order "+req.body.orderNo+" doesn't exist!"});

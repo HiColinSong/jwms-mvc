@@ -126,7 +126,13 @@ exports.formatDateTime=function(dateString){
 			doItem = doItems[i];
 			_do.plannedItems.push({});
 			for (let key in itemFields) {
-				 _do.plannedItems[i][key]=doItem[itemFields[key]];
+				_do.plannedItems[i][key]=doItem[itemFields[key]];
+				if (_do.plannedItems[i][key]&&(typeof _do.plannedItems[i][key] ==="string"))
+					 _do.plannedItems[i][key]=_do.plannedItems[i][key].replace(/^0+/, ''); //remove leading 0s
+					
+				if (_do.plannedItems[i][key]&&(key ==="DOQuantity"))
+					 _do.plannedItems[i][key]=parseInt(_do.plannedItems[i][key]);
+					
 			}
 		}
 	 }
@@ -174,12 +180,16 @@ exports.formatDateTime=function(dateString){
 			item = items[i];
 			_to.plannedItems.push({});
 			for (let key in itemFields) {
-				 _to.plannedItems[i][key]=item[itemFields[key]];
+				_to.plannedItems[i][key]=item[itemFields[key]];
+				if (_to.plannedItems[i][key]&&(typeof _to.plannedItems[i][key]==="string"))
+					_to.plannedItems[i][key]=_to.plannedItems[i][key].replace(/^0+/, '');//remove leading 0s
+				if (_to.plannedItems[i][key]&&(key ==="TOQuantity"))
+					_to.plannedItems[i][key]=parseInt(_to.plannedItems[i][key]);
 			}
 		}
-	 }
-	 return _to;
- }
+	}
+	return _to;
+}
 
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
 exports.removeIncompleteItem = function (items){

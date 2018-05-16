@@ -96,10 +96,11 @@
 												<td  width="20%">{{item[createdByFieldName]}}</td>
 												<!-- <td>{{item.PackedOn}}</td> -->
 												<td width="10%" class="text-center">
-													<a class="cursor-pointer margin-left-20 text-danger"  confirm-required="the item {{item.serialNo}}" ng-click="removeItem(item)">
-																											<!-- Remove  -->
-																											<i class="text-danger fa fa-times-circle fa-lg"></i>
-																									</a>
+													<a class="cursor-pointer margin-left-20 text-danger"  
+														confirm-required="the item {{item.serialNo}}" 
+														ng-click="removeItem(item)" ng-if="!order.confirmStatus||order.confirmStatus!=='C'">
+														<i class="text-danger fa fa-times-circle fa-lg"></i>
+													</a>
 												</td>
 							
 											</tr>
@@ -176,10 +177,12 @@
 									<td>{{item.SerialNo}}</td>
 									<td>{{item.ScanQty||1}}</td>
 									<td width="10%" class="text-center">
-										<a class="cursor-pointer margin-left-20 text-danger"  confirm-required="item {{item.serialNo}}" ng-click="removeItem(item)">
+										<a class="cursor-pointer margin-left-20 text-danger"  
+											confirm-required="item {{item.serialNo}}" 
+											ng-click="removeItem(item)" ng-show="!order.confirmStatus||order.confirmStatus!=='C'">
 														<!-- Remove  -->
-														<i class="text-danger fa fa-times-circle fa-lg"></i>
-													</a>
+											<i class="text-danger fa fa-times-circle fa-lg"></i>
+										</a>
 									</td>
 				
 								</tr>
