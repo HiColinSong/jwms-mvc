@@ -100,20 +100,20 @@
 		  		</tr> 
 		  		<tr> 
 		  			<td >Created On</td> 
-		  			<td>{{order.DOCreationDate}}</td>
+		  			<td>{{order.DOCreationDate|ymdDate:"dd MMM yyyy"}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Ship to Customer</td> 
-		  			<td>{{order.ShipToCustomer}}</td>
+		  			<td>{{order.ShipToCustomerName}}</td>
 		  		</tr> 
-		  		<tr> 
+		  		<!-- <tr> 
 		  			<td >Shipping Point</td> 
 		  			<td>{{order.ShippingPoint}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Plant</td> 
 		  			<td>{{order.plannedItems[0].Plant}}</td>
-		  		</tr> 
+		  		</tr>  -->
 		  		<tr> 
 		  			<td >Warehouse Number</td> 
 		  			<td>{{order.WarehouseNo}}</td>
@@ -124,7 +124,11 @@
 		  		</tr> 
 		  		<tr> 
 		  			<td >Confirm Status</td> 
-		  			<td>{{order.confirmStatus}}</td>
+		  			<td>{{order.confirmStatus||'Not confirmed yet'}}</td>
+		  		</tr> 
+		  		<tr> 
+		  			<td >PGI Status</td> 
+		  			<td>{{order.pgiStatus||'Not done yet'}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Number of Items</td> 
@@ -144,7 +148,7 @@
 		  		</tr> 
 		  		<tr ng-show="temp.showHU"> 
 		  			<td >HU Create Date</td> 
-		  			<td>{{temp.showHU.CreatedOn}}</td>
+		  			<td>{{temp.showHU.CreatedOn|date:'dd MMM yyyy'}}</td>
 		  		</tr> 
 		  	</tbody> 
 		  </table>
@@ -166,7 +170,7 @@
     </div>
 	  <!--confirm button-->
   	<div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
-		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm packing" 
+		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm packing" 
 		  ng-click="confirmPacking()" ng-disabled="!confirmReady||order.confirmStatus==='C'">
 		  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Packing
 		</button>

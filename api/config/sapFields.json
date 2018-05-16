@@ -6,7 +6,8 @@
        "ShipToCustomer":"KUNNR",
        "Plant":"WERKS",
        "WarehouseNo":"LGNUM",
-       "ShippingPoint":"VSTEL"
+       "ShippingPoint":"VSTEL",
+       "PlannedGoodsDeliveryDate":"WADAT"
     },
     "deliveryOrderHeaderSTSFields": {
         "confirmStatus":"PKSTK",

@@ -95,5 +95,5 @@ app.get('*', function(req, res){
 });
 // port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
 app.listen(process.env.PORT||8080, function () {
-    console.log('Node app is running on port '+process.env.PORT||8080);
+    console.log('Node app is running on port '+(process.env.PORT||8080));
 });

@@ -122,6 +122,7 @@ exports.formatDateTime=function(dateString){
 	 }
 	 if (deliveryOrder.ET_DELIVERY_ITEM&&deliveryOrder.ET_DELIVERY_ITEM.length>0){
 		 doItems = deliveryOrder.ET_DELIVERY_ITEM;
+		 _do.totalPlannedQty=0;
 		for (let i = 0; i < doItems.length; i++) {
 			doItem = doItems[i];
 			_do.plannedItems.push({});
@@ -130,9 +131,10 @@ exports.formatDateTime=function(dateString){
 				if (_do.plannedItems[i][key]&&(typeof _do.plannedItems[i][key] ==="string"))
 					 _do.plannedItems[i][key]=_do.plannedItems[i][key].replace(/^0+/, ''); //remove leading 0s
 					
-				if (_do.plannedItems[i][key]&&(key ==="DOQuantity"))
-					 _do.plannedItems[i][key]=parseInt(_do.plannedItems[i][key]);
-					
+				if (_do.plannedItems[i][key]&&(key ==="DOQuantity")){
+					_do.plannedItems[i][key]=parseInt(_do.plannedItems[i][key]);
+					_do.totalPlannedQty+=_do.plannedItems[i][key];
+				}
 			}
 		}
 	 }

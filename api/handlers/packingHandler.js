@@ -45,7 +45,10 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
-			//todo: check status 
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getVendorDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.GENERALDETAIL.NAME;
+			}
 			
 			if (order&&order.DONumber){
 				util.removeIncompleteItem(order.plannedItems);

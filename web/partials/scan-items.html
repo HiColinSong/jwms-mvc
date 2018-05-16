@@ -5,15 +5,15 @@
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs " role="tablist">
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='groupView'||order.HUList.length===0}"><a class="cursor-pointer" 
-								  ng-click="showScanItemTab='groupView'">Group View</a></li>
+								  ng-click="showScanItemTab='groupView'">Total Summary</a></li>
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0||order.scannedItems">
-									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Item View</a>
+									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Box Summary</a>
 						  </li>
 					</ul>
 				  
 					<!-- Tab panes -->
 					<div class="tab-content">
-						<!-- group view start -->
+						<!-- Total Summary start -->
 					  <div role="tabpanel" class="tab-pane"  ng-class="{'active':showScanItemTab==='groupView'}" id="groupView">
 							<div class="margin-top-20 panel-head">
 										<div class="col-sm-3 col-xs-3">Item No</div>
@@ -113,7 +113,7 @@
 								<dir class="clearboth"></dir>
 							</accordion>
 					  </div>
-					  <!-- group view end -->
+					  <!-- Total Summary end -->
 					  <!-- item view start -->
 					  <div role="tabpanel" class="tab-pane" ng-class="{'active':showScanItemTab==='itemView'}" id="itemView">
 							<form ng-show="items&&items.length>0" class="margin-top">

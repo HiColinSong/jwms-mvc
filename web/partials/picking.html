@@ -48,15 +48,15 @@
 		  		</tr> 
 		  		<tr> 
 		  			<td >Name of Ship from party</td> 
-		  			<td>{{order.shipFrom}}</td>
+		  			<td>{{order.ShipToCustomerName||(order.ShipToCustomer+" (Name can't be found in SAP)")}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Planned Good Issue Date</td> 
-		  			<td>{{order.plannedGoodIssueDate|date:"dd/MMM/yyyy"}}</td>
+		  			<td>{{order.PlannedGoodsDeliveryDate|ymdDate:"dd MMM yyyy"}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >TO Creation Date</td> 
-		  			<td>{{order.TOCreationDate}}</td>
+		  			<td>{{order.TOCreationDate|ymdDate:"dd MMM yyyy"}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >TO Creation User</td> 

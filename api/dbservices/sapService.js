@@ -114,6 +114,10 @@ exports.getTransferOrder=function(orderNo,warehouseNo){
     return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
 };
 
+exports.getVendorDetail=function(vendorNumber){
+    return invokeBAPI("BAPI_VENDOR_GETDETAIL",{VENDORNO:vendorNumber});
+};
+
 exports.confirmPicking=function(orderNo,warehouseNo,items){
 	var param={
         I_LGNUM : warehouseNo,

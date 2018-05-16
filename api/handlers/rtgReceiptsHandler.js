@@ -12,6 +12,11 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
+			//find customer name
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getVendorDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.GENERALDETAIL.NAME;
+			}
 			//todo: check status 
 			
 			if (order&&order.DONumber){
@@ -124,7 +129,7 @@ exports.rgaReversal=function(req,res){
 			var order = util.deliveryOrderConverter(sapOrder);
 			
 			if (!order.DONumber){
-				throw new Error("The Delivery order doesn't exist.");
+				throw new Error("The RGA "+req.body.orderNo+" doesn't exist.");
 			}
 			
 			if (order.pgiStatus!=="C"){

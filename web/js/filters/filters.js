@@ -8,7 +8,16 @@
 	    	if (id)
 	      		return utilSvc.findItemById(id,constants.categories,"id")["display"];
 	    };
-	  }]).filter('unique', function () {
+		}])
+		//take the date format "yyyyMMdd"
+    .filter('ymdDate', ['$filter', function($filter) {
+	    return function(dateString,format) {
+	    	if (dateString)
+	      		return $filter("date")(dateString+"T00:00:00",format);
+	    };
+		}])
+		
+		.filter('unique', function () {
 
 		return function (items, filterOn) {
 	  

@@ -8,6 +8,14 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getTransferOrder(req.body.orderNo,req.session.user.DefaultWH);
 			var order = util.transferOrderConverter(sapOrder);
+			var sapDeliveryOrder = await sapSvc.getDeliveryOrder(order.DONumber);
+			var deliveryOrder = util.deliveryOrderConverter(sapDeliveryOrder);
+			order.PlannedGoodsDeliveryDate = deliveryOrder.PlannedGoodsDeliveryDate;
+			order.ShipToCustomer=deliveryOrder.ShipToCustomer;
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getVendorDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.GENERALDETAIL.NAME;
+			}
 			//check status 
 			if (order&&order.TONumber){
 				// if (order.PickConfirmStatus==="X"){

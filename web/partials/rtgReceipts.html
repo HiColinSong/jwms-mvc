@@ -45,27 +45,23 @@
 						</tr> 
 						<tr> 
 							<td >Created On</td> 
-							<td>{{order.DOCreationDate}}</td>
+							<td>{{order.DOCreationDate|ymdDate:'dd MMM yyyy'}}</td>
 						</tr> 
 						<tr> 
-							<td >Ship to Customer</td> 
-							<td>{{order.ShipToCustomer}}</td>
-						</tr> 
-						<tr> 
-							<td >Shipping Point</td> 
-							<td>{{order.ShippingPoint}}</td>
-						</tr> 
-						<tr> 
-							<td >Plant</td> 
-							<td>{{order.Plant}}</td>
+							<td >Return From Customer</td> 
+							<td>{{order.ShipToCustomerName}}</td>
 						</tr> 
 						<tr> 
 							<td >Warehouse Number</td> 
 							<td>{{order.WarehouseNo}}</td>
 						</tr> 
 						<tr> 
-							<td >Number of Items</td> 
+							<td >Number of Return Items</td> 
 							<td>{{order.plannedItems.length||0}}</td>
+						</tr> 
+						<tr> 
+							<td >Total Return Quantity</td> 
+							<td>{{order.totalPlannedQty}}</td>
 						</tr> 
 					</tbody> 
 		  </table></div>
