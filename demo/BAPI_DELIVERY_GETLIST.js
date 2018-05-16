@@ -22,6 +22,11 @@
 var rfc = require('node-rfc');
 
 var connParams = {
+  // "user": "BX_USER",
+  // "passwd": "P@ssw0rd",
+  // "ashost": "172.32.70.71",
+  // "sysnr": "00",
+  // "client": "500"
   user: 'yd.zhu',
   passwd: 'yadong123',
   ashost: '172.32.70.67',
@@ -52,8 +57,8 @@ client.connect(function(err) {
        IT_VBELN:[{
         SIGN:"I",
         OPTION:"EQ",
-        DELIV_NUMB_LOW:"0800401206" //add leading 0
-        // DELIV_NUMB_LOW:"0800379646" //add leading 0
+        // DELIV_NUMB_LOW:"0800401144" //add leading 0
+        DELIV_NUMB_LOW:"0800401225 " //add leading 0
        }]
     },
     function(err, res) {

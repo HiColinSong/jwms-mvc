@@ -101,7 +101,7 @@ var testDeleteUserProfile=function(){
 }
 var testInsertOrUpdateUserProfile=function(){
     let user={
-        UserID:'se.teo',
+        UserID:'k.cheng',
         DefaultWH:'Z01',
         Domain:'BITSG',
         UserRole:'superAdmin',

@@ -30,6 +30,7 @@ var getUpdatedHuAndScanItemList=function(orderNo){
 				huList=result.recordsets[0],scannedItems;
 				if (result.recordsets.length>1){
 					scannedItems=result.recordsets[1];
+					util.trimValues(scannedItems);
 					huList=addScannedItemsToHUList(huList,scannedItems)
 				}
 			}
@@ -90,7 +91,7 @@ exports.getOrder=function(req,res){
 				return res.status(200).send({error:true,message:"The Delivery Order "+req.body.orderNo+" doesn't exist!"});
 			}
 		} catch (error) {
-			return res.status(200).send({error:true,message:error.message});
+			return res.status(200).send({error:true,message:error.message||error});
 		}
 	})()
 
@@ -134,6 +135,7 @@ exports.addNewHu=function(req,res){
 			huList=huList.recordset;
 			var scannedItems = await dbPackingSvc.getPackDetails(req.body.DONumber);
 			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems)
 			huList=addScannedItemsToHUList(huList,scannedItems);
 			return res.status(200).send(huList);
 		} catch (error) {
@@ -153,6 +155,7 @@ exports.removeHu=function(req,res){
 			huList=huList.recordset;
 			var scannedItems = await dbPackingSvc.getPackDetails(req.body.DONumber);
 			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems);
 			huList=addScannedItemsToHUList(huList,scannedItems);
 			return res.status(200).send(huList);
 		} catch (error) {
@@ -184,6 +187,7 @@ exports.addItem=function(req,res){
 		try {
 			var scannedItems = await dbPackingSvc.InsertScanItem(params);
 			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems);
 			var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
 			huList = addScannedItemsToHUList(huList.recordset,scannedItems);
 			if (huList){

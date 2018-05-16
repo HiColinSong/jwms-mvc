@@ -179,6 +179,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             // resolve(res);
             reject(res.RETURN[0].MESSAGE);
+            console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
             transactionCommit=false;
             client.close();
             return

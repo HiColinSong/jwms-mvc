@@ -54,6 +54,7 @@ exports.getOrder=function(req,res){
 				params.DOQuantityList = DOQuantityList.join(',');
 				var scannedItems=await dbRtgReceiptSvc.InsertOrUpdateDO(params);
 				order.scannedItems=scannedItems.recordset;
+				util.trimValues(order.scannedItems);
 				return res.status(200).send(order);
 			} else {
 				return res.status(200).send({error:true,message:"The Delivery Order "+req.body.orderNo+" doesn't exist!"});
@@ -84,7 +85,9 @@ exports.addItem=function(req,res){
 
 		try {
 			var scannedItems = await dbRtgReceiptSvc.InsertScanItem(params);
-			return res.status(200).send(scannedItems.recordset);
+			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems);
+			return res.status(200).send(scannedItems);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
 		}
@@ -96,7 +99,9 @@ exports.removeItem=function(req,res){
 		try {
 			await dbRtgReceiptSvc.deleteItemByKey(req.body.RowKey);
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
-			return res.status(200).send(scannedItems.recordset);
+			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems);
+			return res.status(200).send(scannedItems);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
 		}
@@ -139,6 +144,7 @@ exports.rgaReversal=function(req,res){
 			//update the SN in sap
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			order.scannedItems = scannedItems.recordset;
+			util.trimValues(order.scannedItems);
 			await sapSvc.serialNoUpdate(util.getTransParams(order,"RGAX"));
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {

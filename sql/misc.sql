@@ -1,154 +1,125 @@
-USE [BIOTRACK]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-ALTER TABLE dbo.BX_PackDetails
-  ADD BalanceQty int;
-
-
-INSERT INTO dbo.SAP_DOHeader values ('0800379646','20180421','yd.zhu','0003562','1234',0)
-
-select * from dbo.SAP_DODetail
-
-select * from dbo.SAP_DOHeader
-
-select * from dbo.SAP_DODetail a,dbo.SAP_DOHeader b where a.DONumber='0800379646'
-
-select dbo.nth_occur('abc,def,ghi',',',1)
-
-EXEC dbo.InsertOrUpdateDO 
-	@DONumber='0800379642',
-	@DOCreationDate='20180423',
-	@DOCreationUser='yadong.zhu',
-	@Plant='3334',
-	@ShipToCustomer='44453',
-	@DOStatus='1',
-    @DOItemNumberList = "doi001,doi002,doi003",
-    @MaterialCodeList = "m123-11,m123-22,m123-33",
-    @BatchNumberList = "batch001,batch002,batch003",
-    @VendorBatchList = "vb001,vb002,vb003",
-    @DOQuantityList = "21,22,23"
+DECLARE
+	@DONumber varchar(12)='0800401225',
+	@EANCode varchar(16)='02888893016290',
+	@HUNumber varchar(20)='118051600000',
+    @MaterialCode varchar(18)='LAH25018P',
+    @BatchNo varchar(20)='P2H40709A',
+	@BinNumber varchar(20)= NULL,
+	@SerialNo varchar(8)=NULL,
+    @PackBy varchar(20)='yd.zh',
+    @PackedOn varchar(10)='20180516',
+    @Status char(1)='0',
+    @FullScanCode varchar(60)='01028888930162901714111310P2H40709A',
+    @Qty int= 1
 
 
-BEGIN TRY  
-    -- RAISERROR with severity 11-19 will cause execution to   
-    -- jump to the CATCH block.  
-    RAISERROR ('Error raised in TRY block.', -- Message text.  
-               16, -- Severity.  
-               1 -- State.  
-               );  
-END TRY  
-BEGIN CATCH  
-    DECLARE @ErrorMessage NVARCHAR(4000);  
-    DECLARE @ErrorSeverity INT;  
-    DECLARE @ErrorState INT;  
+DECLARE @effectiveBatch int = 180601 --change this if the effective batch changes
 
-    SELECT   
-        @ErrorMessage = ERROR_MESSAGE(),  
-        @ErrorSeverity = ERROR_SEVERITY(),  
-        @ErrorState = ERROR_STATE();  
+DECLARE @DOItemNumber char(6),@batchDate int,@isSerialNoRequired char(1)
+IF (@BinNumber IS NULL)
+	SET @BinNumber = 'DEFAULT BIN'
+BEGIN
+    BEGIN TRY  
+		
+        --if material code is not passed in and it can't be found in table SAP_EANCodes per the passed EANCode
+        IF (@MaterialCode is NULL) AND NOT EXISTS (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+        RAISERROR ('Error:Material Code cannot be found',16,1 );  
 
-    -- Use RAISERROR inside the CATCH block to return error  
-    -- information about the original error that caused  
-    -- execution to jump to the CATCH block.  
-    RAISERROR (@ErrorMessage, -- Message text.  
-               @ErrorSeverity, -- Severity.  
-               @ErrorState -- State.  
-               );  
-END CATCH; 
+        --find material code and assign the value
+        IF (@MaterialCode is NULL) 
+            BEGIN
+                SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+            END
 
+            --define a temp table for finding the doItemNumber
+            DECLARE @temp_item TABLE
+                    (
+                        DONumber varchar(12),
+                        DOItemNumber char(6),
+                        EANCode varchar(16),
+                        MaterialCode varchar(18),
+                        BatchNo varchar(20),
+                        SerialNo varchar(8),
+                        ActualQty int,
+                        PlanQty int
+                    );
 
-EXEC dbo.InsertHandlingUnits
-	@DONumber='0800379642',
-	@HUNumberList = '22034560237502345023,22034560237502345024,22034560237502345025',
-	@PackMaterial='m123-11',
-	@CreatedBy='yadong.zhu',
-	@CreatedOn='20180422'
+            -- insert the values into the temp table with Material code, planQty
+            INSERT INTO @temp_item 
+                SELECT @DONumber,DOItemNumber,@EANCode,@MaterialCode,@BatchNo,@SerialNo,0,DOQuantity
+                FROM dbo.SAP_DODetail
+                WHERE DONumber = @DONumber and MaterialCode = @MaterialCode and BatchNumber = @BatchNo
 
+            IF NOT EXISTS (SELECT 1 from @temp_item)
+            RAISERROR ('Error:Material/Batch cannot be found in Delivery order',16,1 ); 
 
-	select sum(BalanceQty)+1 from dbo.BX_PackDetails where DONumber='0800379646'
-	select * from dbo.BX_PackDetails where DONumber='0800379642'
-	INSERT INTO dbo.BX_PackDetails values (newid(),'0800379642','HU111','m123-11','batch001',NULL,'yadong','20180422',0,NULL,13)
+            -- Find DOItemNumber
+             DECLARE @actualQty int = 0,@planQty int
+			 
+			 WHILE EXISTS (SELECT 1 from @temp_item)
+			 BEGIN
+				SELECT TOP 1 @DOItemNumber = DOItemNumber,@planQty = PlanQTY,@MaterialCode=MaterialCode  from @temp_item
+				SELECT @actualQty = sum(ScanQty) from BX_PackDetails 
+				where DONumber = @DONumber and BatchNo = @BatchNo and MaterialCode = @MaterialCode and DOItemNumber = @DOItemNumber
+				SELECT @actualQty=ISNULL(@actualQty,0)
+				
+                -- if the scanned qty plus new qty exceed the plan qty, delete the top 1 record and loop again
+				IF(@actualQty+@Qty>@planQty) 
+					BEGIN
+						DELETE TOP (1) FROM @temp_item 
+						SET @DOItemNumber = NULL
+					END
+				ELSE
+					BREAK  --found DOItemNumber, no need to loop
+				 CONTINUE
+			 END
 
-	select * from dbo.SAP_DODetail where DONumber='0800379642'
+            if (@DOItemNumber is NULL)
+                RAISERROR ('Error:Exceed planned quantity.',16,1 );  
 
-	select ((sum(a.BalanceQty)+12)-b.DOQuantity) from dbo.BX_PackDetails a,dbo.SAP_DODetail b 
-                        where   a.DONumber='0800379642' and 
-                                b.DONumber='0800379642' and 
-                                a.MaterialCode='m123-11' and 
-                                b.MaterialCode='m123-11' and 
-                                a.BatchNo='batch001' and 
-                                b.BatchNumber='batch001'
+        -- check if the serial no is required if it is null
+		IF (@SerialNo IS NULL) AND (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+            BEGIN
+                --check if the the serial no is enabled for the material
+                SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+                IF (@isSerialNoRequired='X')
+                     RAISERROR ('Error:Serial Number is required',16,1 );
+            END
 
-	select * from dbo.BX_PackDetails a,dbo.SAP_DODetail b 
-                        where   a.DONumber='0800379642' and 
-                                b.DONumber='0800379642' and 
-                                a.MaterialCode='m123-11' and 
-                                b.MaterialCode='m123-11' and 
-                                a.BatchNo='batch001' and 
-                                b.BatchNumber='batch001'
+        IF EXISTS (select * from dbo.SAP_DOHeader where DONumber=@DONumber and DOStatus=1)
+            -- RAISERROR with severity 11-19 will cause execution to   
+            -- jump to the CATCH block.  
+            RAISERROR ('Error:Packing is already confirmed', -- Message text.  
+                    16, -- Severity.  
+                    1 -- State.  
+                    );  
+        
+        IF EXISTS (select * from dbo.BX_PackHeader where DONumber=@DONumber and PackStatus=2)
+            RAISERROR ('Error:Packing is already completed',16,1 );  
+        IF NOT EXISTS (select * from dbo.BX_PackHUnits where DONumber=@DONumber and HUNumber=@HUNumber)
+            RAISERROR ('Error:Handling Unit cannot be found.',16,1 );  
+ 
 
-	DECLARE @v1 int,@v2 int, @v3 int
-	SET @v1=(select sum(BalanceQty) from dbo.BX_PackDetails  
-                        where   DONumber='0800379642' and 
-								MaterialCode='m123-11' and 
-                                BatchNo='batch001')
-								
-			SET @v2=(select DOQuantity from dbo.SAP_DODetail 
-                        where   DONumber='0800379642' and 
-								MaterialCode='m123-11' and 
-                                BatchNumber='batch001')
-			SET @v3=8
+    END TRY  
+    BEGIN CATCH  
+        DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
 
-			select (@v1+@v3-@v2)
+        SELECT   
+            @ErrorMessage = ERROR_MESSAGE(),  
+            @ErrorSeverity = ERROR_SEVERITY(),  
+            @ErrorState = ERROR_STATE();  
 
-			DECLARE @sn varchar(8),@SerialNo varchar(8)=NULL
-			--SET @SerialNo='181316AA';
+        -- Use RAISERROR inside the CATCH block to return error  
+        -- information about the original error that caused  
+        -- execution to jump to the CATCH block.  
+        RAISERROR (@ErrorMessage, -- Message text.  
+                @ErrorSeverity, -- Severity.  
+                @ErrorState -- State.  
+                );  
+    END CATCH; 
+	--return freshed items detail
+	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
 
-			select * from dbo.BX_PackDetails where DONumber='0800379647' and SerialNo=@SerialNo
-
-
-EXEC dbo.InsertOrUpdatePacking 
-	@DONumber='0800379642',
-	@HUNumber='HU111',
-    @MaterialCode='m123-11',
-    @BatChNo='batch001',
-    @SerialNo=NULL,
-    @PackBy='sean',
-    @PackedOn='20180422',
-    @Status=0,
-    @FullScanCode=NULL,
-    @Qty=1
-
-	SELECT * from dbo.BX_PackDetails 
-                    WHERE	DONumber='0800379642' and 
-                            HUNumber='HU111' and 
-                            MaterialCode='m123-11' and 
-                            BatchNo='batch001' and 
-                            PackBy='yadong' and
-                            PackedOn='20180422'
-
-	select sum(BalanceQty) from dbo.BX_PackDetails  
-                        where   DONumber='0800379642' and 
-								MaterialCode='m123-11' and 
-                                BatchNo='batch001'
-select DOQuantity from dbo.SAP_DODetail 
-                        where   DONumber='0800379642' and 
-								MaterialCode='m123-11' and 
-                                BatchNumber='batch001'
-
-	IF EXISTS (select * from dbo.BX_PackHeader where DONumber='0800379642' and PackStatus=1) 
-		print 'true'
-	ELSE
-		print 'false'
-
-		select * from dbo.SAP_DOHeader where DONumber='0800379642' and DOStatus=1
-		update  dbo.SAP_DOHeader set DOSTatus=0 where DONumber='0800379642'
-
-		select * from dbo.BX_PackHUnits where DONumber='0800379642' and HUNumber='HU111'
-		insert into dbo.BX_PackHUnits values('0800379642','HU111','111-222','yadong','20180209')            
-
-
+END

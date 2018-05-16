@@ -22,11 +22,16 @@
 var rfc = require('node-rfc');
 
 var connParams = {
-  user: 'yd.zhu',
-  passwd: 'yadong123',
-  ashost: '172.32.70.67',
-  sysnr: '02',
-  client: '200'
+  "user": "BX_USER",
+  "passwd": "P@ssw0rd",
+  "ashost": "172.32.70.71",
+  "sysnr": "00",
+  "client": "500"
+  // user: 'yd.zhu',
+  // passwd: 'yadong123',
+  // ashost: '172.32.70.67',
+  // sysnr: '02',
+  // client: '200'
 };
 
 var client = new rfc.Client(connParams, true);

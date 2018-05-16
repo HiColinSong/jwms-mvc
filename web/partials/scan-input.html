@@ -79,7 +79,14 @@
 						</td>
 						<td width="65%">	
 							<div class="form-group">
-									<input type="text" class="form-control" id="materialCode" placeholder="Material Code" ng-model="barcode.materialCode">
+									<!-- <input type="text" class="form-control" id="materialCode" placeholder="Material Code" ng-model="barcode.materialCode"> -->
+									<select class="chosen-select col-sm-12 form-control"
+											ng-model="barcode.materialCode"
+											id="materialCode"
+											ng-options="item.MaterialCode as item.MaterialCode for item in order.plannedItems"
+											>
+											<option value="">Select Material Code</option>
+									</select>
 							</div>
 						</td>
 					</tr>

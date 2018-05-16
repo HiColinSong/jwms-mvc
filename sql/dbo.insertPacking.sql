@@ -1,22 +1,6 @@
-/**insert or update for table BX_PackDetails
-    do the following check
-    1. Check DOStatus in SAP_DOHeader
-    2. Check PackStatus in BX_PackHeader
-    3. Check HandlingUnit exist in BX_PackHUnits
-    4. if MaterialCode and BatchNo combination exists in SAP_DODetail
-    5. if Total ScanQty of the M/B combination is less than the DOQuantity in SAP_DODetail
-    6. if SerialNo is not null,check if NOT EXIST in the table
-
-    if Passed Check, do Insert/Update
-    else return error message
-    if Exist (DONumber=@DONumber,HUNumber=@HUNumber,BatchNo=@BatchNo,PackBy=@PackBy,
-              PackedOn=@PackedOn,SerialNo=null,@SerialNo=null)
-              Update BalancedQty
-    else  insert record.
-*/
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 03-May-18 2:52:50 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 16-May-18 5:34:38 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -48,7 +32,7 @@ BEGIN
 		
         --if material code is not passed in and it can't be found in table SAP_EANCodes per the passed EANCode
         IF (@MaterialCode is NULL) AND NOT EXISTS (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
-        RAISERROR ('Material Code cannot be found',16,1 );  
+        RAISERROR ('Error:Material Code cannot be found',16,1 );  
 
         --find material code and assign the value
         IF (@MaterialCode is NULL) 
@@ -108,7 +92,7 @@ BEGIN
                 --check if the the serial no is enabled for the material
                 SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
                 IF (@isSerialNoRequired='X')
-                     RAISERROR ('Error:Serial Number is required.',16,1 );
+                     RAISERROR ('Error:Serial Number is required',16,1 );
             END
 
         IF EXISTS (select * from dbo.SAP_DOHeader where DONumber=@DONumber and DOStatus=1)
