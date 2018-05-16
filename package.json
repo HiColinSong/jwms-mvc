@@ -26,12 +26,12 @@
   "dependencies": {
     "Promise": "^1.0.5",
     "activedirectory": "^0.7.2",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "mssql": "^4.1.0",
-    "node-rfc": "^0.1.14",
+    "node-rfc": "^0.1.16",
     "tedious": "2.2.4",
     "winston": "^2.4.2"
   },
@@ -54,11 +54,11 @@
     "jasmine-core": "^3.1.0",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "^1.1.1",
+    "karma-jasmine": "^1.1.2",
     "minimist": "^1.1.1",
     "mocha": "^5.1.1",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.17.4",
     "reload": ">= 0.1.0",
-    "yargs": "^11.0.0"
+    "yargs": "^11.1.0"
   }
 }
