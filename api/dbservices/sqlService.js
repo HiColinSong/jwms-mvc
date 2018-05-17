@@ -48,21 +48,22 @@ exports.sqlQuery=function(queryStmt,paramTypes,paramValues){
         }
         ps.prepare(queryStmt, err => {
             if(err){
-              reject(err);
               pool.close();
+              reject(err);
+              return;
             }
         
             ps.execute(paramValues, (err, result) => {
                 if(err){
                   reject(err);
-                  pool.close();
+                } else {
+                  resolve(result);
                 }
-                resolve(result);
                 ps.unprepare(err => {
-                    if(err){
-                      reject(err);
-                    }
                     pool.close();
+                    if(err){
+                      console.error(err);
+                    }
                 })
             })
         })

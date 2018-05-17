@@ -67,10 +67,25 @@ exports.packingReversal = function(orderNo,HUNumber){
   var param ={DELIVERY:orderNo,HUKEY:HUNumber};
     return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true);
 }
+// VBKOK_WA-VBELN – DO number
+// VBKOK_WA- LGNUM – WH number
+// VBKOK_WA-VBELN – DO number
+// VBKOK_WA- LGNUM – WH number
+// VBKOK_WA-PACKING_REFRESH = ‘X’
+// VBKOK_WA- PACKING_FINAL = ‘X’
 
-exports.pgiUpdate = function(orderNo,currentDate){
+
+exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
   var param ={ 
-      VBKOK_WA:{VBELN_VL:orderNo,WABUC: "X",WADAT_IST: currentDate},
+      VBKOK_WA:{
+        VBELN_VL:orderNo,
+        WABUC: "X",
+        WADAT_IST: currentDate,
+        VBELN:orderNo,
+        LGNUM:warehouseNo
+        // PACKING_REFRESH:"X",
+        // PACKING_FINAL:"X"
+      },
       COMMIT:'X',
       DELIVERY:orderNo
     };
@@ -89,8 +104,8 @@ exports.pgiReversal = function(orderNo,currentDate){
     return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param);
 }
 
-exports.rgaReversal = function(orderNo,currentDate){
-     return this.pgiReversal(orderNo,currentDate);
+exports.rgaReversal = function(orderNo,currentDate,warehouseNo){
+     return this.pgiReversal(orderNo,currentDate,warehouseNo);
 }
 
 exports.reservation = function(ordero,currentDate){
@@ -190,18 +205,17 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
             client.invoke('BAPI_TRANSACTION_COMMIT',
               {WAIT:'X'},
               function(err, res) {
+                client.close();
                 if (err) {
                   // return console.error('Error invoking BAPI_TRANSACTION_COMMIT:', err);
                   reject(err);
-                  client.close();
                 }
                 console.log(res);
                 resolve(res);
-                client.close();
               });
           } else{
-            resolve(res);
             client.close();
+            resolve(res);
           }
 		    });
 		  

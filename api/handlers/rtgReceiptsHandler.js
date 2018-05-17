@@ -111,7 +111,7 @@ exports.removeItem=function(req,res){
 exports.confirmRga=function(req,res){
 	(async function () {
 		try {
-			var ret = await sapSvc.pgiUpdate(req.body.order.DONumber,req.body.currentDate);
+			var ret = await sapSvc.pgiUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
 
 			await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"RGA"));
 

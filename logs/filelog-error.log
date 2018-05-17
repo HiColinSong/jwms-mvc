@@ -21,3 +21,7 @@
 {"handler":"PackingHandler","function":"confirmPacking","error":"No material item found for the specified criteria","level":"error","message":"","timestamp":"2018-05-16T09:54:42.429Z"}
 {"handler":"PackingHandler","function":"confirmPacking","error":"No material item found for the specified criteria","level":"error","message":"","timestamp":"2018-05-16T09:55:41.261Z"}
 {"handler":"PackingHandler","function":"confirmPacking","error":"No material item found for the specified criteria","level":"error","message":"","timestamp":"2018-05-16T09:57:52.230Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":"Assignment material group PM Z001 to pack.mat.type ZPAL not made in Customiz.","level":"error","message":"","timestamp":"2018-05-17T03:00:00.259Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":"Assignment material group PM Z001 to pack.mat.type ZPAL not made in Customiz.","level":"error","message":"","timestamp":"2018-05-17T03:26:43.036Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":"Assignment material group PM Z001 to pack.mat.type ZPAL not made in Customiz.","level":"error","message":"","timestamp":"2018-05-17T03:27:38.959Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":"Delivery status only allows display mode","level":"error","message":"","timestamp":"2018-05-17T03:39:46.711Z"}

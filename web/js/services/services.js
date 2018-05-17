@@ -24,6 +24,11 @@
                method: 'GET',
                params: {type:"logout"}
              },
+
+             getDbInfo: { 
+              method: 'GET',
+              params: {type:"db-info"}
+            },
              //end authentication api
 
              //start sporeceipts api

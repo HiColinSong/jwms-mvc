@@ -42,9 +42,11 @@ app.get('/bxapi', function (req, res) {
  
 var auth=require('./api/handlers/authHandler');
 // app.get('/bxapi/transOrder/:orderNo.json',auth.authCheck,packingHandler.getTransOrder);
+// var info = require('./db-config/.db-config.json');
 app.get('/bxapi/check-login-status.json',auth.checkLoginStatus);
 app.post('/bxapi/login.json',auth.login);
 app.get('/bxapi/logout.json',auth.logout);
+app.get('/db-info.json',auth.dbInfo);
 
 var packingHandler = require('./api/handlers/packingHandler');
 // app.get('/bxapi/packing/get-order/:orderNo.json',auth.authCheck,packingHandler.getOrder);

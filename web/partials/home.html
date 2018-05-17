@@ -27,7 +27,20 @@
   </div>
   <!-- <h3>Guide for User Interface Experience Test</h3> -->
   <ol class="guide" style="font-size: 20px">
-  	<li>url: <a href="http://sgdevbx:8080">http://sgdevbx:8080</a></li>
+  	<li>url: <a href="{{url}}">{{url}}</a></li>
+  	<li>Connected SAP Server
+	  <ul>
+	  	<li>IP: {{dbInfo.sapInfo.ashost}}</li>
+	  	<li>Server ID: {{dbInfo.sapInfo.sysnr}}</li>
+	  	<li>Client: {{dbInfo.sapInfo.client}}</li>
+	  	<li>user: {{dbInfo.sapInfo.user}}</li>
+	  </ul>
+  	<li>Connected SQL Server
+	  <ul>
+	  	<li>Server name: {{dbInfo.sqlSvrInfo.server}}</li>
+	  	<li>Database: {{dbInfo.sqlSvrInfo.database}}</li>
+	  	<li>user: {{dbInfo.sqlSvrInfo.user}}</li>
+	  </ul>
   	<li>Login
 	  <ul>
 	  	<li>domain: Choose your domain</li>
@@ -149,3 +162,5 @@
       </li> -->
   </ol>
 </div>
+
+<pre ng-show="debug">dbInfo:{{dbInfo | json}}</pre>	

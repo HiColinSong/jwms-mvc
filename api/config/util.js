@@ -1,86 +1,86 @@
 'use strict';
 
- var orders = {
- 	to:{
-		toNo:"to123456",
-		doNo:"do123456",
-		customer:"c123456",
-		customerName:"Andrew"
-	},
-	do:{
-		"plannedItems": [
-			{
-				"DONumber": "0800379646",
-				"MaterialCode": "BMXP-2208",
-				"BatchNo": "W16120224",
-				"VendorBatch": "W16120224",
-				"DOItemNumber": "900001",
-				"DOQuantity": 25,
-				"ProductHierarchy": "100110011002100003",
-				"EANCode": "8888893016139"
-			},
-			{
-				"DONumber": "0800379646",
-				"MaterialCode": "BMXP-2736",
-				"BatchNo": "W16110620",
-				"VendorBatch": "W16110620",
-				"DOItemNumber": "900002",
-				"DOQuantity": 13,
-				"ProductHierarchy": "100110011002100003",
-				"EANCode": "8888893016344"
-			},
-			{
-				"DONumber": "0800379646",
-				"MaterialCode": "BMXP-3533",
-				"BatchNo": "W16110607",
-				"VendorBatch": "W16110607",
-				"DOItemNumber": "900003",
-				"DOQuantity": 12,
-				"ProductHierarchy": "100110011002100003",
-				"EANCode": "8888893016498"
-			}
-		],
-		"DONumber": "0800379646",
-		"DOCreationUser": "S.CHAN",
-		"DOCreationDate": "20170103",
-		"ShipToCustomer": "0000032501",
-		"plant": "3250",
-		"warehouseNo": "Z01"
-	},
-	po:{
-	 	poNo:"po345678",
-		vendor:"v345678",
-		vendorName:"Colin"
-	 },
-	 wo:{
-		"woNo":"wo112233",
-		"material":"m123456",
-		"batchNo":"btn123456",
-		"batchQuantity":19,
-		"balanceQuantity":12
-	}
- }
-  var item ={
-	  	serialNo:"180701",
-		batchNo:"45678901",
-		material:"1809-1234"
-	  };
+//  var orders = {
+//  	to:{
+// 		toNo:"to123456",
+// 		doNo:"do123456",
+// 		customer:"c123456",
+// 		customerName:"Andrew"
+// 	},
+// 	do:{
+// 		"plannedItems": [
+// 			{
+// 				"DONumber": "0800379646",
+// 				"MaterialCode": "BMXP-2208",
+// 				"BatchNo": "W16120224",
+// 				"VendorBatch": "W16120224",
+// 				"DOItemNumber": "900001",
+// 				"DOQuantity": 25,
+// 				"ProductHierarchy": "100110011002100003",
+// 				"EANCode": "8888893016139"
+// 			},
+// 			{
+// 				"DONumber": "0800379646",
+// 				"MaterialCode": "BMXP-2736",
+// 				"BatchNo": "W16110620",
+// 				"VendorBatch": "W16110620",
+// 				"DOItemNumber": "900002",
+// 				"DOQuantity": 13,
+// 				"ProductHierarchy": "100110011002100003",
+// 				"EANCode": "8888893016344"
+// 			},
+// 			{
+// 				"DONumber": "0800379646",
+// 				"MaterialCode": "BMXP-3533",
+// 				"BatchNo": "W16110607",
+// 				"VendorBatch": "W16110607",
+// 				"DOItemNumber": "900003",
+// 				"DOQuantity": 12,
+// 				"ProductHierarchy": "100110011002100003",
+// 				"EANCode": "8888893016498"
+// 			}
+// 		],
+// 		"DONumber": "0800379646",
+// 		"DOCreationUser": "S.CHAN",
+// 		"DOCreationDate": "20170103",
+// 		"ShipToCustomer": "0000032501",
+// 		"plant": "3250",
+// 		"warehouseNo": "Z01"
+// 	},
+// 	po:{
+// 	 	poNo:"po345678",
+// 		vendor:"v345678",
+// 		vendorName:"Colin"
+// 	 },
+// 	 wo:{
+// 		"woNo":"wo112233",
+// 		"material":"m123456",
+// 		"batchNo":"btn123456",
+// 		"batchQuantity":19,
+// 		"balanceQuantity":12
+// 	}
+//  }
+//   var item ={
+// 	  	serialNo:"180701",
+// 		batchNo:"45678901",
+// 		material:"1809-1234"
+// 	  };
 
 
-exports.getOrder=function(orderNo,type){
-	var order = orders[type];
-	if (order){
-		order[type+"No"]=orderNo;
-	}
-	return order;
-};
+// exports.getOrder=function(orderNo,type){
+// 	var order = orders[type];
+// 	if (order){
+// 		order[type+"No"]=orderNo;
+// 	}
+// 	return order;
+// };
 
-exports.getItem=function(serialNo){
-	var clone={};
-	 Object.assign(clone,item);
-	clone.serialNo=serialNo;
-	return clone;
-};
+// exports.getItem=function(serialNo){
+// 	var clone={};
+// 	 Object.assign(clone,item);
+// 	clone.serialNo=serialNo;
+// 	return clone;
+// };
 
 exports.formatDateTime=function(dateString){
 	let d=new Date(dateString);

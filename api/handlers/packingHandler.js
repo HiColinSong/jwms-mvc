@@ -310,7 +310,7 @@ exports.pgiUpdate=function(req,res){
 				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK==='C')){
 					throw new Error("The Document has been PGI!");
 				}
-			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate);
+			var ret = await sapSvc.pgiUpdate(req.body.orderNo,req.body.currentDate,req.session.user.DefaultWH);
 			//update SN in sap
 			var order = util.deliveryOrderConverter(sapOrder);
 			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);

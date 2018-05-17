@@ -1,7 +1,7 @@
 /*bx - services.js - Yadong Zhu 2017*/ (function() {
     'use strict';
     angular.module('bx.services')
-    .service('authSvc',['$rootScope','bxService',function($rootScope,apiSvc){
+    .service('authSvc',['$rootScope','$timeout','bxService',function($rootScope,$timeout,apiSvc){
         var userObj,isLogin;
         $rootScope.$on("loginStautsChange",function(){
             console.log("receive event:loginStautsChange");
@@ -25,8 +25,11 @@
                 }
             },
             checkLoginStatus:function(){
-                if (!$rootScope.authUser)
-                    apiSvc.checkLoginStatus();
+                if (!$rootScope.authUser){
+                    $timeout(function(){
+                        apiSvc.checkLoginStatus();
+                    },10)
+                }
             },
             user:function(){
                 return userObj;
