@@ -80,14 +80,11 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
       VBKOK_WA:{
         VBELN_VL:orderNo,
         WABUC: "X",
-        WADAT_IST: currentDate,
-        VBELN:orderNo,
-        LGNUM:warehouseNo
-        // PACKING_REFRESH:"X",
-        // PACKING_FINAL:"X"
+        WADAT_IST: currentDate
       },
       COMMIT:'X',
-      DELIVERY:orderNo
+      DELIVERY:orderNo,
+      IF_DATABASE_UPDATE:"1"
     };
     return invokeBAPI("WS_DELIVERY_UPDATE",param);
 }

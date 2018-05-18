@@ -41,11 +41,17 @@ client.connect(function(err) {
 
   console.log('Invoking WS_DELIVERY_UPDATE - for PGI');
   client.invoke('WS_DELIVERY_UPDATE',
-      {
-        VBKOK_WA:{VBELN : "0800379646", WABUC: "X", WADAT_IST:20180420}
-        ,COMMIT:"X"
-        , DELIVERY:"0800379646"
-      },
+  {
+    "VBKOK_WA": {
+      "VBELN_VL": "0800401239",
+      "WABUC": "X",
+      "WADAT_IST": "20180517",
+    },
+    "COMMIT":"X",
+    "DELIVERY":"0800401239",
+    "IF_DATABASE_UPDATE":"1"
+  },
+  
 
   //  { VBKOK_WA:{VBELN_VL: "0800401130",WABUC: "X",WADAT_IST: 20180420},
   //    COMMIT:"X",
