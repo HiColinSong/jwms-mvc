@@ -51,8 +51,8 @@ Barcode.prototype.parseBarcode=function(){
     var self = this;
     if (!self.barcode1&&!self.barcode2) return;
     // var barcode = (self.barcode1||"")+(self.barcode2||"");
-    // var ascii29 = String.fromCharCode(29);
-    var ascii29 = "|";
+    var ascii29 = String.fromCharCode(29);
+    // var ascii29 = "|";
     var parser = function(code){ 
         self.valid=self.valid||true;
         if (code.legnth<3){
