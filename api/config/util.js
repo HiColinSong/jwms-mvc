@@ -235,7 +235,7 @@ exports.getTransParams = function(order,TRANS){
 						CHARG: item.BatchNo,
 						SERIAL:item.SerialNo,
 						DOCNO: item.HUNumber,
-						ENDCUST:order.endUser,
+						ENDCUST:order.ShipToCustomer,
 						BXDATE:this.formatDateTime(item.PackedOn).date,
 						BXTIME:this.formatDateTime(item.PackedOn).time,
 						BXUSER:item.PackBy
@@ -254,7 +254,7 @@ exports.getTransParams = function(order,TRANS){
 					CHARG: item.BatchNo,
 					SERIAL:item.SerialNo,
 					DOCNO: order.DONumber,
-					ENDCUST:order.endUser,
+					ENDCUST:order.ShipToCustomer,
 					BXDATE:this.formatDateTime(item.PackedOn||item.ReceivedOn).date,
 					BXTIME:this.formatDateTime(item.PackedOn||item.ReceivedOn).time,
 					BXUSER:item.PackBy||item.ReceiptBy
