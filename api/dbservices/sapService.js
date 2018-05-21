@@ -80,13 +80,14 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
       VBKOK_WA:{
         VBELN_VL:orderNo,
         WABUC: "X",
-        WADAT_IST: currentDate
+        WADAT_IST: currentDate,
+        SPE_RESET_VLSTK:'X'
       },
       COMMIT:'X',
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
-    return invokeBAPI("WS_DELIVERY_UPDATE",param);
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param);
 }
 
 exports.pgiReversal = function(orderNo,currentDate){

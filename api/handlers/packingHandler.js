@@ -279,7 +279,7 @@ exports.reversal=function(req,res){
 			var info={
 				DONumber:req.params.orderNo,
 				Push2SAPStatus:'R',
-				PackStatus:0,
+				PackStatus:1,
 				DOStatus:'R',
 			}
 			await dbCommonSvc.UpdateDOStatus(info);
