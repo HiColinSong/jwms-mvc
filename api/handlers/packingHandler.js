@@ -46,10 +46,6 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
-			if (order.ShipToCustomer){
-				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
-				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
-			}
 			if (order&&order.DONumber){
 				util.removeIncompleteItem(order.plannedItems);
 				// if (order.confirmStatus!=="A"&&order.confirmStatus){

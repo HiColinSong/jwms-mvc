@@ -90,12 +90,13 @@ app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceipt
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);
+app.post('/bxapi/find-customer-name.json',auth.authCheck,commonHandler.getCustomerName);
 
 
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, this is an invalid URL.'});
 });
-// port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
-app.listen(process.env.PORT||8080, function () {
-    console.log('Node app is running on port '+(process.env.PORT||8080));
+// port must be set to 7070 because incoming http requests are routed from port 80 to port 8080
+app.listen(process.env.PORT||7070, function () {
+    console.log('Node app is running on port '+(process.env.PORT||7070));
 });

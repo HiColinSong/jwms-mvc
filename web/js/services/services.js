@@ -338,6 +338,12 @@
                   subtype:'get-qa-category-list'
                 },
                 isArray:true
+              },
+              getCustomerName:{
+                method: 'POST',
+                params:{
+                  type: 'find-customer-name'
+                }
               }
         }
       }
