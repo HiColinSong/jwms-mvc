@@ -25,9 +25,11 @@
             }
 
             $scope.submitReversals=function(){
+                utilSvc.pageLoading("start");
                 apiSvc.pickingReversals({order:$scope.order})
                         .$promise.then(
                             function(data){
+                                utilSvc.pageLoading("stop");
                                 if (data&&data.confirm==='success'){
                                     $scope.confirm={
                                         type:"success",
@@ -55,6 +57,7 @@
                                 }
                                 confirmSubmit.do($scope);
                             },function(err){
+                                utilSvc.pageLoading("stop");
                                 console.error(err);
                                 $scope.confirm={
                                     type:"danger",

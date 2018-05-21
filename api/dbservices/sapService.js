@@ -67,13 +67,6 @@ exports.packingReversal = function(orderNo,HUNumber){
   var param ={DELIVERY:orderNo,HUKEY:HUNumber};
     return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true);
 }
-// VBKOK_WA-VBELN – DO number
-// VBKOK_WA- LGNUM – WH number
-// VBKOK_WA-VBELN – DO number
-// VBKOK_WA- LGNUM – WH number
-// VBKOK_WA-PACKING_REFRESH = ‘X’
-// VBKOK_WA- PACKING_FINAL = ‘X’
-
 
 exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
   var param ={ 
@@ -184,17 +177,17 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
 		    function(err, res) {
 		      if (err) {
 		        // return console.error('Error invoking BAPI_PO_GETDETAIL:', err);
-            reject(err);
-            transactionCommit=false;
             client.close();
+            reject(err);
+            // transactionCommit=false;
             return
           }
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             // resolve(res);
+            client.close();
             reject(res.RETURN[0].MESSAGE);
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
-            transactionCommit=false;
-            client.close();
+            // transactionCommit=false;
             return
           }
           console.log("Invoking "+bapiName+" successfully");
@@ -214,6 +207,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
           } else{
             client.close();
             resolve(res);
+            return;
           }
 		    });
 		  

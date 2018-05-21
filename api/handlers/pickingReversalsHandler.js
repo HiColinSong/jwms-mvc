@@ -1,5 +1,6 @@
 'use strict';
 const util = require('../config/util');
+const logger = require("../config/logger");
 const sapSvc =require('../dbservices/sapService');
 const dbPickingSvc =require('../dbservices/dbPickingSvc');
 var order,promise;
@@ -29,7 +30,7 @@ exports.pickingReversals=function(req,res){
 		try {
 
 			var ret = await sapSvc.PickingReversals(req.body.order,req.session.user.DefaultWH);
-			
+			logger.debug({handler:"PickingReversals",function:"pickingReversals",params:req.body.order,ret:ret,message:"Picking Reversals call success!"});
 			var params={
 				TONumber:req.body.TONumber,
 				PickStatus:"D",
@@ -37,8 +38,9 @@ exports.pickingReversals=function(req,res){
 			} 
 			var result = await dbPickingSvc.setStatus(params);
 			result = result.recordset[0];
-			return res.status(200).send(result);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
+			logger.error({handler:"PickingReversals",function:"pickingReversals",params:req.body.order,ret:ret,message:error.message});
 			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
