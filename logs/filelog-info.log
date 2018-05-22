@@ -25,3 +25,6 @@
 {"handler":"PackingHandler","function":"confirmPacking","error":"Assignment material group PM Z001 to pack.mat.type ZPAL not made in Customiz.","level":"error","message":"","timestamp":"2018-05-17T03:26:43.035Z"}
 {"handler":"PackingHandler","function":"confirmPacking","error":"Assignment material group PM Z001 to pack.mat.type ZPAL not made in Customiz.","level":"error","message":"","timestamp":"2018-05-17T03:27:38.959Z"}
 {"handler":"PackingHandler","function":"confirmPacking","error":"Delivery status only allows display mode","level":"error","message":"","timestamp":"2018-05-17T03:39:46.708Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":{},"level":"error","message":"","timestamp":"2018-05-22T02:30:41.922Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":{},"level":"error","message":"","timestamp":"2018-05-22T02:30:49.774Z"}
+{"handler":"PackingHandler","function":"confirmPacking","error":{},"level":"error","message":"","timestamp":"2018-05-22T02:31:04.518Z"}

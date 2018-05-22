@@ -157,7 +157,7 @@
                                 utilSvc.pageLoading("start");
                                 apiSvc.getOrderForPacking(
                                     {orderNo:$route.current.params.DONumber,
-                                     PackStart:utilSvc.formatDate()}
+                                     PackStart:utilSvc.formatDateTime()}
                                 ).$promise.then(function(data){
                                     if (data){
                                         deferred.resolve(data);

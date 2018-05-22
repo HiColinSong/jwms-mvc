@@ -11,7 +11,8 @@
     },
     "deliveryOrderHeaderSTSFields": {
         "confirmStatus":"PKSTK",
-        "pgiStatus":"WBSTK"
+        "pgiStatus":"WBSTK",
+        "pickingStatus":"LVSTK"
      },
     "deliveryOrderItemFields": {
         "DONumber":"VBELN",

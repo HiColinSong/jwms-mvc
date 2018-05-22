@@ -228,6 +228,10 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
+			//check picking is confirmed:
+			if (req.body.order.pickingStatus!=='C'){
+					throw new Error("Please confirm the picking!");
+				}
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
 			ret = await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"PAK"));
@@ -331,7 +335,7 @@ exports.pgiReversal=function(req,res){
 			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
 			//update the SN in sap
 			var order = util.deliveryOrderConverter(sapOrder);
-			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			order.HUList = HUList;
 			await sapSvc.serialNoUpdate(util.getTransParams(order,"PGIX"));
 			return res.status(200).send({confirm:"success"});

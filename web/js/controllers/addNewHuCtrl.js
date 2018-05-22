@@ -11,7 +11,7 @@
                 apiSvc.createHu({MaterialCode:$scope.temp.material.MaterialCode,
                                  DONumber:$scope.DONumber,
                                  NumOfHu:$scope.temp.newHuNo,
-                                 createdOn:utilSvc.formatDate()})
+                                 createdOn:utilSvc.formatDateTime()})
                 .$promise.then(function(huList){
                     if (huList){
                         $modalInstance.close(huList);

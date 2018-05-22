@@ -25,8 +25,8 @@ const dbSvc=require("./dbCommonSvc");
     var params={
       TONumber:{type:"sql.VarChar(12)",value:info.TONumber},
       PickConfirmStatus:{type:'sql.Char(1)',value:info.PickConfirmStatus},
-      PickStart:{type:"sql.VarChar(10)",value:info.PickStart},
-      PickComplete:{type:'sql.VarChar(10)',value:info.PickComplete},
+      PickStart:{type:"sql.VarChar(22)",value:info.PickStart},
+      PickComplete:{type:'sql.VarChar(22)',value:info.PickComplete},
       PickStatus:{type:'sql.Char(1)',value:info.PickStatus},
       Push2SAPStatus:{type:'sql.Char(1)',value:info.Push2SAPStatus},
       SAPRefNo:{type:"sql.VarChar(20)",value:info.SAPRefNo}

@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 16-May-18 5:34:38 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 22-May-18 12:43:42 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -16,7 +16,7 @@ ALTER PROCEDURE [dbo].[InsertOrUpdatePacking]
 	@BinNumber varchar(20) = NULL,
     @SerialNo varchar(8) = NULL,
     @PackBy varchar(20),
-    @PackedOn varchar(10),
+    @PackedOn varchar(22),
     @Status char(1),
     @FullScanCode varchar(60),
     @Qty int = 1
@@ -37,7 +37,8 @@ BEGIN
         --find material code and assign the value
         IF (@MaterialCode is NULL) 
             BEGIN
-                SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+                --SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+				SELECT @MaterialCode=MaterialCode,@Qty=ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
             --define a temp table for finding the doItemNumber
@@ -87,6 +88,7 @@ BEGIN
                 RAISERROR ('Error:Exceed planned quantity.',16,1 );  
 
         -- check if the serial no is required if it is null
+		BEGIN TRY
 		IF (@SerialNo IS NULL) AND (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
             BEGIN
                 --check if the the serial no is enabled for the material
@@ -94,7 +96,10 @@ BEGIN
                 IF (@isSerialNoRequired='X')
                      RAISERROR ('Error:Serial Number is required',16,1 );
             END
-
+		END TRY
+		BEGIN CATCH
+			print 'BATCH NO does not follow X180602xxxx format';
+		END CATCH
         IF EXISTS (select * from dbo.SAP_DOHeader where DONumber=@DONumber and DOStatus=1)
             -- RAISERROR with severity 11-19 will cause execution to   
             -- jump to the CATCH block.  

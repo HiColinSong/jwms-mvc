@@ -1,24 +1,18 @@
 USE [BIOTRACK]
 GO
-
-/****** Object:  StoredProcedure [dbo].[BX_UpdateDOStatus]    Script Date: 27-Apr-18 11:43:33 AM ******/
-DROP PROCEDURE [dbo].[BX_UpdateDOStatus]
-GO
-
-/****** Object:  StoredProcedure [dbo].[BX_UpdateDOStatus]    Script Date: 27-Apr-18 11:43:33 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_UpdateDOStatus]    Script Date: 22-May-18 12:57:55 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[BX_UpdateDOStatus] 
+ALTER PROCEDURE [dbo].[BX_UpdateDOStatus] 
 (
 	@DONumber varchar(12),
 	@DOStatus char(1)=NULL,
-    @PackStart varchar(10)=NULL,
-    @PackComplete varchar(10)=NULL,
+    @PackStart varchar(22)=NULL,
+    @PackComplete varchar(22)=NULL,
 	@PackStatus char(1)=NULL,
 	@Push2SAPStatus char(1)=NULL,
 	@SAPRefNo nvarchar(20)=NULL
@@ -70,7 +64,4 @@ BEGIN
     END CATCH
     COMMIT TRANSACTION 
 END;
-
-GO
-
 

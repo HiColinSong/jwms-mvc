@@ -73,9 +73,9 @@ const sqlSvc=require("./sqlService");
     if (info.DOStatus)
       params.DOStatus={type:'sql.Char(1)',value:info.DOStatus};
     if (info.PackStart)
-      params.PackStart={type:'sql.VarChar(10)',value:info.PackStart};
+      params.PackStart={type:'sql.VarChar(22)',value:info.PackStart};
     if (info.PackComplete)
-      params.PackComplete={type:'sql.VarChar(10)',value:info.PackComplete};
+      params.PackComplete={type:'sql.VarChar(22)',value:info.PackComplete};
     if (info.PackStatus||infoPackStatus===0)
       params.PackStatus={type:'sql.Char(1)',value:info.PackStatus};
     if (info.Push2SAPStatus)

@@ -77,11 +77,11 @@
 		  		</tr> 
 		  		<tr ng-show="order.PickStart"> 
 		  			<td >Pick Start </td> 
-		  			<td>{{order.PickStart}}</td>
+		  			<td>{{order.PickStart|localDatetime}}</td>
 		  		</tr> 
 		  		<tr ng-show="order.PickComplete"> 
-		  			<td >Pik Complete</td> 
-		  			<td>{{order.PickComplete}}</td>
+		  			<td >Pick Complete</td> 
+		  			<td>{{order.PickComplete|localDatetime}}</td>
 		  		</tr> 
 		  		<tr ng-show="order.Push2SAPStatus"> 
 		  			<td >Pick Confirm</td> 

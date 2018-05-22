@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertHandlingUnits]    Script Date: 02-May-18 12:37:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertHandlingUnits]    Script Date: 22-May-18 12:35:25 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -12,7 +12,7 @@ ALTER PROCEDURE [dbo].[InsertHandlingUnits]
     @PackMaterial varchar(18),
     @CreatedBy varchar(20),
     @BUnit varchar(10),
-    @CreatedOn varchar(10)
+    @CreatedOn varchar(22)
 )
 AS
 --insert or update for table BX_PackHUnits

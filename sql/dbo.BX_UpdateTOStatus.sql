@@ -1,10 +1,17 @@
+USE [BIOTRACK]
+GO
+/****** Object:  StoredProcedure [dbo].[BX_UpdateTOStatus]    Script Date: 22-May-18 12:58:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
-CREATE PROCEDURE [dbo].[BX_UpdateTOStatus] 
+ALTER PROCEDURE [dbo].[BX_UpdateTOStatus] 
 (
 	@TONumber varchar(12),
 	@PickConfirmStatus char(1)=NULL,
-    @PickStart varchar(10)=NULL,
-    @PickComplete varchar(10)=NULL,
+    @PickStart varchar(22)=NULL,
+    @PickComplete varchar(22)=NULL,
 	@PickStatus char(1)=NULL,
 	@Push2SAPStatus char(1)=NULL,
 	@SAPRefNo nvarchar(20)=NULL
@@ -55,8 +62,6 @@ BEGIN
         END
     END CATCH
     COMMIT TRANSACTION 
+	SELECT * FROM dbo.BX_PickHeader WHERE TONumber=@TONumber
 END;
-
-GO
-
 

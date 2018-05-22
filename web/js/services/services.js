@@ -443,6 +443,21 @@
           
               return [year, month, day].join(separator||"");
           },
+          formatDateTime:function(date,separator) {
+            Number.prototype.padLeft = function(base,chr){
+              var  len = (String(base || 10).length - String(this).length)+1;
+              return len > 0? new Array(len).join(chr || '0')+this : this;
+          }
+          var d = (date)?new Date(date):new Date(),
+          dformat = [d.getUTCFullYear(),
+            (d.getUTCMonth()+1).padLeft(),
+            d.getUTCDate().padLeft(),
+            ].join('') +' ' +
+           [d.getUTCHours().padLeft(),
+            d.getUTCMinutes().padLeft(),
+            d.getUTCSeconds().padLeft()].join(':');
+            return dformat;
+        },
           formalizeOrderNo:function(orderNo) {
               if (orderNo&&orderNo.length>0&&orderNo.length<10){
                 return "0".repeat(10-orderNo.length)+orderNo;

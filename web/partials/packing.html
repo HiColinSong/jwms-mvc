@@ -119,12 +119,16 @@
 		  			<td>{{order.WarehouseNo}}</td>
 		  		</tr> 
 		  		<tr> 
-		  			<td >End User</td> 
+		  			<td >End Customer</td> 
 		  			<td>{{order.endUser}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >Confirm Status</td> 
 		  			<td>{{order.confirmStatus||'Not confirmed yet'}}</td>
+		  		</tr> 
+		  		<tr> 
+		  			<td >Picking Status</td> 
+		  			<td>{{order.pickingStatus||'Not done yet'}}</td>
 		  		</tr> 
 		  		<tr> 
 		  			<td >PGI Status</td> 
@@ -147,8 +151,8 @@
 		  			<td>{{temp.showHU.CreatedBy}}</td>
 		  		</tr> 
 		  		<tr ng-show="temp.showHU"> 
-		  			<td >HU Create Date</td> 
-		  			<td>{{temp.showHU.CreatedOn|date:'dd MMM yyyy'}}</td>
+		  			<td >HU Create Date time</td> 
+		  			<td>{{temp.showHU.CreatedOn|localDatetime}}</td>
 		  		</tr> 
 		  	</tbody> 
 		  </table>

@@ -13,7 +13,7 @@
                 params.EANCode=barcode.eanCode;
                 params.MaterialCode=barcode.materialCode;
                 params.BatchNo=barcode.batchNo;
-                params.scannedOn=utilSvc.formatDate();
+                params.scannedOn=utilSvc.formatDateTime();
                 params.FullScanCode=barcode.getFullBarcode();
                 params.Qty=barcode.quantity||1;
                 params.Status=0;

@@ -12,7 +12,7 @@ exports.InsertScanItem=function(info){
     BatchNo:{type:'sql.VarChar(20)',value:info.BatchNo},
     BinNumber:{type:'sql.VarChar(20)',value:info.BinNumber},
     PackBy:{type:'sql.VarChar(20)',value:info.PackBy},
-    PackedOn:{type:'sql.VarChar(10)',value:info.PackedOn},
+    PackedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
     FullScanCode:{type:'sql.VarChar(60)',value:info.FullScanCode},
     Status:{type:'sql.Char(1)',value:info.Status},
     Qty:{type:'sql.Int',value:info.Qty}
@@ -32,7 +32,7 @@ exports.InsertScanItem=function(info){
       Plant:{type:'sql.VarChar(4)',value:info.ShippingPoint},
       ShipToCustomer:{type:'sql.VarChar(8)',value:info.ShipToCustomer},
       DOStatus:{type:'sql.Char(1)',value:info.DOStatus},
-      PackStart:{type:'sql.VarChar(10)',value:info.PackStart},
+      PackStart:{type:'sql.VarChar(22)',value:info.PackStart},
       DOItemNumberList:{type:'sql.VarChar(3500)',value:info.DOItemNumberList},
       MaterialCodeList:{type:'sql.VarChar(8000)',value:info.MaterialCodeList},
       BatchNumberList:{type:'sql.VarChar(5500)',value:info.BatchNumberList},
@@ -49,7 +49,7 @@ exports.InsertScanItem=function(info){
       PackMaterial:{type:'sql.VarChar(18)',value:info.PackMaterial},
       CreatedBy:{type:'sql.VarChar(20)',value:info.CreatedBy},
       BUnit:{type:'sql.VarChar(10)',value:info.Domain},
-      CreatedOn:{type:'sql.VarChar(8)',value:info.CreatedOn}
+      CreatedOn:{type:'sql.VarChar(22)',value:info.CreatedOn}
     }
     return sqlSvc.callStoredProcedure("dbo.InsertHandlingUnits",params)
   }

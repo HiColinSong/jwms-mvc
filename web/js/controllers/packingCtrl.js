@@ -157,7 +157,7 @@
                 }
                 $scope.confirmPacking = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"packing"},{order:order,PackComplete:utilSvc.formatDate()}).$promise.
+                    apiSvc.confirmOperation({type:"packing"},{order:order,PackComplete:utilSvc.formatDateTime()}).$promise.
                     then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){

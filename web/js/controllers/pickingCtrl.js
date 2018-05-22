@@ -29,7 +29,8 @@
 
                 $scope.changePickingStatus=function(status){
                     var params={TONumber:$scope.TONumber}
-                    params[status]=utilSvc.formatDate();
+                    // params[status]=utilSvc.formatDate();
+                    params[status]=utilSvc.formatDateTime();
                     if ('Push2SAPStatus'===status){
                         params.Push2SAPStatus='C';
                         params.items=order.plannedItems;
