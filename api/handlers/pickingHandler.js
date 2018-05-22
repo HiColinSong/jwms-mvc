@@ -12,6 +12,10 @@ exports.getOrder=function(req,res){
 			var deliveryOrder = util.deliveryOrderConverter(sapDeliveryOrder);
 			order.PlannedGoodsDeliveryDate = deliveryOrder.PlannedGoodsDeliveryDate;
 			order.ShipToCustomer=deliveryOrder.ShipToCustomer;
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
+			}
 			//check status 
 			if (order&&order.TONumber){
 				// if (order.PickConfirmStatus==="X"){

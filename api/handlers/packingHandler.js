@@ -46,6 +46,10 @@ exports.getOrder=function(req,res){
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
 			var order = util.deliveryOrderConverter(sapOrder);
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
+			}
 			if (order&&order.DONumber){
 				util.removeIncompleteItem(order.plannedItems);
 				// if (order.confirmStatus!=="A"&&order.confirmStatus){
@@ -229,9 +233,9 @@ exports.confirmPacking=function(req,res){
 		var args,info,ret;
 		try {
 			//check picking is confirmed:
-			if (req.body.order.pickingStatus!=='C'){
-					throw new Error("Please confirm the picking!");
-				}
+			// if (req.body.order.pickingStatus!=='C'){
+			// 		throw new Error("Please confirm the picking!");
+			// 	}
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
 			ret = await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"PAK"));
@@ -248,7 +252,7 @@ exports.confirmPacking=function(req,res){
 		} catch (error) {
 			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
 			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
-			logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			// logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
 			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()

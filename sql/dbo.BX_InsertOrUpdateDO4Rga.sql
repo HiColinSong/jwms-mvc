@@ -1,14 +1,14 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdateDO]    Script Date: 05-May-18 11:06:29 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_RgaInsertOrUpdateDO]    Script Date: 22-May-18 4:57:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[BX_RgaInsertOrUpdateDO] 
+ALTER PROCEDURE [dbo].[BX_RgaInsertOrUpdateDO] 
 (
 	@DONumber varchar(12),
-	@DOCreationDate varchar(10),
+	@DOCreationDate varchar(22),
 	@DOCreationUser varchar(20),
 	@Plant varchar(4),
 	@ShipToCustomer varchar(12)=NULL,
@@ -66,6 +66,6 @@ SET @nth=1
 		SET @nth=@nth+1
         continue;
     END
-
+	SELECT * FROM dbo.BX_RgaDetails where DONumber=@DONumber
     PRINT 'insert or update of DOHeader and DODetail done!'
 	END

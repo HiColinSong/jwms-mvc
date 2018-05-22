@@ -1,12 +1,9 @@
 'use strict';
-
- var rfc = require('node-rfc');
- var Promise = require('Promise').default;
- var connParams =require("../../db-config/.db-config.json").sapConnParams;
-
- var client = new rfc.Client(connParams, true);
-
-console.log('Client Version: ', client.getVersion());
+  const logger = require("../config/logger"); 
+ const r3connect = require('r3connect');
+ var client;
+ const Promise = require('Promise').default;
+ const configuration =require("../../db-config/.db-config.json").sapConnParams;
 
 exports.getDeliveryOrder=function(orderNo){
 	var param = {
@@ -168,49 +165,37 @@ exports.serialNoUpdate=function(param){
 
 var invokeBAPI = function(bapiName,param,transactionCommit){
 	return new Promise(function(resolve,reject){
-	    client.connect(function(err) {
-		  if (err) {
-		  	reject(err);
-		    // return console.error('could not connect to server', err);
-		  }
-		  client.invoke(bapiName, param,
-		    function(err, res) {
-		      if (err) {
-		        // return console.error('Error invoking BAPI_PO_GETDETAIL:', err);
-            client.close();
-            reject(err);
-            // transactionCommit=false;
-            return
-          }
+    r3connect.Pool.get(configuration).acquire()
+    .then(function (rfcClient) {
+      // Actually call the back-end
+      client = rfcClient;
+      return client.invoke(bapiName, param);
+    })
+    .then(function (response) {
+          var res=response[0];
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             // resolve(res);
-            client.close();
-            reject(res.RETURN[0].MESSAGE);
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
-            // transactionCommit=false;
-            return
+            // reject(res.RETURN[0].MESSAGE);
+            throw new Error(res.RETURN[0].MESSAGE);
+            transactionCommit=false;
+            // return
+          } else if (transactionCommit){
+              console.log("Invoking BAPI_TRANSACTION_COMMIT");
+              return client.invoke('BAPI_TRANSACTION_COMMIT',{WAIT:'X'});
+          }else {
+            console.log("Invoking "+bapiName+" successfully");
+            return response;
           }
-          console.log("Invoking "+bapiName+" successfully");
-          if (transactionCommit){
-            console.log("Invoking BAPI_TRANSACTION_COMMIT");
-            client.invoke('BAPI_TRANSACTION_COMMIT',
-              {WAIT:'X'},
-              function(err, res) {
-                client.close();
-                if (err) {
-                  // return console.error('Error invoking BAPI_TRANSACTION_COMMIT:', err);
-                  reject(err);
-                }
-                console.log(res);
-                resolve(res);
-              });
-          } else{
-            client.close();
-            resolve(res);
-            return;
-          }
-		    });
-		  
-		});
+    })
+    .then(function(response){
+           resolve(response[0]);
+    })
+    .catch(function (error) {
+      // Output error
+        console.error('Error invoking'+bapiName+' :', error);
+        logger.error({bapiName:bapiName,param:param,error:error});
+        reject (error);
+    });
     });
 }

@@ -28,13 +28,13 @@
             $scope.barcode = itemSvc.getBarcodeObj();
 
             //get customer name
-            if (order.ShipToCustomer)
-                apiSvc.getCustomerName({ShipToCustomer:order.ShipToCustomer}).$promise.
-                then(function(data){
-                    order.ShipToCustomerName=data.customerName;
-                },function(err){
-                    console.error(err);
-                });
+            // if (order.ShipToCustomer)
+            //     apiSvc.getCustomerName({ShipToCustomer:order.ShipToCustomer}).$promise.
+            //     then(function(data){
+            //         order.ShipToCustomerName=data.customerName;
+            //     },function(err){
+            //         console.error(err);
+            //     });
 
             $scope.$watchCollection( "temp.showHU", function( hu ) {
                 if (hu){

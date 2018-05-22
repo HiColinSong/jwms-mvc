@@ -3,10 +3,10 @@
 const r3connect = require('r3connect');
 
 const configuration  = {
-  // "user": "BX_USER",
-  // "passwd": "P@ssw0rd",
-  // "ashost": "172.32.70.71",
-  // "sysnr": "00",
+  // "username": "BX_USER",
+  // "password": "P@ssw0rd",
+  // "applicationServer": "172.32.70.71",
+  // "instanceNumber": "00",
   // "client": "500"
   username: 'yd.zhu',
   password: 'yadong123',
@@ -31,13 +31,14 @@ r3connect.Pool.get(configuration).acquire()
       SIGN:"I",
       OPTION:"EQ",
       // DELIV_NUMB_LOW:"0800401144" //add leading 0
-      DELIV_NUMB_LOW:"0800401225 " //add leading 0
+      DELIV_NUMB_LOW:"0800401256 " //add leading 0
       }]
   });
 })
 .then(function (response) {
   // Output response
       console.log(JSON.stringify(response,null,2));
+      r3connect.Pool.destory();
 })
 .catch(function (error) {
   // Output error

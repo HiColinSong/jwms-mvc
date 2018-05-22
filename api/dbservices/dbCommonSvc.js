@@ -76,7 +76,7 @@ const sqlSvc=require("./sqlService");
       params.PackStart={type:'sql.VarChar(22)',value:info.PackStart};
     if (info.PackComplete)
       params.PackComplete={type:'sql.VarChar(22)',value:info.PackComplete};
-    if (info.PackStatus||infoPackStatus===0)
+    if (info.PackStatus||info.PackStatus===0)
       params.PackStatus={type:'sql.Char(1)',value:info.PackStatus};
     if (info.Push2SAPStatus)
       params.Push2SAPStatus={type:'sql.Char(1)',value:info.Push2SAPStatus};

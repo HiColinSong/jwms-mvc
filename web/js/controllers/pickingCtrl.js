@@ -19,12 +19,12 @@
             order.scannedItems=order.scannedItems||[];
             $scope.order=order;
             $scope.TONumber=order.TONumber;
-            apiSvc.getCustomerName({ShipToCustomer:order.ShipToCustomer}).$promise.
-            then(function(data){
-                order.ShipToCustomerName=data.customerName;
-            },function(err){
-                console.error(err);
-            });
+            // apiSvc.getCustomerName({ShipToCustomer:order.ShipToCustomer}).$promise.
+            // then(function(data){
+            //     order.ShipToCustomerName=data.customerName;
+            // },function(err){
+            //     console.error(err);
+            // });
                 
 
                 $scope.changePickingStatus=function(status){
