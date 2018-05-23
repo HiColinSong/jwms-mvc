@@ -232,10 +232,10 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
-			//check picking is confirmed:
-			// if (req.body.order.pickingStatus!=='C'){
-			// 		throw new Error("Please confirm the picking!");
-			// 	}
+			// check picking is confirmed:
+			if (req.body.order.pickingStatus!=='C'){
+					throw new Error("Please confirm the picking!");
+				}
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
 			args = util.getTransParams(req.body.order,"PAK");
