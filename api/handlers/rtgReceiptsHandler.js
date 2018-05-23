@@ -113,7 +113,9 @@ exports.confirmRga=function(req,res){
 		try {
 			var ret = await sapSvc.pgiUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
 
-			await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"RGA"));
+			var args = util.getTransParams(req.body.order,"RGA");
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 
 			var info={
 				DONumber:req.body.orderNo,
@@ -145,7 +147,9 @@ exports.rgaReversal=function(req,res){
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			order.scannedItems = scannedItems.recordset;
 			util.trimValues(order.scannedItems);
-			await sapSvc.serialNoUpdate(util.getTransParams(order,"RGAX"));
+			var args = util.getTransParams(order,"RGAX");
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});

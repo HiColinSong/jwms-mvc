@@ -238,7 +238,9 @@ exports.confirmPacking=function(req,res){
 			// 	}
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
-			ret = await sapSvc.serialNoUpdate(util.getTransParams(req.body.order,"PAK"));
+			args = util.getTransParams(req.body.order,"PAK");
+			if (args.IT_BX_STOCK.length>0)
+				ret = await sapSvc.serialNoUpdate(args);
 			//update DO status
 			var info={
 				DONumber:req.body.order.DONumber,
@@ -267,6 +269,10 @@ exports.reversal=function(req,res){
 			if (order.confirmStatus!=="C"){
 				throw new Error("The Delivery Order hasn't been confirmed yet!");
 			}
+			//todo pgi checking
+			if (order.pgiStatus==='C'){
+					throw new Error("The Document has been PGI!");
+				}
 			if (sapOrder.ET_HU_HEADER&&sapOrder.ET_HU_HEADER.length>0){
 				for (let i = 0; i < sapOrder.ET_HU_HEADER.length; i++) {
 					const hu = sapOrder.ET_HU_HEADER[i];
@@ -277,7 +283,9 @@ exports.reversal=function(req,res){
 			}
 			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(util.getTransParams(order,"PAKX"));
+			var args = util.getTransParams(order,"PAKX");
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 
 			//update DO status
 			var info={
@@ -319,7 +327,9 @@ exports.pgiUpdate=function(req,res){
 			var order = util.deliveryOrderConverter(sapOrder);
 			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(util.getTransParams(order,"PGI"));
+			var args = util.getTransParams(order,"PGI");
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
@@ -341,7 +351,9 @@ exports.pgiReversal=function(req,res){
 			var order = util.deliveryOrderConverter(sapOrder);
 			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			order.HUList = HUList;
-			await sapSvc.serialNoUpdate(util.getTransParams(order,"PGIX"));
+			var args = util.getTransParams(order,"PGIX");
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});

@@ -4,7 +4,6 @@
  var client;
  const Promise = require('Promise').default;
  const configuration =require("../../db-config/.db-config.json").sapConnParams;
-
 exports.getDeliveryOrder=function(orderNo){
 	var param = {
       IS_DLV_DATA_CONTROL:{
@@ -77,7 +76,7 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
-    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param);
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,false,true);
 }
 
 exports.pgiReversal = function(orderNo,currentDate){
@@ -89,7 +88,7 @@ exports.pgiReversal = function(orderNo,currentDate){
       I_TCODE:'VL09',
       I_COMMIT:'X'
     }
-    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param);
+    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
 }
 
 exports.rgaReversal = function(orderNo,currentDate,warehouseNo){
@@ -163,7 +162,7 @@ exports.serialNoUpdate=function(param){
     return invokeBAPI("ZIM_BX_STOCK_UPDATE",param);
 };
 
-var invokeBAPI = function(bapiName,param,transactionCommit){
+var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
 	return new Promise(function(resolve,reject){
     r3connect.Pool.get(configuration).acquire()
     .then(function (rfcClient) {
@@ -174,12 +173,11 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
     .then(function (response) {
           var res=response[0];
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
-            // resolve(res);
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
-            // reject(res.RETURN[0].MESSAGE);
+            if (reconnectRequired)
+              reconnect();
             throw new Error(res.RETURN[0].MESSAGE);
             transactionCommit=false;
-            // return
           } else if (transactionCommit){
               console.log("Invoking BAPI_TRANSACTION_COMMIT");
               return client.invoke('BAPI_TRANSACTION_COMMIT',{WAIT:'X'});
@@ -190,12 +188,20 @@ var invokeBAPI = function(bapiName,param,transactionCommit){
     })
     .then(function(response){
            resolve(response[0]);
+           if (reconnectRequired)
+              reconnect();
     })
     .catch(function (error) {
       // Output error
         console.error('Error invoking'+bapiName+' :', error);
+
         logger.error({bapiName:bapiName,param:param,error:error});
         reject (error);
     });
     });
+}
+
+var reconnect = function(){
+  r3connect.Pool.remove(configuration);
+  r3connect.Pool.get(configuration);
 }
