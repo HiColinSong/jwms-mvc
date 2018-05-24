@@ -182,6 +182,26 @@
                 templateUrl: 'partials/tools.html',
                 controller: 'toolsCtrl'
             })
+            .when('/admin', {
+                templateUrl: 'partials/admin.html',
+                controller: 'adminCtrl',
+                resolve:{
+                    userList:['$q','bxService',
+                        function($q,apiSvc){
+                            var deferred = $q.defer();
+                            apiSvc.getUserList().$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                            },function(err){
+                                deferred.reject(err);
+                            })
+                            return deferred.promise;
+                        }]
+                }
+            })
             .otherwise({
                 redirectTo: '/home'
             })

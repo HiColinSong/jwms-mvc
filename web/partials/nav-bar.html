@@ -52,6 +52,12 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
+           <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='admin')"> 
+            <a href="#/admin" active-link="active">
+              <span class="fa fa-universal-access fa-lg"></span>
+              Admin
+            </a>
+          </li>
            <li ng-show="!authUser"> 
             <a class="cursor-pointer" ng-click="login()">
               <span class="fa fa-sign-in fa-lg"></span>

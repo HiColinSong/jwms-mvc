@@ -91,6 +91,9 @@ app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceipt
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);
 app.post('/bxapi/find-customer-name.json',auth.authCheck,commonHandler.getCustomerName);
+app.get('/bxapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
+app.post('/bxapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
+app.post('/bxapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 
 
 app.get('*', function(req, res){

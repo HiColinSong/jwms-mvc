@@ -39,7 +39,7 @@ client.connect(function(err) {
   console.log('Invoking BAPI_WHSE_TO_GET_DETAIL');
   client.invoke('BAPI_WHSE_TO_GET_DETAIL',
     // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000167887'},
-    {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178282'},
+    {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178345'},
     // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178283'},
     function(err, res) {
       if (err) {

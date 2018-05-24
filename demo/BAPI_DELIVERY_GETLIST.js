@@ -58,7 +58,7 @@ client.connect(function(err) {
         SIGN:"I",
         OPTION:"EQ",
         // DELIV_NUMB_LOW:"0800401144" //add leading 0
-        DELIV_NUMB_LOW:"0800401225 " //add leading 0
+        DELIV_NUMB_LOW:"0800401271 " //add leading 0
        }]
     },
     function(err, res) {

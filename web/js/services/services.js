@@ -344,6 +344,27 @@
                 params:{
                   type: 'find-customer-name'
                 }
+              },
+              getUserList:{
+                method: 'GET',
+                params:{
+                  type: 'get-user-list'
+                },
+                isArray:true
+              },
+              addEditUser:{
+                method: 'POST',
+                params:{
+                  type: 'add-edit-user'
+                },
+                isArray:true
+              },
+              deleteUser:{
+                method: 'POST',
+                params:{
+                  type: 'delete-user'
+                },
+                isArray:true
               }
         }
       }

@@ -31,18 +31,19 @@ r3connect.Pool.get(configuration).acquire()
       SIGN:"I",
       OPTION:"EQ",
       // DELIV_NUMB_LOW:"0800401144" //add leading 0
-      DELIV_NUMB_LOW:"0800401256 " //add leading 0
+      DELIV_NUMB_LOW:"0800401272 " //add leading 0
       }]
   });
 })
 .then(function (response) {
   // Output response
       console.log(JSON.stringify(response,null,2));
-      r3connect.Pool.destory();
+      r3connect.Pool.remove(configuration);
 })
 .catch(function (error) {
   // Output error
     console.error('Error invoking BAPI_DELIVERY_GETLIST:', error);
+    r3connect.Pool.remove(configuration);
 });
 
 

@@ -6,7 +6,8 @@
 					function($scope, $route,$location, apiSvc) {
 						$scope.login = {
 							username : "",
-							password : ""
+							password : "",
+							domain: "BITSG"
 						};
 						$scope.submitForm = function() {
 							// form:"+$scope.login.username+":"+$scope.login.password);

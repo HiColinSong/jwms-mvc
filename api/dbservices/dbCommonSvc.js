@@ -27,7 +27,7 @@ const sqlSvc=require("./sqlService");
 
   //user profile
   exports.getUserProfile=function(userId){
-    var stmt = "select * from dbo.BX_UserProfile where UserID=@UserID";
+    var stmt = "select * from dbo.BX_UserProfile where UserID=@UserID and isActive='1'";
     let paramTypes={UserID:'sql.VarChar(20)'};
     let paramValues={UserID:userId};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
