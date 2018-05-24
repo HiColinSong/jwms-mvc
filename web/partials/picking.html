@@ -25,7 +25,7 @@
   <!-- Nav tabs -->
   <ul class="nav nav-tabs margin-bottom" role="tablist">
     <li role="presentation" ng-class="{'active':temp.showTab==='picking'}"><a class="cursor-pointer" ng-click="temp.showTab='picking'">Order Detail</a></li>
-    <li role="presentation" ng-show="order.pickingStatus" ng-class="{'active':temp.showTab==='serialNos'}"><a class="cursor-pointer" ng-click="temp.showTab='serialNos'">Serial Nos</a></li>
+    <li role="presentation" ng-show="order.plannedItems" ng-class="{'active':temp.showTab==='items'}"><a class="cursor-pointer" ng-click="temp.showTab='items'">Item Detail</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -89,14 +89,63 @@
 		  		</tr> 
 		  	</tbody> 
 		  </table>
-    </div>
-		<!-- <div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='serialNos'}"
-		 id="serialNos" scan-items items="order.items" type="picking" info="info">
-		 <div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='scanItem'}" 
-		 id="scanItem" scan-items order="order" type="picking" barcode="barcode" order-no="{{order.DONumber}}">
-    </div>
+		</div>
+		
+		<!-- item tab -->
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='items'}" id="items">
+			<table class="table padding-top table-striped border">
+				<thead> 
+					<tr>
+					<td>
+						<a class="cursor-pointer" ng-click="sortType = 'TOItemNumber'; sortReverse = !sortReverse">
+						Item Number
+						<span ng-show="sortType == 'TOItemNumber' && !sortReverse" class="fa fa-caret-down"></span>
+						<span ng-show="sortType == 'TOItemNumber' && sortReverse" class="fa fa-caret-up"></span>
+						</a>
+					</td>
+					<td>
+						<a class="cursor-pointer" ng-click="sortType = 'MaterialCode'; sortReverse = !sortReverse">
+						Material
+						<span ng-show="sortType == 'MaterialCode' && !sortReverse" class="fa fa-caret-down"></span>
+						<span ng-show="sortType == 'MaterialCode' && sortReverse" class="fa fa-caret-up"></span>
+						</a>
+					</td>
+					<td>
+						<a class="cursor-pointer" ng-click="sortType = 'BatchNo'; sortReverse = !sortReverse">
+						Batch No 
+						<span ng-show="sortType == 'BatchNo' && !sortReverse" class="fa fa-caret-down"></span>
+						<span ng-show="sortType == 'BatchNo' && sortReverse" class="fa fa-caret-up"></span>
+						</a>
+					</td>
+						
+					<td>
+						<a class="cursor-pointer" ng-click="sortType = 'ScanQty'; sortReverse = !sortReverse">
+						Qty
+						<span ng-show="sortType == 'ScanQty' && !sortReverse" class="fa fa-caret-down"></span>
+						<span ng-show="sortType == 'ScanQty' && sortReverse" class="fa fa-caret-up"></span>
+						</a>
+					</td>
+					<!-- <td width="10%" class="text-center">Action</td> -->
+						
+					</tr>
+				</thead> 
+				<tbody> 
+					<tr ng-if="order.plannedItems&&order.plannedItems.length>0" 
+						ng-repeat="(idx,item) in order.plannedItems | orderBy:sortType:sortReverse">
+
+					<td>{{item.TOItemNumber}}</td>
+					<td>{{item.MaterialCode}}</td>
+					<td>{{item.BatchNo}}</td>
+					<td>{{item.SerialNo}}</td>
+					<td>{{item.TOQuantity||1}}</td>
+				</tr>
+				<tr ng-if="!order.plannedItems||order.plannedItems.length==0">
+					<td colspan="5" class='empty-message'>No item.</td>
+				</tr>
+				</tbody> 
+			</table>
 	  
-  </div> -->
+  </div>
   <div class="button-group margin-top-20">
   	<div class="col-sm-3 col-xs-12 margin-top">
 	  	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="start pick"

@@ -49,7 +49,7 @@
         "MaterialCode":"MATERIAL",
         "BatchNo":"BATCH",
         "VendorBatch":"",
-        "TOQuantity":"",
+        "TOQuantity":"SRCTGTQTYB",
         "Plant":"PLANT",
         "Cancel":"CONFIRM_IND"
     },
