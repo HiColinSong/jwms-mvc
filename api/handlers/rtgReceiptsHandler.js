@@ -111,7 +111,10 @@ exports.removeItem=function(req,res){
 exports.confirmRga=function(req,res){
 	(async function () {
 		try {
-			var ret = await sapSvc.pgiUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
+			if (req.body.order.pgiStatus==="C"){
+				throw new Error("The document has been PGR!");
+			}
+			var ret = await sapSvc.pgrUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
 
 			var args = util.getTransParams(req.body.order,"RGA");
 			if (args.IT_BX_STOCK.length>0)
@@ -124,7 +127,7 @@ exports.confirmRga=function(req,res){
 			await dbCommonSvc.UpdateDOStatus(info);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			return res.status(400).send({error:true,message:error.message|error});
+			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
 };
@@ -142,7 +145,7 @@ exports.rgaReversal=function(req,res){
 			if (order.pgiStatus!=="C"){
 				throw new Error("The Document hasn't been PGR yet.");
 			}
-			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
+			var ret = await sapSvc.pgrReversal(req.body.orderNo,req.body.currentDate);
 			//update the SN in sap
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			order.scannedItems = scannedItems.recordset;

@@ -73,6 +73,24 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
         SPE_RESET_VLSTK:'X'
       },
       COMMIT:'X',
+      SYNCHRON:'X',
+      DELIVERY:orderNo,
+      IF_DATABASE_UPDATE:"1"
+    };
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,false,true);
+}
+
+exports.pgrUpdate = function(orderNo,currentDate,warehouseNo){
+  var param ={ 
+      VBKOK_WA:{
+        VBELN_VL:orderNo,
+        WABUC: "X",
+        SPE_AUTO_GR:'X',
+        WADAT_IST: currentDate,
+        SPE_RESET_VLSTK:'X'
+      },
+      COMMIT:'X',
+      SYNCHRON:'X',
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
@@ -90,10 +108,21 @@ exports.pgiReversal = function(orderNo,currentDate){
     }
     return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
 }
-
-exports.rgaReversal = function(orderNo,currentDate,warehouseNo){
-     return this.pgiReversal(orderNo,currentDate,warehouseNo);
+exports.pgrReversal = function(orderNo,currentDate){
+  var param ={
+      I_VBELN:orderNo,
+      I_BUDAT:currentDate,
+      I_VBTYP:'J',
+      I_COUNT:'001',
+      I_TCODE:'VL09',
+      I_COMMIT:'X'
+    }
+    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
 }
+
+// exports.rgaReversal = function(orderNo,currentDate,warehouseNo){
+//      return this.pgiReversal(orderNo,currentDate,warehouseNo);
+// }
 
 exports.reservation = function(ordero,currentDate){
   var param ={ 
@@ -130,11 +159,12 @@ exports.confirmPicking=function(orderNo,warehouseNo,items){
       };
       param.T_LTAP_CONF=[];
       for (let i = 0; i < items.length; i++) {
-        param.T_LTAP_CONF.push({
-          TANUM:orderNo,
-          TAPOS:items[i].TOItemNumber,
-          SQUIT:"X"
-        });
+        if (items[i].Cancel!=='X')
+          param.T_LTAP_CONF.push({
+            TANUM:orderNo,
+            TAPOS:items[i].TOItemNumber,
+            SQUIT:"X"
+          });
       }
     return invokeBAPI("L_TO_CONFIRM",param);
 };
@@ -188,7 +218,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
     })
     .then(function(response){
            resolve(response[0]);
-           if (reconnectRequired)
+           if (reconnectRequired||true)
               reconnect();
     })
     .catch(function (error) {

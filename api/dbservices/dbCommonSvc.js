@@ -12,6 +12,13 @@ const sqlSvc=require("./sqlService");
     var stmt = "select MaterialCode,MaterialDesc from dbo.SAPPkgMaterials";
     return sqlSvc.sqlQuery(stmt);
   }
+  //get user List
+  exports.getUserList=function(domain){
+    var stmt = "select * from dbo.BX_UserProfile where DOMAIN=@DOMAIN";
+    let paramTypes={DOMAIN:'sql.VarChar(20)'};
+    let paramValues={DOMAIN:domain};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues);
+  }
   //get getQASampleCategoryList
   exports.getQASampleCategoryList=function(){
     var stmt = "select QASampleID,QASampleDesc from dbo.BX_QASampleCategory";

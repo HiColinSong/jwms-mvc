@@ -19,6 +19,15 @@ exports.authCheck=function(req, res, next) {
 	  else
 	    return res.sendStatus(401);
 };
+
+exports.adminCheck=function(req, res, next) {
+		if (req.session&&req.session.user&&
+			 (req.session.user.UserRole==='superAdmin'||
+			  req.session.user.UserRole==='admin'))
+	   next();
+	  else
+	    return res.sendStatus(401);
+};
 exports.login=function(req, res) {
 	session=req.session;
 	fullUsername=req.body.domain+"\\"+req.body.username;

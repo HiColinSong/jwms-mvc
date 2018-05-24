@@ -33,3 +33,14 @@ exports.getCustomerName=function(req,res){
 		}
 	})()
 };
+
+exports.getUserList=function(req,res){
+	(async function () {
+		try {
+			var list = await dbCommonSvc.getUserList(req.session.user.Domain);
+			return res.status(200).send(list.recordset);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+};
