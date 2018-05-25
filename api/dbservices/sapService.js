@@ -56,12 +56,12 @@ exports.confirmPacking=function(order){
         }
       }
     }
-    return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true);
+    return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true,true);
 };
 
 exports.packingReversal = function(orderNo,HUNumber){
   var param ={DELIVERY:orderNo,HUKEY:HUNumber};
-    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true);
+    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true,true);
 }
 
 exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
@@ -73,7 +73,7 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
         SPE_RESET_VLSTK:'X'
       },
       COMMIT:'X',
-      SYNCHRON:'X',
+      // SYNCHRON:'X',
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
@@ -97,7 +97,7 @@ exports.pgrUpdate = function(orderNo,currentDate,warehouseNo){
     return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,false,true);
 }
 
-exports.pgiReversal = function(orderNo,currentDate){
+exports.pgiReversal = function(orderNo,deliveryType,currentDate){
   var param ={
       I_VBELN:orderNo,
       I_BUDAT:currentDate,
@@ -108,11 +108,12 @@ exports.pgiReversal = function(orderNo,currentDate){
     }
     return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
 }
-exports.pgrReversal = function(orderNo,currentDate){
+exports.pgrReversal = function(orderNo,deliveryType,currentDate){
   var param ={
       I_VBELN:orderNo,
       I_BUDAT:currentDate,
       I_VBTYP:'J',
+      // I_VBTYP:deliveryType,
       I_COUNT:'001',
       I_TCODE:'VL09',
       I_COMMIT:'X'
@@ -132,7 +133,7 @@ exports.reservation = function(ordero,currentDate){
         {PLANT:order.plant,ENTRY_QNT:order.quantity, RESERV_NO: order.orderNo, RES_ITEM: order.itemNo}        
       ]
   }
-    return invokeBAPI("BAPI_GOODSMVT_CREATE",param);
+    return invokeBAPI("BAPI_GOODSMVT_CREATE",param,false,true);
 }
 
 exports.getPurchaseOrder=function(orderNo){
@@ -166,7 +167,7 @@ exports.confirmPicking=function(orderNo,warehouseNo,items){
             SQUIT:"X"
           });
       }
-    return invokeBAPI("L_TO_CONFIRM",param);
+    return invokeBAPI("L_TO_CONFIRM",param,false,true);
 };
 
 exports.PickingReversals=function(order,warehouseNo){
@@ -185,11 +186,11 @@ exports.PickingReversals=function(order,warehouseNo){
         })
       }
     }
-    return invokeBAPI("L_TO_CANCEL",param);
+    return invokeBAPI("L_TO_CANCEL",param,false,true);
 };
 
 exports.serialNoUpdate=function(param){
-    return invokeBAPI("ZIM_BX_STOCK_UPDATE",param);
+    return invokeBAPI("ZIM_BX_STOCK_UPDATE",param,false,true);
 };
 
 var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
@@ -204,8 +205,6 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
           var res=response[0];
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
-            if (reconnectRequired)
-              reconnect();
             throw new Error(res.RETURN[0].MESSAGE);
             transactionCommit=false;
           } else if (transactionCommit){
@@ -218,7 +217,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
     })
     .then(function(response){
            resolve(response[0]);
-           if (reconnectRequired||true)
+           if (reconnectRequired)
               reconnect();
     })
     .catch(function (error) {
@@ -226,6 +225,8 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
         console.error('Error invoking'+bapiName+' :', error);
 
         logger.error({bapiName:bapiName,param:param,error:error});
+        if (reconnectRequired)
+          reconnect();
         reject (error);
     });
     });

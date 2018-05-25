@@ -123,3 +123,30 @@ BEGIN
 	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
 
 END
+
+
+--execute inserOrUpdatePacking
+EXEC [dbo].[InsertOrUpdatePacking] 
+	@DONumber ='0800401167',
+	@EANCode = '08889912345678',
+	@HUNumber ='118052100008',
+    @MaterialCode ='BMX6-2529',
+    @BatchNo ='W17020095',
+	@BinNumber ='111',
+    @SerialNo ='170112149',
+    @PackBy ='yd.zhu',
+    @PackedOn ='20180525 10:08:02',
+    @Status='2',
+    @FullScanCode ='08889912345678afas',
+    @Qty = 1
+
+
+	select * FROM dbo.SAP_DODetail where DONumber='0800401167'
+		select * FROM dbo.BX_PackDetails where DONumber='0800401167'
+
+                EXEC dbo.SP_IsValidSerialNo 
+                @sFullScanCode=@FullScanCode, 
+                @sTransactionType='OUT',
+                @sSerialNo=@SerialNo,
+                @sMaterialCode=@MaterialCode,
+                @sBatchNo = @BatchNo 

@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 22-May-18 12:43:42 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 25-May-18 9:45:34 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ ALTER PROCEDURE [dbo].[InsertOrUpdatePacking]
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
 	@BinNumber varchar(20) = NULL,
-    @SerialNo varchar(8) = NULL,
+    @SerialNo varchar(10) = NULL,
     @PackBy varchar(20),
     @PackedOn varchar(22),
     @Status char(1),
@@ -49,7 +49,7 @@ BEGIN
                         EANCode varchar(16),
                         MaterialCode varchar(18),
                         BatchNo varchar(20),
-                        SerialNo varchar(8),
+                        SerialNo varchar(10),
                         ActualQty int,
                         PlanQty int
                     );
@@ -88,18 +88,20 @@ BEGIN
                 RAISERROR ('Error:Exceed planned quantity.',16,1 );  
 
         -- check if the serial no is required if it is null
-		BEGIN TRY
-		IF (@SerialNo IS NULL) AND (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+		IF (@SerialNo IS NULL) 
             BEGIN
+		        BEGIN TRY
                 --check if the the serial no is enabled for the material
-                SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+                IF (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+                    SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+		        END TRY
+                BEGIN CATCH
+                    print 'BATCH NO does not follow X180602xxxx format';
+                END CATCH
                 IF (@isSerialNoRequired='X')
                      RAISERROR ('Error:Serial Number is required',16,1 );
             END
-		END TRY
-		BEGIN CATCH
-			print 'BATCH NO does not follow X180602xxxx format';
-		END CATCH
+
         IF EXISTS (select * from dbo.SAP_DOHeader where DONumber=@DONumber and DOStatus=1)
             -- RAISERROR with severity 11-19 will cause execution to   
             -- jump to the CATCH block.  
@@ -116,6 +118,14 @@ BEGIN
 
         IF EXISTS (select * from dbo.BX_PackDetails where SerialNo=@SerialNo)
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
+
+        --check if the serialNo is valid
+       EXEC dbo.SP_IsValidSerialNo 
+                @sFullScanCode=@FullScanCode, 
+                @sTransactionType='OUT',
+                @sSerialNo=@SerialNo,
+                @sMaterialCode=@MaterialCode,
+                @sBatchNo = @BatchNo                    
 
         IF (@SerialNo is NULL) AND 
             EXISTS (SELECT DONumber from dbo.BX_PackDetails 

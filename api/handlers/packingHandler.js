@@ -346,11 +346,11 @@ exports.pgiReversal=function(req,res){
 				(sapOrder.ET_DELIVERY_HEADER_STS[0].WBSTK!=='C')){
 					throw new Error("The Document hasn't been PGI!");
 				}
-			var ret = await sapSvc.pgiReversal(req.body.orderNo,req.body.currentDate);
-			//update the SN in sap
-			var order = util.deliveryOrderConverter(sapOrder);
-			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
-			order.HUList = HUList;
+				var order = util.deliveryOrderConverter(sapOrder);
+				var ret = await sapSvc.pgiReversal(req.body.orderNo,order.DeliveryType,req.body.currentDate);
+				var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
+				order.HUList = HUList;
+				//update the SN in sap
 			var args = util.getTransParams(order,"PGIX");
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);

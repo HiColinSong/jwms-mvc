@@ -145,7 +145,7 @@ exports.rgaReversal=function(req,res){
 			if (order.pgiStatus!=="C"){
 				throw new Error("The Document hasn't been PGR yet.");
 			}
-			var ret = await sapSvc.pgrReversal(req.body.orderNo,req.body.currentDate);
+			var ret = await sapSvc.pgrReversal(req.body.orderNo,order.DeliveryType,req.body.currentDate);
 			//update the SN in sap
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			order.scannedItems = scannedItems.recordset;

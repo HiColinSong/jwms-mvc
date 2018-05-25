@@ -24,7 +24,7 @@
     	 	$scope.reset=function(){
                 $scope.user={};
                 angular.copy(user,$scope.user);
-                $scope.user.isActive=($scope.user.isActive===undefined)?'0':$scope.user.isActive;
+                $scope.user.isActive=($scope.user.isActive===undefined)?'1':$scope.user.isActive;
                 $scope.user.DefaultWH=$scope.user.DefaultWH||$rootScope.authUser.DefaultWH;
                 $scope.user.Domain=$scope.user.Domain||$rootScope.authUser.Domain;
                 $scope.user.UserRole=$scope.user.UserRole||"normal";

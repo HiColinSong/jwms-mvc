@@ -7,7 +7,8 @@
        "Plant":"WERKS",
        "WarehouseNo":"LGNUM",
        "ShippingPoint":"VSTEL",
-       "PlannedGoodsDeliveryDate":"WADAT"
+       "PlannedGoodsDeliveryDate":"WADAT",
+       "DeliveryType":"VBTYP"
     },
     "deliveryOrderHeaderSTSFields": {
         "confirmStatus":"PKSTK",
