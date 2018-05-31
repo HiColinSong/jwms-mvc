@@ -160,6 +160,37 @@
                         }]
                 }
             })
+            .when('/fulfillment/reservation/:resvNo?', {
+                templateUrl: 'partials/reservation.html',
+                controller: 'reservationCtrl',
+                resolve:{
+                    resvDoc:['$q','$route','bxService','utilSvc',
+                        function($q,$route,apiSvc,utilSvc){
+                            var deferred = $q.defer();
+                            if ($route.current.params.resvNo){
+                                utilSvc.pageLoading("start");
+                                apiSvc.getReservationDoc(
+                                    {resvNo:$route.current.params.resvNo}
+                                ).$promise.then(function(data){
+                                    if (data){
+                                        deferred.resolve(data);
+                                        utilSvc.pageLoading("stop");
+                                    } else {
+                                        deferred.resolve(undefined);
+                                        utilSvc.pageLoading("stop");
+                                    }
+                                },function(err){
+                                    deferred.reject(err);
+                                    utilSvc.pageLoading("stop");
+                                })
+                            } else {
+                                deferred.resolve(undefined)
+                                utilSvc.pageLoading("stop");
+                            }
+                            return deferred.promise;
+                        }]
+                }
+            })
             .when('/fulfillment/tools/:toolType?', {
                 templateUrl: 'partials/tools.html',
                 controller: 'toolsCtrl'

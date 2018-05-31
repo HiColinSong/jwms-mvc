@@ -110,36 +110,30 @@ exports.formatDateTime=function(dateString){
 	return _to;
 }
  exports.reservationConverter = function (doc){
-	 var _to = {plannedItems:[]};
+	 var _resv = {plannedItems:[]};
 	 var headerFields=sapFields.reservationHeaderFields;
 	 var itemFields=sapFields.reservationItemFields;
 	 var header,items,item;
-	 if (doc){
-	 	for (let key in reservationFields) {
-			_to[key]=reservation[reservationFields[key]];
-		 }
-	 }
-	 if (doc.TOHEADERDATA&&doc.TOHEADERDATA.length>0){
-		 header = doc.TOHEADERDATA[0];
+
+	 if (doc.RESERVATION_HEADER){
+		 header = doc.RESERVATION_HEADER;
 	 	for (let key in headerFields) {
-			_to[key]=header[headerFields[key]];
+			_resv[key]=header[headerFields[key]];
 		 }
 	 }
-	 if (doc.TOITEMDATA&&doc.TOITEMDATA.length>0){
-		 items = doc.TOITEMDATA;
+	 if (doc.RESERVATION_ITEMS&&doc.RESERVATION_ITEMS.length>0){
+		 items = doc.RESERVATION_ITEMS;
 		for (let i = 0; i < items.length; i++) {
 			item = items[i];
-			_to.plannedItems.push({});
+			_resv.plannedItems.push({});
 			for (let key in itemFields) {
-				_to.plannedItems[i][key]=item[itemFields[key]];
-				// if (_to.plannedItems[i][key]&&(typeof _to.plannedItems[i][key]==="string"))
-				// 	_to.plannedItems[i][key]=_to.plannedItems[i][key].replace(/^0+/, '');//remove leading 0s
-				if (_to.plannedItems[i][key]&&(key ==="TOQuantity"))
-					_to.plannedItems[i][key]=parseInt(_to.plannedItems[i][key]);
+				_resv.plannedItems[i][key]=item[itemFields[key]];
+				// if (_resv.plannedItems[i][key]&&(key ==="Quantity"))
+				// 	_resv.plannedItems[i][key]=parseInt(_resv.plannedItems[i][key]);
 			}
 		}
 	}
-	return _to;
+	return _resv;
 }
 
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0

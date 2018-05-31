@@ -83,7 +83,7 @@
                                 plannedItems[i].ScanQty+=scannedItems[j].ScanQty;
                             }
                     }
-                    if (plannedItems[i].ScanQty<plannedItems[i].DOQuantity){
+                    if (plannedItems[i].ScanQty<(plannedItems[i].DOQuantity||plannedItems[i].Quantity)){
                         confirmReady=false;
                     }
                 }

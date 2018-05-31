@@ -39,7 +39,7 @@ client.connect(function(err) {
   console.log('Invoking BAPI_RESERVATION_GETDETAIL');
   client.invoke('BAPI_RESERVATION_GETDETAIL',
     // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000167887'},
-    {RESERVATION:'1687562'},
+    {RESERVATION:'0001687562'},
     // {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178283'},
     function(err, res) {
       if (err) {

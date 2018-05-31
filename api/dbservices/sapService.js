@@ -193,6 +193,10 @@ exports.PickingReversals=function(order,warehouseNo){
 exports.serialNoUpdate=function(param){
     return invokeBAPI("ZIM_BX_STOCK_UPDATE",param,false,true);
 };
+exports.getReservationDoc=function(resvNo){
+    var param = {RESERVATION:resvNo};
+    return invokeBAPI("BAPI_RESERVATION_GETDETAIL",param);
+};
 
 var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
 	return new Promise(function(resolve,reject){

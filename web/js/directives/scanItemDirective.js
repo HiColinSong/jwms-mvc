@@ -24,6 +24,10 @@
                             scope.createdByFieldDisplay = "Receipt By";
                             scope.createdByFieldName = "ReceiptBy";
                             scope.itemNoFieldName = "DOItemNumber";
+                        } else if (scope.type==='reservation'){
+                            scope.createdByFieldDisplay = "Created By";
+                            scope.createdByFieldName = "CreatedBy";
+                            scope.itemNoFieldName = "ResvItemNumber";
                         }
                         scope.findItem=function(){
                             scope.barcode.parseBarcode();

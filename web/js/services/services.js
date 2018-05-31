@@ -51,6 +51,14 @@
                   subtype:'reversal'
                 }
               },
+              reservationReversals:{
+                method: 'post',
+                headers: {'Accept': 'application/json'},
+                params:{
+                  type: 'reservation', 
+                  subtype:'reversal'
+                }
+              },
             //start rtgreceipt api
             getRtgDeliveryOrder:{ //  /bxapi/rtgreceipts/get-order.json
                 method: 'POST',
@@ -229,7 +237,15 @@
                   type: 'view-log'
                 },
                 isArray:true
-              }
+              },
+              getReservationDoc:{ 
+                method: 'POST',
+                params: {
+                    type: 'reservation',
+                    subtype: 'get-doc'
+                },
+                cache:false
+            }
         }
       }
        

@@ -87,6 +87,13 @@ var pickingReversalsHandler = require('./api/handlers/pickingReversalsHandler');
 app.post('/bxapi/picking-reversals/get-order.json',auth.authCheck,pickingReversalsHandler.getOrder);
 app.post('/bxapi/picking-reversals/reversals.json',auth.authCheck,pickingReversalsHandler.pickingReversals);
 
+var reservationHandler = require('./api/handlers/reservationHandler');
+app.post('/bxapi/reservation/get-doc.json',auth.authCheck,reservationHandler.getResvDoc);
+app.post('/bxapi/reservation/add-item.json',auth.authCheck,reservationHandler.addItem);
+app.post('/bxapi/reservation/remove-item.json',auth.authCheck,reservationHandler.removeItem);
+app.post('/bxapi/reservation/confirm.json',auth.authCheck,reservationHandler.confirmReservation);
+app.post('/bxapi/reservation/reversal.json',auth.authCheck,reservationHandler.reservationReversal);
+
 var rtgReceiptsHandler = require('./api/handlers/rtgReceiptsHandler');
 app.post('/bxapi/rtgreceipts/get-order.json',auth.authCheck,rtgReceiptsHandler.getOrder);
 app.post('/bxapi/rtgreceipts/add-item.json',auth.authCheck,rtgReceiptsHandler.addItem);

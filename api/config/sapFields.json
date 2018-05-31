@@ -63,6 +63,7 @@
         "ResvItemNumber":"RES_ITEM",
         "MaterialCode":"MATERIAL",
         "BatchNo":"BATCH",
+        "Quantity":"QUANTITY",
         "ResvStatus":"WITHDRAWN"
     },
     "purchaseOrderFields":{}
