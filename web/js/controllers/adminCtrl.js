@@ -15,7 +15,8 @@
                 controller: "addEditUserCtrl",
                 backdrop: "static",
                 resolve:{
-                    user:function(){return user;}
+                    user:function(){return user;},
+                    userList:function(){return $scope.userList}
                 }
             });
             modalInstance.result.then(function(userList) {

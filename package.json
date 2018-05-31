@@ -31,8 +31,9 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "mssql": "^4.1.0",
-    "node-rfc": "0.1.15",
+    "node-rfc": "^0.1.15",
     "r3connect": "^1.1.0",
+    "reverse-line-reader": "^0.2.6",
     "tedious": "2.2.4",
     "winston": "^2.4.2"
   },

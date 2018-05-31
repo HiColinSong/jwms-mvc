@@ -39,10 +39,10 @@
                 <td width="25%" class="text-center">{{user.DefaultWH}}</td>
                 <td width="25%" class="text-center">{{(user.isActive==='1')?'Active':'Inactive'}}</td>
                 <td width="25%" class="text-center">
-                    <button type="button" class="btn btn-info btn-xs" ng-click="addOrEditUser(user)">
+                    <button type="button" class="btn btn-info btn-xs" ng-disabled="user.UserRole!=='normal'&&authUser.UserRole!=='superAdmin'" ng-click="addOrEditUser(user)">
                         Edit 
                     </button>
-                    <button type="button" class="btn btn-danger btn-xs" confirm-required="{{user.UserID}}" 
+                    <button type="button" class="btn btn-danger btn-xs" ng-disabled="user.UserRole!=='normal'&&authUser.UserRole!=='superAdmin'" confirm-required="{{user.UserID}}" 
                             ng-click="deleteUser(user)">
                         delete 
                     </button>

@@ -6,6 +6,7 @@
 // // const dbPackingSvc =require('../dbservices/dbPackingSvc');
 const dbCommonSvc=require('../dbservices/dbCommonSvc')
 const sapSvc =require('../dbservices/sapService');
+var Promise = require('Promise').default
 var material, eanCode;
 
 exports.getMaterial=function(req,res){
@@ -65,4 +66,34 @@ exports.deleteUser=function(req,res){
 			return res.status(200).send({error:true,message:error.message});
 		}
 	})()
+};
+exports.viewLog=function(req,res){
+	var lineReader = require('reverse-line-reader');
+	var maxLine = 50;
+	var i=0,logs=[];
+	var promise = new Promise(function(resolve,reject){
+		try {
+			lineReader.eachLine('logs/filelog-error.log', function(line, last) {
+				// console.log(line);
+				// console.log(last);
+				try {
+					logs.push(JSON.parse(line));
+				} catch (error) {
+					console.log("JSON.parse error:"+error+", Skipped the log in line "+(i+1)+":"+line);
+				}
+				i++;
+				if (i===maxLine||last) {
+					resolve(logs);
+					return false; // stop reading
+				}
+			});
+		} catch (error) {
+			reject(error);
+		}
+	});
+	promise.then(function(logs){
+		return res.status(200).send(logs);
+	},function(err){
+		return res.status(400).send({error:true,message:err});
+	})
 };

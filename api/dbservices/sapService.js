@@ -3,7 +3,8 @@
  const r3connect = require('r3connect');
  var client;
  const Promise = require('Promise').default;
- const configuration =require("../../db-config/.db-config.json").sapConnParams;
+//  const configuration =require("../../db-config/.db-config.json").sapConnParams;
+ const configuration =require('../config/appConfig').getInstance().getSapConnParam();
 exports.getDeliveryOrder=function(orderNo){
 	var param = {
       IS_DLV_DATA_CONTROL:{

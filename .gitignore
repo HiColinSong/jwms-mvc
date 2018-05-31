@@ -5,7 +5,7 @@ node_modules
 .DS_Store
 js/.DS_Store
 .vscode
-package-lock.json
 /deploy/
 /db-config/
-/logs/*
+logs/
+dev_rfc.trc

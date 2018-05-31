@@ -54,5 +54,16 @@
         "Plant":"PLANT",
         "Cancel":"CONFIRM_IND"
     },
+    "reservationHeaderFields":{
+        "ResvNo":"RES_NO",
+        "CreatedBy":"CREATED_BY",
+        "CreatedOn":"RES_DATE"
+    },
+    "reservationItemFields":{
+        "ResvItemNumber":"RES_ITEM",
+        "MaterialCode":"MATERIAL",
+        "BatchNo":"BATCH",
+        "ResvStatus":"WITHDRAWN"
+    },
     "purchaseOrderFields":{}
 }

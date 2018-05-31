@@ -24,22 +24,6 @@
                method: 'GET',
                params: {type:"logout"}
              },
-
-             getDbInfo: { 
-              method: 'GET',
-              params: {type:"db-info"}
-            },
-             //end authentication api
-
-             //start sporeceipts api
-            checkOrderStatus: { //  /bxapi/sporder/xxxxxx.json
-                method: 'GET',
-                params: {
-                    type: '@type',
-                    subtype:'check-order-status',
-                    param1:'@param1'
-                }
-            },
               //confirm SPO receipt, Return Goods Receipts, picking, packing
               confirmOperation:{
                 method: 'POST',
@@ -67,84 +51,14 @@
                   subtype:'reversal'
                 }
               },
-              
-              //start sporeceipts api
-            getSubconPurchaseOrder: { //  /bxapi/sporder/xxxxxx.json
-                method: 'GET',
-                params: {
-                    type: 'sporeceipts',
-                    subtype:'get-order',
-                    param1:'@param1'
-                }
-            },
-            //@deprecated
-            addItemToSpo: { //  /bxapi/box/xxxxxx.json
-                method: 'GET',
-                params: {
-                    type: 'sporeceipts',
-                    subtype:'add-item',
-                    param1:'@param1', //category, bit, besa, qas
-                    param2:'@param2', //SPO NO
-                    param3:'@param3' //Item Serial No
-                }
-            },
-              removeItemFromSpo:{
-                method: 'GET',
-                params:{
-                  type: 'sporeceipts',
-                  subtype:'remove-item',
-                  param1:'@param1', //category, bit, besa, qas
-                  param2:'@param2', //SPO NO
-                  param3:'@param3' //Item Serial No
-                }
-              },
-              //end sporeceipts api
-
             //start rtgreceipt api
-            //@deprecated
-            getRtgDeliveryOrder:{ //  /bxapi/rtgreceipts/get-order/:orderNo.json
-                method: 'GET',
-                params: {
-                    type: 'rtgreceipts',
-                    subtype: 'get-order',
-                    param1:'@param1' //orderNo
-                }
-            },
             getRtgDeliveryOrder:{ //  /bxapi/rtgreceipts/get-order.json
                 method: 'POST',
                 params: {
                     type: 'rtgreceipts',
                     subtype: 'get-order'
                 }
-            }
-            //@deprecated
-            ,addItemToRtgDo: { //  /bxapi/rtgreceipts/add-item/xxxxxx.json
-                method: 'GET',
-                params: {
-                    type: 'rtgreceipts',
-                    subtype: 'add-item',
-                    param1:'@param1', //DO NO
-                    param2:'@param2' //Item Serial No
-                }
             },
-              //@deprecate
-              removeItemFromRtgDo:{
-                method: 'GET',
-                params:{
-                  type: 'rtgreceipts',
-                  subtype: 'remove-item',
-                  param1:'@param1', //DO NO
-                  param2:'@param2' //Item Serial No
-                }
-              },
-              confirmRtgReceipt:{
-                method: 'POST',
-                headers: {'Accept': 'application/json'},
-                params:{
-                  type: 'rtgreceipts',
-                  subtype:'confirm'
-                }
-              },
               //end of rtgreceipt api
 
               //start of picking api
@@ -178,32 +92,6 @@
                   subtype: 'set-status'
                 }
               },
-              // checkPickingStatus:{
-              //   method: 'GET',
-              //   params:{
-              //     type: 'check-picking-status',
-              //     param1:'@param1'//order number
-              //   }
-              // },
-              //@deprecated
-              addItemforPicking:{
-                method: 'GET',
-                params:{
-                  type: 'picking',
-                  subtype: 'add-item',
-                  param1:'@param1',//order number
-                  param2:'@param2' //item sno
-                }
-              },
-              removePickingItem:{
-                method: 'GET',
-                params:{
-                  type: 'picking',
-                  subtype: 'remove-item',
-                  param1:'@param1',//order number
-                  param2:'@param2' //item sno
-                }
-              },
             //end of picking api
 
             //start packing api
@@ -224,17 +112,6 @@
                 },
                 isArray:true
               },
-              //@deprecated
-              addItemToHu:{
-                method: 'POST',
-                params:{
-                  type: 'packing',
-                  subtype: 'add-item-to-hu',
-                  param1:'@param1',//TO number
-                  param2:'@param2',//HU Barcode
-                  param3:'@param3' //item sno
-                }
-              },
               
               removeHu:{
                 method: 'POST',
@@ -244,26 +121,6 @@
                 },
                 isArray:true
               },
-              removeHuItem:{
-                method: 'GET',
-                params:{
-                  type: 'packing',
-                  subtype: 'remove-item-from-hu',
-                  param1:'@param1',//TO number
-                  param2:'@param2',//HU Barcode
-                  param3:'@param3' //Serial NO
-                }
-              }
-              //end packing api
-              ,
-              findMaterialByEAN:{
-                method: 'GET',
-                params:{
-                  type: 'find-material',
-                  param1:'@param1'//EAN Code
-                }
-              }
-              ,
               getPkgMaterialList:{
                 method: 'GET',
                 params:{
@@ -363,6 +220,13 @@
                 method: 'POST',
                 params:{
                   type: 'delete-user'
+                },
+                isArray:true
+              },
+              viewLog:{
+                method: 'POST',
+                params:{
+                  type: 'view-log'
                 },
                 isArray:true
               }
@@ -508,9 +372,7 @@
           id:"SGQ",
           display:"QA Sample"
         }
-      ],
-      // apiDomain:"http://localhost:8080"
-      apiDomain:""
+      ]
     })
     .service('dynamicLocale',function(){
             var locale = {

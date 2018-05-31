@@ -10,11 +10,5 @@
 	"bbvLdapConfig":{
 		"url": "ldap://bbvdc01.bbv.bsi.corp",
         "baseDN": "DC=bbv,DC=bsi,DC=corp"
-	},
-	"effectiveBatch":180601,
-	"authorizedUsers":[
-		"BITSG\\yd.zhu",
-		"BITSG\\ch.tan",
-		"BITSG\\mia.ali"
-	]
+	}
 }

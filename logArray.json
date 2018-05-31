@@ -1,0 +1,1028 @@
+[
+  {
+    "bapiName": "BAPI_WHSE_TO_GET_DETAIL",
+    "param": {
+      "WHSENUMBER": "Z01",
+      "TRANSFERORDERNO": "2000178303"
+    },
+    "error": {
+      "context": {
+        "username": "yd.zhu",
+        "password": "********",
+        "applicationServer": "172.32.70.67",
+        "instanceNumber": "02",
+        "client": "200"
+      },
+      "statusCode": 403,
+      "code": "RFC_LOGON_FAILURE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-26T08:52:16.674Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401276",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 20,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "ERROR_REVERSE_GOODS_ISSUE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:15:48.591Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401276",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 20,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "ERROR_REVERSE_GOODS_ISSUE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:15:13.601Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401276",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "ERROR_REVERSE_GOODS_ISSUE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:14:56.151Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401276",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "ERROR_REVERSE_GOODS_ISSUE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:13:35.629Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401276",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 20,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "ERROR_REVERSE_GOODS_ISSUE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:10:51.085Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401275",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": ""
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T04:04:18.526Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0890015475",
+      "I_BUDAT": "20180525",
+      "I_VBTYP": "T",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "RFC_INVALID_HANDLE"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:53:51.890Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401279"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:39:40.751Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401278"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:34:47.061Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401274"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:28:59.210Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401274"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:28:54.354Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401274"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-25T03:28:23.002Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0925003435",
+      "I_BUDAT": "20180524",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "Cannot be processed with this transaction."
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T06:44:04.430Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0925003433",
+      "I_BUDAT": "20180524",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 2
+      },
+      "statusCode": 502,
+      "code": "Cannot be processed with this transaction."
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T06:17:04.527Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0925003433",
+      "I_BUDAT": "20180524",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 3318,
+        "numberOfInvokes": 1
+      },
+      "statusCode": 502,
+      "code": "Cannot be processed with this transaction."
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T06:17:02.229Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0925003433",
+      "I_BUDAT": "20180524",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 84,
+        "numberOfInvokes": 4
+      },
+      "statusCode": 502,
+      "code": "Cannot be processed with this transaction."
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T06:13:12.227Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401168"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T02:17:57.009Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401168"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T02:15:30.434Z"
+  },
+  {
+    "bapiName": "L_TO_CONFIRM",
+    "param": {
+      "I_LGNUM": "Z01",
+      "I_TANUM": "2000178345",
+      "I_UPDATE_TASK": "X",
+      "I_COMMIT_WORK": "X",
+      "T_LTAP_CONF": [
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0001",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0002",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0003",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0004",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0005",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0006",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0007",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0008",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0009",
+          "SQUIT": "X"
+        },
+        {
+          "TANUM": "2000178345",
+          "TAPOS": "0010",
+          "SQUIT": "X"
+        }
+      ]
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 122,
+        "numberOfInvokes": 8
+      },
+      "statusCode": 502,
+      "code": "ITEM_CONFIRMED"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-24T01:56:39.052Z"
+  },
+  {
+    "handler": "PackingHandler",
+    "function": "confirmPacking",
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T16:10:46.537Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401259"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T04:55:29.849Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 31,
+        "numberOfInvokes": 4
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T04:21:37.061Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 61,
+        "numberOfInvokes": 6
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T04:20:23.827Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 20,
+        "numberOfInvokes": 4
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T04:00:28.232Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 32,
+        "numberOfInvokes": 4
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T04:00:03.386Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 71,
+        "numberOfInvokes": 10
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:59:48.722Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 10
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:19:04.018Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 60,
+        "numberOfInvokes": 8
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:17:18.499Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 9
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:16:09.554Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 23,
+        "numberOfInvokes": 11
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:14:26.307Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401262",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401262",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 10
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:13:41.043Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 32,
+        "numberOfInvokes": 8
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:11:51.706Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401262",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401262",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 8
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:11:25.442Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401262",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 30,
+        "numberOfInvokes": 13
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:11:01.751Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401259"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:02:19.740Z"
+  },
+  {
+    "bapiName": "BAPI_DELIVERY_GETLIST",
+    "param": {
+      "IS_DLV_DATA_CONTROL": {
+        "HEAD_STATUS": "X",
+        "ITEM_STATUS": "X",
+        "ITEM": "X",
+        "HU_DATA": "X",
+        "HEAD_PARTNER": "X"
+      },
+      "IT_VBELN": [
+        {
+          "SIGN": "I",
+          "OPTION": "EQ",
+          "DELIV_NUMB_LOW": "0800401259"
+        }
+      ]
+    },
+    "error": {},
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T03:02:15.535Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 30,
+        "numberOfInvokes": 6
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T02:38:30.969Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 51,
+        "numberOfInvokes": 6
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T02:35:27.803Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 21,
+        "numberOfInvokes": 6
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T02:18:05.310Z"
+  },
+  {
+    "bapiName": "Z_WS_REVERSE_GOODS_ISSUE",
+    "param": {
+      "I_VBELN": "0800401261",
+      "I_BUDAT": "20180523",
+      "I_VBTYP": "J",
+      "I_COUNT": "001",
+      "I_TCODE": "VL09",
+      "I_COMMIT": "X"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 32,
+        "numberOfInvokes": 5
+      },
+      "statusCode": 502,
+      "code": "Delivery  does not exist"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T02:17:42.960Z"
+  },
+  {
+    "bapiName": "Z_WS_DELIVERY_UPDATE",
+    "param": {
+      "VBKOK_WA": {
+        "VBELN_VL": "0800401261",
+        "WABUC": "X",
+        "WADAT_IST": "20180523",
+        "SPE_RESET_VLSTK": "X"
+      },
+      "COMMIT": "X",
+      "DELIVERY": "0800401261",
+      "IF_DATABASE_UPDATE": "1"
+    },
+    "error": {
+      "context": {
+        "nodeRFC": {},
+        "connectTime": 22,
+        "numberOfInvokes": 5
+      },
+      "statusCode": 502,
+      "code": "Error determining target currency: SOrg  CoCode 2100"
+    },
+    "level": "error",
+    "message": "",
+    "timestamp": "2018-05-23T02:17:29.185Z"
+  }
+]

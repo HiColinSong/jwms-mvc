@@ -7,12 +7,14 @@ var logger = new (winston.Logger)({
 	  new (winston.transports.File)({
 		name: 'info-file',
 		filename: './logs/filelog-info.log',
-		level: 'info'
+		level: 'info',
+		json:true
 	  }),
 	  new (winston.transports.File)({
 		name: 'error-file',
 		filename: './logs/filelog-error.log',
-		level: 'error'
+		level: 'error',
+		json:true
 	  })
 	]
   });

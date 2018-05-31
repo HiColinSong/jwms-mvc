@@ -81,6 +81,12 @@
               log out
             </a>
           </li>
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
+            <a href="#/view-error-log">
+              <span class="fa fa-file-text-o fa-lg"></span>
+              View Log
+            </a>
+          </li>
           <!--removeIf(qa)-->
           <!--removeIf(production)-->
           <li class="dropdown">

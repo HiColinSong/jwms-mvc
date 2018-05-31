@@ -2,7 +2,6 @@
 var session,fullUsername;
 var ActiveDirectory = require('activedirectory');
 const constants=require('./../config/const.json');
-const dbConnInfo = require("../../db-config/.db-config.json");
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
 exports.checkLoginStatus=function(req,res){
 	if (req.session&&req.session.user){
@@ -67,9 +66,11 @@ exports.logout=function(req, res) {
 };
 exports.dbInfo=function(req, res) {
 		let dbinfo={sapInfo:{},sqlSvrInfo:{}};
-		Object.assign(dbinfo.sapInfo,dbConnInfo.sapConnParams);
-		Object.assign(dbinfo.sqlSvrInfo,dbConnInfo.bxSqlConnParams);
-		dbinfo.sapInfo.passwd=undefined;
+		dbinfo.sapInfo = require('../config/appConfig').getInstance().getSapConnParam();
+		dbinfo.sqlSvrInfo = require('../config/appConfig').getInstance().getSqlConnParam();
+		// Object.assign(dbinfo.sapInfo,require('../config/appConfig').getInstance().getSapConnParam());
+		// Object.assign(dbinfo.sqlSvrInfo,require('../config/appConfig').getInstance().getSqlConnParam());
+		dbinfo.sapInfo.password=undefined;
 		dbinfo.sqlSvrInfo.password=undefined;
   	return res.status(200).send(dbinfo);
 };

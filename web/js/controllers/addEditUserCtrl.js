@@ -3,8 +3,8 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('addEditUserCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','bxService','user',
-    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,user){
+    .controller('addEditUserCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','bxService','user','userList',
+    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,user,userList){
 
              $scope.type=user?"Edit":"Add";
     	 	$scope.submit=function(){
@@ -20,7 +20,15 @@
                 function(err){
                     utilSvc.addAlert("The operation failed!", "fail", false);
                 })
-    	 	}
+             }
+            $scope.uniqueValidation=function(){
+                $scope.duplicateUserID=false;
+                userList.forEach(_user => {
+                    if (_user.UserID===$scope.user.UserID){
+                        $scope.duplicateUserID=true;
+                    }
+                });
+            }
     	 	$scope.reset=function(){
                 $scope.user={};
                 angular.copy(user,$scope.user);

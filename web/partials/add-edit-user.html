@@ -15,12 +15,13 @@
           <i class="fa fa-minus-circle"></i> {{error.text}}
         </div>
         
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error':duplicateUserID}">
           <label class="col-sm-3 control-label no-padding-right field-required" for="name"> User ID </label>
           <div class="col-sm-6">
                <input type='text' class='col-sm-12 form-control'
                                name='UserID'
                                ng-required="true"
+                               ng-keyup="uniqueValidation()"
                                class='full-width form-control'
                                ng-class="{'submitted':submitted,'error':(!user.UserID)}"
                                ng-model="user.UserID"
@@ -28,6 +29,7 @@
                                autocomplete="off" ng-if="type==='Add'">
                 <div ng-if="type==='Edit'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserID}}</div>
           </div>
+          <label class="col-sm-3 no-margin-x margin-top-5" for="name" ng-show="duplicateUserID"> User ID Exist</label>
         </div>
         <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right field-required" for="name"> Warehouse</label>
@@ -65,7 +67,7 @@
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!user.UserID||!user.DefaultWH||!user.isActive">
+      ng-disabled="!user.UserID||!user.DefaultWH||!user.isActive||duplicateUserID">
       Submit
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

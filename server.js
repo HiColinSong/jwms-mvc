@@ -1,3 +1,16 @@
+let port = "7070"
+if (process.argv.length <= 2) {
+	console.log("Usage: node server.js [dev/qas/prod] [port]");
+	process.exit(-1);
+} else if (process.argv.length > 2){
+	let env = process.argv[2];
+	require('./api/config/appConfig').getInstance().setEnv(env);
+	// console.log(JSON.stringify(require('./api/config/appConfig').getInstance().getSapConnParam(),null,2));
+	// console.log(JSON.stringify(require('./api/config/appConfig').getInstance().getSqlConnParam(),null,2));
+	if (process.argv.length > 3)
+		port = process.argv[3];
+}
+ 
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -94,12 +107,12 @@ app.post('/bxapi/find-customer-name.json',auth.authCheck,commonHandler.getCustom
 app.get('/bxapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
 app.post('/bxapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/bxapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
+app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
 
 
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, this is an invalid URL.'});
 });
-// port must be set to 7070 because incoming http requests are routed from port 80 to port 8080
-app.listen(process.env.PORT||7070, function () {
-    console.log('Node app is running on port '+(process.env.PORT||7070));
+app.listen(port, function () {
+    console.log('Node app is running on port '+(port));
 });

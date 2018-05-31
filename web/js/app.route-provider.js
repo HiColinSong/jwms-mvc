@@ -8,25 +8,7 @@
             $routeProvider
             .when('/home', {
                 templateUrl: 'partials/home.html',
-                controller: 'homeCtrl',
-                resolve:{
-                    // dbInfo:['$q','bxService',
-                    // function($q,apiSvc){
-                    //     var deferred = $q.defer();
-                    //     apiSvc.getDbInfo()
-                    //     .$promise.then(function(data){
-                    //         if (data){
-                    //             deferred.resolve(data);
-                    //         } else {
-                    //             deferred.resolve(undefined);
-                    //         }
-                    //     },function(err){
-                    //         deferred.reject(err);
-                    //     })
-                       
-                    //     return deferred.promise;
-                    // }]     
-                }
+                controller: 'homeCtrl'
             })
             .when('/receiving', {templateUrl: 'partials/receiving.html'})
             .when('/fulfillment', {templateUrl: 'partials/fulfillment.html'})
@@ -190,6 +172,26 @@
                         function($q,apiSvc){
                             var deferred = $q.defer();
                             apiSvc.getUserList().$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                            },function(err){
+                                deferred.reject(err);
+                            })
+                            return deferred.promise;
+                        }]
+                }
+            })
+            .when('/view-error-log', {
+                templateUrl: 'partials/view-log.html',
+                controller: 'viewLogCtrl',
+                resolve:{
+                    logs:['$q','bxService',
+                        function($q,apiSvc){
+                            var deferred = $q.defer();
+                            apiSvc.viewLog().$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
                                 } else {
