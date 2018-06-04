@@ -33,6 +33,10 @@
 	    				$scope.info.title="RGA Reversals";
 	    				$scope.info.order="DO";
 	    				break;
+	    			case "reservation-reversals":
+	    				$scope.info.title="Reservation Reversals";
+	    				$scope.info.order="Reservation";
+	    				break;
 	    		}
     		}
 

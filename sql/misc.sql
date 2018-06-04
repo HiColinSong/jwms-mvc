@@ -150,3 +150,22 @@ EXEC [dbo].[InsertOrUpdatePacking]
                 @sSerialNo=@SerialNo,
                 @sMaterialCode=@MaterialCode,
                 @sBatchNo = @BatchNo 
+
+
+--test BX_InsertOrUpdate Resv
+EXEC [dbo].[BX_InsertOrUpdateResv] 
+
+	@Warehouse ='z01',
+	@ResvOrder='1687562',
+	@ResvOrderDate='20180601',
+	@ResvCreaedBy='K.CHENG',
+	@Plant ='2100',
+	@PostingStatus='A',
+    @ResvItemNumberList ='0001,0002,0003',
+    @MaterialCodeList='BMXP-2714,BMXP-2715,BMXP-2716',
+    @BatchNumberList='W15010255,W15010256,W15010257',
+    @VendorBatchList='W15010255,W15010256,W15010257',
+    @ResvQuantityList='1,2,3'
+
+	select * from dbo.SAP_RESVHeader
+	select * from dbo.SAP_RESVDetail                

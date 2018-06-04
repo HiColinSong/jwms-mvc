@@ -10,44 +10,45 @@ exports.getResvDoc=function(req,res){
 			var resvDoc = util.reservationConverter(sapDoc);
 			//check status 
 			if (resvDoc&&resvDoc.ResvNo){
-
-				//insertOrUpdateDo, PackStart will be set if the HU List is empty, or ignore
-				// var params={
-				// 	TransferOrder:order.TONumber,
-				// 	Warehouse:order.Warehouse,
-				// 	TOCreationDate:order.TOCreationDate,
-				// 	TOCreationUser:order.TOCreationUser,
-				// 	DONumber:order.DONumber,
-				// 	Plant:order.plannedItems[0].Plant,
-				// 	ShipToCustomer:order.ShipToCustomer,
-				// 	PickConfirmStatus:order.PickConfirmStatus||0
-				// }
-				// var TOItemNumberList=[];
-				// var MaterialCodeList=[];
-				// var BatchNumberList=[];
-				// var VendorBatchList=[];
-				// var TOQuantityList=[];
-				// for (let i=0;i<order.plannedItems.length;i++){
-				// 	TOItemNumberList[i]=order.plannedItems[i].TOItemNumber;
-				// 	MaterialCodeList[i]=order.plannedItems[i].MaterialCode;
-				// 	BatchNumberList[i]=order.plannedItems[i].BatchNo;
-				// 	VendorBatchList[i]=order.plannedItems[i].VendorBatch;
-				// 	TOQuantityList[i]=order.plannedItems[i].TOQuantity||1;
-				// }
-				// params.TOItemNumberList = TOItemNumberList.join(',');
-				// params.MaterialCodeList = MaterialCodeList.join(',');
-				// params.BatchNumberList = BatchNumberList.join(',');
-				// params.VendorBatchList = VendorBatchList.join(',');
-				// params.TOQuantityList = TOQuantityList.join(',');
-				// let ret=await dbPickingSvc.InsertOrUpdateTO(params);
-				// ret = ret.recordset;
-				// if (ret.length>0){
-				// 	order.PickStart = ret[0].PickStart;
-				// 	order.PickComplete = ret[0].PickComplete||undefined;
-				// 	order.PickStatus = ret[0].PickStatus||undefined;
-				// 	order.Push2SAPStatus = ret[0].Push2SAPStatus||undefined;
-				// 	order.SAPRefNo = ret[0].SAPRefNo||undefined;
-				// }
+				//insert data to dbo.SAP_RESVHeader, dbo.SAP_RESVDetail
+				var params={
+					Warehouse:req.session.user.DefaultWH,
+					ResvOrder:resvDoc.ResvNo,
+					ResvOrderDate:resvDoc.CreatedOn,
+					ResvCreaedBy:resvDoc.CreatedBy,
+					DONumber:resvDoc.DONumber,
+					Plant:resvDoc.plannedItems[0].Plant,
+					PostingStatus:'0' //Incomplete
+				}
+				var ResvItemNumberList=[];
+				var MaterialCodeList=[];
+				var BatchNumberList=[];
+				var VendorBatchList=[];
+				var ResvQuantityList=[];
+				for (let i=0;i<resvDoc.plannedItems.length;i++){
+					ResvItemNumberList[i]=resvDoc.plannedItems[i].ResvItemNumber;
+					MaterialCodeList[i]=resvDoc.plannedItems[i].MaterialCode;
+					BatchNumberList[i]=resvDoc.plannedItems[i].BatchNo;
+					VendorBatchList[i]=resvDoc.plannedItems[i].VendorBatch;
+					ResvQuantityList[i]=resvDoc.plannedItems[i].Quantity||1;
+				}
+				params.ResvItemNumberList = ResvItemNumberList.join(',');
+				params.MaterialCodeList = MaterialCodeList.join(',');
+				params.BatchNumberList = BatchNumberList.join(',');
+				params.VendorBatchList = VendorBatchList.join(',');
+				params.ResvQuantityList = ResvQuantityList.join(',');
+				let ret=await dbResvSvc.InsertOrUpdateResv(params);
+				ret = ret.recordsets;
+				if (ret.length>0&&ret[0].length>0){
+					resvDoc.Push2SAPStatus = ret[0][0].Push2SAPStatus||undefined;
+					resvDoc.SAPRefNo = ret[0][0].SAPRefNo||undefined;
+					resvDoc.postedOn = ret[0][0].postedOn||undefined;
+					resvDoc.postedBy = ret[0][0].postedBy||undefined;
+				}
+				if (ret.length>1){
+					resvDoc.scannedItems= ret[1];
+					util.trimValues(resvDoc.scannedItems);
+				}
 	
 				return res.status(200).send(resvDoc);
 			} else {
@@ -62,7 +63,7 @@ exports.getResvDoc=function(req,res){
 exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
-		params.ResvNo=info.orderNo;
+		params.ResvNumber=info.orderNo;
 		params.EANCode=info.EANCode;
 		params.MaterialCode=info.MaterialCode;
 		params.BatchNo=info.BatchNo;
@@ -126,7 +127,7 @@ exports.confirmReservation=function(req,res){
 	})()
 };
 
-exports.reversationReversal=function(req,res){
+exports.reservationReversal=function(req,res){
 	(async function () {
 		try {
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);

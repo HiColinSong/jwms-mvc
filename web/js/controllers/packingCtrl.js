@@ -24,6 +24,7 @@
             $scope.createdByFieldDisplay = "Pack By";
             $scope.createdByFieldName = "PackBy";
             $scope.itemNoFieldName = "DOItemNumber";
+            $scope.QuantityFieldName = "DOQuantity";
             $scope.type = "packing";
             $scope.barcode = itemSvc.getBarcodeObj();
 

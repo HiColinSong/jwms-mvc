@@ -1,7 +1,7 @@
 
 
 	<h2 class="text-center" style="padding-top:60px">Reservation</h2>
-	<div class="margin-top-20" ng-if="!ResvNo">
+	<div class="margin-top-20 col-sm-8 col-sm-offset-2" ng-if="!ResvNo">
 	 <form role="form" name="ResvNoForm">
 
 	  <div class="form-group">
@@ -67,9 +67,9 @@
     </div>
 	<!--confirm button-->
 	<div class="col-sm-3 col-xs-12 no-padding-x text-right margin-top">
-		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm receipt" 
-		  ng-click="confirmReceipt()" ng-disabled="!order.confirmReady">
-		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Receipt
+		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm Reservation" 
+		  ng-click="confirmReceipt()" ng-disabled="!resvDoc.confirmReady">
+		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Reservation
 	  </button>
   </div>
   </div>

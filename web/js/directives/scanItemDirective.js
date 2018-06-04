@@ -24,10 +24,12 @@
                             scope.createdByFieldDisplay = "Receipt By";
                             scope.createdByFieldName = "ReceiptBy";
                             scope.itemNoFieldName = "DOItemNumber";
+                            scope.QuantityFieldName = "DOQuantity";
                         } else if (scope.type==='reservation'){
-                            scope.createdByFieldDisplay = "Created By";
-                            scope.createdByFieldName = "CreatedBy";
+                            scope.createdByFieldDisplay = "Posted By";
+                            scope.createdByFieldName = "PostBy";
                             scope.itemNoFieldName = "ResvItemNumber";
+                            scope.QuantityFieldName = "Quantity";
                         }
                         scope.findItem=function(){
                             scope.barcode.parseBarcode();
@@ -68,7 +70,7 @@
                         
                         scope.$watchCollection( "items", function( items ) {
                             if (items){
-                                scope.order.confirmReady=itemSvc.calculateScannedQty(items,scope.order.plannedItems);
+                                scope.order.confirmReady=itemSvc.calculateScannedQty(items,scope.order.plannedItems,scope.itemNoFieldName,scope.QuantityFieldName);
                                 }
                             }
                         );

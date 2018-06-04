@@ -72,18 +72,18 @@
                 return confirmReady;
             } //end of function
             ,
-            calculateScannedQty:function(scannedItems,plannedItems){
+            calculateScannedQty:function(scannedItems,plannedItems,itemNoFieldName,QuantityFiledName){
                 var confirmReady=true;
                 for (let i = 0; i < plannedItems.length; i++) {
                     plannedItems[i].ScanQty=0;
                     for (let j = 0; j < scannedItems.length; j++) {
                         if (scannedItems[j].MaterialCode===plannedItems[i].MaterialCode&&
                             scannedItems[j].BatchNo===plannedItems[i].BatchNo&&
-                            scannedItems[j].DOItemNumber===plannedItems[i].DOItemNumber){
+                            scannedItems[j][itemNoFieldName]===plannedItems[i][itemNoFieldName]){
                                 plannedItems[i].ScanQty+=scannedItems[j].ScanQty;
                             }
                     }
-                    if (plannedItems[i].ScanQty<(plannedItems[i].DOQuantity||plannedItems[i].Quantity)){
+                    if (plannedItems[i].ScanQty<(plannedItems[i][QuantityFiledName]||plannedItems[i].Quantity)){
                         confirmReady=false;
                     }
                 }

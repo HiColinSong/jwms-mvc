@@ -25,7 +25,7 @@
 							<accordion close-others="true" >
 					
 								<div accordion-group class="panel-default scan-item"  
-										ng-class="{'full':plannedItem.ScanQty===plannedItem.DOQuantity}"
+										ng-class="{'full':plannedItem.ScanQty===(plannedItem[QuantityFieldName])}"
 										is-open="false" is-disabled="false" 
 											ng-repeat="(pidx,plannedItem) in order.plannedItems" >
 									<accordion-heading>
@@ -34,25 +34,15 @@
 												<td width="25%" class="text-center">{{plannedItem[itemNoFieldName]}}</td>
 												<td width="25%" class="text-center">{{plannedItem.MaterialCode}}</td>
 												<td width="25%" class="text-center">{{plannedItem.BatchNo}}</td>
-												<td width="25%" class="text-center">{{plannedItem.ScanQty||0}}/{{plannedItem.DOQuantity||plannedItem.Quantity}}</td>
+												<td width="25%" class="text-center">{{plannedItem.ScanQty||0}}/{{plannedItem[QuantityFieldName]}}</td>
 											</tr>
 										</table>
-										<!-- <scan width="33%">{{item.MaterialCode}}</scan>
-										<scan width="33%">{{item.BatchNo}}</scan>
-										<scan width="33%">0/{{item.DOQuantity}}</scan> -->
 									</accordion-heading>
 									<table class="table table-striped border scan-item">
 											<thead ng-show="plannedItem.ScanQty"> 
 												<tr>
-													<!-- <td>Line No</td> -->
-													<td>
-														<!-- <a class="cursor-pointer" ng-click="sortType = 'BinNumber'; sortReverse = !sortReverse">
-															Bin Number
-															<span ng-show="sortType == 'BinNumber' && !sortReverse" class="fa fa-caret-down"></span>
-															<span ng-show="sortType == 'BinNumber' && sortReverse" class="fa fa-caret-up"></span>
-														</a> -->
-														Line No
-													</td>
+													<td>Line No</td>
+
 													<td>
 														<a class="cursor-pointer" ng-click="sortType = 'serialNo'; sortReverse = !sortReverse">
 															Serials No
@@ -74,27 +64,23 @@
 																<span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
 															</a>
 														</td>
-														<!-- <td>
-															<a class="cursor-pointer" ng-click="sortType = 'packedOn'; sortReverse = !sortReverse">
-															Packed On 
-																<span ng-show="sortType == 'packedOn' && !sortReverse" class="fa fa-caret-down"></span>
-																<span ng-show="sortType == 'packedOn' && sortReverse" class="fa fa-caret-up"></span>
-															</a>
-														</td> -->
 														<td width="10%" class="text-center">Action</td>
 													
 												</tr>
 											</thead> 
 											<tbody> 
 												<tr ng-if="items&&items.length>0" 
-														ng-repeat="(idx,item) in items | orderBy:sortType:sortReverse | filter:plannedItem.MaterialCode| filter:plannedItem.BatchNo|filter:plannedItem.DOItemNumber">
+														ng-repeat="(idx,item) in items | 
+																	orderBy:sortType:sortReverse | 
+																	filter:{MaterialCode:plannedItem.MaterialCode}| 
+																	filter:{BatchNo:plannedItem.BatchNo}|
+																	filter:{DOItemNumber:plannedItem.DOItemNumber}|
+																	filter:{ResvItemNumber:plannedItem.ResvItemNumber}">
 							
 												<td width="20%">{{idx+1}}</td>
-												<!-- <td width="25%">{{item.BinNumber}}</td> -->
 												<td  width="30%">{{item.SerialNo||'-'}}</td>
 												<td  width="15%">{{item.ScanQty||1}}</td>
 												<td  width="20%">{{item[createdByFieldName]}}</td>
-												<!-- <td>{{item.PackedOn}}</td> -->
 												<td width="10%" class="text-center">
 													<a class="cursor-pointer margin-left-20 text-danger"  
 														confirm-required="the item {{item.serialNo}}" 
@@ -129,10 +115,10 @@
 									<tr>
 										<!-- <td>Line No</td> -->
 									<td>
-										<a class="cursor-pointer" ng-click="sortType = 'DOItemNumber'; sortReverse = !sortReverse">
+										<a class="cursor-pointer" ng-click="sortType = itemNoFieldName; sortReverse = !sortReverse">
 										Item Number
-										<span ng-show="sortType == 'DOItemNumber' && !sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="sortType == 'DOItemNumber' && sortReverse" class="fa fa-caret-up"></span>
+										<span ng-show="sortType == itemNoFieldName && !sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="sortType == itemNoFieldName && sortReverse" class="fa fa-caret-up"></span>
 										</a>
 									</td>
 									<td>
@@ -171,7 +157,7 @@
 									<tr ng-if="items&&items.length>0" 
 										ng-repeat="(idx,item) in items | orderBy:sortType:sortReverse | filter:searchItem">
 				
-									<td>{{item.DOItemNumber}}</td>
+									<td>{{item[itemNoFieldName]}}</td>
 									<td>{{item.MaterialCode}}</td>
 									<td>{{item.BatchNo}}</td>
 									<td>{{item.SerialNo}}</td>

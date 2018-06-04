@@ -64,7 +64,8 @@
         "MaterialCode":"MATERIAL",
         "BatchNo":"BATCH",
         "Quantity":"QUANTITY",
-        "ResvStatus":"WITHDRAWN"
+        "ResvStatus":"WITHDRAWN",
+        "Plant":"PLANT"
     },
     "purchaseOrderFields":{}
 }
