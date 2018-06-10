@@ -11,9 +11,9 @@
                 } else {
                     player=ngAudio.load('../../media/goodScan.mp3')
                     player.play();
-                    $timeout(function(){
-                        player.stop();
-                    },500);
+                    // $timeout(function(){
+                    //     player.stop();
+                    // },500);
                 }
             }
         }

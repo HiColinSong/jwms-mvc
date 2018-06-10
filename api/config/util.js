@@ -122,7 +122,11 @@ exports.formatDateTime=function(dateString){
 		 }
 	 }
 	 if (doc.RESERVATION_ITEMS&&doc.RESERVATION_ITEMS.length>0){
+		 let postedItem=undefined;
+		 let nonPostedItem=undefined;
 		 items = doc.RESERVATION_ITEMS;
+		 items = doc.RESERVATION_ITEMS;
+		 _resv.totalPlannedQty=0;
 		for (let i = 0; i < items.length; i++) {
 			item = items[i];
 			_resv.plannedItems.push({});
@@ -131,6 +135,18 @@ exports.formatDateTime=function(dateString){
 				// if (_resv.plannedItems[i][key]&&(key ==="Quantity"))
 				// 	_resv.plannedItems[i][key]=parseInt(_resv.plannedItems[i][key]);
 			}
+			_resv.totalPlannedQty+=_resv.plannedItems[i].Quantity;
+			if (_resv.plannedItems[i].ResvStatus==='X')
+				postedItem=true;
+			if (!_resv.plannedItems[i].ResvStatus)
+				nonPostedItem=true;
+		}
+		if (postedItem&&!nonPostedItem){
+			_resv.postingStatus="Completed"
+		} else if (postedItem){
+			_resv.postingStatus="Partial"
+		} else {
+			_resv.postingStatus="NotStarted"
 		}
 	}
 	return _resv;
@@ -196,11 +212,11 @@ exports.getTransParams = function(order,TRANS){
 					MATNR:item.MaterialCode,
 					CHARG: item.BatchNo,
 					SERIAL:item.SerialNo,
-					DOCNO: order.DONumber,
+					DOCNO: order.DONumber||order.ResvNo,
 					ENDCUST:order.ShipToCustomer,
-					BXDATE:this.formatDateTime(item.PackedOn||item.ReceivedOn).date,
-					BXTIME:this.formatDateTime(item.PackedOn||item.ReceivedOn).time,
-					BXUSER:item.PackBy||item.ReceiptBy
+					BXDATE:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).date,
+					BXTIME:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).time,
+					BXUSER:item.PackBy||item.ReceiptBy||item.PostBy
 				});
 			}
 		}

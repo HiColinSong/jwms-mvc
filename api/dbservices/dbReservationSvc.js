@@ -51,15 +51,15 @@ const dbSvc=require("./dbCommonSvc");
 
   exports.setStatus=function(info){
     var params={
-      TONumber:{type:"sql.VarChar(12)",value:info.TONumber},
-      PickConfirmStatus:{type:'sql.Char(1)',value:info.PickConfirmStatus},
-      PickStart:{type:"sql.VarChar(22)",value:info.PickStart},
-      PickComplete:{type:'sql.VarChar(22)',value:info.PickComplete},
-      PickStatus:{type:'sql.Char(1)',value:info.PickStatus},
+      Warehouse:{type:"sql.VarChar(6)",value:info.Warehouse},
+      ResvNumber:{type:"sql.VarChar(12)",value:info.ResvNumber},
+      PostedOn:{type:"sql.VarChar(22)",value:info.PostedOn},
+      PostedBy:{type:'sql.VarChar(30)',value:info.PostedBy},
+      PostingStatus:{type:'sql.Char(1)',value:info.PostingStatus},
       Push2SAPStatus:{type:'sql.Char(1)',value:info.Push2SAPStatus},
       SAPRefNo:{type:"sql.VarChar(20)",value:info.SAPRefNo}
     }
-    return sqlSvc.callStoredProcedure("dbo.BX_UpdateTOStatus",params)
+    return sqlSvc.callStoredProcedure("dbo.BX_UpdateResvStatus",params)
   }
   
 

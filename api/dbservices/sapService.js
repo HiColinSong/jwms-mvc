@@ -126,15 +126,27 @@ exports.pgrReversal = function(orderNo,deliveryType,currentDate){
 //      return this.pgiReversal(orderNo,currentDate,warehouseNo);
 // }
 
-exports.reservation = function(ordero,currentDate){
+exports.reservation = function(order,currentDate){
   var param ={ 
       GOODSMVT_HEADER:{PSTNG_DATE:currentDate},
       GOODSMVT_CODE:{GM_CODE:"06"},
-      GOODSMVT_ITEM: [
-        {PLANT:order.plant,ENTRY_QNT:order.quantity, RESERV_NO: order.orderNo, RES_ITEM: order.itemNo}        
-      ]
+      GOODSMVT_ITEM: []
   }
-    return invokeBAPI("BAPI_GOODSMVT_CREATE",param,false,true);
+  for (let i = 0; i < order.plannedItems.length; i++) {
+    const item = order.plannedItems[i];
+    if (item.posting){ //only posting the selected item, i.e. partial posting
+      param.GOODSMVT_ITEM.push(
+        {
+          PLANT:item.Plant,
+          ENTRY_QNT:item.Quantity, 
+          RESERV_NO: order.ResvNo, 
+          RES_ITEM: item.ResvItemNumber,
+          MOVE_TYPE: order.moveType
+        }
+      )
+    }
+  }
+    return invokeBAPI("BAPI_GOODSMVT_CREATE",param,true,true);
 }
 
 exports.getPurchaseOrder=function(orderNo){
@@ -229,7 +241,7 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
       // Output error
         console.error('Error invoking'+bapiName+' :', error);
 
-        logger.error({bapiName:bapiName,param:param,error:error});
+        logger.error({bapiName:bapiName,param:param,error:(error.message||error)});
         if (reconnectRequired)
           reconnect();
         reject (error);

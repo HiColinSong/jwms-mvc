@@ -20,10 +20,10 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues);
   }
   //get getQASampleCategoryList
-  exports.getQASampleCategoryList=function(){
-    var stmt = "select QASampleID,QASampleDesc from dbo.BX_QASampleCategory";
-    return sqlSvc.sqlQuery(stmt);
-  }
+  // exports.getQASampleCategoryList=function(){
+  //   var stmt = "select QASampleID,QASampleDesc from dbo.BX_QASampleCategory";
+  //   return sqlSvc.sqlQuery(stmt);
+  // }
 
   //user profile
   exports.getUserProfile=function(userId){
@@ -42,12 +42,12 @@ const sqlSvc=require("./sqlService");
   }
 
   //user profile
-  exports.getSubconPendingList=function(args){
-    var stmt = "select * from dbo.BX_SubconShipments where shipToTarget=@sShip2Target";
-    let paramTypes={sShip2Target:'sql.VarChar(3)'};
-    let paramValues={sShip2Target:args.sShip2Target};
-    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
-  }
+  // exports.getSubconPendingList=function(args){
+  //   var stmt = "select * from dbo.BX_SubconShipments where shipToTarget=@sShip2Target";
+  //   let paramTypes={sShip2Target:'sql.VarChar(3)'};
+  //   let paramValues={sShip2Target:args.sShip2Target};
+  //   return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  // }
  
   // exports.getSubconPendingList=function(args){
   //   var stmt = "select * from dbo.BX_SubconShipments where shipToTarget=@sShip2Target";
@@ -55,12 +55,12 @@ const sqlSvc=require("./sqlService");
   //   let paramValues={sShip2Target:args.sShip2Target};
   //   return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   // }
-  exports.getSubconPendingList=function(shipTotarget){
-    var params={
-      sShip2Target:{type:'sql.VarChar(3)',value:shipTotarget}
-    }
-    return sqlSvc.callStoredProcedure("dbo.SpGetPendingReceiptsSerials",params);
-  }
+  // exports.getSubconPendingList=function(shipTotarget){
+  //   var params={
+  //     sShip2Target:{type:'sql.VarChar(3)',value:shipTotarget}
+  //   }
+  //   return sqlSvc.callStoredProcedure("dbo.SpGetPendingReceiptsSerials",params);
+  // }
   //update insertOrUpdateUserProfile 
   exports.insertOrUpdateUserProfile=function(user){
     var params={
@@ -119,17 +119,17 @@ const sqlSvc=require("./sqlService");
     }
       return sqlSvc.callStoredProcedure("dbo.BX_CheckMultipleTOStatus",params);
   }
-  exports.updateSubConReturns=function(args){
-    var params={
-      sFullScanCode:{type:'sql.VarChar(60)',value:args.sFullScanCode},
-      sReturnToTarget:{type:'sql.VarChar(3)',value:args.sReturnToTarget},
-      sLogonUser:{type:'sql.VarChar(20)',value:args.sLogonUser},
-      sQACategory:{type:'sql.VarChar(12)',value:args.sQACategory},
-      dCurrDate:{type:'sql.DateTime',value:new Date()}
-      // dCurrDate:{type:'sql.DateTime',value:args.dCurrDate}
-    }
-      return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
-  }
+  // exports.updateSubConReturns=function(args){
+  //   var params={
+  //     sFullScanCode:{type:'sql.VarChar(60)',value:args.sFullScanCode},
+  //     sReturnToTarget:{type:'sql.VarChar(3)',value:args.sReturnToTarget},
+  //     sLogonUser:{type:'sql.VarChar(20)',value:args.sLogonUser},
+  //     sQACategory:{type:'sql.VarChar(12)',value:args.sQACategory},
+  //     dCurrDate:{type:'sql.DateTime',value:new Date()}
+  //     // dCurrDate:{type:'sql.DateTime',value:args.dCurrDate}
+  //   }
+  //     return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
+  // }
 
   exports.getParamTypes = function(){
     let paramTypes={ScanQty:'sql.Int'};

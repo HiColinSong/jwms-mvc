@@ -188,6 +188,22 @@
                 },
                 isArray:true
               },
+              getSubconOrderList:{
+                method: 'GET',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-subcon-order-list'
+                },
+                isArray:true
+              },
+              getSubconWorkOrderInfo:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-subcon-work-order-info'
+                },
+                isArray:false
+              },
               getSubconPendingList:{
                 method: 'POST',
                 params:{

@@ -22,7 +22,7 @@
 							ng-model="barcode.binNo" autocomplete="off">
 						</td>
 					</tr> -->
-					<tr class="form-group" ng-if="qaSampleCategoryList&&qaSampleCategoryList.length>0">
+					<tr class="form-group" ng-if="barcode.isQaSample">
 						<td width="35%" class="padding-top">
 							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
 						</td>
@@ -90,17 +90,14 @@
 							</div>
 						</td>
 					</tr>
-					<!-- <tr class="form-group" ng-class="{'has-error':barcode.error.batchNo}">
+					<tr class="form-group" ng-if="qaSampleCategoryList&&qaSampleCategoryList.length>0">
 						<td width="35%" class="padding-top">
-							<label for="batchNo" class="block margin-top">Batch No:</label>
+							<label for="batchNo" class="block margin-top">Scan QA Sample</label>
 						</td>
-						<td width="65%">	
-								<div class="form-group">
-										<input type="text" class="form-control col-sm-8" id="batchNo" placeholder="Batch No" 
-											 ng-model="barcode.batchNo">
-										</div>
+						<td width="65%" class="text-left">	
+								<input type="checkbox" ng-model="barcode.isQaSample" style="height:16px;width:20px;margin-top:10px">
 						</td>
-					</tr> -->
+					</tr>
 				</tbody> 
 				<tfoot>
 					<tr>

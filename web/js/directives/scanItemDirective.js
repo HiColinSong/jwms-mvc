@@ -56,6 +56,17 @@
                             })
                         };
                         scope.removeItem=function(item){
+                            //find plannedItem:
+                            if (scope.type==='reservation'){
+                                for (let i = 0; i < scope.order.plannedItems.length; i++) {
+                                    const plannedItem = scope.order.plannedItems[i];
+                                    if (item.ResvItemNumber===plannedItem.ResvItemNumber){
+                                        plannedItem.posting=undefined;
+                                        break;
+                                    }
+                                }
+                            }
+
                             apiSvc.removeScanItem({type:scope.type},{RowKey:item.RowKey,orderNo:scope.orderNo}).$promise.
                                 then(function(data){
                                     if (data&&data.length>0&&data[0].error)

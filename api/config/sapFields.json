@@ -57,7 +57,9 @@
     "reservationHeaderFields":{
         "ResvNo":"RES_NO",
         "CreatedBy":"CREATED_BY",
-        "CreatedOn":"RES_DATE"
+        "CreatedOn":"RES_DATE",
+        "moveType":"MOVE_TYPE",
+        "ShipToCustomer":"COST_CTR"
     },
     "reservationItemFields":{
         "ResvItemNumber":"RES_ITEM",
@@ -65,7 +67,8 @@
         "BatchNo":"BATCH",
         "Quantity":"QUANTITY",
         "ResvStatus":"WITHDRAWN",
-        "Plant":"PLANT"
+        "Plant":"PLANT",
+        "Movement":"MOVEMENT"
     },
     "purchaseOrderFields":{}
 }

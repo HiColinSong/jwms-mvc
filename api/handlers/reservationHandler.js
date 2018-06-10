@@ -109,18 +109,21 @@ exports.confirmReservation=function(req,res){
 			// if (req.body.order.pgiStatus==="C"){
 			// 	throw new Error("The document has been PGR!");
 			// }
-			var ret = await sapSvc.pgrUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
+			var ret = await sapSvc.reservation(req.body.order,req.body.postedOn);
 
-			var args = util.getTransParams(req.body.order,"RGA");
+			var args = util.getTransParams(req.body.order,"RSV");
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
-
 			var info={
-				DONumber:req.body.orderNo,
-				DOStatus:'C',
+				Warehouse:req.session.user.DefaultWH,
+				ResvNumber:req.body.order.ResvNo,
+				PostedOn:req.body.postedOn,
+				PostedBy:req.session.user.UserID,
+				PostingStatus:'C',
+				Push2SAPStatus:'C',
 			}
-			await dbCommonSvc.UpdateDOStatus(info);
-			return res.status(200).send({confirm:"success"});
+			var status=await dbResvSvc.setStatus(info);
+			return res.status(200).send({confirm:"success",status:status.recordset[0]});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}
@@ -130,24 +133,33 @@ exports.confirmReservation=function(req,res){
 exports.reservationReversal=function(req,res){
 	(async function () {
 		try {
-			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
-			var order = util.deliveryOrderConverter(sapOrder);
+			// var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			// var order = util.deliveryOrderConverter(sapOrder);
 			
-			if (!order.DONumber){
-				throw new Error("The RGA "+req.body.orderNo+" doesn't exist.");
-			}
+			// if (!order.DONumber){
+			// 	throw new Error("The RGA "+req.body.orderNo+" doesn't exist.");
+			// }
 			
-			if (order.pgiStatus!=="C"){
-				throw new Error("The Document hasn't been PGR yet.");
+			// if (order.pgiStatus!=="C"){
+			// 	throw new Error("The Document hasn't been PGR yet.");
+			// }
+			// var ret = await sapSvc.pgrReversal(req.body.orderNo,order.DeliveryType,req.body.currentDate);
+			// //update the SN in sap
+			// var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
+			// order.scannedItems = scannedItems.recordset;
+			// util.trimValues(order.scannedItems);
+			// var args = util.getTransParams(order,"RGAX");
+			// if (args.IT_BX_STOCK.length>0)
+			// 	await sapSvc.serialNoUpdate(args);
+			var info={
+				Warehouse:req.session.user.DefaultWH,
+				ResvNumber:req.body.orderNo,
+				PostedOn:req.body.postedOn,
+				PostedBy:req.session.user.UserID,
+				PostingStatus:'R',
+				Push2SAPStatus:'R',
 			}
-			var ret = await sapSvc.pgrReversal(req.body.orderNo,order.DeliveryType,req.body.currentDate);
-			//update the SN in sap
-			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
-			order.scannedItems = scannedItems.recordset;
-			util.trimValues(order.scannedItems);
-			var args = util.getTransParams(order,"RGAX");
-			if (args.IT_BX_STOCK.length>0)
-				await sapSvc.serialNoUpdate(args);
+			var status=await dbResvSvc.setStatus(info);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});

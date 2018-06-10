@@ -1,0 +1,204 @@
+	<div class="" style="padding:30px;margin-top:20px">
+	  <h2 class="text-center">Post Sterile Receipts</h2>
+	</div>
+<section ng-if="!shipToTarget">
+	<div class="col-sm-6 col-sm-offset-3 margin-top">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('SGW')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Receive @BIT
+		</button>
+	</div>
+	<div class="clearboth"></div>
+	<!-- <div class="col-sm-6 col-sm-offset-3 margin-top-20">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('besa')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Receive @BESA
+		</button>
+	</div>
+	<div class="clearboth"></div> -->
+	<div class="col-sm-6 col-sm-offset-3 margin-top-20">
+	  	<button type="button" class="col-xs-12 btn btn-info btn-lg" 
+	  			ng-click="scanReceipt('SGQ')"> 
+	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> QA Sample
+		</button>
+	</div>
+</section>
+<section ng-if="shipToTarget">
+	  <ul class="nav nav-tabs margin-bottom" role="tablist">
+	    <li role="presentation" class="active"><a class="cursor-pointer">{{shipToTarget|dispCategoryName}}</a></li>
+		</ul>
+
+
+		<div ng-include src="'partials/scan-input.html'"></div>
+		<h4 class="margin-top">Subcon pending list for return scan</h4>
+		<div ng-init="showScanItemTab='groupView'" class="full-width" ng-show="list.length>0">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs " role="tablist">
+					<li role="presentation" ng-class="{'active':showScanItemTab==='groupView'}"><a class="cursor-pointer" 
+							ng-click="showScanItemTab='groupView'">Group View</a></li>
+					<li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}">
+								<a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Item View</a>
+					</li>
+			</ul>
+			
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<!-- group view start -->
+				<div role="tabpanel" class="tab-pane"  ng-class="{'active':showScanItemTab==='groupView'}" id="groupView" ng-init="groupCount=[]">
+					<div class="margin-top-20 panel-head">
+								<div class="col-sm-6 col-xs-6">Subcon PO No</div>
+								<div class="col-sm-6 col-xs-6">Quantity</div>
+					</div>
+					<div class="clearboth"></div>
+					<accordion close-others="true" >
+			
+						<div accordion-group class="panel-default scan-item"  
+								is-open="false" is-disabled="false" 
+									ng-repeat="(pidx,spo) in uniqueSubconPo" >
+							<accordion-heading>
+								<table class="full-width">
+									<tr>
+										<td width="50%" class="text-center">{{spo.subConPo}}</td>
+										<td width="50%" class="text-center">{{groupCount[pidx]||0}}</td>
+									</tr>
+								</table>
+							</accordion-heading>
+							<table class="table table-striped border scan-item">
+									<thead> 
+										<tr>
+											<td class="text-center">
+												Line No
+											</td>
+											<td class="text-center">
+												<a class="cursor-pointer" ng-click="sortType = 'SerialNo'; sortReverse = !sortReverse">
+													Serials No
+													<span ng-show="sortType == 'SerialNo' && !sortReverse" class="fa fa-caret-down"></span>
+													<span ng-show="sortType == 'SerialNo' && sortReverse" class="fa fa-caret-up"></span>
+												</a>
+											</td>
+											<td class="text-center">
+												<a class="cursor-pointer" ng-click="sortType = 'workorder'; sortReverse = !sortReverse">
+													Workorder
+													<span ng-show="sortType == 'workorder' && !sortReverse" class="fa fa-caret-down"></span>
+													<span ng-show="sortType == 'workorder' && sortReverse" class="fa fa-caret-up"></span>
+												</a>
+											</td>
+												<td class="text-center">
+													<a class="cursor-pointer" ng-click="sortType = 'CreatedBy'; sortReverse = !sortReverse">
+													CreatedBy
+														<span ng-show="sortType == 'CreatedBy' && !sortReverse" class="fa fa-caret-down"></span>
+														<span ng-show="sortType == 'CreatedBy' && sortReverse" class="fa fa-caret-up"></span>
+													</a>
+												</td>
+												<td class="text-center">
+													<a class="cursor-pointer" ng-click="sortType = 'CreatedOn'; sortReverse = !sortReverse">
+													Created On 
+														<span ng-show="sortType == 'CreatedOn' && !sortReverse" class="fa fa-caret-down"></span>
+														<span ng-show="sortType == 'CreatedOn' && sortReverse" class="fa fa-caret-up"></span>
+													</a>
+												</td>
+										</tr>
+									</thead> 
+									<tbody> 
+										<tr ng-repeat="(idx,item) in list | orderBy:sortType:sortReverse | filter:spo.subConPo" ng-init="groupCount[pidx]=(idx+1)">
+					
+										<td class="text-center" width="10%" >{{idx+1}}</td>
+										<td class="text-center"  width="20%">{{item.SerialNo||'-'}}</td>
+										<td class="text-center"  width="20%">{{item.workorder}}</td>
+										<td class="text-center"  width="30%">{{item.CreatedBy}}</td>
+										<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+									</tr>
+									<tr ng-show="!list||list.length===0">
+										<td colspan="5" class='empty-message text-center'>No pending item.</td>
+									</tr>
+									</tbody> 
+								</table>
+						</div>
+						<dir class="clearboth"></dir>
+					</accordion>
+				</div>
+				<!-- group view end -->
+				<!-- item view start -->
+				<div role="tabpanel" class="tab-pane" ng-class="{'active':showScanItemTab==='itemView'}" id="itemView">
+					<form ng-show="list&&list.length>0" class="margin-top">
+						<div class="form-group">
+							<div class="input-group">
+							<div class="input-group-addon"><i class="fa fa-search"></i></div>
+							<input type="text" class="form-control" placeholder="Search item" ng-model="searchItem">
+							</div>      
+						</div>
+					</form>
+					<table class="table padding-top table-striped border">
+						<thead> 
+							<tr>
+								<!-- <td>Line No</td> -->
+								<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'SerialNo'; sortReverse = !sortReverse">
+								Serials No
+								<span ng-show="sortType == 'SerialNo' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'SerialNo' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'workorder'; sortReverse = !sortReverse">
+								Work Order
+								<span ng-show="sortType == 'workorder' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'workorder' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'subConPo'; sortReverse = !sortReverse">
+								Subcon PO
+								<span ng-show="sortType == 'subConPo' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'subConPo' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'CreatedBy'; sortReverse = !sortReverse">
+								Created By 
+								<span ng-show="sortType == 'CreatedBy' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'CreatedBy' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'CreatedOn'; sortReverse = !sortReverse">
+								Created On
+								<span ng-show="sortType == 'CreatedOn' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'CreatedOn' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
+							</tr>
+						</thead> 
+						<tbody> 
+							<tr ng-if="list&&list.length>0" 
+								ng-repeat="(idx,item) in list | orderBy:sortType:sortReverse | filter:searchItem">
+		
+							<td class="text-center">{{item.SerialNo}}</td>
+							<td class="text-center">{{item.workorder}}</td>
+							<td class="text-center">{{item.subConPo}}</td>
+							<td class="text-center">{{item.CreatedBy}}</td>
+							<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+						</tr>
+					
+						<tr>
+							<td class="text-center" colspan="6" class='empty-message'  ng-show="!list||list.length==0">No item.</td>
+							<td class="text-center" colspan="6" class='empty-message'  ng-show="list&&list.length>0">Total Quantity: {{list.length}}</td>
+						</tr>
+						</tbody> 
+					</table>
+					
+				</div>
+				<!-- item view end -->
+				
+				<div class="clearboth"></div>
+			</div>
+			</div>
+	
+
+	<div class="clearboth"></div>
+</section>
+
+
+<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-show="debug">uniqueSubconPo:{{uniqueSubconPo | json}}</pre>	
+<pre ng-show="debug">list:{{list | json}}</pre>	

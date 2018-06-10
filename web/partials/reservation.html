@@ -46,18 +46,14 @@
 							<td >Number of Items</td> 
 							<td>{{resvDoc.plannedItems.length}}</td>
 						</tr> 
-						<!-- <tr ng-show="resvDoc.PickStart"> 
-							<td >Pick Start </td> 
-							<td>{{resvDoc.PickStart|localDatetime}}</td>
+						<tr> 
+							<td >Total Quantity</td> 
+							<td>{{resvDoc.totalPlannedQty}}</td>
 						</tr> 
-						<tr ng-show="resvDoc.PickComplete"> 
-							<td >Pick Complete</td> 
-							<td>{{resvDoc.PickComplete|localDatetime}}</td>
+						<tr> 
+							<td >Posting Status</td> 
+							<td>{{resvDoc.postingStatus}}</td>
 						</tr> 
-						<tr ng-show="resvDoc.Push2SAPStatus"> 
-							<td >Pick Confirm</td> 
-							<td>{{resvDoc.Push2SAPStatus}}</td>
-						</tr>  -->
 					</tbody> 
 				</table>
 			</div>
@@ -68,7 +64,7 @@
 	<!--confirm button-->
 	<div class="col-sm-3 col-xs-12 no-padding-x text-right margin-top">
 		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="comfirm Reservation" 
-		  ng-click="confirmReceipt()" ng-disabled="!resvDoc.confirmReady">
+		  ng-click="confirmReservation()" ng-disabled="!resvDoc.confirmReady||resvDoc.postingStatus==='Completed'">
 		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Reservation
 	  </button>
   </div>

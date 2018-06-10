@@ -1,0 +1,26 @@
+<div class="" style="padding:30px;margin-top:20px">
+	<h2 class="text-center">Post Sterile Receipts</h2>
+</div>
+<section>
+	<div class="form-group">
+	  	<label class="block text-center margin-bottom" for="workOrder">Please Choose Subcon Order</label>
+	    <div class="col-sm-6 col-xs-9  col-sm-offset-3 col-xs-offset-1 no-padding-x margin-bottom">
+			<select class="chosen-select col-sm-12 col-xs-12 form-control"
+					ng-model="order.orderNo"
+					name="domain"
+					ng-options="item.SubCOnPORefNo as item.SubCOnPORefNo for item in subconOrders"
+					>
+					<option value="">Select Subcon Order</option>
+			</select>
+		</div>
+		<div class="clearboth"></div>
+		<div class="col-sm-12 no-padding-x margin-bottom  text-center">
+			<button type="submit" class="btn btn-default" ng-click="getWorkOrders()" ng-disabled="!order.orderNo">Submit</button>
+		</div>
+	</div>
+	<div class="clearboth"></div>
+</section>
+
+
+<pre ng-show="debug">subconOrders:{{subconOrders | json}}</pre>	
+<pre ng-show="debug">order:{{order | json}}</pre>	

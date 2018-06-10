@@ -12,15 +12,40 @@
             })
             .when('/receiving', {templateUrl: 'partials/receiving.html'})
             .when('/fulfillment', {templateUrl: 'partials/fulfillment.html'})
-            .when('/receiving/spoReceipts/:shipToTarget?', {
+            .when('/receiving/spoReceipts', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersCtrl'
+                // resolve:{
+                //     list:['$q','$route','utilSvc','bxService',
+                //     function($q,$route,utilSvc,apiSvc){
+                //         var deferred = $q.defer();
+                //         if ($route.current.params.shipToTarget){
+                //             apiSvc.getSubconOrderList()
+                //             .$promise.then(function(data){
+                //                 if (data){
+                //                     deferred.resolve(data);
+                //                 } else {
+                //                     deferred.resolve(undefined);
+                //                 }
+                //             },function(err){
+                //                 deferred.reject(err);
+                //             })
+                //         } else {
+                //             deferred.resolve(undefined)
+                //         }
+                //         return deferred.promise;
+                //     }]                   
+                // }
+            })
+            .when('/receiving/spoReceipts/:orderNo?', {
                 templateUrl: 'partials/spoReceipts.html',
                 controller: 'spoReceiptsCtrl',
                 resolve:{
-                    list:['$q','$route','utilSvc','bxService',
+                    info:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
-                        if ($route.current.params.shipToTarget){
-                            apiSvc.getSubconPendingList({sShip2Target:$route.current.params.shipToTarget})
+                        if ($route.current.params.orderNo){
+                            apiSvc.getSubconWorkOrderInfo({orderNo:$route.current.params.orderNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
@@ -37,6 +62,31 @@
                     }]                   
                 }
             })
+            // .when('/receiving/spoReceipts/:shipToTarget?', {
+            //     templateUrl: 'partials/spoReceipts.html',
+            //     controller: 'spoReceiptsCtrl',
+            //     resolve:{
+            //         list:['$q','$route','utilSvc','bxService',
+            //         function($q,$route,utilSvc,apiSvc){
+            //             var deferred = $q.defer();
+            //             if ($route.current.params.shipToTarget){
+            //                 apiSvc.getSubconPendingList({sShip2Target:$route.current.params.shipToTarget})
+            //                 .$promise.then(function(data){
+            //                     if (data){
+            //                         deferred.resolve(data);
+            //                     } else {
+            //                         deferred.resolve(undefined);
+            //                     }
+            //                 },function(err){
+            //                     deferred.reject(err);
+            //                 })
+            //             } else {
+            //                 deferred.resolve(undefined)
+            //             }
+            //             return deferred.promise;
+            //         }]                   
+            //     }
+            // })
             .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',
                 controller: 'rtgReceiptsCtrl',

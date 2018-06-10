@@ -53,7 +53,8 @@
 					case "packing-reversals":
 						apiSvc.reverseOperation({type:'packing',param1:orderNo}).$promise.then(resultHandler,errorHandler);
 						break;
-					case "reservation":
+					case "reservation-reversals":
+						apiSvc.reservationReversals({orderNo:orderNo,postedOn:utilSvc.formatDateTime()}).$promise.then(resultHandler,errorHandler);
 						break;
 					case "pgi":
 						apiSvc.pgiUpdate({orderNo:orderNo,currentDate:utilSvc.formatDate()}).$promise.then(resultHandler,errorHandler);
