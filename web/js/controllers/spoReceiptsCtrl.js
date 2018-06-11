@@ -11,16 +11,6 @@
                     // $scope.categories=constants.categories;
         $scope.temp = {showTab:"workOrders"};
         $scope.workOrders = info.workOrders;
-        // let dummy = {};
-        // dummy.SubConPoRefNo= "2100180606",
-        // dummy.WorkOrder= "210000083091",
-        // dummy.nPlanCHWQty= 0,
-        // dummy.nPlanSGWQty= 120,
-        // dummy.nPlanSGQQty= 10,
-        // dummy.nRcptCHWQty= 0,
-        // dummy.nRcptSGWQty= 0,
-        // dummy.nRcptSGQQty= 0
-        // $scope.workOrders.push(dummy);
         $scope.bitList = info.bitPendingList;
         $scope.qasList = info.qasPendingList;
 
@@ -36,10 +26,35 @@
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
                     if ($scope.barcode.isQaSample&& $scope.barcode.qaCategory){
                         param.sQACategory =  $scope.barcode.qaCategory.QASampleID;
+                        let exist = false;
+                        for (let i = 0; i < $scope.qasList.length; i++) {
+                            const item = $scope.qasList[i];
+                            if ($scope.barcode.barcode1===item.FullScanCode){
+                                exist = true;
+                                break
+                            }
+                        }
+                        if (!exist){
+                            utilSvc.addAlert('Item does not exist!', "fail", false);
+                            return;
+                        }
                     } else if ($scope.barcode.isQaSample){
                         utilSvc.addAlert('Please select QA Sample Category', "fail", false);
                         return;
-                    } 
+                    } else {
+                        let exist = false;
+                        for (let i = 0; i < $scope.bitList.length; i++) {
+                            const item = $scope.bitList[i];
+                            if ($scope.barcode.barcode1===item.FullScanCode){
+                                exist = true;
+                                break
+                            }
+                        }
+                        if (!exist){
+                            utilSvc.addAlert('Item does not exist!', "fail", false);
+                            return;
+                        }
+                    }
                     apiSvc.updateSubconReturn(param).$promise.then(
                         function(data){
                             // console.log(JSON.stringify(data,null,2));
@@ -59,14 +74,34 @@
 
                 }
                 $scope.confirmReceipt = function() {
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$routeParams.orderNo}).$promise.then(function(data){
-                                if (data){
-                                    $scope.confirm=data;
-                                    confirmSubmit.do($scope);
-                                }
-                            },function(err){
-                                console.err(err);
-                            });
+                    utilSvc.pageLoading("start");
+                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$routeParams.orderNo}).$promise
+                    .then(function(data){
+                        utilSvc.pageLoading("stop");
+                        if (data&&data.confirm==='success'){
+                            $scope.confirm={
+                                type:"success",
+                                modalHeader: 'Subcon PO Confirmation Success',
+                                message:"The Subcon PO Receipts is confirmed successfully!",
+                                resetPath:"/receiving"
+                            }
+                        } else {
+                            $scope.confirm={
+                                type:"danger",
+                                modalHeader: 'Subcon PO Confirmation Fail',
+                                message:"Unknown error, confirmation is failed!",
+                            }
+                        }
+                        confirmSubmit.do($scope);
+                    },function(err){
+                        utilSvc.pageLoading("stop");
+                        console.error(err);
+                        $scope.confirm={
+                            type:"danger",
+                            message:err.data.message||"System error, confirmation is failed!",
+                        }
+                        confirmSubmit.do($scope);
+                    });
                 }
 
 

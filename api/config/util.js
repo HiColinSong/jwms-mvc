@@ -1,6 +1,6 @@
 'use strict';
 exports.formatDateTime=function(dateString){
-	let d=new Date(dateString);
+	let d=(dateString)?new Date(dateString):new Date();
 	let formatDate =  d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2);
 	let formatTime = ("0"+d.getHours()).slice(-2)+("0"+d.getMinutes()).slice(-2)+("0"+d.getSeconds()).slice(-2);
 	return {date:formatDate,time:formatTime}
@@ -212,7 +212,7 @@ exports.getTransParams = function(order,TRANS){
 					MATNR:item.MaterialCode,
 					CHARG: item.BatchNo,
 					SERIAL:item.SerialNo,
-					DOCNO: order.DONumber||order.ResvNo,
+					DOCNO: order.DONumber||order.ResvNo||order.orderNo,
 					ENDCUST:order.ShipToCustomer,
 					BXDATE:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).date,
 					BXTIME:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).time,

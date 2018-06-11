@@ -1,6 +1,6 @@
 'use strict';
 const util = require('../config/util');
-// const dbCommonSvc=require('../dbservices/dbCommonSvc');
+const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
 exports.getSubconOrderList=function(req,res){
 	(async function () {
@@ -70,9 +70,9 @@ exports.updateReturn=function(req,res){
 			list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
 			data.qasPendingList = list.recordset;
 
-			return res.status(200).send(list.recordset);//return serial number
+			return res.status(200).send(data);//return serial number
 		} catch (error) {
-			return res.status(400).send([{error:true,message:error.message}]);
+			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
 };
@@ -81,7 +81,27 @@ exports.completeSubconReceipt=function(req,res){
 	(async function () {
 		try {
 			var list = await dbSpoReceiptsSvc.CheckAndCompleteSubConReceipt(req.body.orderNo);
-			return res.status(200).send(list.recordset);//return serial number
+			list = list.recordset;
+			//call custom bapi to udpate SAP
+			let args = {IT_BX_STOCK:[]};
+			for (let j = 0; j < list.length; j++) {
+				const item = list[j];
+				args.IT_BX_STOCK.push({
+					TRANS:"PGI",
+					WERKS:item.PlantCode,
+					MATNR:item.Itemcode,
+					CHARG: item.batchno,
+					SERIAL:item.SerialNo,
+					DOCNO: item.PostingDocument,
+					// ENDCUST:item.ShipToCustomer,
+					BXDATE:util.formatDateTime().date,
+					BXTIME:util.formatDateTime().time,
+					BXUSER:req.session.user.UserID
+				});
+			}
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
 		}

@@ -186,7 +186,7 @@
                   type: 'sporeceipts',
                   subtype:'update-return'
                 },
-                isArray:true
+                isArray:false
               },
               getSubconOrderList:{
                 method: 'GET',
