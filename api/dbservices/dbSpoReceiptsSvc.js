@@ -43,6 +43,9 @@ const sqlSvc=require("./sqlService");
       dCurrDate:{type:'sql.DateTime',value:new Date()}
       // dCurrDate:{type:'sql.DateTime',value:args.dCurrDate}
     }
+      if (args.sOverWritePreviousScan){
+        params.sOverWritePreviousScan={type:'sql.VarChar(1)',value:args.sOverWritePreviousScan};
+      }
       return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
   }
 

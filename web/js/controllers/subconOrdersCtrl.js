@@ -16,7 +16,32 @@
                 })
 
                 $scope.getWorkOrders = function() {
-                    $location.path("/receiving/spoReceipts/"+$scope.order.orderNo);
+                    if (!$scope.order.orderNo&&$scope.order.userInput){
+                        let userInput = $scope.order.userInput;
+                        topLoop:
+                        for (let i = 0; i < $scope.subconOrders.length; i++) {
+                            const so = $scope.subconOrders[i];
+                            if (userInput===so.SubCOnPORefNo){
+                                $scope.order.orderNo = so.SubCOnPORefNo;
+                                break;
+                            } else {
+                                if (so.woNos&&so.woNos.length>0){
+                                    for (let j = 0; j < so.woNos.length; j++) {
+                                        const wo = so.woNos[j];
+                                        if (userInput===wo){
+                                            $scope.order.orderNo = wo;
+                                            break topLoop;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if ($scope.order.orderNo){
+                        $location.path("/receiving/spoReceipts/"+$scope.order.orderNo);
+                    } else {
+                        utilSvc.addAlert('The Subcon Order doesn\'t exist!', "fail", false);
+                    }
                 }
     }])
  }())

@@ -31,17 +31,14 @@ var gulp = require('gulp'),
     paths = {
         //the order matters for all app.xxx.js
         scripts: [
-            // 'web/js/app.js',
-            // 'web/js/app.route-provider.js',
-            // 'web/js/app.http-provider.js',
-            // 'web/js/app.local-storage-service-provider.js',
-            // 'web/js/app.run.js',
-            // 'web/js/controllers/*.js',
-            // 'web/js/directives/*.js',
-            // 'web/js/filters/*.js',
-            // 'web/js/services/*.js'
             'web/js/**',
             '!web/js/mock/**'
+        ],
+        nodeScripts: [
+            'api/**/*.*'
+        ],
+        nodeConfig: [
+            'db-config/**'
         ],
         css: ['web/css/*.css'],
         // json: ['json/*.json'],
@@ -80,6 +77,12 @@ gulp.task('scripts', ['clean'], function() {
         .pipe(uglify())
         .pipe(concat('bx.min.js'))
         .pipe(gulp.dest('deploy/web/js'));
+});
+
+gulp.task('nodeScripts', ['scripts'], function() {
+    return gulp.src(paths.nodeScripts)
+        // .pipe(uglify())
+        .pipe(gulp.dest('deploy/api'));
 });
 
 gulp.task('css', ['clean'], function() {
@@ -145,7 +148,7 @@ gulp.task('watch', function() {
     gulp.watch(paths.css, ['css']);
     gulp.watch(paths.htmlPartials, ['htmlPartials']);
 });
-gulp.task('default', ['copy-jsLibFiles','scripts','css','template','mergeJsWithPartials','remove-partials','index']);
+gulp.task('default', ['copy-jsLibFiles','scripts','nodeScripts','css','template','mergeJsWithPartials','remove-partials','index']);
 //gulp.task('default', ['copy-jsLibFiles','copy-imageFolders','scripts','aceCss','css','template','index']);
 
 

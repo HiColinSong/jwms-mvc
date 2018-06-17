@@ -6,7 +6,24 @@ exports.getSubconOrderList=function(req,res){
 	(async function () {
 		try {
 			var list = await dbSpoReceiptsSvc.getSubconOrders();
-			return res.status(200).send(list.recordset);
+			list = list.recordset;
+			var orders = [];
+			let previous = '';
+			//merge the duplicate subconPO into one element in the array
+			if (list&&list.length>0){
+				for (let i = 0; i < list.length; i++) {
+					const order = list[i];
+					if (order.SubCOnPORefNo!==previous){
+						order.woNos=[order.WorkOrder];
+						order.WorkOrder=undefined;
+						orders.push(order);
+					} else {
+						orders[orders.length-1].woNos.push(order.WorkOrder);
+					}
+					previous=order.SubCOnPORefNo;
+				}
+			}
+			return res.status(200).send(orders);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
 		}
@@ -56,9 +73,8 @@ exports.updateReturn=function(req,res){
 					sFullScanCode:req.body.sFullScanCode,
 					sReturnToTarget:req.body.sReturnToTarget,
 					sLogonUser:req.session.user.UserID,
-					sQACategory:req.body.sQACategory
-					// ,
-					// dCurrDate:new Date(req.body.dCurrDate)
+					sQACategory:req.body.sQACategory,
+					sOverWritePreviousScan:req.body.sOverWritePreviousScan
 				}
 			var list = await dbSpoReceiptsSvc.updateSubConReturns(param);
 			
@@ -72,7 +88,7 @@ exports.updateReturn=function(req,res){
 
 			return res.status(200).send(data);//return serial number
 		} catch (error) {
-			return res.status(400).send({error:true,message:error.message});
+			return res.status(400).send({error:error,message:error.message,errorCode:error.number});
 		}
 	})()
 };

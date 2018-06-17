@@ -46,6 +46,7 @@ Barcode.prototype.reset=function(){
     this.materialCode = undefined;
     this.materialRequired = undefined;
     this.serialNoRequired = undefined;
+    this.sOverWritePreviousScan = undefined;
 }
 Barcode.prototype.parseBarcode=function(){
     var self = this;

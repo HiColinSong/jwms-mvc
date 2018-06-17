@@ -2,7 +2,7 @@
 	<h2 class="text-center">Post Sterile Receipts</h2>
 </div>
 <section>
-	<div class="form-group">
+	<!-- <div class="form-group">
 	  	<label class="block text-center margin-bottom" for="workOrder">Please Choose Subcon Order</label>
 	    <div class="col-sm-6 col-xs-9  col-sm-offset-3 col-xs-offset-1 no-padding-x margin-bottom">
 			<select class="chosen-select col-sm-12 col-xs-12 form-control"
@@ -13,12 +13,46 @@
 					<option value="">Select Subcon Order</option>
 			</select>
 		</div>
-		<div class="clearboth"></div>
-		<div class="col-sm-12 no-padding-x margin-bottom  text-center">
-			<button type="submit" class="btn btn-default" ng-click="getWorkOrders()" ng-disabled="!order.orderNo">Submit</button>
-		</div>
+
+	</div> -->
+	<form >
+	<div class="form-group">
+			<label class="block" for="userInput">Please Scan PO or WO Number, Or Select from List:</label>
+				<input type="text" class="form-control" placeholder="Scan PO/WO Number" 
+							 ng-model="order.userInput" autofocus focus-me="true">
 	</div>
 	<div class="clearboth"></div>
+	<div role="tabpanel" class="tab-pane">
+			<table class="table padding-top">
+				<thead> 
+					<tr> 
+						<th  class="text-center">Choose</th> 
+						<th  class="text-center">SubconPO No</th> 
+						<th  class="text-center">WorkOrder No</th> 
+					</tr> 
+				</thead> 
+				<tbody> 
+						  <tr ng-repeat="(idx,sOrder) in subconOrders"> 
+							  <td class="text-center" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}">
+									<input type="radio" name="order{{idx}}" ng-model="order.orderNo" value="{{sOrder.SubCOnPORefNo}}">
+							  </td> 
+							  <td class="text-center cursor-pointer" 
+							  		ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"
+							  		ng-click="order.orderNo=sOrder.SubCOnPORefNo">
+									  {{sOrder.SubCOnPORefNo}}
+								</td>
+							  <td class="text-center cursor-pointer" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
+								  <div ng-repeat="wo in sOrder.woNos">{{wo}}</div>
+							  </td>
+						  </tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="clearboth"></div>
+		<div class="col-sm-12 no-padding-x margin-bottom  text-center">
+			<button type="submit" class="btn btn-default" ng-click="getWorkOrders()" ng-disabled="!order.orderNo&&!order.userInput">Submit</button>
+		</div>	
+	</form>	
 </section>
 
 

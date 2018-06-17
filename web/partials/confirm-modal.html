@@ -8,8 +8,13 @@
         Please Confirm
       </h4>
     </div>
-    <div class="modal-body font-16 text-info">
+    <div class="modal-body font-16 text-info" ng-if="!confirmMessage">
       Are you sure to {{actionOperate}} <span ng-if="itemName">"{{itemName}}"</span>?
+    </div>
+    <div class="modal-body font-16 text-info" ng-if="confirmMessage">
+      <div ng-repeat="msg in confirmMessage">
+        {{msg}}
+      </div>
     </div>
     <div class="modal-footer text-center">
       <button type="button" class="btn btn-default" ng-click="yes()">

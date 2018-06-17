@@ -4,9 +4,9 @@
     /* Controllers */
     angular.module('bx.controllers')
     .controller('spoReceiptsCtrl', ['$scope','$location','$routeParams','$filter','utilSvc','info',
-                'bxService','constants','modalConfirmSubmit','scanItemSvc','soundSvc',
+                'bxService','constants','modalConfirmSubmit','$modal','scanItemSvc','soundSvc',
             function($scope,$location,$routeParams,$filter,utilSvc,info,
-                     apiSvc,constants,confirmSubmit,itemSvc,soundSvc){
+                     apiSvc,constants,confirmSubmit,$modal,itemSvc,soundSvc){
 
                     // $scope.categories=constants.categories;
         $scope.temp = {showTab:"workOrders"};
@@ -24,34 +24,12 @@
                 $scope.findItem=function(){
                     var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$routeParams.orderNo};
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
-                    if ($scope.barcode.isQaSample&& $scope.barcode.qaCategory){
-                        param.sQACategory =  $scope.barcode.qaCategory.QASampleID;
-                        let exist = false;
-                        for (let i = 0; i < $scope.qasList.length; i++) {
-                            const item = $scope.qasList[i];
-                            if ($scope.barcode.barcode1===item.FullScanCode){
-                                exist = true;
-                                break
-                            }
-                        }
-                        if (!exist){
-                            utilSvc.addAlert('Item does not exist!', "fail", false);
-                            return;
-                        }
-                    } else if ($scope.barcode.isQaSample){
-                        utilSvc.addAlert('Please select QA Sample Category', "fail", false);
-                        return;
-                    } else {
-                        let exist = false;
-                        for (let i = 0; i < $scope.bitList.length; i++) {
-                            const item = $scope.bitList[i];
-                            if ($scope.barcode.barcode1===item.FullScanCode){
-                                exist = true;
-                                break
-                            }
-                        }
-                        if (!exist){
-                            utilSvc.addAlert('Item does not exist!', "fail", false);
+                    param.sOverWritePreviousScan = $scope.barcode.sOverWritePreviousScan;
+                    if ($scope.barcode.isQaSample){
+                        if ($scope.barcode.qaCategory){
+                            param.sQACategory = $scope.barcode.qaCategory.QASampleID
+                        } else {
+                            utilSvc.addAlert('Please select QA Sample Category', "fail", false);
                             return;
                         }
                     }
@@ -65,11 +43,46 @@
                             $scope.barcode.reset();
                         },function(err){
                             soundSvc.play("badSound");
-                            // console.error(JSON.stringify(err,null,2));
-                            if (err.data[0].message.trim())
-                                utilSvc.addAlert(err.data[0].message, "fail", false);
-                            else
-                                utilSvc.addAlert('Unknow error!', "fail", false);
+                            let errMsg = err.data.message.trim();
+                            
+                            //overwrite the scan
+                            let sourceTarget,sourceQACategory,regex,requiredTarget,requiredQACategory;
+                            if (errMsg){
+                                sourceTarget = (errMsg.match(/SG[A-Z]/i))?errMsg.match(/SG[A-Z]/i)[0]:undefined;
+                                sourceQACategory=errMsg.match(/00[0-9]/i);
+                                sourceQACategory=(sourceQACategory)?sourceQACategory[0]:undefined;
+                                requiredTarget=($scope.barcode.isQaSample)?"SGQ":"SGW";
+                                requiredQACategory = ($scope.barcode.qaCategory)?$scope.barcode.qaCategory.QASampleID:undefined;
+                                if ((sourceTarget === requiredTarget&&sourceQACategory&&sourceQACategory!==requiredQACategory)||
+                                      (sourceTarget&&sourceTarget !== requiredTarget)){
+                                        let msg1="This serial No is already assgined to ";
+                                        let msg2 = (sourceTarget==="SGW")?"BIT Warehouse":"QA Sample";
+                                        let msg3 = (sourceQACategory)?utilSvc.findItemById(sourceQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
+                                        let msg4 = (msg3)?"  in Category of \""+msg3+"\"":".";
+                                        let msg5 = "Are you sure move to ";
+                                        let msg6 = (requiredTarget==="SGW")?"BIT Warehouse":"QA Sample in Category of \"";
+                                        let msg7 = ($scope.barcode.isQaSample&&requiredQACategory)?utilSvc.findItemById(requiredQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
+                                        let msg8 = "?";
+                                        $scope.confirmMessage = [];
+                                        $scope.confirmMessage[0] = [msg1,msg2,msg4].join("");
+                                        $scope.confirmMessage[1] = [msg5,msg6,msg7,msg8].join("");
+                                        var modalInstance = $modal.open({
+                                            templateUrl: 'partials/confirm-modal.html',
+                                            scope: $scope
+                                        });
+                                        $scope.yes = function() {
+                                            modalInstance.close("yes");
+                                            $scope.barcode.sOverWritePreviousScan = "X";
+                                            $scope.findItem();
+                                            return;
+                                        }
+
+                                } else {
+                                    $scope.barcode.errMsg=[];
+                                    $scope.barcode.errMsg.push(err.data.message.trim()||"Unknow error");
+                                    return;
+                                }
+                            }
                         })
 
                 }
