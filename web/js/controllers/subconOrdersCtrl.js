@@ -16,7 +16,7 @@
                 })
 
                 $scope.getWorkOrders = function() {
-                    if (!$scope.order.orderNo&&$scope.order.userInput){
+                    if ($scope.order.userInput){
                         let userInput = $scope.order.userInput;
                         topLoop:
                         for (let i = 0; i < $scope.subconOrders.length; i++) {
@@ -29,7 +29,7 @@
                                     for (let j = 0; j < so.woNos.length; j++) {
                                         const wo = so.woNos[j];
                                         if (userInput===wo){
-                                            $scope.order.orderNo = wo;
+                                            $scope.order.orderNo = so.SubCOnPORefNo;;
                                             break topLoop;
                                         }
                                     }
