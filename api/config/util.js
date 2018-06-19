@@ -193,7 +193,7 @@ exports.getTransParams = function(order,TRANS){
 						MATNR:item.MaterialCode,
 						CHARG: item.BatchNo,
 						SERIAL:item.SerialNo,
-						DOCNO: item.HUNumber,
+						DOCNO: (TRANS==='PGI'||TRANS==='PGIX')?order.DONumber:item.HUNumber,
 						ENDCUST:order.ShipToCustomer,
 						BXDATE:this.formatDateTime(item.PackedOn).date,
 						BXTIME:this.formatDateTime(item.PackedOn).time,
