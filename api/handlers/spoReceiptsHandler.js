@@ -103,13 +103,13 @@ exports.completeSubconReceipt=function(req,res){
 			for (let j = 0; j < list.length; j++) {
 				const item = list[j];
 				args.IT_BX_STOCK.push({
-					TRANS:"PGI",
+					TRANS:"GR1",
 					WERKS:item.PlantCode,
 					MATNR:item.Itemcode,
 					CHARG: item.batchno,
 					SERIAL:item.SerialNo,
 					DOCNO: item.PostingDocument,
-					// ENDCUST:item.ShipToCustomer,
+					ENDCUST:item.ShipToTarget,
 					BXDATE:util.formatDateTime().date,
 					BXTIME:util.formatDateTime().time,
 					BXUSER:req.session.user.UserID
