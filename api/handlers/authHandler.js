@@ -21,8 +21,7 @@ exports.authCheck=function(req, res, next) {
 
 exports.adminCheck=function(req, res, next) {
 		if (req.session&&req.session.user&&
-			 (req.session.user.UserRole==='superAdmin'||
-			  req.session.user.UserRole==='admin'))
+			 (req.session.user.UserRole.indexOf("Admin")!==-1))
 	   next();
 	  else
 	    return res.sendStatus(401);

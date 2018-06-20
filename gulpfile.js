@@ -20,6 +20,7 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     concat = require('gulp-concat'),
     ngAnnotate = require('gulp-ng-annotate'),
+    // uglify = require('uglify-js'),
     uglify = require('gulp-uglify-es').default,
     cleanCss = require('gulp-clean-css'),
     minifyHtml = require('gulp-minify-html'),
@@ -66,9 +67,9 @@ gulp.task('copy-jsLibFiles', ['clean'], function() {
     gulp.src('bower_components/**/*.*').pipe(gulp.dest('deploy/bower_components/'));
 });
 
-// gulp.task('copy-imageFolders', ['clean'], function() {
-//     gulp.src('images/**/*.*').pipe(gulp.dest('deploy/images/'));
-// });
+gulp.task('copy-mediaFolders', ['clean'], function() {
+    gulp.src('web/media/**/*.*').pipe(gulp.dest('deploy/web/media/'));
+});
 
 gulp.task('scripts', ['clean'], function() {
     return gulp.src(paths.scripts)
@@ -148,7 +149,7 @@ gulp.task('watch', function() {
     gulp.watch(paths.css, ['css']);
     gulp.watch(paths.htmlPartials, ['htmlPartials']);
 });
-gulp.task('default', ['copy-jsLibFiles','scripts','nodeScripts','css','template','mergeJsWithPartials','remove-partials','index']);
-//gulp.task('default', ['copy-jsLibFiles','copy-imageFolders','scripts','aceCss','css','template','index']);
+gulp.task('default', ['copy-jsLibFiles','scripts','nodeScripts','css','template','mergeJsWithPartials','copy-mediaFolders','remove-partials','index']);
+//gulp.task('default', ['copy-jsLibFiles','copy-mediaFolders','scripts','aceCss','css','template','index']);
 
 

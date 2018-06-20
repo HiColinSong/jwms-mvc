@@ -52,7 +52,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
-           <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='admin')"> 
+           <li ng-show="authUser&&(authUser.UserRole.indexOf('Admin')!==-1)"> 
             <a href="#/admin" active-link="active">
               <span class="fa fa-universal-access fa-lg"></span>
               Admin

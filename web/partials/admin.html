@@ -33,7 +33,7 @@
             </thead> 
             <tbody> 
                 <tr ng-if="userList&&userList.length>0" 
-                    ng-repeat="(idx,user) in userList | orderBy:sortType:sortReverse">
+                    ng-repeat="(idx,user) in userList | orderBy:sortType:sortReverse|filter:{UserRole:'qa'}">
 
                 <td width="25%" class="text-center">{{user.UserID}}</td>
                 <td width="25%" class="text-center">{{user.DefaultWH}}</td>

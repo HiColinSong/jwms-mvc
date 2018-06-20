@@ -3,10 +3,18 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('adminCtrl',['$scope','$location','$modal','userList','utilSvc','bxService',
-	function($scope,$location,$modal,userList,utilSvc,apiSvc){
+    .controller('adminCtrl',['$scope','$rootScope','$location','$modal','userList','utilSvc','bxService',
+	function($scope,$rootScope,$location,$modal,userList,utilSvc,apiSvc){
 
         $scope.userList = userList;
+        $rootScope.$on("loginStautsChange",function(){
+            if (!$rootScope.authUser) return;
+            if ($rootScope.authUser.UserRole==="qaAdmin"){
+                $scope.roleFilter="qa";
+            } else if ($rootScope.authUser.UserRole==="whAdmin"){
+                $scope.roleFilter="wh"
+            }
+        })
         $scope.addOrEditUser=function(user){
             var modalInstance;
             modalInstance = $modal.open({

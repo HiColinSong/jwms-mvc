@@ -3,10 +3,12 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('addEditUserCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','bxService','user','userList',
-    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,user,userList){
+    .controller('addEditUserCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','bxService','user','userList','constants',
+    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,user,userList,constants){
 
              $scope.type=user?"Edit":"Add";
+             $scope.userRoles = constants.userRoles;
+
     	 	$scope.submit=function(){
 
                 apiSvc.addEditUser({user:$scope.user})
@@ -36,6 +38,13 @@
                 $scope.user.DefaultWH=$scope.user.DefaultWH||$rootScope.authUser.DefaultWH;
                 $scope.user.Domain=$scope.user.Domain||$rootScope.authUser.Domain;
                 $scope.user.UserRole=$scope.user.UserRole||"normal";
+                if ($rootScope.authUser.UserRole==="qaAdmin"){
+                    $scope.user.UserRole="qaLab";
+                    $scope.roleFilter="qa";
+                } else if ($rootScope.authUser.UserRole==="whAdmin"){
+                    $scope.user.UserRole="wh"
+                    $scope.roleFilter="wh"
+                }
              }
              $scope.reset();
     }])

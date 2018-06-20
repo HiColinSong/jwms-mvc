@@ -16,7 +16,7 @@ var appConfig=(function(){
 		return param;
 	}
 	return {
-		getInstance: function(){
+		getInstance : function(){
 				if (instance == null) {
 						instance = new AppConfig();
 						// Hide the constructor so the returned objected can't be new'd...
