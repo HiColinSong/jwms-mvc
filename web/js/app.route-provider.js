@@ -90,7 +90,7 @@
             .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',
                 controller: 'rtgReceiptsCtrl',
-                forbiddenRoles:['qaLab','qaAdmin','DocControlQA'],
+                bannedRoles:['qaLab','qaAdmin','DocControlQA'],
                 resolve:{
                     order:['$q','$route','utilSvc','bxService',
                         function($q,$route,utilSvc,apiSvc){
