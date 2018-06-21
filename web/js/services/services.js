@@ -405,7 +405,7 @@
           display:"QA Sample"
         }
       ],
-      userRoles:["superAdmin","qaAdmin","whAdmin","qaLab","wh","qaDocControl","tech"]
+      userRoles:["superAdmin","qaAdmin","whAdmin","qaLab","wh","DocControlQA","tech"]
     })
     .service('dynamicLocale',function(){
             var locale = {

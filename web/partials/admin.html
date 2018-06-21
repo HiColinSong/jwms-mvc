@@ -18,6 +18,13 @@
                     </a>
                 </th>
                 <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'UserRole'; sortReverse = !sortReverse">
+                    User Role
+                    <span ng-show="sortType == 'UserRole' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'UserRole' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
                     <a class="cursor-pointer" ng-click="sortType = 'Status'; sortReverse = !sortReverse">
                     Status
                     <span ng-show="sortType == 'Status' && !sortReverse" class="fa fa-caret-down"></span>
@@ -33,16 +40,17 @@
             </thead> 
             <tbody> 
                 <tr ng-if="userList&&userList.length>0" 
-                    ng-repeat="(idx,user) in userList | orderBy:sortType:sortReverse|filter:{UserRole:'qa'}">
+                    ng-repeat="(idx,user) in userList | orderBy:sortType:sortReverse|filter:{UserRole:roleFilter}">
 
-                <td width="25%" class="text-center">{{user.UserID}}</td>
-                <td width="25%" class="text-center">{{user.DefaultWH}}</td>
-                <td width="25%" class="text-center">{{(user.isActive==='1')?'Active':'Inactive'}}</td>
-                <td width="25%" class="text-center">
-                    <button type="button" class="btn btn-info btn-xs" ng-disabled="user.UserRole!=='normal'&&authUser.UserRole!=='superAdmin'" ng-click="addOrEditUser(user)">
+                <td width="20%" class="text-center">{{user.UserID}}</td>
+                <td width="20%" class="text-center">{{user.DefaultWH}}</td>
+                <td width="20%" class="text-center">{{user.UserRole}}</td>
+                <td width="20%" class="text-center">{{(user.isActive==='1')?'Active':'Inactive'}}</td>
+                <td width="20%" class="text-center">
+                    <button type="button" class="btn btn-info btn-xs" ng-disabled="authUser.UserRole.indexOf('Admin')===-1" ng-click="addOrEditUser(user)">
                         Edit 
                     </button>
-                    <button type="button" class="btn btn-danger btn-xs" ng-disabled="user.UserRole!=='normal'&&authUser.UserRole!=='superAdmin'" confirm-required="{{user.UserID}}" 
+                    <button type="button" class="btn btn-danger btn-xs" ng-disabled="authUser.UserRole.indexOf('Admin')===-1" confirm-required="{{user.UserID}}" 
                             ng-click="deleteUser(user)">
                         delete 
                     </button>

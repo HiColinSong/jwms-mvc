@@ -13,7 +13,7 @@
                 $scope.roleFilter="qa";
             } else if ($rootScope.authUser.UserRole==="whAdmin"){
                 $scope.roleFilter="wh"
-            }
+            } 
         })
         $scope.addOrEditUser=function(user){
             var modalInstance;

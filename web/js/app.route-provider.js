@@ -90,6 +90,7 @@
             .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',
                 controller: 'rtgReceiptsCtrl',
+                forbiddenRoles:['qaLab','qaAdmin','DocControlQA'],
                 resolve:{
                     order:['$q','$route','utilSvc','bxService',
                         function($q,$route,utilSvc,apiSvc){
@@ -231,6 +232,7 @@
                                     }
                                 },function(err){
                                     deferred.reject(err);
+                                    utilSvc.addAlert("The reservation "+$route.current.params.resvNo+" doesn't exist!", "fail", false);
                                     utilSvc.pageLoading("stop");
                                 })
                             } else {
