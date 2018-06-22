@@ -58,6 +58,12 @@
               Admin
             </a>
           </li>
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
+            <a href="#/view-error-log">
+              <span class="fa fa-file-text-o fa-lg"></span>
+              View Log
+            </a>
+          </li>
            <li ng-show="!authUser"> 
             <a class="cursor-pointer" ng-click="login()">
               <span class="fa fa-sign-in fa-lg"></span>
@@ -80,12 +86,6 @@
             <a href="#/home" ng-click="logout()">
               <span class="fa fa-sign-out fa-lg"></span>
               log out
-            </a>
-          </li>
-          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
-            <a href="#/view-error-log">
-              <span class="fa fa-file-text-o fa-lg"></span>
-              View Log
             </a>
           </li>
           <!--removeIf(qa)-->

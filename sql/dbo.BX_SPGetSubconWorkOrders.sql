@@ -19,7 +19,8 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 ALTER PROCEDURE [dbo].[BX_SPGetSubconWorkOrders]
-		@sSubCOnPORefNo		Varchar(20)
+		@sSubCOnPORefNo		Varchar(20) = NULL,
+		@sFullScanCode		Varchar(60) = NULL
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -34,6 +35,21 @@ BEGIN
 	DECLARE	@nRcptSGQQty	Int = 0
 	DECLARE	@nRcptCHWQty	Int = 0
 	DECLARE	@sOpenSubConPORefNo	Varchar(20)=''
+	DECLARE	@sErrorMessages	Varchar(300)=''
+
+	IF (@sSubCOnPORefNo is NULL)
+	   BEGIN
+		SELECT @sSubCOnPORefNo = subConPo 
+		FROM dbo.BX_SubconShipments
+		WHERE FullScanCode=@sFullScanCode
+		IF (@sSubCOnPORefNo is NULL)
+			BEGIN
+				SET @sErrorMessages = 'Error : Subcon PO cannot be found!' ;
+				THROW 51000, @sErrorMessages, 1;
+			END
+	   END
+
+	
 
 		--SELECT	
 		--	@nPlanCHWQty = sum(ISNULL(BESAQty,0)) ,
