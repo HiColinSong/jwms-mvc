@@ -5,13 +5,13 @@
  const Promise = require('Promise').default;
 //  const configuration =require("../../db-config/.db-config.json").sapConnParams;
  const configuration =require('../config/appConfig').getInstance().getSapConnParam();
-exports.getDeliveryOrder=function(orderNo){
+exports.getDeliveryOrder=function(orderNo,isHU_DATA){
 	var param = {
       IS_DLV_DATA_CONTROL:{
         HEAD_STATUS:"X",
         ITEM_STATUS:"X",
         ITEM:"X",
-        HU_DATA:"X",
+        // HU_DATA:"X",
         HEAD_PARTNER:"X"
       },
        IT_VBELN:[{
@@ -20,6 +20,9 @@ exports.getDeliveryOrder=function(orderNo){
         DELIV_NUMB_LOW:orderNo //add leading 0
        }]
     };
+    if (isHU_DATA){
+      param.IS_DLV_DATA_CONTROL.HU_DATA="X";
+    }
     return invokeBAPI("BAPI_DELIVERY_GETLIST",param);
 };
 

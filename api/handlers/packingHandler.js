@@ -263,7 +263,7 @@ exports.reversal=function(req,res){
 	var ret;
 	(async function () {
 		try {
-			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo);
+			var sapOrder = await sapSvc.getDeliveryOrder(req.params.orderNo,true);
 			var order = util.deliveryOrderConverter(sapOrder);
 			//todo: check status 
 			if (order.confirmStatus!=="C"){
