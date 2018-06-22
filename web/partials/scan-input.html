@@ -22,7 +22,7 @@
 							ng-model="barcode.binNo" autocomplete="off">
 						</td>
 					</tr> -->
-					<tr class="form-group" ng-if="barcode.isQaSample">
+					<tr class="form-group" ng-if="barcode.isQaSample||authUser.UserRole.indexOf('qa')!==-1">
 						<td width="35%" class="padding-top">
 							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
 						</td>
@@ -90,9 +90,9 @@
 							</div>
 						</td>
 					</tr>
-					<tr class="form-group" ng-if="qaSampleCategoryList&&qaSampleCategoryList.length>0">
+					<tr class="form-group" ng-if="authUser.UserRole.indexOf('qa')===-1&&authUser.UserRole.indexOf('wh')===-1">
 						<td width="35%" class="padding-top">
-							<label for="batchNo" class="block margin-top">Scan QA Sample</label>
+							<label for="" class="block margin-top">Scan QA Sample</label>
 						</td>
 						<td width="65%" class="text-left">	
 								<input type="checkbox" ng-model="barcode.isQaSample" style="height:16px;width:20px;margin-top:10px">

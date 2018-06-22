@@ -23,36 +23,17 @@
                       $rootScope.currentUrl=$location.url();
               })
             $rootScope.$on("$routeChangeStart", function(event, next, current) {
-                  if (next.$$route&&next.$$route.bannedRoles){
-                    if ($rootScope.authUser){
-                        checkAuthorization(next,$rootScope.authUser,event);
-                    } else {
-                        apiSvc.checkLoginStatus().$promise.then(function(data){
-                            if (data.loginUser){
-                                checkAuthorization(next,data.loginUser,event);
-                                $location.path(current.originalPath);
-                            } else {
-                                modalLogin.do();
-                            }
-                        },function(err){
-                            modalLogin.do();
-                            console.log(err);
-                        });
-                    }
-                        
+                  if (next.$$route&&next.$$route.bannedRoles&&$rootScope.authUser){
+                      for (let i = 0; i < next.$$route.bannedRoles.length; i++) {
+                          const bannedRole = next.$$route.bannedRoles[i];
+                          if (bannedRole===$rootScope.authUser.UserRole){
+                              event.preventDefault();
+                              utilSvc.addAlert("You are NOT authorized to access this module!", "fail", false);
+                              break;
+                          }
+                      }
                 }
             })
-
-                function checkAuthorization(next,authUser,event){
-                    for (let i = 0; i < next.$$route.bannedRoles.length; i++) {
-                        const bannedRole = next.$$route.bannedRoles[i];
-                        if (bannedRole===authUser.UserRole){
-                            event.preventDefault();
-                            utilSvc.addAlert("You are NOT authorized to access this module!", "fail", false);
-                            break;
-                        }
-                    }
-              }
     }])
 
    //  .run(['mockBackendService',function(mockSvc) {

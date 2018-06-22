@@ -310,7 +310,7 @@
                   callback.call();
                   return
                 }
-              }, 3000);
+              }, 5000);
             } else {
               if (callback)
                 callback.call();

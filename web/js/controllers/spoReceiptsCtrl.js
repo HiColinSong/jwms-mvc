@@ -3,9 +3,9 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('spoReceiptsCtrl', ['$scope','$location','$routeParams','$filter','utilSvc','info',
+    .controller('spoReceiptsCtrl', ['$scope','$rootScope','$routeParams','$interval','utilSvc','info',
                 'bxService','constants','modalConfirmSubmit','$modal','scanItemSvc','soundSvc',
-            function($scope,$location,$routeParams,$filter,utilSvc,info,
+            function($scope,$rootScope,$routeParams,$interval,utilSvc,info,
                      apiSvc,constants,confirmSubmit,$modal,itemSvc,soundSvc){
 
                     // $scope.categories=constants.categories;
@@ -15,6 +15,14 @@
         $scope.qasList = info.qasPendingList;
 
         $scope.barcode = itemSvc.getBarcodeObj();
+        let waitForUser = $interval(function() {
+            if ($rootScope.authUser) {
+                $interval.cancel(waitForUser);
+                if ($rootScope.authUser.UserRole.indexOf('qa')!==-1){
+                    $scope.barcode.isQaSample=true; 
+                }
+            }
+          }, 10);
 
         apiSvc.getQASampleCategoryList().$promise.then(function(data){
             $scope.qaSampleCategoryList = data;

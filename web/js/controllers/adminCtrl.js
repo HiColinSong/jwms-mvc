@@ -3,18 +3,32 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('adminCtrl',['$scope','$rootScope','$location','$modal','userList','utilSvc','bxService',
-	function($scope,$rootScope,$location,$modal,userList,utilSvc,apiSvc){
+    .controller('adminCtrl',['$scope','$rootScope','$interval','$modal','userList','utilSvc','bxService',
+	function($scope,$rootScope,$interval,$modal,userList,utilSvc,apiSvc){
 
         $scope.userList = userList;
         $rootScope.$on("loginStautsChange",function(){
             if (!$rootScope.authUser) return;
             if ($rootScope.authUser.UserRole==="qaAdmin"){
-                $scope.roleFilter="qa";
+                $scope.roleFilter=function(val){
+                    return val==='qaLab'||val==='qaAdmin';
+                }
+                $scope.roleFilter='qa'
             } else if ($rootScope.authUser.UserRole==="whAdmin"){
                 $scope.roleFilter="wh"
             } 
         })
+        let waitForUser = $interval(function() {
+            if ($rootScope.authUser) {
+                $interval.cancel(waitForUser);
+                if ($rootScope.authUser.UserRole==="qaAdmin"){
+//                     $scope.roleFilter="qaLab";
+                } else if ($rootScope.authUser.UserRole==="whAdmin"){
+                    $scope.roleFilter="wh"
+                } 
+            }
+          }, 10);
+
         $scope.addOrEditUser=function(user){
             var modalInstance;
             modalInstance = $modal.open({

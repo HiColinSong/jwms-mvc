@@ -224,4 +224,21 @@ exports.getTransParams = function(order,TRANS){
 	return args
 }
 
-
+//access control
+var accessControl = require('./accessControl.json');
+exports.checkAccess=function(role,targetUrl){
+	if (!accessControl[role]) return true;
+	let access=true;
+	if (accessControl[role]["allowedUrls"]){
+		access=false; 
+	}
+	let accessUrls = accessControl[role]["allowedUrls"]||accessControl[role]["bannedUrls"]
+	for (let i = 0; i < accessUrls.length; i++) {
+		const accessUrl = accessUrls[i];
+		if (targetUrl.match(accessUrl)){
+			access=!access;
+			break;
+		}
+	}
+	return access;
+}

@@ -9,10 +9,10 @@
                  apiSvc,confirmSubmit,itemSvc,soundSvc){
 
                     $scope.temp={};
-        $scope.onBlur = function($event) {
-            console.log($event);
-            $event.currentTarget.focus();
-        }
+        // $scope.onBlur = function($event) {
+        //     console.log($event);
+        //     $event.currentTarget.focus();
+        // }
         if (order&&order.DONumber&&(!order.status||order.status==='valid')){
                 utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" found", "success", true);
                 order.scannedItems=order.scannedItems||[]

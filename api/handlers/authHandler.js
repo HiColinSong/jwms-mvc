@@ -3,6 +3,7 @@ var session,fullUsername;
 var ActiveDirectory = require('activedirectory');
 const constants=require('./../config/const.json');
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
+const util=require('./../config/util');
 exports.checkLoginStatus=function(req,res){
 	if (req.session&&req.session.user){
 			var data={loginUser:req.session.user};
@@ -13,10 +14,13 @@ exports.checkLoginStatus=function(req,res){
 };
 
 exports.authCheck=function(req, res, next) {
-	  if (req.session&&req.session.user)
-	   next();
-	  else
+	  if (req.session&&req.session.user&&util.checkAccess(req.session.user.UserRole,req.originalUrl))
+	   	next();
+	  else if (req.session&&req.session.user){
+			return res.sendStatus(403);
+		} else {
 	    return res.sendStatus(401);
+		}
 };
 
 exports.adminCheck=function(req, res, next) {

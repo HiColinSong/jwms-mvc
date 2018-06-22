@@ -25,45 +25,22 @@
                                     } else {
                                         auth.checkLoginStatus();
                                     }
-                                    
                                 }
                                 return response;
                             },
                             responseError: function(response) {
                                 console.log("response.config.url="+response.config.url);
                                 if (response.status === 401) {
-                                    // redirect to URLs.login
-                                    console.log("redirect to URLs.login");
                                     //log user out:
                                     $injector.get("authSvc").setStatus("logout");
                                     $injector.get("modalLogin").do();
-
-                                    // $injector.invoke(['$http', '$modal','$location','$rootScope',
-                                    //     function($http, $modal,$location,$rootScope) {
-                                    //         var modalInstance = $modal.open({
-                                    //             templateUrl: 'partials/loginModal.html',
-                                    //             controller: 'loginCtrl'
-                                    //         });
-                                    //         $rootScope.$on("loginStautsChange",function(){
-                                    //             console.log("receive event:loginStautsChange");
-                                    //             if (modalInstance)
-                                    //                 modalInstance.close();
-                                    //         })
-                                    //         modalInstance.result.then(function() {
-                                    //             isLoggingIn = true;
-                                    //             console.log("login resolved");
-                                    //         }, function(path) {
-                                    //             isLoggingIn = false;
-                                    //             console.log("login rejected");
-                                    //              $location.path("/home");
-                                    //             //redirect to signup page
-
-                                    //         })['finally'](function() {
-                                    //             modalInstance = undefined;
-                                    //         });
-                                    //     }
-                                    // ]);
-                                    
+                                } else if  (response.status === 403) {
+                                    if(response.data&&response.data.loginUser)
+                                        auth.setStatus("login",response.data.loginUser,response.data.baseUrl);
+                                    $injector.get("utilSvc").addAlert("You are NOT authorized to access this module!", "fail", true);
+                                    $injector.get("utilSvc").pageLoading("stop");
+                                    // $injector.get("$location").path("/home");
+                                    return $q(function () { return null; }) // cancels the promise. stop all the reset handling in controller
                                 }
                                 return $q.reject(response);
                             }
