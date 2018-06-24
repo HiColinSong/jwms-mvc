@@ -29,22 +29,28 @@ var gulp = require('gulp'),
     stripLine = require('gulp-strip-line'),
     removeLines = require('gulp-remove-empty-lines'),
     templateCache = require('gulp-angular-templatecache'),
+    destFolder="../test/deploy",
     paths = {
         //the order matters for all app.xxx.js
         scripts: [
-            'web/js/**',
-            '!web/js/mock/**'
+            'web/js/app.js',
+            'web/js/app.http-provider.js',
+            'web/js/app.local-storage-service-provider.js',
+            'web/js/app.route-provider.js',
+            'web/js/app.run.js',
+            'web/js/controllers/*.*',
+            'web/js/directives/*.*',
+            'web/js/filters/*.*',
+            'web/js/services/*.*'
+            // ,'!web/js/mock/**'//exclude path
         ],
-        nodeScripts: [
-            'api/**/*.*'
-        ],
-        nodeConfig: [
-            'db-config/**'
-        ],
-        css: ['web/css/*.css'],
+        nodeScripts: ['api/**/*.*'],
+        dbConfig: ['db-config/**/.*.*'],
+        logs: ['logs/**/*.*'],
+        css: ['web/css/base.css','web/css/bx.css'],
         // json: ['json/*.json'],
 	    htmlPartials: ['web/partials/*.html'],
-        unifiedjs:['deploy/web/js/bx.min.js','deploy/web/partials/templates.js'],
+        unifiedjs:[destFolder+'/web/js/bx.min.js',destFolder+'/web/partials/templates.js'],
         index:['web/index.html'],
 	    jsCssLibrary: ['bower_components/*/*.*']
     },
@@ -59,16 +65,23 @@ gulp.task('default', function() {
 });
 
 gulp.task('clean', function() {
-    return gulp.src(['deploy'])
+    return gulp.src([destFolder])
         .pipe(clean({force:true}));
 });
 
 gulp.task('copy-jsLibFiles', ['clean'], function() {
-    gulp.src('bower_components/**/*.*').pipe(gulp.dest('deploy/bower_components/'));
+    gulp.src('bower_components/**/*.*').pipe(gulp.dest(destFolder+'/bower_components/'));
+    // gulp.src('node_modules/**/*.*').pipe(gulp.dest(destFolder+'/node_modules/'));
+    for (let key in require("./package.json").dependencies){
+        gulp.src("node_modules/"+key+"/**/*.*").pipe(gulp.dest(destFolder+'/node_modules/'+key+"/"));
+    } 
+});
+gulp.task('copy-serverjs', ['clean'], function() {
+    gulp.src('./server.js').pipe(gulp.dest(destFolder+'/'));
 });
 
 gulp.task('copy-mediaFolders', ['clean'], function() {
-    gulp.src('web/media/**/*.*').pipe(gulp.dest('deploy/web/media/'));
+    gulp.src('web/media/**/*.*').pipe(gulp.dest(destFolder+'/web/media/'));
 });
 
 gulp.task('scripts', ['clean'], function() {
@@ -77,20 +90,30 @@ gulp.task('scripts', ['clean'], function() {
         .pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest('deploy/web/js'));
+        .pipe(gulp.dest(destFolder+'/web/js'));
 });
 
 gulp.task('nodeScripts', ['scripts'], function() {
     return gulp.src(paths.nodeScripts)
         // .pipe(uglify())
-        .pipe(gulp.dest('deploy/api'));
+        .pipe(gulp.dest(destFolder+'/api'));
+});
+gulp.task('dbConfig', ['nodeScripts'], function() {
+    return gulp.src(paths.dbConfig)
+        // .pipe(uglify())
+        .pipe(gulp.dest(destFolder+'/db-config'));
+});
+gulp.task('logs', ['scripts'], function() {
+    return gulp.src(paths.logs)
+        // .pipe(uglify())
+        .pipe(gulp.dest(destFolder+'/logs'));
 });
 
 gulp.task('css', ['clean'], function() {
     return gulp.src(paths.css)
         .pipe(cleanCss())
         .pipe(concat('bx.min.css'))
-        .pipe(gulp.dest('deploy/web/css'));
+        .pipe(gulp.dest(destFolder+'/web/css'));
 });
 
 
@@ -105,16 +128,16 @@ gulp.task('template',['clean'], function() {
             }))
      .pipe(removeLines())
     .pipe(templateCache({
-        root:"web/partials/",
+        root:"partials/",
         module:"bx"
     }))
-    .pipe(gulp.dest('deploy/web/partials'));
+    .pipe(gulp.dest(destFolder+'/web/partials'));
 });
 
 gulp.task('mergeJsWithPartials',['clean','scripts','template'], function() {
     return gulp.src(paths.unifiedjs)
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest('deploy/web/js'));
+        .pipe(gulp.dest(destFolder+'/web/js'));
     });
 
 gulp.task('index', ['clean'], function() {
@@ -138,10 +161,10 @@ gulp.task('index', ['clean'], function() {
             loose: true
         }))
         .pipe(removeLines())
-        .pipe(gulp.dest('deploy'));
+        .pipe(gulp.dest(destFolder+'/web'));
 });
 gulp.task('remove-partials',['mergeJsWithPartials'], function() {
-    return gulp.src(['deploy/web/partials'])
+    return gulp.src([destFolder+'/web/partials'])
         .pipe(clean({force:true}));
 });
 gulp.task('watch', function() {
@@ -149,7 +172,9 @@ gulp.task('watch', function() {
     gulp.watch(paths.css, ['css']);
     gulp.watch(paths.htmlPartials, ['htmlPartials']);
 });
-gulp.task('default', ['copy-jsLibFiles','scripts','nodeScripts','css','template','mergeJsWithPartials','copy-mediaFolders','remove-partials','index']);
+gulp.task('default', ['copy-jsLibFiles','scripts','nodeScripts','css','template',
+                        'dbConfig','logs','copy-serverjs',
+                        'mergeJsWithPartials','copy-mediaFolders','remove-partials','index']);
 //gulp.task('default', ['copy-jsLibFiles','copy-mediaFolders','scripts','aceCss','css','template','index']);
 
 
