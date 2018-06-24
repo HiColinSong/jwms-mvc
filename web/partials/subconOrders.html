@@ -17,8 +17,8 @@
 	</div> -->
 	<form >
 	<div class="form-group">
-			<label class="block" for="userInput">Please Scan PO or WO Number, Or Select from List:</label>
-				<input type="text" class="form-control" placeholder="Scan PO/WO Number" 
+			<label class="block" for="userInput">Please Scan PO, WO Number or full barcode, Or Select from List:</label>
+				<input type="text" class="form-control" placeholder="Scan PO/WO Number or full barcode" 
 							 ng-model="order.userInput" autofocus focus-me="true">
 	</div>
 	<div class="clearboth"></div>
@@ -38,7 +38,7 @@
 							  </td> 
 							  <td class="text-center cursor-pointer" 
 							  		ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"
-							  		ng-click="order.orderNo=sOrder.SubCOnPORefNo">
+							  		ng-click="order.orderNo=sOrder.SubCOnPORefNo;order.userInput=undefined">
 									  {{sOrder.SubCOnPORefNo}}
 								</td>
 							  <td class="text-center cursor-pointer" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">

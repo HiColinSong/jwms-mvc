@@ -16,7 +16,9 @@
                 })
 
                 $scope.getWorkOrders = function() {
-                    if ($scope.order.userInput){
+                    if ($scope.order.userInput&&$scope.order.userInput.length>20){
+                        $scope.order.orderNo=$scope.order.userInput;
+                    } else if ($scope.order.userInput){
                         let userInput = $scope.order.userInput;
                         topLoop:
                         for (let i = 0; i < $scope.subconOrders.length; i++) {

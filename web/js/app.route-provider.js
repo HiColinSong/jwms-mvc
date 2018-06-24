@@ -32,6 +32,9 @@
                                     deferred.resolve(undefined);
                                 }
                             },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
                                 deferred.reject(err);
                             })
                         } else {

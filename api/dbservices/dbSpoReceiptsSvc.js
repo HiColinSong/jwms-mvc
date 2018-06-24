@@ -7,8 +7,15 @@ const sqlSvc=require("./sqlService");
   }
 
   exports.getSubconWorkOrders=function(subconPONo){
-    var params={
-      sSubCOnPORefNo:{type:'sql.VarChar(20)',value:subconPONo}
+    var params;
+    if (subconPONo&&subconPONo.length>20){
+      params={
+        sFullScanCode:{type:'sql.VarChar(60)',value:subconPONo}
+      }
+    } else {
+      params={
+        sSubCOnPORefNo:{type:'sql.VarChar(20)',value:subconPONo}
+      }
     }
     return sqlSvc.callStoredProcedure("dbo.BX_SPGetSubconWorkOrders",params);
   }
