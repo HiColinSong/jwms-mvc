@@ -41,7 +41,7 @@ exports.login=function(req, res) {
 	ad.authenticate(fullUsername, req.body.password, function(err, auth) {
 	  if (err) {
 	    console.log('ERROR: '+JSON.stringify(err));
-	    return res.status(403).send({message:"incorrect domain, username or password!"});
+	    return res.status(402).send({message:"incorrect domain, username or password!"});
 	  }
 		
 		(async function () {
@@ -57,7 +57,7 @@ exports.login=function(req, res) {
 					res.status(403).send({message:"You are not an authorized user."});
 				}
 			} catch (error) {
-				return res.status(200).send({error:true,message:error});
+				return res.status(400).send({error:true,message:error});
 			}
 		}})()
 	});

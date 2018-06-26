@@ -22,7 +22,7 @@
 							ng-model="barcode.binNo" autocomplete="off">
 						</td>
 					</tr> -->
-					<tr class="form-group" ng-if="barcode.isQaSample||authUser.UserRole.indexOf('qa')!==-1">
+					<tr class="form-group" ng-if="barcode.isQaSample&&qaSampleCategoryList&&qaSampleCategoryList.length>0">
 						<td width="35%" class="padding-top">
 							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
 						</td>
@@ -90,7 +90,8 @@
 							</div>
 						</td>
 					</tr>
-					<tr class="form-group" ng-if="authUser.UserRole.indexOf('qa')===-1&&authUser.UserRole.indexOf('wh')===-1">
+					<!-- only in subcon po, and superAdmin,tech roles need QA sample checkbox -->
+					<tr class="form-group" ng-if="authUser.UserRole.indexOf('qa')===-1&&authUser.UserRole.indexOf('wh')===-1&&type==='subcon'">
 						<td width="35%" class="padding-top">
 							<label for="" class="block margin-top">Scan QA Sample</label>
 						</td>
