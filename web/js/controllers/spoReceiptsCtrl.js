@@ -10,6 +10,7 @@
 
                     // $scope.categories=constants.categories;
         $scope.temp = {showTab:"workOrders"};
+        $scope.type = "subcon";
         $scope.workOrders = info.workOrders;
         $scope.bitList = info.bitPendingList;
         $scope.qasList = info.qasPendingList;
