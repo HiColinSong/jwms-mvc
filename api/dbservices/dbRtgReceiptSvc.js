@@ -16,7 +16,7 @@ exports.InsertScanItem=function(info){
     Qty:{type:'sql.Int',value:info.Qty}
   }
   if (info.SerialNo){
-    params.SerialNo={type:'sql.VarChar(8)',value:info.SerialNo};
+    params.SerialNo={type:'sql.VarChar(10)',value:info.SerialNo};
   }
   return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateRga",params)
 }
