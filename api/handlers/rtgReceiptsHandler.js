@@ -5,6 +5,7 @@ const sapSvc =require('../dbservices/sapService');
 const sqlSvc =require('../dbservices/sqlService');
 const dbRtgReceiptSvc =require('../dbservices/dbRtgReceiptSvc');
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
+const logger = require("../config/logger"); 
 var Promise = require('Promise').default;
 var order,promise;
 exports.getOrder=function(req,res){
@@ -115,7 +116,12 @@ exports.confirmRga=function(req,res){
 				throw new Error("The document has been PGR!");
 			}
 			var ret = await sapSvc.pgrUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
-
+			//if ret.PROT[0].MSGTY = 'E', throw error
+			if (ret&&ret.PROT&&ret.PROT.length>0&&ret.PROT[0].MSGTY==='E'){
+				let errMsg = "The PGR is failed!";
+				logger.error({bapiName:"Z_WS_DELIVERY_UPDATE",result:ret,error:errMsg});
+				throw new Error(errMsg);
+			}
 			var args = util.getTransParams(req.body.order,"RGA");
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
