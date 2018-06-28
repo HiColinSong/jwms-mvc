@@ -111,7 +111,7 @@ exports.confirmReservation=function(req,res){
 			// }
 			var ret = await sapSvc.reservation(req.body.order,req.body.postedOn);
 
-			var args = util.getTransParams(req.body.order,"RSV");
+			var args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 			var info={

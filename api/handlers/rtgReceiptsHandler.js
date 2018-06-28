@@ -122,7 +122,7 @@ exports.confirmRga=function(req,res){
 				logger.error({bapiName:"Z_WS_DELIVERY_UPDATE",result:ret,error:errMsg});
 				throw new Error(errMsg);
 			}
-			var args = util.getTransParams(req.body.order,"RGA");
+			var args = util.getTransParams(req.body.order,"RGA",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 
@@ -156,7 +156,7 @@ exports.rgaReversal=function(req,res){
 			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			order.scannedItems = scannedItems.recordset;
 			util.trimValues(order.scannedItems);
-			var args = util.getTransParams(order,"RGAX");
+			var args = util.getTransParams(order,"RGAX",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});

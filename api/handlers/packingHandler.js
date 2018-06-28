@@ -238,7 +238,7 @@ exports.confirmPacking=function(req,res){
 				}
 			ret = await sapSvc.confirmPacking(req.body.order);
 			//update all serial no with SAP
-			args = util.getTransParams(req.body.order,"PAK");
+			args = util.getTransParams(req.body.order,"PAK",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				ret = await sapSvc.serialNoUpdate(args);
 			//update DO status
@@ -283,7 +283,7 @@ exports.reversal=function(req,res){
 			}
 			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			order.HUList = HUList;
-			var args = util.getTransParams(order,"PAKX");
+			var args = util.getTransParams(order,"PAKX",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 
@@ -327,7 +327,7 @@ exports.pgiUpdate=function(req,res){
 			var order = util.deliveryOrderConverter(sapOrder);
 			var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 			order.HUList = HUList;
-			var args = util.getTransParams(order,"PGI");
+			var args = util.getTransParams(order,"PGI",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});
@@ -351,7 +351,7 @@ exports.pgiReversal=function(req,res){
 				var HUList = await getUpdatedHuAndScanItemList(req.body.orderNo);
 				order.HUList = HUList;
 				//update the SN in sap
-			var args = util.getTransParams(order,"PGIX");
+			var args = util.getTransParams(order,"PGIX",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 			return res.status(200).send({confirm:"success"});

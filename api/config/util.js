@@ -177,7 +177,7 @@ exports.trimValues = function (list){
 }
 
 //get SNUpdate Params
-exports.getTransParams = function(order,TRANS){
+exports.getTransParams = function(order,TRANS,bxUser){
 	const HUList = order.HUList;
 	const scannedItems = order.scannedItems;
 	var args = {IT_BX_STOCK:[]};
@@ -195,9 +195,9 @@ exports.getTransParams = function(order,TRANS){
 						SERIAL:item.SerialNo,
 						DOCNO: (TRANS==='PGI'||TRANS==='PGIX')?order.DONumber:item.HUNumber,
 						ENDCUST:order.ShipToCustomer,
-						BXDATE:this.formatDateTime(item.PackedOn).date,
-						BXTIME:this.formatDateTime(item.PackedOn).time,
-						BXUSER:item.PackBy
+						BXDATE:this.formatDateTime().date,//real time 
+						BXTIME:this.formatDateTime().time,//real time
+						BXUSER:bxUser//should be BX login User
 					});
 				}
 			}
@@ -214,9 +214,9 @@ exports.getTransParams = function(order,TRANS){
 					SERIAL:item.SerialNo,
 					DOCNO: order.DONumber||order.ResvNo||order.orderNo,
 					ENDCUST:order.ShipToCustomer,
-					BXDATE:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).date,
-					BXTIME:this.formatDateTime(item.PackedOn||item.ReceivedOn||item.PostedOn).time,
-					BXUSER:item.PackBy||item.ReceiptBy||item.PostBy
+					BXDATE:this.formatDateTime().date,
+					BXTIME:this.formatDateTime().time,
+					BXUSER:bxUser
 				});
 			}
 		}
@@ -235,7 +235,7 @@ exports.checkAccess=function(role,targetUrl){
 	let accessUrls = accessControl[role]["allowedUrls"]||accessControl[role]["bannedUrls"]
 	for (let i = 0; i < accessUrls.length; i++) {
 		const accessUrl = accessUrls[i];
-		if (targetUrl.match(accessUrl)){
+		if (targetUrl.toLowerCase().match(accessUrl.toLowerCase())){
 			access=!access;
 			break;
 		}
