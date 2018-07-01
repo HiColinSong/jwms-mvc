@@ -7,6 +7,7 @@
             function($rootScope,$locale,$location,utilSvc,dynamicLocale,apiSvc,modalLogin) {
               $locale.id="en-sg";
               dynamicLocale.setLocale($locale);
+              $rootScope.debug=$location.search().debug;
               //check login status
             //   apiSvc.checkLoginStatus();
               $rootScope.login=function(){

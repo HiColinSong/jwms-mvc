@@ -121,7 +121,7 @@ app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
 
 
 app.get('*', function(req, res){
-   res.send({ERROR:'Sorry, this is an invalid URL.'});
+   res.send({ERROR:'Sorry, '+req.originalUrl+' is an invalid URL.'});
 });
 app.listen(port, function () {
     console.log('Node app is running on port '+(port));
