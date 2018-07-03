@@ -35,9 +35,10 @@ exports.getSubconWorkOrderInfo=function(req,res){
 			var data = {};
 			var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			data.workOrders = list.recordset;
-			list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGW');
+			var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
+			list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');
 			data.bitPendingList = list.recordset;
-			list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
+			list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
 			data.qasPendingList = list.recordset;
 			return res.status(200).send(data);
 		} catch (error) {
