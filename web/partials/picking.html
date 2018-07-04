@@ -156,7 +156,7 @@
 	  		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Start Pick
 		</button>
   	</div>
-  	<div class="col-sm-3 col-xs-12 text-center margin-top">
+  	<!-- <div class="col-sm-3 col-xs-12 text-center margin-top">
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="complete pick"
   			ng-class="{'btn-primary':order.PickStart,
   						'btn-success':order.PickComplete||order.Push2SAPStatus}"
@@ -164,12 +164,12 @@
   			ng-click="changePickingStatus('PickComplete')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Pick Complete
 	</button>
-	</div>
+	</div> -->
   	<div class="col-sm-3 col-xs-12 text-right margin-top">
   	<button type="button" class="col-xs-12 btn btn-default btn-md" confirm-required action="comfirm pick"
-  			ng-class="{'btn-primary':order.PickComplete,
+  			ng-class="{'btn-primary':order.PickStart,
   						'btn-success':order.Push2SAPStatus}"
-  			ng-disabled="!order.PickStart||!order.PickComplete||order.Push2SAPStatus||order.PickConfirmStatus==='X'"
+  			ng-disabled="!order.PickStart||order.Push2SAPStatus||order.PickConfirmStatus==='X'"
 			ng-click="changePickingStatus('Push2SAPStatus')">
 	  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Pick
 	</button>
