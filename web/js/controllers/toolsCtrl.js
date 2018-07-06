@@ -100,12 +100,14 @@
 			const errorHandler=function(err){
 				utilSvc.pageLoading("stop");
 				console.error(err);
-				$scope.confirm={
-					type:"danger",
-					modalHeader: 'Operation Fail',
-					message:err.data.message||"System error, Operation is failed!",
+				if (!err.status||err.status!==401){
+					$scope.confirm={
+						type:"danger",
+						modalHeader: 'Operation Fail',
+						message:err.data.message||"System error, Operation is failed!",
+					}
+					confirmSubmit.do($scope);
 				}
-				confirmSubmit.do($scope);
 			}
     }])
  }())

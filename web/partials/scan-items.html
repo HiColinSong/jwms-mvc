@@ -98,7 +98,7 @@
 												<td  width="20%">{{item[createdByFieldName]}}</td>
 												<td width="10%" class="text-center">
 													<a class="cursor-pointer margin-left-20 text-danger"  
-														confirm-required="the item {{item.serialNo}}" 
+														confirm-required="item {{item.serialNo||item.SerialNo}}" 
 														ng-click="removeItem(item)" 
 														ng-if="((!order.confirmStatus||order.confirmStatus!=='C')&&type!=='reservation')||(type==='reservation'&&plannedItem.ResvStatus!=='X')">
 														<i class="text-danger fa fa-times-circle fa-lg"></i>
@@ -116,7 +116,7 @@
 							</accordion>
 					  </div>
 					  <!-- Total Summary end -->
-					  <!-- item view start -->
+					  <!-- Box Summary start -->
 					  <div role="tabpanel" class="tab-pane" ng-class="{'active':showScanItemTab==='itemView'}" id="itemView">
 							<form ng-show="items&&items.length>0" class="margin-top">
 								<div class="form-group">
@@ -180,9 +180,9 @@
 									<td>{{item.ScanQty||1}}</td>
 									<td width="10%" class="text-center">
 										<a class="cursor-pointer margin-left-20 text-danger"  
-											confirm-required="item {{item.serialNo}}" 
+											confirm-required="item {{item.serialNo||item.SerialNo}}" 
 											ng-click="removeItem(item)" 
-											ng-if="(!order.confirmStatus||order.confirmStatus!=='C')&&type!=='reservation'">
+											ng-if="(!order.confirmStatus||order.confirmStatus!=='C')">
 														<!-- Remove  -->
 											<i class="text-danger fa fa-times-circle fa-lg"></i>
 										</a>
@@ -200,7 +200,7 @@
 							</table>
 						  
 						</div>
-						<!-- item view end -->
+						<!-- Box Summary end -->
 						
 					  <div class="clearboth"></div>
 					</div>

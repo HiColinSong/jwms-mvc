@@ -30,15 +30,16 @@
                             },
                             responseError: function(response) {
                                 console.log("response.config.url="+response.config.url);
+                                $injector.get("utilSvc").pageLoading("stop");
                                 if (response.status === 401) {
                                     //log user out:
                                     $injector.get("authSvc").setStatus("logout");
                                     $injector.get("modalLogin").do();
+                                    return $q(function () { return null; })
                                 } else if  (response.status === 403) {
                                     if(response.data&&response.data.loginUser)
                                         auth.setStatus("login",response.data.loginUser,response.data.baseUrl);
                                     $injector.get("utilSvc").addAlert("You are NOT authorized to access this module!", "fail", true);
-                                    $injector.get("utilSvc").pageLoading("stop");
                                     // $injector.get("$location").path("/home");
                                     return $q(function () { return null; }) // cancels the promise. stop all the reset handling in controller
                                 }
