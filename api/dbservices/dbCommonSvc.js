@@ -14,7 +14,8 @@ const sqlSvc=require("./sqlService");
   }
   //get user List
   exports.getUserList=function(domain){
-    var stmt = "select * from dbo.BX_UserProfile where DOMAIN=@DOMAIN";
+    var stmt = "select * from dbo.BX_UserProfile";
+    // var stmt = "select * from dbo.BX_UserProfile where DOMAIN=@DOMAIN";
     let paramTypes={DOMAIN:'sql.VarChar(20)'};
     let paramValues={DOMAIN:domain};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues);

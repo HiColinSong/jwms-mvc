@@ -61,6 +61,10 @@
                                 for (let i = 0; i < scope.order.plannedItems.length; i++) {
                                     const plannedItem = scope.order.plannedItems[i];
                                     if (item.ResvItemNumber===plannedItem.ResvItemNumber){
+                                        if (plannedItem.ResvStatus==='X'){
+                                            util.addAlert("The item has been already posted!", "fail", true);
+                                            return;
+                                        }
                                         plannedItem.posting=undefined;
                                         break;
                                     }

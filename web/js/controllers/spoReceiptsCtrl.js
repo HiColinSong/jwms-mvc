@@ -97,7 +97,7 @@
                 }
                 $scope.confirmReceipt = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$routeParams.orderNo}).$promise
+                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo}).$promise
                     .then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
