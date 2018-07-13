@@ -120,7 +120,7 @@
                         console.error(err);
                         $scope.confirm={
                             type:"danger",
-                            message:err.data.message||"System error, confirmation is failed!",
+                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
                         }
                         confirmSubmit.do($scope);
                     });

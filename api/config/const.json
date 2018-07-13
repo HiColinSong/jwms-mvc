@@ -8,7 +8,7 @@
         "baseDN": "DC=besa,DC=bsi,DC=corp"
 	},
 	"bbvLdapConfig":{
-		"url": "ldap://bbvdc01.bbv.bsi.corp",
+		"url": "ldap://bbvdc03.bbv.bsi.corp",
         "baseDN": "DC=bbv,DC=bsi,DC=corp"
 	}
 }
