@@ -14,6 +14,7 @@
 		<li role="presentation" ng-class="{'active':temp.showTab==='qasScanItem'}">
 			<a class="cursor-pointer" ng-click="temp.showTab='qasScanItem'">Scan QA Samples</a>
 		</li>
+		<button type="button" class="btn btn-default pull-right" ng-click="refresh()">Refresh</button>
 	</ul>
 <!-- Tab panes -->
 <div class="tab-content">
@@ -216,9 +217,9 @@
 
 
 <div class="clearboth"></div>
-<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
+<!-- <pre ng-show="debug">barcode:{{barcode | json}}</pre>	
 <pre ng-show="debug">workOrders:{{workOrders | json}}</pre>	
 <pre ng-show="debug">bitList:{{bitList | json}}</pre>	
 <pre ng-show="debug">qasList:{{qasList | json}}</pre>	
-<pre ng-show="debug">temp:{{temp | json}}</pre>	
+<pre ng-show="debug">temp:{{temp | json}}</pre>	 -->
 

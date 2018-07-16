@@ -30,6 +30,23 @@
         },function(err){
             console.error(JSON.stringify(err,null,2));
         })
+        $scope.refresh=function(){
+            utilSvc.pageLoading("start");
+            apiSvc.getSubconWorkOrderInfo({orderNo:$scope.workOrders[0].SubConPoRefNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    $scope.workOrders = data.workOrders;
+                                    $scope.bitList = data.bitPendingList;
+                                    $scope.qasList = data.qasPendingList;
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                utilSvc.pageLoading("stop");
+                            })
+        }
                 $scope.findItem=function(){
                     var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$routeParams.orderNo};
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
@@ -46,9 +63,9 @@
                         function(data){
                             // console.log(JSON.stringify(data,null,2));
                             soundSvc.play("goodSound");
-                            $scope.workOrders = data.workOrders;
-                            $scope.bitList = data.bitPendingList;
-                            $scope.qasList = data.qasPendingList;
+                            // $scope.workOrders = data.workOrders;
+                            // $scope.bitList = data.bitPendingList;
+                            // $scope.qasList = data.qasPendingList;
                             $scope.barcode.reset();
                         },function(err){
                             soundSvc.play("badSound");

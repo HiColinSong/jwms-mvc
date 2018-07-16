@@ -80,12 +80,12 @@ exports.updateReturn=function(req,res){
 			var list = await dbSpoReceiptsSvc.updateSubConReturns(param);
 			
 			var data = {};
-			var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
-			data.workOrders = list.recordset;
-			list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGW');
-			data.bitPendingList = list.recordset;
-			list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
-			data.qasPendingList = list.recordset;
+			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
+			// data.workOrders = list.recordset;
+			// list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGW');
+			// data.bitPendingList = list.recordset;
+			// list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
+			// data.qasPendingList = list.recordset;
 
 			return res.status(200).send(data);//return serial number
 		} catch (error) {
