@@ -43,6 +43,9 @@ exports.InsertScanItem=function(info){
   }
 //insert Handlig Units list
   exports.createHandlingUnits=function(info){
+    if (info.Domain=='BESA'){
+      info.Domain='BBV'
+    }
     var params={
       DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
       NumToCreate:{type:'sql.Int',value:info.NumToCreate},
