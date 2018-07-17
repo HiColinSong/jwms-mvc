@@ -14,45 +14,40 @@
 		<li role="presentation" ng-class="{'active':temp.showTab==='qasScanItem'}">
 			<a class="cursor-pointer" ng-click="temp.showTab='qasScanItem'">Scan QA Samples</a>
 		</li>
-		<button type="button" class="btn btn-default pull-right" ng-click="refresh()">Refresh</button>
+		
 	</ul>
 <!-- Tab panes -->
 <div class="tab-content">
 		<h3 class="text-center">Subcon Order:{{workOrders[0].SubConPoRefNo}}</h3>
 		<div role="tabpanel" class="tab-pane"  ng-class="{'active':temp.showTab==='workOrders'}" id="workOrders">
+			<button type="button" class="btn btn-default pull-right" ng-click="refresh()">Refresh Scan Count</button>
 			  <table class="table padding-top table-striped" >
 				  <thead> 
 					  <tr> 
 						  <th width="20%"  class="text-center">Work Order</th> 
-						  <th width="14%"  class="text-center">Batch</th> 
-						  <th width="11%"  class="text-center">Plan Qty BIT</th> 
-						  <th width="11%"  class="text-center">Recv Qty BIT</th> 
-						  <th width="11%"  class="text-center">Recv Qty BIT Incr</th> 
-						  <th width="11%"  class="text-center">Plan Qty QA</th> 
-						  <th width="11%"  class="text-center">Recv Qty QA</th> 
-						  <th width="11%"  class="text-center">Recv Qty QA Incr</th> 
+						  <th width="20%"  class="text-center">Batch</th> 
+						  <th width="15%"  class="text-center">Recv/Plan Qty BIT</th> 
+						  <th width="15%"  class="text-center">Recv Qty BIT Incr</th> 
+						  <th width="15%"  class="text-center">Recv/Plan Qty QA</th> 
+						  <th width="15%"  class="text-center">Recv Qty QA Incr</th> 
 					  </tr> 
 				  </thead> 
 				  <tbody> 
 							<tr ng-repeat="(woIdx,order) in workOrders"> 
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.WorkOrder}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.FullScanCode|displayBatch}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nPlanSGWQty}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGWQty===order.nRcptSGWQty}">{{order.nRcptSGWQty}} / {{order.nPlanSGWQty}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQtyIncr||0}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nPlanSGQQty}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGQQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGQQty===order.nRcptSGQQty}">{{order.nRcptSGQQty}} / {{order.nPlanSGQQty}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGQQtyIncr||0}}</td>
 							</tr>
 						</tbody> 
 						<tfoot>
 							<tr> 
 								<td  class="text-center" colspan="2">Total:</td>
-								<td  class="text-center">{{su.planSGWQty}}</td>
-								<td  class="text-center">{{su.rcptSGWQty}}</td>
+								<td  class="text-center">{{su.rcptSGWQty}} / {{su.planSGWQty}}</td>
 								<td  class="text-center">{{su.rcptSGWQtyIncr||0}}</td>
-								<td  class="text-center">{{su.planSGQQty}}</td>
-								<td  class="text-center">{{su.rcptSGQQty}}</td>
+								<td  class="text-center">{{su.rcptSGQQty}} / {{su.planSGQQty}}</td>
 								<td  class="text-center">{{su.rcptSGQQtyIncr||0}}</td>
 							</tr>
 						</tfoot>
@@ -101,8 +96,9 @@
 		</div> 
 		<!-- endof first tab -->
 		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='bitScanItem'}" >
-				
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshPendList('SGW')">Refresh BIT Pending Scan List</button>
 				<h4 class="margin-top">Subcon pending list for return scan</h4>	
+				<div class="clearboth"></div>
 				<form ng-show="bitList&&bitList.length>0" class="margin-top">
 						<div class="form-group">
 							<div class="input-group">
@@ -130,10 +126,10 @@
 								</a>
 							</td>
 							<td class="text-center">
-								<a class="cursor-pointer" ng-click="sortType = 'subConPo'; sortReverse = !sortReverse">
-								Subcon PO
-								<span ng-show="sortType == 'subConPo' && !sortReverse" class="fa fa-caret-down"></span>
-								<span ng-show="sortType == 'subConPo' && sortReverse" class="fa fa-caret-up"></span>
+								<a class="cursor-pointer" ng-click="sortType = 'Batch'; sortReverse = !sortReverse">
+								Batch
+								<span ng-show="sortType == 'Batch' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'Batch' && sortReverse" class="fa fa-caret-up"></span>
 								</a>
 							</td>
 							<td class="text-center">
@@ -172,8 +168,9 @@
 		</div>
 				<!-- endof second tab -->
 		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='qasScanItem'}" >
-				
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshPendList('SGQ')">Refresh QA Sample Pending Scan List</button>
 				<h4 class="margin-top">Subcon pending list for return scan</h4>	
+				<div class="clearboth"></div>
 				<form ng-show="qasList&&qasList.length>0" class="margin-top">
 						<div class="form-group">
 							<div class="input-group">
@@ -201,10 +198,10 @@
 								</a>
 							</td>
 							<td class="text-center">
-								<a class="cursor-pointer" ng-click="sortType = 'subConPo'; sortReverse = !sortReverse">
-								Subcon PO
-								<span ng-show="sortType == 'subConPo' && !sortReverse" class="fa fa-caret-down"></span>
-								<span ng-show="sortType == 'subConPo' && sortReverse" class="fa fa-caret-up"></span>
+								<a class="cursor-pointer" ng-click="sortType = 'Batch'; sortReverse = !sortReverse">
+								Batch
+								<span ng-show="sortType == 'Batch' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'Batch' && sortReverse" class="fa fa-caret-up"></span>
 								</a>
 							</td>
 							<td class="text-center">
@@ -228,8 +225,8 @@
 								ng-repeat="(idx,item) in qasList | orderBy:sortType:sortReverse | filter:searchItem">
 		
 							<td class="text-center">{{item.SerialNo}}</td>
-							<td class="text-center">{{item.workorder}}</td>
-							<td class="text-center">{{item.subConPo}}</td>
+							<td class="text-center">{{item.WorkOrder}}</td>
+							<td class="text-center">{{item.FullScanCode|displayBatch}}</td>
 							<td class="text-center">{{item.CreatedBy}}</td>
 							<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
 						</tr>

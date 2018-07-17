@@ -16,9 +16,13 @@ exports.getSubconOrderList=function(req,res){
 					if (order.SubCOnPORefNo!==previous){
 						order.woNos=[order.WorkOrder];
 						order.WorkOrder=undefined;
+						// orders.push(order);
+						order.fullScanCodeList=[order.FullScanCode];
+						order.FullScanCode=undefined;
 						orders.push(order);
 					} else {
 						orders[orders.length-1].woNos.push(order.WorkOrder);
+						orders[orders.length-1].fullScanCodeList.push(order.FullScanCode);
 					}
 					previous=order.SubCOnPORefNo;
 				}
@@ -35,27 +39,41 @@ exports.getSubconWorkOrderInfo=function(req,res){
 			var data = {};
 			var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			data.workOrders = list.recordset;
-			var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
-			list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');
-			data.bitPendingList = list.recordset;
-			list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
-			data.qasPendingList = list.recordset;
+			if (req.session.user.UserRole==='DocControlQA'){ //only load pendingList for DocControlQA Role.
+				var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
+				list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');
+				data.bitPendingList = list.recordset;
+				list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
+				data.qasPendingList = list.recordset;
+			}
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
 };
-exports.getPendingList=function(req,res){
+exports.getScanPendingList=function(req,res){
 	(async function () {
 		try {
-			var list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.sShip2Target);
-			return res.status(200).send(list.recordset);
+			let data = {};
+			let list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.subconPO,req.body.ShipToTarget);
+			data.pendingList = list.recordset;
+			return res.status(200).send(data);
 		} catch (error) {
-			return res.status(400).send([{error:true,message:error.message}]);
+			return res.status(400).send({error:true,message:error.message});
 		}
 	})()
 };
+// exports.getPendingList=function(req,res){
+// 	(async function () {
+// 		try {
+// 			var list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.sShip2Target);
+// 			return res.status(200).send(list.recordset);
+// 		} catch (error) {
+// 			return res.status(400).send([{error:true,message:error.message}]);
+// 		}
+// 	})()
+// };
 exports.getQASampleCategoryList=function(req,res){
 	(async function () {
 		try {

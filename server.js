@@ -103,11 +103,12 @@ app.post('/bxapi/rtgReceipts/reversal.json',auth.authCheck,rtgReceiptsHandler.rg
 
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
 app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandler.updateReturn);
-app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getPendingList);
+// app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getPendingList);
 app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceiptsHandler.getQASampleCategoryList);
 app.get('/bxapi/sporeceipts/get-subcon-order-list.json',auth.authCheck,spoReceiptsHandler.getSubconOrderList);
 app.post('/bxapi/sporeceipts/get-subcon-work-order-info.json',auth.authCheck,spoReceiptsHandler.getSubconWorkOrderInfo);
 app.post('/bxapi/sporeceipts/confirm.json',auth.authCheck,spoReceiptsHandler.completeSubconReceipt);
+app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getScanPendingList);
 // app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
 // app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
 

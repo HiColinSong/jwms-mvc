@@ -210,7 +210,7 @@
                   type: 'sporeceipts',
                   subtype:'get-pending-list'
                 },
-                isArray:true
+                isArray:false
               },
               getQASampleCategoryList:{
                 method: 'GET',
