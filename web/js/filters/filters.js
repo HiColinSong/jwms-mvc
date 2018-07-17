@@ -3,6 +3,14 @@
     'use strict';
     /* Filters */
     angular.module('bx.filters')
+    .filter('displayBatch', [function(fullBarcode) {
+			return function(fullBarcode){
+				let barcode = new Barcode();
+				barcode.barcode1=fullBarcode;
+				barcode.parseBarcode()
+				return barcode.batchNo;
+			}
+		}])
     .filter('dispCategoryName', ['utilSvc','constants', function(utilSvc,constants,id) {
 	    return function(id) {
 	    	if (id)

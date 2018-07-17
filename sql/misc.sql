@@ -9,3 +9,7 @@ update dbo.BX_SubConPOHeader set isComplete = NULL where SubconPORefNo='21001806
 -- add full barcode
 update [dbo].[BX_SubconShipments] set FullScanCode='01088888930189661720062710W18060005|21'+SerialNo 
 where subConPo='2100180611'
+
+--insert EAN Code
+insert into dbo.SAP_EANCodes values('04543660018009','LAH35018P', 1)
+insert into dbo.SAP_EANCodes values('04543660017965','LAH25018P', 1)

@@ -156,6 +156,10 @@
     color: #fff;
     background: none;
 }
+.bx .bg-highlight{
+    background-color: yellow;
+    color: #333333;
+}
 
 @media(max-width:1160px) {
     #sidebar-wrapper .sidebar-nav{

@@ -20,7 +20,44 @@
 <div class="tab-content">
 		<h3 class="text-center">Subcon Order:{{workOrders[0].SubConPoRefNo}}</h3>
 		<div role="tabpanel" class="tab-pane"  ng-class="{'active':temp.showTab==='workOrders'}" id="workOrders">
-			  <table class="table padding-top table-striped" ng-repeat="(woIdx,order) in workOrders">
+			  <table class="table padding-top table-striped" >
+				  <thead> 
+					  <tr> 
+						  <th width="20%"  class="text-center">Work Order</th> 
+						  <th width="14%"  class="text-center">Batch</th> 
+						  <th width="11%"  class="text-center">Plan Qty BIT</th> 
+						  <th width="11%"  class="text-center">Recv Qty BIT</th> 
+						  <th width="11%"  class="text-center">Recv Qty BIT Incr</th> 
+						  <th width="11%"  class="text-center">Plan Qty QA</th> 
+						  <th width="11%"  class="text-center">Recv Qty QA</th> 
+						  <th width="11%"  class="text-center">Recv Qty QA Incr</th> 
+					  </tr> 
+				  </thead> 
+				  <tbody> 
+							<tr ng-repeat="(woIdx,order) in workOrders"> 
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.WorkOrder}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.FullScanCode|displayBatch}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nPlanSGWQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQtyIncr||0}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nPlanSGQQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGQQty}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGQQtyIncr||0}}</td>
+							</tr>
+						</tbody> 
+						<tfoot>
+							<tr> 
+								<td  class="text-center" colspan="2">Total:</td>
+								<td  class="text-center">{{su.planSGWQty}}</td>
+								<td  class="text-center">{{su.rcptSGWQty}}</td>
+								<td  class="text-center">{{su.rcptSGWQtyIncr||0}}</td>
+								<td  class="text-center">{{su.planSGQQty}}</td>
+								<td  class="text-center">{{su.rcptSGQQty}}</td>
+								<td  class="text-center">{{su.rcptSGQQtyIncr||0}}</td>
+							</tr>
+						</tfoot>
+			  </table>
+			  <!-- <table class="table padding-top table-striped" ng-repeat="(woIdx,order) in workOrders">
 				  <thead> 
 					  <tr> 
 						  <th  class="text-center" colspan="2">Work Order No: {{order.WorkOrder}}</th> 
@@ -53,7 +90,7 @@
 								<td>{{order.nRcptCHWQty}}</td>
 							</tr>
 						</tbody> 
-			  </table>
+			  </table> -->
 			  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
 					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Lot Release" 
 					ng-click="confirmReceipt()" ng-disabled="bitList.length>0||qasList.length>0">
@@ -120,8 +157,8 @@
 								ng-repeat="(idx,item) in bitList | orderBy:sortType:sortReverse | filter:searchItem">
 		
 							<td class="text-center">{{item.SerialNo}}</td>
-							<td class="text-center">{{item.workorder}}</td>
-							<td class="text-center">{{item.subConPo}}</td>
+							<td class="text-center">{{item.WorkOrder}}</td>
+							<td class="text-center">{{item.FullScanCode|displayBatch}}</td>
 							<td class="text-center">{{item.CreatedBy}}</td>
 							<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
 						</tr>
@@ -217,9 +254,9 @@
 
 
 <div class="clearboth"></div>
-<!-- <pre ng-show="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
 <pre ng-show="debug">workOrders:{{workOrders | json}}</pre>	
 <pre ng-show="debug">bitList:{{bitList | json}}</pre>	
 <pre ng-show="debug">qasList:{{qasList | json}}</pre>	
-<pre ng-show="debug">temp:{{temp | json}}</pre>	 -->
+<pre ng-show="debug">temp:{{temp | json}}</pre>	
 

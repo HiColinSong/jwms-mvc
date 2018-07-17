@@ -1,0 +1,1 @@
+update dbo.BX_SubconShipments set StatusID='6',ReceivedBy='e.ang',ReceivedOn=Convert(datetime,'20180717 17:30:00') where FullScanCode='01088888930162521720071110W18070122|21180617391'

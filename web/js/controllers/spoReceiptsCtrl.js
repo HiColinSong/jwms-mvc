@@ -14,6 +14,20 @@
         $scope.workOrders = info.workOrders;
         $scope.bitList = info.bitPendingList;
         $scope.qasList = info.qasPendingList;
+        var calcSummary = function(){
+            let su={};
+            for (let i = 0; i < $scope.workOrders.length; i++) {
+                const wo = $scope.workOrders[i];
+                su.planSGWQty=(su.planSGWQty||0)+wo.nPlanSGWQty;
+                su.rcptSGWQty=(su.rcptSGWQty||0)+wo.nRcptSGWQty;
+                su.rcptSGWQtyIncr=(su.rcptSGWQtyIncr||0)+wo.nRcptSGWQtyIncr;
+                su.planSGQQty=(su.planSGQQty||0)+wo.nPlanSGQQty;
+                su.rcptSGQQty=(su.rcptSGQQty||0)+wo.nRcptSGQQty;
+                su.rcptSGQQtyIncr=(su.rcptSGQQtyIncr||0)+wo.nRcptSGQQtyIncr;
+            }
+            $scope.su=su;
+        }
+        calcSummary();
 
         $scope.barcode = itemSvc.getBarcodeObj();
         let waitForUser = $interval(function() {
@@ -35,7 +49,14 @@
             apiSvc.getSubconWorkOrderInfo({orderNo:$scope.workOrders[0].SubConPoRefNo})
                             .$promise.then(function(data){
                                 if (data){
+                                    for (let i = 0; i < data.workOrders.length; i++) {
+                                        const updatedWo = data.workOrders[i];
+                                        const previousWo = $scope.workOrders[i];
+                                        updatedWo.nRcptSGWQtyIncr=updatedWo.nRcptSGWQty-previousWo.nRcptSGWQty;
+                                        updatedWo.nRcptSGQQtyIncr=updatedWo.nRcptSGQQty-previousWo.nRcptSGQQty;
+                                    }
                                     $scope.workOrders = data.workOrders;
+                                    calcSummary();
                                     $scope.bitList = data.bitPendingList;
                                     $scope.qasList = data.qasPendingList;
                                 }
