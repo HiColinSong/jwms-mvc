@@ -3,8 +3,8 @@
     'use strict';
     angular.module('bx')
     //set global 
-    .run(["$rootScope","$locale","$location","utilSvc","dynamicLocale","bxService","modalLogin",
-            function($rootScope,$locale,$location,utilSvc,dynamicLocale,apiSvc,modalLogin) {
+    .run(["$rootScope","$window","$locale","$location","utilSvc","dynamicLocale","bxService","modalLogin",
+            function($rootScope,$window,$locale,$location,utilSvc,dynamicLocale,apiSvc,modalLogin) {
               $locale.id="en-sg";
               dynamicLocale.setLocale($locale);
               $rootScope.debug=$location.search().debug;
@@ -23,6 +23,9 @@
                       console.log("locationChangeSuccess:"+url);
                       $rootScope.currentUrl=$location.url();
               })
+              $rootScope.setFocus=function(elementId){
+                $window.document.getElementById(elementId).focus()
+              }
             $rootScope.$on("$routeChangeStart", function(event, next, current) {
                   if (next.$$route&&next.$$route.bannedRoles&&$rootScope.authUser){
                       for (let i = 0; i < next.$$route.bannedRoles.length; i++) {
