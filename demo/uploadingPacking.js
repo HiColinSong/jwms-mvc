@@ -1302,17 +1302,70 @@ var data=[
 ]
 
 
+var hu=[
+{no:'30',hunumber:'118071900056'},
+{no:'31',hunumber:'118071900057'},
+{no:'32',hunumber:'118071900058'},
+{no:'33',hunumber:'118071900059'},
+{no:'34',hunumber:'118071900060'},
+{no:'35',hunumber:'118071900061'},
+{no:'36',hunumber:'118071900062'},
+{no:'37',hunumber:'118071900063'},
+{no:'38',hunumber:'118071900064'},
+{no:'39',hunumber:'118071900065'},
+{no:'40',hunumber:'118071900066'},
+{no:'41',hunumber:'118071900067'},
+{no:'42',hunumber:'118071900068'},
+{no:'43',hunumber:'118071900069'},
+{no:'44',hunumber:'118071900070'},
+{no:'45',hunumber:'118071900071'},
+{no:'46',hunumber:'118071900072'},
+{no:'47',hunumber:'118071900073'},
+{no:'48',hunumber:'118071900074'},
+{no:'49',hunumber:'118071900075'},
+{no:'50',hunumber:'118071900076'},
+{no:'51',hunumber:'118071900077'},
+{no:'52',hunumber:'118071900078'},
+{no:'53',hunumber:'118071900079'},
+{no:'54',hunumber:'118071900080'},
+{no:'55',hunumber:'118071900081'},
+{no:'56',hunumber:'118071900082'},
+{no:'57',hunumber:'118071900083'},
+{no:'58',hunumber:'118071900084'},
+{no:'59',hunumber:'118071900085'},
+{no:'60',hunumber:'118071900086'},
+{no:'61',hunumber:'118071900087'},
+{no:'62',hunumber:'118071900088'},
+{no:'63',hunumber:'118071900089'},
+{no:'64',hunumber:'118071900090'},
+{no:'65',hunumber:'118071900091'},
+{no:'66',hunumber:'118071900092'},
+{no:'67',hunumber:'118071900093'},
+{no:'68',hunumber:'118071900094'},
+{no:'69',hunumber:'118071900095'},
+{no:'70',hunumber:'118071900096'},
+{no:'71',hunumber:'118071900097'},
+{no:'72',hunumber:'118071900098'}
+]
+
 var barcode = new Barcode();
 let sqlscript;
 for (let i = 0; i < data.length; i++) {
     const item = data[i];
     barcode.barcode1=item.fullScanCode;
     barcode.parseBarcode();
+    let hunumber;
+    for (let j = 0; j < hu.length; j++) {
+        const hun = hu[j];
+        if (hun.no===item.HUNumber){
+            hunumber=hun.hunumber;
+        }
+    }
     sqlscript=[
         "exec dbo.InsertOrUpdatePacking",
         "'"+item.DONumber+"',",
         "'"+barcode.eanCode+"',",
-        "'"+item.HUNumber+"',",
+        "'"+hunumber+"',",
         "Null,",
         "'"+barcode.batchNo+"',",
         "Null,",
