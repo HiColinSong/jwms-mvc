@@ -206,6 +206,23 @@ var test_BAPI_TRANSACTION_COMMIT = function(){
   return invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
 }
 
+var test_ZIM_INVENTORY_REPORTX = function(){
+  let param = {
+    PSPMON:'201804',
+    S_WERKS:[
+      { SIGN:"I", OPTION:"EQ", PLANT_LOW:"2100" },
+      { SIGN:"I", OPTION:"EQ", PLANT_LOW:"2101" },
+      { SIGN:"I", OPTION:"EQ", PLANT_LOW:"2102" },
+      { SIGN:"I", OPTION:"EQ", PLANT_LOW:"2103" },
+      { SIGN:"I", OPTION:"EQ", PLANT_LOW:"2104" }
+    ],
+    S_MATNR:[
+      { SIGN:"I", OPTION:"EQ", MATERIAL_LOW:"BFR1-3028", MATERIAL_HIGH:"BFR1-4018" }
+    ]
+  }
+  return invokeBAPI("ZIM_INVENTORY_REPORTX",param);
+}
+
 var invokeBAPI = function(BAPI,param){
   r3connect.Pool.get(configuration).acquire()
   .then(function (client) {
@@ -232,7 +249,7 @@ var invokeBAPI = function(BAPI,param){
 // test_L_TO_CANCEL();
 // test_L_TO_CONFIRM();
 // test_BAPI_OUTB_DELIVERY_CONFIRM_DEC();
-test_BAPI_PO_GETDETAIL();
+// test_BAPI_PO_GETDETAIL();
 // test_BAPI_RESERVATION_GETDETAIL();
 // test_BAPI_CUSTOMER_GETDETAIL2();
 // test_BAPI_WHSE_TO_GET_DETAIL();
@@ -240,3 +257,4 @@ test_BAPI_PO_GETDETAIL();
 // test_Z_WS_REVERSE_GOODS_ISSUE();
 // test_L_TO_CONFIRM();
 // test_BAPI_TRANSACTION_COMMIT();
+test_ZIM_INVENTORY_REPORTX();

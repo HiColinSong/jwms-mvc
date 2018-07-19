@@ -3,8 +3,8 @@
     'use strict';
     /* Directives */
     angular.module('bx.directives')
-    .directive('scanItems', ['$timeout','bxService','scanItemSvc', 'utilSvc','soundSvc',
-            function($timeout,apiSvc,itemSvc, util,soundSvc) {
+    .directive('scanItems', ['$window','$timeout','bxService','scanItemSvc', 'utilSvc','soundSvc',
+            function($window,$timeout,apiSvc,itemSvc, util,soundSvc) {
                 return {
                     restrict: 'A',
                     transclude: false,
@@ -82,7 +82,9 @@
                                 }
                             )
                         }
-                        
+                        scope.setFocus=function(elementId){
+                            $window.document.getElementById(elementId).focus()
+                          }
                         scope.$watchCollection( "items", function( items ) {
                             if (items){
                                 scope.order.confirmReady=itemSvc.calculateScannedQty(items,scope.order.plannedItems,scope.itemNoFieldName,scope.QuantityFieldName);

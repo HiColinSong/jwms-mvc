@@ -232,18 +232,20 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.order.DONumber,true);
+			var order = util.deliveryOrderConverter(sapOrder);
 			// check picking is confirmed:
-			if (req.body.order.pickingStatus!=='C'){
+			if (order.pickingStatus!=='C'){
 					throw new Error("Please confirm the picking!");
 				}
-			ret = await sapSvc.confirmPacking(req.body.order);
+			ret = await sapSvc.confirmPacking(order);
 			//update all serial no with SAP
-			args = util.getTransParams(req.body.order,"PAK",req.session.user.UserID);
+			args = util.getTransParams(order,"PAK",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				ret = await sapSvc.serialNoUpdate(args);
 			//update DO status
 			var info={
-				DONumber:req.body.order.DONumber,
+				DONumber:order.DONumber,
 				PackComplete:req.body.PackComplete,
 				Push2SAPStatus:'C',
 				PackStatus:2,
