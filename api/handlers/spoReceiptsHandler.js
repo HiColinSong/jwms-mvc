@@ -2,6 +2,7 @@
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
+const dbPackingSvc =require('../dbservices/dbPackingSvc');
 exports.getSubconOrderList=function(req,res){
 	(async function () {
 		try {
@@ -129,6 +130,36 @@ exports.completeSubconReceipt=function(req,res){
 					SERIAL:item.SerialNo,
 					DOCNO: item.PostingDocument,
 					ENDCUST:item.ShipToTarget,
+					BXDATE:util.formatDateTime().date,
+					BXTIME:util.formatDateTime().time,
+					BXUSER:req.session.user.UserID
+				});
+			}
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
+			return res.status(200).send({confirm:"success"});
+		} catch (error) {
+			return res.status(400).send([{error:true,message:error.message}]);
+		}
+	})()
+};
+exports.partialRelease=function(req,res){
+	(async function () {
+		try {
+			var list = await dbPackingSvc.getScannedItemsWithWorkOrder(req.body.orderNo,req.body.subconPO);
+			list = list.recordset;
+			//call custom bapi to udpate SAP
+			let args = {IT_BX_STOCK:[]};
+			for (let j = 0; j < list.length; j++) {
+				const item = list[j];
+				args.IT_BX_STOCK.push({
+					TRANS:"GR1",
+					WERKS:'2100',
+					MATNR:item.MaterialCode,
+					CHARG: item.BatchNo,
+					SERIAL:item.SerialNo,
+					DOCNO: item.workorder,
+					ENDCUST:'SGW',
 					BXDATE:util.formatDateTime().date,
 					BXTIME:util.formatDateTime().time,
 					BXUSER:req.session.user.UserID

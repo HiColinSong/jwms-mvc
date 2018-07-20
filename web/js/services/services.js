@@ -212,6 +212,14 @@
                 },
                 isArray:false
               },
+              partialRelease:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'partial-release'
+                },
+                isArray:false
+              },
               getQASampleCategoryList:{
                 method: 'GET',
                 params:{

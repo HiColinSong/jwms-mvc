@@ -92,6 +92,14 @@ exports.InsertScanItem=function(info){
     let paramValues={DONumber:DONumber};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
+  //get scanned items for packing
+  exports.getScannedItemsWithWorkOrder=function(DONumber,SubconPO){
+    // var stmt = "select * from dbo.BX_PackDetails where DONumber=@DONumber";
+    var stmt = "select p.*,s.workorder from dbo.BX_PackDetails p,dbo.BX_SubconShipments s where p.DONumber=@DONumber and s.subConPo=@SubconPO and p.SerialNo =s.SerialNo";
+    let paramTypes={DONumber:'sql.VarChar(12)',SubconPO:'sql.VarChar(30)'};
+    let paramValues={DONumber:DONumber,SubconPO:SubconPO};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
   //get PackHeader
   exports.getPackHeader=function(DONumber){
     var stmt = "select * from dbo.BX_PackHeader where DONumber=@DONumber";

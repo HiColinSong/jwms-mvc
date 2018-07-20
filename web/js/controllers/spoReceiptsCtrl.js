@@ -163,6 +163,37 @@
                         confirmSubmit.do($scope);
                     });
                 }
+                $scope.dorder={};
+                $scope.partialRelease = function() {
+                    utilSvc.pageLoading("start");
+                    apiSvc.partialRelease({orderNo:utilSvc.formalizeOrderNo($scope.dorder.DONumber),subconPO:$scope.workOrders[0].SubConPoRefNo}).$promise
+                    .then(function(data){
+                        utilSvc.pageLoading("stop");
+                        if (data&&data.confirm==='success'){
+                            $scope.confirm={
+                                type:"success",
+                                modalHeader: 'Partial Release Confirmation Success',
+                                message:"The Partial Release is confirmed successfully!",
+                                resetPath:"/receiving"
+                            }
+                        } else {
+                            $scope.confirm={
+                                type:"danger",
+                                modalHeader: 'Partial Release Confirmation Fail',
+                                message:"Unknown error, confirmation is failed!",
+                            }
+                        }
+                        confirmSubmit.do($scope);
+                    },function(err){
+                        utilSvc.pageLoading("stop");
+                        console.error(err);
+                        $scope.confirm={
+                            type:"danger",
+                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                        }
+                        confirmSubmit.do($scope);
+                    });
+                }
 
         $scope.refreshPendList=function(ShipToTarget){
             utilSvc.pageLoading("start");

@@ -86,10 +86,20 @@
 							</tr>
 						</tbody> 
 			  </table> -->
-			  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+			  <!-- <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
 					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Lot Release" 
 					ng-click="confirmReceipt()" ng-disabled="bitList.length>0||qasList.length>0">
 					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Lot Release
+				  </button>
+			  </div> -->
+			  <div class="form-group col-sm-4 col-xs-12" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+					<input type="text" class="form-control" placeholder="Scan or Input DO Number" 
+								 ng-model="dorder.DONumber" autofocus focus-me="true">
+				</div>
+			  <div class="col-sm-4 col-xs-12 no-padding-x text-right" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Partial Lot Release" 
+					ng-click="partialRelease()" ng-disabled="!dorder.DONumber">
+					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Partial Lot Release
 				  </button>
 			  </div>
 			  <div class="clearboth"></div>
@@ -251,6 +261,7 @@
 
 
 <div class="clearboth"></div>
+<pre ng-show="debug">dorder:{{dorder | json}}</pre>	
 <pre ng-show="debug">barcode:{{barcode | json}}</pre>	
 <pre ng-show="debug">workOrders:{{workOrders | json}}</pre>	
 <pre ng-show="debug">bitList:{{bitList | json}}</pre>	
