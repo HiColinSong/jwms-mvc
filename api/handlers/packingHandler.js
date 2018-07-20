@@ -238,6 +238,7 @@ exports.confirmPacking=function(req,res){
 			if (order.pickingStatus!=='C'){
 					throw new Error("Please confirm the picking!");
 				}
+			order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);	
 			ret = await sapSvc.confirmPacking(order);
 			//update all serial no with SAP
 			args = util.getTransParams(order,"PAK",req.session.user.UserID);
