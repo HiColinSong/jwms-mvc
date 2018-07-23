@@ -169,7 +169,10 @@ var test_BAPI_WHSE_TO_GET_DETAIL = function(){
   let param = {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178345'};
   return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
 }
-
+var test_Z_SD_UPDATE_DN_STATUS = function(){
+  var param ={IM_VBELN :'0800401204'};
+    return invokeBAPI("Z_SD_UPDATE_DN_STATUS",param,false,true);
+}
 var test_Z_WS_DELIVERY_UPDATE = function(){
   let param = {
                 "VBKOK_WA": {
@@ -257,4 +260,5 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_WS_REVERSE_GOODS_ISSUE();
 // test_L_TO_CONFIRM();
 // test_BAPI_TRANSACTION_COMMIT();
-test_ZIM_INVENTORY_REPORTX();
+// test_ZIM_INVENTORY_REPORTX();
+test_Z_SD_UPDATE_DN_STATUS
