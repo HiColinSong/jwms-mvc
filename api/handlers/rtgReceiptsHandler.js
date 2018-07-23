@@ -112,16 +112,30 @@ exports.removeItem=function(req,res){
 exports.confirmRga=function(req,res){
 	(async function () {
 		try {
-			if (req.body.order.pgiStatus==="C"){
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.orderNo);
+			var order = util.deliveryOrderConverter(sapOrder);
+			//find customer name
+			if (order.ShipToCustomer){
+				var customer = await sapSvc.getCustomerDetail(order.ShipToCustomer);
+				order.ShipToCustomerName=customer.CUSTOMERADDRESS.NAME;
+			}
+			var scannedItems = await dbRtgReceiptSvc.getScannedItems(order.DONumber);
+			order.scannedItems=scannedItems.recordset;
+			util.trimValues(order.scannedItems);			
+			
+			if (order.pgiStatus==="C"){
 				throw new Error("The document has been PGR!");
 			}
-			var ret = await sapSvc.pgrUpdate(req.body.order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
+			var ret = await sapSvc.pgrUpdate(order.DONumber,req.body.currentDate,req.session.user.DefaultWH);
 			//if ret.PROT[0].MSGTY = 'E', throw error
 			if (ret&&ret.PROT&&ret.PROT.length>0&&ret.PROT[0].MSGTY==='E'){
 				let errMsg = "The PGR is failed!";
 				logger.error({bapiName:"Z_WS_DELIVERY_UPDATE",result:ret,error:errMsg});
 				throw new Error(errMsg);
 			}
+			
+
+
 			var args = util.getTransParams(req.body.order,"RGA",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);

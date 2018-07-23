@@ -26,7 +26,7 @@
 
                 $scope.confirmReceipt = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"rtgreceipts"},{order:order,currentDate:utilSvc.formatDate()}).$promise.
+                    apiSvc.confirmOperation({type:"rtgreceipts"},{orderNo:order.DONumber,currentDate:utilSvc.formatDate()}).$promise.
                     then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
