@@ -68,6 +68,11 @@ exports.packingReversal = function(orderNo,HUNumber){
     return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true,true);
 }
 
+exports.packingStatusUpdate = function(orderNo){
+  var param ={IM_VBELN :orderNo};
+    return invokeBAPI("Z_SD_UPDATE_DN_STATUS",param,false,true);
+}
+
 exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
   var param ={ 
       VBKOK_WA:{

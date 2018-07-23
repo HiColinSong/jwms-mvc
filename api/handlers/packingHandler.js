@@ -240,6 +240,8 @@ exports.confirmPacking=function(req,res){
 				}
 			order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);	
 			ret = await sapSvc.confirmPacking(order);
+			//update packing status:
+			ret = await sapSvc.packingStatusUpdate(order.DONumber);
 			//update all serial no with SAP
 			args = util.getTransParams(order,"PAK",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
@@ -284,6 +286,9 @@ exports.reversal=function(req,res){
 					}
 				}
 			}
+			//update packing status:
+			ret = await sapSvc.packingStatusUpdate(order.DONumber);
+			
 			var HUList = await getUpdatedHuAndScanItemList(req.params.orderNo);
 			order.HUList = HUList;
 			var args = util.getTransParams(order,"PAKX",req.session.user.UserID);
