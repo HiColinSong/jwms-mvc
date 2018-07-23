@@ -51,8 +51,8 @@
                     for (let j = 0; j < huList.length; j++) {
                         scannedItems=huList[j].scannedItems=huList[j].scannedItems||[];
                         for (let k = 0; k < scannedItems.length; k++) {
-                            if (scannedItems[k].MaterialCode===plannedItems[i].MaterialCode&&
-                                scannedItems[k].BatchNo===plannedItems[i].BatchNo&&
+                            if (scannedItems[k].MaterialCode.toUpperCase()===plannedItems[i].MaterialCode&&
+                                scannedItems[k].BatchNo.toUpperCase()===plannedItems[i].BatchNo&&
                                 scannedItems[k].DOItemNumber===plannedItems[i].DOItemNumber){
                                     plannedItems[i].ScanQty+=scannedItems[k].ScanQty;
                                 }
@@ -77,8 +77,8 @@
                 for (let i = 0; i < plannedItems.length; i++) {
                     plannedItems[i].ScanQty=0;
                     for (let j = 0; j < scannedItems.length; j++) {
-                        if (scannedItems[j].MaterialCode===plannedItems[i].MaterialCode&&
-                            scannedItems[j].BatchNo===plannedItems[i].BatchNo&&
+                        if (scannedItems[j].MaterialCode.toUpperCase()===plannedItems[i].MaterialCode&&
+                            scannedItems[j].BatchNo.toUpperCase()===plannedItems[i].BatchNo&&
                             scannedItems[j][itemNoFieldName]===plannedItems[i][itemNoFieldName]){
                                 plannedItems[i].ScanQty+=scannedItems[j].ScanQty;
                             }
