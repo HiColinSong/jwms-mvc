@@ -1,4 +1,5 @@
-<form role="form" name="labelBarcode">
+<form role="form" name="labelBarcode" ng-submit="barcode.infoComplete&&setFocus('barcode1');!barcode.infoComplete&&setFocus('barcode2');">
+<!-- <form role="form" name="labelBarcode" ng-submit="setInputFocus()"> -->
 	<accordion close-others="false" >
 		<div accordion-group class="panel-primary scan-panel text-center"  is-open="true" is-disabled="false" >
 		<accordion-heading>

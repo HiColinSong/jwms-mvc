@@ -1,6 +1,7 @@
 'use strict';
   const logger = require("../config/logger"); 
  const r3connect = require('r3connect');
+ r3connect.Client.options.invokeTimeout=30*1000*60; //timeout 30 miniutes
  var client;
  const Promise = require('Promise').default;
 //  const configuration =require("../../db-config/.db-config.json").sapConnParams;
