@@ -7,10 +7,10 @@ html,body {
 	margin-right:15px;
 }
 .bx .page-loading{
-	position: absolute;
+	position: fixed;
 	top: 40%;
-	left: 50%;
-	max-width: 70px;
+	left: 45%;
+	max-width: 120px;
 }
 .bx .navbar-inverse .navbar-collapse, 
 .bx .navbar-inverse .navbar-form{
