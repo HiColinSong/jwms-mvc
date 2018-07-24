@@ -108,6 +108,7 @@
                 };
                 //findItem
                 $scope.findItem=function(){
+                    $scope.temp.showHU.scannnedItems=undefined;
                     $scope.barcode.parseBarcode();
                     if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
                         return;
@@ -125,7 +126,7 @@
                             $scope.barcode.errMsg.push(err.message)
                             soundSvc.play("badSound");
                         } else if(data){
-                            $scope.order.HUList = data;
+                            // $scope.order.HUList = data;
                             $scope.barcode.reset();
                             soundSvc.play("goodSound");
                         }
@@ -144,7 +145,7 @@
                         }
                     )
                 }
-                $scope.refreshPacking=function(){
+                $scope.refreshScannedItems=function(){
                     apiSvc.refreshPacking({param1:order.DONumber}).$promise.
                         then(function(data){
                             if (data&&data.length>0&&data[0].error)

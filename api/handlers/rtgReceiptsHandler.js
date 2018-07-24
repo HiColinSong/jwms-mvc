@@ -68,6 +68,7 @@ exports.getOrder=function(req,res){
 
 exports.addItem=function(req,res){
 	(async function () {
+		console.time("rgaInsert");
 		var info=req.body,params={};
 		params.DONumber=info.orderNo;
 		params.EANCode=info.EANCode;
@@ -86,6 +87,20 @@ exports.addItem=function(req,res){
 
 		try {
 			var scannedItems = await dbRtgReceiptSvc.InsertScanItem(params);
+			// scannedItems=scannedItems.recordset;
+			// util.trimValues(scannedItems);
+			// return res.status(200).send(scannedItems);
+			console.timeEnd("rgaInsert");
+			return res.status(200).send([]);
+		} catch (error) {
+			return res.status(400).send([{error:true,message:error}]);
+		}
+	})()
+};
+exports.refreshScannedItems=function(req,res){
+	(async function () {
+		try {
+			var scannedItems = await dbRtgReceiptSvc.getScannedItems(req.body.orderNo);
 			scannedItems=scannedItems.recordset;
 			util.trimValues(scannedItems);
 			return res.status(200).send(scannedItems);

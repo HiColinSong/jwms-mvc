@@ -166,6 +166,14 @@
                 },
                 isArray:true
               },
+              refreshScannedItems:{
+                method: 'POST',
+                params:{
+                  type: '@type',
+                  subtype:'refresh-scanned-items'
+                },
+                isArray:true
+              },
               pgiUpdate:{
                 method: 'POST',
                 params:{

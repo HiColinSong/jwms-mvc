@@ -23,7 +23,7 @@
   <ul class="nav nav-tabs margin-bottom" role="tablist">
     <li role="presentation" ng-class="{'active':temp.showTab==='orderDetail'}"><a class="cursor-pointer" ng-click="temp.showTab='orderDetail'">Order Detail</a></li>
     <li role="presentation" ng-class="{'active':temp.showTab==='scanItem'}"><a class="cursor-pointer" ng-click="temp.showTab='scanItem'">Scan Item</a></li>
-  </ul>
+	</ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
@@ -84,6 +84,6 @@
 	<div class="clearboth"></div>
 </div>
 
-<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
-<pre ng-show="debug">order:{{order | json}}</pre>
-<pre ng-show="debug">temp:{{temp | json}}</pre>	
+<!-- <pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">order:{{order | json}}</pre>
+<pre ng-if="debug">temp:{{temp | json}}</pre>	 -->

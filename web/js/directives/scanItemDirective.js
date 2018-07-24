@@ -32,6 +32,7 @@
                             scope.QuantityFieldName = "Quantity";
                         }
                         scope.findItem=function(){
+                            scope.items=scope.order.scannedItems=undefined;
                             scope.barcode.parseBarcode();
                             if (!scope.barcode.valid||!scope.barcode.infoComplete){
                                 return;
@@ -49,12 +50,27 @@
                                     scope.barcode.errMsg.push(err.message)
                                     soundSvc.play("badSound");
                                 } else if(data){
-                                    scope.items=scope.order.scannedItems = data;
+                                    // scope.items=scope.order.scannedItems = data;
                                     scope.barcode.reset();
                                     soundSvc.play("goodSound");
                                 }
                             })
                         };
+                        scope.refreshScannedItems=function(){
+                            util.pageLoading("start");
+                            apiSvc.refreshScannedItems({type:scope.type},{orderNo:scope.orderNo}).$promise.
+                                then(function(data){
+                                    util.pageLoading("stop");
+                                    if (data&&data.length>0&&data[0].error)
+                                        console.error(data[0].message.originalError.info.message);
+                                    else 
+                                        scope.items=scope.order.scannedItems = data;
+                                },function(error){
+                                    console.error(error);
+                                    util.pageLoading("stop");
+                                }
+                            )
+                        }
                         scope.removeItem=function(item){
                             //find plannedItem:
                             if (scope.type==='reservation'){

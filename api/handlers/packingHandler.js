@@ -166,6 +166,7 @@ exports.removeHu=function(req,res){
 
 exports.addItem=function(req,res){
 	(async function () {
+		console.time("Packing Insert");
 		var info=req.body,params={};
 		params.DONumber=info.orderNo;
 		params.HUNumber=info.HUNumber;
@@ -186,15 +187,17 @@ exports.addItem=function(req,res){
 
 		try {
 			var scannedItems = await dbPackingSvc.InsertScanItem(params);
-			scannedItems=scannedItems.recordset;
-			util.trimValues(scannedItems);
-			var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
-			huList = addScannedItemsToHUList(huList.recordset,scannedItems);
-			if (huList){
-				return res.status(200).send(huList);
-			} else {
-				return res.status(200).send([{error:true,message:"failed to insert the scan item"}]);
-			}
+			// scannedItems=scannedItems.recordset;
+			// util.trimValues(scannedItems);
+			// var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
+			// huList = addScannedItemsToHUList(huList.recordset,scannedItems);
+			// if (huList){
+			// 	return res.status(200).send(huList);
+			// } else {
+			// 	return res.status(200).send([{error:true,message:"failed to insert the scan item"}]);
+			// }
+			console.timeEnd("Packing Insert");
+			return res.status(200).send([]);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
 		}

@@ -9,6 +9,7 @@
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0||order.scannedItems">
 									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Box Summary</a>
 						  </li>
+						  <button type="button" class="btn btn-default pull-right" ng-click="refreshScannedItems()">Refresh</button>
 					</ul>
 				  
 					<!-- Tab panes -->
@@ -53,7 +54,7 @@
 											</tr>
 										</table>
 									</accordion-heading>
-									<table class="table table-striped border scan-item">
+									<!-- <table class="table table-striped border scan-item">
 											<thead ng-show="plannedItem.ScanQty"> 
 												<tr>
 													<td>Line No</td>
@@ -110,7 +111,7 @@
 												<td colspan="5" class='empty-message text-center'>No scan item.</td>
 											</tr>
 											</tbody> 
-										</table>
+										</table> -->
 								</div>
 								<dir class="clearboth"></dir>
 							</accordion>
@@ -129,7 +130,7 @@
 							<table class="table padding-top table-striped border">
 								<thead> 
 									<tr>
-										<!-- <td>Line No</td> -->
+										
 									<td>
 										<a class="cursor-pointer" ng-click="sortType = itemNoFieldName; sortReverse = !sortReverse">
 										Item Number
@@ -184,16 +185,11 @@
 											ng-click="removeItem(item)" 
 											ng-if="((!order.confirmStatus||order.confirmStatus!=='C')&&type!=='reservation')||
 													(type==='reservation'&&plannedItem.ResvStatus!=='X')">
-														<!-- Remove  -->
 											<i class="text-danger fa fa-times-circle fa-lg"></i>
 										</a>
 									</td>
 				
 								</tr>
-								<!-- <tr ng-if="items&&items.length>0">
-									<td>Total Qty:</td>
-									<td colspan="5">{{temp.showHU.scanQty}}</td>
-								</tr> -->
 								<tr ng-if="!items||items.length==0">
 									<td colspan="6" class='empty-message'>No item.</td>
 								</tr>

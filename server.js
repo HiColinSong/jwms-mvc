@@ -100,6 +100,7 @@ app.post('/bxapi/rtgreceipts/add-item.json',auth.authCheck,rtgReceiptsHandler.ad
 app.post('/bxapi/rtgreceipts/remove-item.json',auth.authCheck,rtgReceiptsHandler.removeItem);
 app.post('/bxapi/rtgreceipts/confirm.json',auth.authCheck,rtgReceiptsHandler.confirmRga);
 app.post('/bxapi/rtgReceipts/reversal.json',auth.authCheck,rtgReceiptsHandler.rgaReversal);
+app.post('/bxapi/rtgReceipts/refresh-scanned-items.json',auth.authCheck,rtgReceiptsHandler.refreshScannedItems);
 
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
 app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandler.updateReturn);

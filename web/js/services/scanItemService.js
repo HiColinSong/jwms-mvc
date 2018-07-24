@@ -27,7 +27,7 @@
 
                 apiSvc.insertScanItem({type:type},params).$promise.then(
                     function(data){
-                        console.log(data);
+                        // console.log(data);
                         if (data&&data.length>0&&data[0].error)
                             callback(data[0].message.originalError.info);
                         else 

@@ -73,7 +73,7 @@
 				ng-click="showTab='orderDetail'">Delivery Order Detail</a></li>
 		<li role="presentation" ng-class="{'active':showTab==='scanItem'}" ng-show="order.HUList.length>0"><a class="cursor-pointer" 
 				ng-click="showTab='scanItem'">Scan Item</a></li>
-		<button type="button" class="btn btn-default pull-right" ng-click="refreshPacking()">Refresh</button>
+		<!-- <button type="button" class="btn btn-default pull-right" ng-click="refreshPacking()">Refresh</button> -->
   </ul>
 
   <!-- Tab panes -->
@@ -184,7 +184,7 @@
 
 </div>
 <div class="clearboth"></div>
-<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
-<pre ng-show="debug">temp:{{temp | json}}</pre>	
-<pre ng-show="debug">order:{{order | json}}</pre>	
+<pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">temp:{{temp | json}}</pre>	
+<pre ng-if="debug">order:{{order | json}}</pre>	
 <!-- <pre ng-show="debug">categories:{{categories | json}}</pre>	 -->
