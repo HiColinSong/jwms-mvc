@@ -33,7 +33,7 @@
 		  		<tr ng-repeat="(idx,item) in order.HUList" class="margin-right" ng-if="order.HUList.length>0" > 
 						
 		  			<td ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber}">
-						<a data-toggle="tab" class="full-height full-width pull-left block" ng-click="temp.showHU=item;temp.showHUIdx=idx" 
+						<a data-toggle="tab" class="full-height full-width pull-left block" ng-click="temp.showHU=item;temp.showHUIdx=idx;setFocus('barcode1')" 
 								ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber,'cursor-pointer':temp.showHU.HUNumber!==item.HUNumber}">
 										<i class="blue ace-icon fa bigger-120 pull-left" 
 										ng-class="{'fa-file':temp.showHU.HUNumber===item.HUNumber,'fa-file-o':temp.showHU.HUNumber!==item.HUNumber}"></i>

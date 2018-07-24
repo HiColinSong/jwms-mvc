@@ -9,7 +9,7 @@
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0||order.scannedItems">
 									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Box Summary</a>
 						  </li>
-						  <button type="button" class="btn btn-default pull-right" ng-click="refreshScannedItems()">Refresh</button>
+						  <button type="button" class="btn btn-default pull-right" ng-click="refreshScannedItems();setFocus('barcode1')">Refresh</button>
 					</ul>
 				  
 					<!-- Tab panes -->
