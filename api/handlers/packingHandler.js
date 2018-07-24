@@ -166,7 +166,7 @@ exports.removeHu=function(req,res){
 
 exports.addItem=function(req,res){
 	(async function () {
-		console.time("Packing Insert");
+		// console.time("Packing Insert");
 		var info=req.body,params={};
 		params.DONumber=info.orderNo;
 		params.HUNumber=info.HUNumber;
@@ -196,7 +196,7 @@ exports.addItem=function(req,res){
 			// } else {
 			// 	return res.status(200).send([{error:true,message:"failed to insert the scan item"}]);
 			// }
-			console.timeEnd("Packing Insert");
+			// console.timeEnd("Packing Insert");
 			return res.status(200).send([]);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
