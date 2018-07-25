@@ -220,6 +220,22 @@
                 },
                 isArray:false
               },
+              saveQuarShptPlan:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'save-plan'
+                },
+                isArray:false
+              },
+              getPrepackOrder:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'get-prepack-order'
+                },
+                isArray:false
+              },
               getSubconPendingList:{
                 method: 'POST',
                 params:{

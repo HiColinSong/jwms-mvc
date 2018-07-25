@@ -10,11 +10,18 @@
 
                     // $scope.categories=constants.categories;
         $scope.workOrders = info.workOrders;
+        let barcode = itemSvc.getBarcodeObj();
         var calcSummary = function(){
             let su={};
             for (let i = 0; i < $scope.workOrders.length; i++) {
+                barcode.reset();
                 const wo = $scope.workOrders[i];
+                barcode.barcode1=wo.FullScanCode
+                barcode.parseBarcode();
                 wo.totalQty=wo.nPlanSGWQty+wo.nPlanQuarQty;
+                wo.MaterialCode="BMX-4028";
+                wo.EANCode=barcode.eanCode;
+                wo.BatchNo=barcode.batchNo;
 
                 su.totalQty=(su.totalQty||0)+wo.totalQty;
                 su.planSGWQty=(su.planSGWQty||0)+wo.nPlanSGWQty;
@@ -36,32 +43,26 @@
 
 
                
-                $scope.confirmPlan = function() {
+                $scope.saveQuarShptPlan = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo}).$promise
+                    apiSvc.saveQuarShptPlan({workOrders:$scope.workOrders}).$promise
                     .then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
-                                modalHeader: 'Subcon PO Confirmation Success',
-                                message:"The Subcon PO Receipts is confirmed successfully!",
-                                resetPath:"/receiving"
+                                modalHeader: 'Quarantine Shipment Plan Save Success',
+                                message:"The Quarantine Shipment Plan is saved successfully!"
                             }
-                        } else {
-                            $scope.confirm={
-                                type:"danger",
-                                modalHeader: 'Subcon PO Confirmation Fail',
-                                message:"Unknown error, confirmation is failed!",
-                            }
-                        }
+                        } 
                         confirmSubmit.do($scope);
+                        utilSvc.pageLoading("stop");
                     },function(err){
                         utilSvc.pageLoading("stop");
                         console.error(err);
                         $scope.confirm={
                             type:"danger",
-                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                            message:err.data.message||err.data[0].message||"System error, Operation is failed!",
                         }
                         confirmSubmit.do($scope);
                     });

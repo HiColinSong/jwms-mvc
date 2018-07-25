@@ -125,6 +125,7 @@ app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
 var qrsmtHandler = require('./api/handlers/qrsmtHandler');
 app.post('/bxapi/qrsmt/get-subcon-work-order-for-planner.json',auth.authCheck,qrsmtHandler.getSubconWorkOrderForPlanner);
 app.post('/bxapi/qrsmt/save-plan.json',auth.authCheck,qrsmtHandler.saveQuarShptPlan);
+app.post('/bxapi/qrsmt/get-prepack-order.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
 
 
 app.get('*', function(req, res){

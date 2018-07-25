@@ -246,6 +246,42 @@
                     }]                   
                 }
             })
+            .when('/qrsmt/prepack', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersForPrepackCtrl'
+            })
+            .when('/qrsmt/prepack/:orderNo?', {
+                templateUrl: 'partials/qrsmt-prepack.html',
+                controller: 'qrsmtPrepackCtrl',
+                resolve:{
+                    order:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.orderNo){
+                            utilSvc.pageLoading("start");
+                            apiSvc.getPrepackOrder({orderNo:$route.current.params.orderNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                deferred.reject(err);
+                                utilSvc.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            utilSvc.pageLoading("stop");
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
+            })
 
 
             .when('/admin', {

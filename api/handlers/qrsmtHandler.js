@@ -3,32 +3,6 @@ const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
-
-exports.getSubconWorkOrderForPlanner=function(req,res){
-	(async function () {
-		try {
-			var data = {};
-			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
-			// data.workOrders = list.recordset;
-			data.workOrders=workOrders;
-			return res.status(200).send(data);
-		} catch (error) {
-			return res.status(400).send({error:true,message:error.message});
-		}
-	})()
-};
-
-exports.saveQuarShptPlan=function(req,res){
-	(async function () {
-		try {
-			workOrders=req.body.workOrders;
-			return res.status(200);
-		} catch (error) {
-			return res.status(400).send({error:true,message:error.message});
-		}
-	})()
-};
-
 var workOrders = [
 	{
 		"SubConPoRefNo": "B20180041",
@@ -183,4 +157,59 @@ var workOrders = [
 		"nScanSGWQty": 0,
 		"nScanQuarQty": 0,
 	}
-	]
+	];
+
+exports.getSubconWorkOrderForPlanner=function(req,res){
+	(async function () {
+		try {
+			var data = {};
+			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
+			// data.workOrders = list.recordset;
+			data.workOrders=workOrders;
+			return res.status(200).send(data);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
+
+exports.saveQuarShptPlan=function(req,res){
+	(async function () {
+		try {
+			workOrders=req.body.workOrders;
+			return res.status(200).send({confirm:"success"});
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
+
+var prepackOrder={};
+exports.getPrepackOrder=function(req,res){
+	(async function () {
+		try {
+			prepackOrder.SubConPoRefNo=workOrders[0].SubConPoRefNo;
+			prepackOrder.plannedItems=[];
+			let j=0
+			for (let i = 0; i < workOrders.length; i++) {
+				const wo = workOrders[i];
+				if (wo.nPlanQuarQty>0){
+					prepackOrder.plannedItems[j++]={
+						"orderNo": wo.SubConPoRefNo,
+						"MaterialCode": wo.MaterialCode,
+						"BatchNo": wo.BatchNo,
+						"ItemNumber": "0".repeat(5-j.toString().length)+j.toString(),
+						"Quantity": wo.nPlanQuarQty,
+						"EANCode": wo.EANCode
+					}
+				}
+				
+			}
+			// prepackOrder.HUList=[]
+
+			return res.status(200).send(prepackOrder);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
