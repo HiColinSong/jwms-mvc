@@ -122,6 +122,10 @@ app.post('/bxapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/bxapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
 
+var qrsmtHandler = require('./api/handlers/qrsmtHandler');
+app.post('/bxapi/qrsmt/get-subcon-work-order-for-planner.json',auth.authCheck,qrsmtHandler.getSubconWorkOrderForPlanner);
+app.post('/bxapi/qrsmt/save-plan.json',auth.authCheck,qrsmtHandler.saveQuarShptPlan);
+
 
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, '+req.originalUrl+' is an invalid URL.'});

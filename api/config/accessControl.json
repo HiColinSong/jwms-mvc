@@ -30,5 +30,10 @@
 		"bannedUrls": [
 			"/bxapi/sporeceipts/confirm.json"
 		]
+	},
+	"planner":{
+		"allowedUrls": [
+			"/bxapi/qrsmt/get-subcon-work-order-for-planner.json"
+		]
 	}
 }

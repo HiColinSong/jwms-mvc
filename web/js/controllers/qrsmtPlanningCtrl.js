@@ -1,0 +1,74 @@
+/*bx - Controllers.js - Yadong Zhu 2018*/
+(function() {
+    'use strict';
+    /* Controllers */
+    angular.module('bx.controllers')
+    .controller('qrsmtPlanningCtrl', ['$scope','$rootScope','$routeParams','$interval','utilSvc','info',
+                'bxService','modalConfirmSubmit','$modal','scanItemSvc','soundSvc',
+            function($scope,$rootScope,$routeParams,$interval,utilSvc,info,
+                     apiSvc,confirmSubmit,$modal,itemSvc,soundSvc){
+
+                    // $scope.categories=constants.categories;
+        $scope.workOrders = info.workOrders;
+        var calcSummary = function(){
+            let su={};
+            for (let i = 0; i < $scope.workOrders.length; i++) {
+                const wo = $scope.workOrders[i];
+                wo.totalQty=wo.nPlanSGWQty+wo.nPlanQuarQty;
+
+                su.totalQty=(su.totalQty||0)+wo.totalQty;
+                su.planSGWQty=(su.planSGWQty||0)+wo.nPlanSGWQty;
+                su.planQuarQty=(su.planQuarQty||0)+wo.nPlanQuarQty;
+                su.scanSGWQty=(su.scanSGWQty||0)+wo.nScanSGWQty;
+                su.scanQuarQty=(su.scanQuarQty||0)+wo.nScanQuarQty;
+            }
+            $scope.su=su;
+        }
+        calcSummary();
+        $scope.reCalulate=function(order){
+            order.nPlanQuarQty=order.nPlanQuarQty||0
+            order.nPlanQuarQty=Math.min(order.nPlanQuarQty,order.totalQty-(order.nScanSGWQty));
+            order.nPlanQuarQty=Math.max(order.nScanQuarQty,order.nPlanQuarQty);
+            order.nPlanSGWQty = order.totalQty-order.nPlanQuarQty;
+            calcSummary();
+        }
+
+
+
+               
+                $scope.confirmPlan = function() {
+                    utilSvc.pageLoading("start");
+                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo}).$promise
+                    .then(function(data){
+                        utilSvc.pageLoading("stop");
+                        if (data&&data.confirm==='success'){
+                            $scope.confirm={
+                                type:"success",
+                                modalHeader: 'Subcon PO Confirmation Success',
+                                message:"The Subcon PO Receipts is confirmed successfully!",
+                                resetPath:"/receiving"
+                            }
+                        } else {
+                            $scope.confirm={
+                                type:"danger",
+                                modalHeader: 'Subcon PO Confirmation Fail',
+                                message:"Unknown error, confirmation is failed!",
+                            }
+                        }
+                        confirmSubmit.do($scope);
+                    },function(err){
+                        utilSvc.pageLoading("stop");
+                        console.error(err);
+                        $scope.confirm={
+                            type:"danger",
+                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                        }
+                        confirmSubmit.do($scope);
+                    });
+                }
+               
+
+       
+        
+    }])
+ }())

@@ -212,6 +212,14 @@
                 },
                 isArray:false
               },
+              getSubconWorkOrderForPlanner:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'get-subcon-work-order-for-planner'
+                },
+                isArray:false
+              },
               getSubconPendingList:{
                 method: 'POST',
                 params:{
