@@ -133,3 +133,5 @@ Barcode.prototype.parseBarcode=function(){
 Barcode.prototype.getFullBarcode=function(){
     return (this.barcode1||"")+(this.barcode2||"")
 }
+
+module.exports = Barcode;
