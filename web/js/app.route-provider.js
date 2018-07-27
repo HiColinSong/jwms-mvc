@@ -250,14 +250,14 @@
                 templateUrl: 'partials/subconOrders.html',
                 controller: 'subconOrdersForPrepackCtrl'
             })
-            .when('/qrsmt/prepack/:orderNo?', {
+            .when('/qrsmt/prepack/:DONumber?', {
                 templateUrl: 'partials/qrsmt-prepack.html',
                 controller: 'qrsmtPrepackCtrl',
                 resolve:{
                     order:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
-                        if ($route.current.params.orderNo){
+                        if ($route.current.params.DONumber){
                             utilSvc.pageLoading("start");
                             apiSvc.getPrepackOrder({orderNo:$route.current.params.orderNo})
                             .$promise.then(function(data){

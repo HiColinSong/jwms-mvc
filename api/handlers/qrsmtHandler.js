@@ -188,19 +188,20 @@ var prepackOrder={};
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
-			prepackOrder.SubConPoRefNo=workOrders[0].SubConPoRefNo;
+			prepackOrder.DONumber=workOrders[0].SubConPoRefNo;
 			prepackOrder.plannedItems=[];
 			let j=0
 			for (let i = 0; i < workOrders.length; i++) {
 				const wo = workOrders[i];
 				if (wo.nPlanQuarQty>0){
 					prepackOrder.plannedItems[j++]={
-						"orderNo": wo.SubConPoRefNo,
+						"DONumber": wo.SubConPoRefNo,
 						"MaterialCode": wo.MaterialCode,
 						"BatchNo": wo.BatchNo,
-						"ItemNumber": "0".repeat(5-j.toString().length)+j.toString(),
-						"Quantity": wo.nPlanQuarQty,
-						"EANCode": wo.EANCode
+						"DOItemNumber": "0".repeat(5-j.toString().length)+j.toString(),
+						"DOQuantity": wo.nPlanQuarQty,
+						"EANCode": wo.EANCode,
+						"ScanQty": 1
 					}
 				}
 				

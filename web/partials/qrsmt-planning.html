@@ -16,9 +16,9 @@
 	</thead> 
 	<tbody> 
 				<tr ng-repeat="(woIdx,order) in workOrders"> 
-					<td  class="text-center" >{{order.WorkOrder}}</td>
-					<td  class="text-center" >{{order.FullScanCode|displayBatch}}</td>
-					<td  class="text-center" >{{order.totalQty}}</td>
+					<td  class="text-center" >{{::order.WorkOrder}}</td>
+					<td  class="text-center" >{{::order.FullScanCode|displayBatch}}</td>
+					<td  class="text-center" >{{::order.totalQty}}</td>
 					<td  class="text-center" >{{order.nPlanSGWQty||0}}</td>
 					<td  class="text-center" >
 							<input type='number' class='col-sm-12 col-xs-12 no-padding-right'
@@ -30,18 +30,18 @@
 							ng-model="order.nPlanQuarQty"
 							ng-change="reCalulate(order)">
 					</td>
-					<td  class="text-center" >{{order.nScanSGWQty}}</td>
-					<td  class="text-center" >{{order.nScanQuarQty}}</td>
+					<td  class="text-center" >{{::order.nScanSGWQty}}</td>
+					<td  class="text-center" >{{::order.nScanQuarQty}}</td>
 				</tr>
 			</tbody> 
 			<tfoot>
 				<tr> 
 					<td  class="text-center" colspan="2">Total:</td>
-					<td  class="text-center">{{su.totalQty}}</td>
+					<td  class="text-center">{{::su.totalQty}}</td>
 					<td  class="text-center">{{su.planSGWQty||0}}</td>
 					<td  class="text-center">{{su.planQuarQty}}</td>
-					<td  class="text-center">{{su.scanSGWQty||0}}</td>
-					<td  class="text-center">{{su.scanQuarQty||0}}</td>
+					<td  class="text-center">{{::su.scanSGWQty||0}}</td>
+					<td  class="text-center">{{::su.scanQuarQty||0}}</td>
 				</tr>
 			</tfoot>
 </table>

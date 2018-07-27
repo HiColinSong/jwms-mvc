@@ -34,8 +34,8 @@
 				  </thead> 
 				  <tbody> 
 							<tr ng-repeat="(woIdx,order) in workOrders"> 
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.WorkOrder}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.FullScanCode|displayBatch}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.WorkOrder}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.FullScanCode|displayBatch}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGWQty===order.nRcptSGWQty}">{{order.nRcptSGWQty}} / {{order.nPlanSGWQty}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQtyIncr||0}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGQQty===order.nRcptSGQQty}">{{order.nRcptSGQQty}} / {{order.nPlanSGQQty}}</td>
@@ -261,10 +261,10 @@
 
 
 <div class="clearboth"></div>
-<pre ng-show="debug">dorder:{{dorder | json}}</pre>	
-<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
-<pre ng-show="debug">workOrders:{{workOrders | json}}</pre>	
-<pre ng-show="debug">bitList:{{bitList | json}}</pre>	
-<pre ng-show="debug">qasList:{{qasList | json}}</pre>	
-<pre ng-show="debug">temp:{{temp | json}}</pre>	
+<pre ng-if="debug">dorder:{{dorder | json}}</pre>	
+<pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">workOrders:{{workOrders | json}}</pre>	
+<pre ng-if="debug">bitList:{{bitList | json}}</pre>	
+<pre ng-if="debug">qasList:{{qasList | json}}</pre>	
+<pre ng-if="debug">temp:{{temp | json}}</pre>	
 
