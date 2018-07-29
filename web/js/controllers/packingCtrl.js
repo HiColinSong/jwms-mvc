@@ -114,7 +114,7 @@
                         return;
                     }
 
-                    itemSvc.insertScanItem($scope.barcode,"packing",order.DONumber,$scope.temp.showHU.HUNumber,
+                    itemSvc.insertScanItem($scope.barcode,$scope.type,order.DONumber,$scope.temp.showHU.HUNumber,
                     function(err,data){
                         if (err&&err.message){
                             if (err.message==='Error:Material Code cannot be found'){
@@ -146,7 +146,7 @@
                     )
                 }
                 $scope.refreshScannedItems=function(){
-                    apiSvc.refreshPacking({param1:order.DONumber}).$promise.
+                    apiSvc.refreshPacking({type:$scope.type,param1:order.DONumber}).$promise.
                         then(function(data){
                             if (data&&data.length>0&&data[0].error)
                                 console.error(data[0].message.originalError.info.message);

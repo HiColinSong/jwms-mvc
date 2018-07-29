@@ -3,6 +3,9 @@ const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
+
+const dummyData =require('../dummyData/data.json'); //dummy code
+
 exports.getSubconOrderList=function(req,res){
 	(async function () {
 		try {
@@ -28,6 +31,7 @@ exports.getSubconOrderList=function(req,res){
 					previous=order.SubCOnPORefNo;
 				}
 			}
+			orders.push(dummyData.subconOrder); //dummy code
 			return res.status(200).send(orders);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
@@ -47,6 +51,13 @@ exports.getSubconWorkOrderInfo=function(req,res){
 				list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
 				data.qasPendingList = list.recordset;
 			}
+			//dummy code
+			if (req.body.orderNo==='B12345678'){
+				data={};
+				data.workOrders = dummyData.workOrders;
+			}
+			//end dummy code
+
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -113,6 +124,38 @@ exports.updateReturn=function(req,res){
 	})()
 };
 
+//dummy code
+exports.updateReturn=function(req,res){
+	(async function () {
+		try {
+			var data = {},amount=0;
+			if (!isNaN(req.body.sFullScanCode)){
+				amount=parseInt(req.body.sFullScanCode)
+			} else if (req.body.sFullScanCode==="reset"){
+				dummyData.workOrders=Object.assign([],dummyData.originalWorkOrders);
+				// dummyData.subconOrder=dummyData.originalSubconOrder;
+				// dummyData.workOrders=dummyData.originalWorkOrders;
+			}
+			if (amount>0){
+				if (dummyData.workOrders[0].nRcptSGWQty<50){
+					dummyData.workOrders[0].nRcptSGWQty=Math.min(amount,50);
+					dummyData.workOrders[0].nRcptSGQQty=5;
+				} else if (dummyData.workOrders[1].nRcptSGWQty<100){
+					dummyData.workOrders[1].nRcptSGWQty=Math.min(amount,100);
+					dummyData.workOrders[1].nRcptSGQQty=10;
+				} else  if (dummyData.workOrders[2].nRcptSGWQty<200){
+					dummyData.workOrders[2].nRcptSGWQty=Math.min(amount,200);
+					dummyData.workOrders[2].nRcptSGQQty=20;
+				} 
+			}
+			return res.status(200).send(data);//return serial number
+		} catch (error) {
+			return res.status(400).send({error:error,message:error.message,errorCode:error.number});
+		}
+	})()
+};
+//end dummy data
+
 exports.completeSubconReceipt=function(req,res){
 	(async function () {
 		try {
@@ -143,36 +186,58 @@ exports.completeSubconReceipt=function(req,res){
 		}
 	})()
 };
-exports.partialRelease=function(req,res){
+
+//dummy code
+exports.completeSubconReceipt=function(req,res){
 	(async function () {
 		try {
-			var list = await dbPackingSvc.getScannedItemsWithWorkOrder(req.body.orderNo,req.body.subconPO);
-			list = list.recordset;
-			//call custom bapi to udpate SAP
-			let args = {IT_BX_STOCK:[]};
-			for (let j = 0; j < list.length; j++) {
-				const item = list[j];
-				args.IT_BX_STOCK.push({
-					TRANS:"GR1",
-					WERKS:'2100',
-					MATNR:item.MaterialCode,
-					CHARG: item.BatchNo,
-					SERIAL:item.SerialNo,
-					DOCNO: item.workorder,
-					ENDCUST:'SGW',
-					BXDATE:util.formatDateTime().date,
-					BXTIME:util.formatDateTime().time,
-					BXUSER:req.session.user.UserID
-				});
+			console.log(req.body.orderNo);
+			for (let i = 0; i < req.body.releasedOrders.length; i++) {
+				const ro = req.body.releasedOrders[i];
+				for (let j = 0; j < dummyData.workOrders.length; j++) {
+					const wo = dummyData.workOrders[j];
+					if (ro===wo.WorkOrder){
+						wo.lotReleased=true;
+					}
+				}
 			}
-			if (args.IT_BX_STOCK.length>0)
-				await sapSvc.serialNoUpdate(args);
-			return res.status(200).send({confirm:"success"});
+			let data={workOrders:dummyData.workOrders,confirm:"success"}
+			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
 		}
 	})()
 };
+// exports.partialRelease=function(req,res){
+// 	(async function () {
+// 		try {
+// 			var list = await dbPackingSvc.getScannedItemsWithWorkOrder(req.body.orderNo,req.body.subconPO);
+// 			list = list.recordset;
+// 			//call custom bapi to udpate SAP
+// 			let args = {IT_BX_STOCK:[]};
+// 			for (let j = 0; j < list.length; j++) {
+// 				const item = list[j];
+// 				args.IT_BX_STOCK.push({
+// 					TRANS:"GR1",
+// 					WERKS:'2100',
+// 					MATNR:item.MaterialCode,
+// 					CHARG: item.BatchNo,
+// 					SERIAL:item.SerialNo,
+// 					DOCNO: item.workorder,
+// 					ENDCUST:'SGW',
+// 					BXDATE:util.formatDateTime().date,
+// 					BXTIME:util.formatDateTime().time,
+// 					BXUSER:req.session.user.UserID
+// 				});
+// 			}
+// 			if (args.IT_BX_STOCK.length>0)
+// 				await sapSvc.serialNoUpdate(args);
+// 			return res.status(200).send({confirm:"success"});
+// 		} catch (error) {
+// 			return res.status(400).send([{error:true,message:error.message}]);
+// 		}
+// 	})()
+// };
 
 exports.removeItem=function(req,res){
 

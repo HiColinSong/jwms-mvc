@@ -26,16 +26,16 @@
                 su.totalQty=(su.totalQty||0)+wo.totalQty;
                 su.planSGWQty=(su.planSGWQty||0)+wo.nPlanSGWQty;
                 su.planQuarQty=(su.planQuarQty||0)+wo.nPlanQuarQty;
-                su.scanSGWQty=(su.scanSGWQty||0)+wo.nScanSGWQty;
-                su.scanQuarQty=(su.scanQuarQty||0)+wo.nScanQuarQty;
+                su.scanSGWQty=(su.scanSGWQty||0)+wo.nRcptSGWQty;
+                su.scanQuarQty=(su.scanQuarQty||0)+wo.nRcptQuarQty;
             }
             $scope.su=su;
         }
         calcSummary();
         $scope.reCalulate=function(order){
             order.nPlanQuarQty=order.nPlanQuarQty||0
-            order.nPlanQuarQty=Math.min(order.nPlanQuarQty,order.totalQty-(order.nScanSGWQty));
-            order.nPlanQuarQty=Math.max(order.nScanQuarQty,order.nPlanQuarQty);
+            order.nPlanQuarQty=Math.min(order.nPlanQuarQty,order.totalQty-(order.nRcptSGWQty));
+            order.nPlanQuarQty=Math.max(order.nRcptQuarQty,order.nPlanQuarQty);
             order.nPlanSGWQty = order.totalQty-order.nPlanQuarQty;
             calcSummary();
         }

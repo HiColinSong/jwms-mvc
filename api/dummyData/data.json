@@ -1,0 +1,117 @@
+{
+    "subconOrder":{
+        "SubCOnPORefNo": "B12345678",
+        "PoDate": "2018-07-11T00:00:00.000Z",
+        "SAPSTORefNo": "DummySAPTO",
+        "woNos": [
+          "210000000001",
+          "210000000002",
+          "210000000003"
+        ],
+        "fullScanCodeList": [
+          "01088888930163751720071110W18070001|21180616861",
+          "01088888930162211720071110W18070002|21180619851",
+          "01088888930163201720071110W18070003|21180618971"
+        ]
+      },
+      "workOrders":[
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000001",
+          "FullScanCode": "01088888930163751720071110W18070001|21180616861",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 50,
+          "nPlanSGQQty": 5,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 50,
+          "nPendingSGQQty": 0,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000002",
+          "FullScanCode": "01088888930162211720071110W18070002|21180619851",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 100,
+          "nPlanSGQQty": 10,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 100,
+          "nPendingSGQQty": 10,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000003",
+          "FullScanCode": "01088888930163201720071110W18070003|21180618971",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 200,
+          "nPlanSGQQty": 20,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 200,
+          "nPendingSGQQty": 20,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        }
+    ],
+    "originalWorkOrders":[
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000001",
+          "FullScanCode": "01088888930163751720071110W18070001|21180616861",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 50,
+          "nPlanSGQQty": 5,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 50,
+          "nPendingSGQQty": 0,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000002",
+          "FullScanCode": "01088888930162211720071110W18070002|21180619851",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 100,
+          "nPlanSGQQty": 10,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 100,
+          "nPendingSGQQty": 10,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000003",
+          "FullScanCode": "01088888930163201720071110W18070003|21180618971",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 200,
+          "nPlanSGQQty": 20,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 200,
+          "nPendingSGQQty": 20,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        }
+    ]
+}

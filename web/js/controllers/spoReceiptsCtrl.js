@@ -135,16 +135,24 @@
                 }
                 $scope.confirmReceipt = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo}).$promise
+                    let releasedOrders=[];
+                    for (let i = 0; i < $scope.workOrders.length; i++) {
+                        const wo = $scope.workOrders[i];
+                        if (wo.toRelease){
+                            releasedOrders.push(wo.WorkOrder);
+                        }
+                    }
+                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo,releasedOrders:releasedOrders}).$promise
                     .then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
                                 modalHeader: 'Subcon PO Confirmation Success',
-                                message:"The Subcon PO Receipts is confirmed successfully!",
-                                resetPath:"/receiving"
+                                message:"The Subcon PO Receipts is confirmed successfully!"
                             }
+                            $scope.workOrders=data.workOrders;
+                            $scope.checkLotRelease();
                         } else {
                             $scope.confirm={
                                 type:"danger",
@@ -163,37 +171,37 @@
                         confirmSubmit.do($scope);
                     });
                 }
-                $scope.dorder={};
-                $scope.partialRelease = function() {
-                    utilSvc.pageLoading("start");
-                    apiSvc.partialRelease({orderNo:utilSvc.formalizeOrderNo($scope.dorder.DONumber),subconPO:$scope.workOrders[0].SubConPoRefNo}).$promise
-                    .then(function(data){
-                        utilSvc.pageLoading("stop");
-                        if (data&&data.confirm==='success'){
-                            $scope.confirm={
-                                type:"success",
-                                modalHeader: 'Partial Release Confirmation Success',
-                                message:"The Partial Release is confirmed successfully!",
-                                resetPath:"/receiving"
-                            }
-                        } else {
-                            $scope.confirm={
-                                type:"danger",
-                                modalHeader: 'Partial Release Confirmation Fail',
-                                message:"Unknown error, confirmation is failed!",
-                            }
-                        }
-                        confirmSubmit.do($scope);
-                    },function(err){
-                        utilSvc.pageLoading("stop");
-                        console.error(err);
-                        $scope.confirm={
-                            type:"danger",
-                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
-                        }
-                        confirmSubmit.do($scope);
-                    });
-                }
+                // $scope.dorder={};
+                // $scope.partialRelease = function() {
+                //     utilSvc.pageLoading("start");
+                //     apiSvc.partialRelease({orderNo:utilSvc.formalizeOrderNo($scope.dorder.DONumber),subconPO:$scope.workOrders[0].SubConPoRefNo}).$promise
+                //     .then(function(data){
+                //         utilSvc.pageLoading("stop");
+                //         if (data&&data.confirm==='success'){
+                //             $scope.confirm={
+                //                 type:"success",
+                //                 modalHeader: 'Partial Release Confirmation Success',
+                //                 message:"The Partial Release is confirmed successfully!",
+                //                 resetPath:"/receiving"
+                //             }
+                //         } else {
+                //             $scope.confirm={
+                //                 type:"danger",
+                //                 modalHeader: 'Partial Release Confirmation Fail',
+                //                 message:"Unknown error, confirmation is failed!",
+                //             }
+                //         }
+                //         confirmSubmit.do($scope);
+                //     },function(err){
+                //         utilSvc.pageLoading("stop");
+                //         console.error(err);
+                //         $scope.confirm={
+                //             type:"danger",
+                //             message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                //         }
+                //         confirmSubmit.do($scope);
+                //     });
+                // }
 
         $scope.refreshPendList=function(ShipToTarget){
             utilSvc.pageLoading("start");
@@ -213,6 +221,19 @@
                                 }
                                 utilSvc.pageLoading("stop");
                             })
+        }
+
+        $scope.isLotRelease=false;
+        $scope.checkLotRelease=function(){
+            $scope.isLotRelease=false;
+            for (let i = 0; i < $scope.workOrders.length; i++) {
+                const wo = $scope.workOrders[i];
+                if (wo.toRelease){
+                    $scope.isLotRelease=true;
+                    break;
+                }
+            }
+            return;
         }
 
 

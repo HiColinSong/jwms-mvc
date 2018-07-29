@@ -115,7 +115,7 @@
                 method: 'POST',
                 headers: {'Accept': 'application/json'},
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype: 'add-new-hu'
                 },
                 isArray:true
@@ -160,7 +160,7 @@
               refreshPacking:{
                 method: 'GET',
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype:'refresh-hu',
                   param1:'@param1'
                 },

@@ -3,169 +3,15 @@ const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
-var workOrders = [
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000066596",
-		"FullScanCode": "01088888930163751720071110W18070115|21180616861",
-		"nPlanSGWQty": 192,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000078391",
-		"FullScanCode": "01088888930162211720071110W18070116|21180619851",
-		"nPlanSGWQty": 91,
-		"nPlanQuarQty": 120,
-		"nScanSGWQty": 2,
-		"nScanQuarQty": 3,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000081717",
-		"FullScanCode": "01088888930163201720071110W18070117|21180618971",
-		"nPlanSGWQty": 241,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000081730",
-		"FullScanCode": "01088888930163821720071110W18070118|21180619651",
-		"nPlanSGWQty": 192,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000081744",
-		"FullScanCode": "01088888930164671720071110W18070119|21180616681",
-		"nPlanSGWQty": 173,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000084482",
-		"FullScanCode": "01088888930162451720071110W18070120|21180617191",
-		"nPlanSGWQty": 190,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000084488",
-		"FullScanCode": "01088888930163441720071110W18070121|21180617941",
-		"nPlanSGWQty": 234,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000087234",
-		"FullScanCode": "01088888930162521720071110W18070122|21180617391",
-		"nPlanSGWQty": 187,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000087239",
-		"FullScanCode": "01088888930163371720071110W18070123|21180617591",
-		"nPlanSGWQty": 93,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088876",
-		"FullScanCode": "01088888930161841720071110W18070124|21180617061",
-		"nPlanSGWQty": 122,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088879",
-		"FullScanCode": "01088888930162691720071110W18070125|21180618741",
-		"nPlanSGWQty": 223,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 19,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088884",
-		"FullScanCode": "01088888930164051720071110W18070126|21180619221",
-		"nPlanSGWQty": 193,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088885",
-		"FullScanCode": "01088888930164121720071110W18070127|21180617691",
-		"nPlanSGWQty": 240,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088886",
-		"FullScanCode": "01088888930164291720071110W18070128|21180618491",
-		"nPlanSGWQty": 242,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 62,
-		"nScanQuarQty": 0
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000088887",
-		"FullScanCode": "01088888930165041720071110W18070129|21180618191",
-		"nPlanSGWQty": 141,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000089211",
-		"FullScanCode": "01088888930165041720071110W18070130|21180618341",
-		"nPlanSGWQty": 143,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	},
-	{
-		"SubConPoRefNo": "B20180041",
-		"WorkOrder": "210000089213",
-		"FullScanCode": "01088888930165421720071110W18070131|21180616591",
-		"nPlanSGWQty": 85,
-		"nPlanQuarQty": 0,
-		"nScanSGWQty": 0,
-		"nScanQuarQty": 0,
-	}
-	];
 
+var dummyData =require('../dummyData/data.json'); //dummy code
 exports.getSubconWorkOrderForPlanner=function(req,res){
 	(async function () {
 		try {
 			var data = {};
 			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			// data.workOrders = list.recordset;
-			data.workOrders=workOrders;
+			data.workOrders=dummyData.workOrders;
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -176,7 +22,7 @@ exports.getSubconWorkOrderForPlanner=function(req,res){
 exports.saveQuarShptPlan=function(req,res){
 	(async function () {
 		try {
-			workOrders=req.body.workOrders;
+			dummyData.workOrders=req.body.workOrders;
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -188,11 +34,11 @@ var prepackOrder={};
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
-			prepackOrder.DONumber=workOrders[0].SubConPoRefNo;
+			prepackOrder.DONumber=dummyData.workOrders[0].SubConPoRefNo;
 			prepackOrder.plannedItems=[];
 			let j=0
-			for (let i = 0; i < workOrders.length; i++) {
-				const wo = workOrders[i];
+			for (let i = 0; i < dummyData.workOrders.length; i++) {
+				const wo = dummyData.workOrders[i];
 				if (wo.nPlanQuarQty>0){
 					prepackOrder.plannedItems[j++]={
 						"DONumber": wo.SubConPoRefNo,
@@ -211,6 +57,145 @@ exports.getPrepackOrder=function(req,res){
 			return res.status(200).send(prepackOrder);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
+exports.refreshHu=function(req,res){
+	(async function () {
+		try {
+			var huList = prepackOrder.HUList;
+			if (huList){
+				return res.status(200).send(huList);
+			} else {
+				return res.status(200).send([{error:true,message:"failed to refresh the scan item"}]);
+			}
+		} catch (error) {
+			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
+
+exports.addNewHu=function(req,res){
+	(async function () {
+		var date,newHu=[];
+		for (var i=0;i<req.body.NumOfHu;i++){
+			date=new Date();
+			newHu.push(date.getTime()+i.toString())
+		}
+		var params={
+			DONumber:req.body.DONumber,
+			// HUNumberList:newHu.join(','),
+			NumToCreate:req.body.NumOfHu,
+			PackMaterial:req.body.MaterialCode,
+			CreatedBy:req.session.user.UserID,
+			Domain:req.session.user.Domain,
+			CreatedOn:req.body.createdOn
+		}
+		try {
+			// var huList = await dbPackingSvc.createHandlingUnits(params);
+			// huList=huList.recordset;
+			// var scannedItems = await dbPackingSvc.getPackDetails(req.body.DONumber);
+			// scannedItems=scannedItems.recordset;
+			// util.trimValues(scannedItems)
+			// huList=addScannedItemsToHUList(huList,scannedItems);
+			let hu = {};
+			prepackOrder.HUList=prepackOrder.HUList||[]
+			let n = prepackOrder.HUList.length;
+			for (let i = 0; i < params.NumToCreate; i++) {
+				hu={
+					DONumber:params.DONumber,
+					HUNumber:"1180729000"+("0".repeat(2-(n+i).toString().length)+(i+n+1).toString()),
+					PackMaterial: params.PackMaterial,
+					Domain:req.session.user.Domain,
+					CreatedBy:req.session.user.UserID,
+					CreatedOn:req.body.createdOn,
+					scannedItems:[]
+				}
+				prepackOrder.HUList.push(hu);
+			}
+			return res.status(200).send(prepackOrder.HUList);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error});
+		}
+	})()
+};
+
+exports.addItem=function(req,res){
+	(async function () {
+		// console.time("Packing Insert");
+		var info=req.body,params={};
+		params.DONumber=info.orderNo;
+		params.HUNumber=info.HUNumber;
+		params.EANCode=info.EANCode;
+		params.MaterialCode=info.MaterialCode;
+		params.BatchNo=info.BatchNo;
+		// params.DOItemNumber=info.itemNumber;
+		params.Qty = info.Qty||1;
+		if (info.SerialNo){
+			params.SerialNo=info.SerialNo;
+			params.Qty = 1;
+		} 
+		params.PackBy=req.session.user.UserID;
+		params.PackedOn=info.scannedOn;
+		params.Status = info.Status
+		params.FullScanCode = info.FullScanCode;
+		params.BinNumber = info.BinNumber;
+
+		try {
+			// var scannedItems = await dbPackingSvc.InsertScanItem(params);
+			var scannedItems=[];
+			// scannedItems=scannedItems.recordset;
+			// util.trimValues(scannedItems);
+			// var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
+			// huList = addScannedItemsToHUList(huList.recordset,scannedItems);
+			// if (huList){
+			// 	return res.status(200).send(huList);
+			// } else {
+			// 	return res.status(200).send([{error:true,message:"failed to insert the scan item"}]);
+			// }
+			// console.timeEnd("Packing Insert");
+
+			for (let i = 0; i < prepackOrder.HUList.length; i++) {
+				const hu = prepackOrder.HUList[i];
+				if (prepackOrder.plannedItems.length>i){
+					const pitem = prepackOrder.plannedItems[i];
+					scannedItems=[
+						{
+							"DONumber": prepackOrder.DONumber,
+							"HUNumber": hu.HUNumber,
+							"MaterialCode": pitem.MaterialCode,
+							"BatchNo": pitem.BatchNo,
+							"SerialNo": null,
+							"PackBy": req.session.user.UserID,
+							"PackedOn": params.PackedOn,
+							"ScanQty":pitem.DOQuantity,
+							"DOItemNumber":pitem.DOItemNumber,
+							"BinNumber": "DEFAULT BIN"
+						}
+					];
+					hu.scannedItems=scannedItems;
+				}
+			}
+
+			return res.status(200).send([]);
+		} catch (error) {
+			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
+
+exports.confirmPacking=function(req,res){
+	(async function () {
+		var args,info,ret;
+		try {
+			prepackOrder.packingStatus = true;
+			let data={order:prepackOrder,confirm:"success"};
+			return res.status(200).send(data);
+		} catch (error) {
+			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
+			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			// logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
 };

@@ -5,10 +5,11 @@
 <table class="table padding-top table-striped" >
 	<thead> 
 		<tr> 
-			<th width="15%"  class="text-center">Work Order</th> 
-			<th width="15%"  class="text-center">Batch</th> 
-			<th width="14%"  class="text-center">Total Qty</th> 
-			<th width="14%"  class="text-center">Plan Qty for BIT</th> 
+			<th width="8%"  class="text-center">Status</th> 
+			<th width="14%"  class="text-center">Work Order</th> 
+			<th width="14%"  class="text-center">Batch</th> 
+			<th width="8%"  class="text-center">Total Qty</th> 
+			<th width="12%"  class="text-center">Plan Qty for BIT</th> 
 			<th width="14%"  class="text-center">Plan Qty for Quar Shpt</th> 
 			<th width="14%"  class="text-center">Scan Qty For BIT</th> 
 			<th width="14%"  class="text-center">Scan Qty For Quar Shpt</th> 
@@ -16,11 +17,12 @@
 	</thead> 
 	<tbody> 
 				<tr ng-repeat="(woIdx,order) in workOrders"> 
-					<td  class="text-center" >{{::order.WorkOrder}}</td>
-					<td  class="text-center" >{{::order.FullScanCode|displayBatch}}</td>
-					<td  class="text-center" >{{::order.totalQty}}</td>
-					<td  class="text-center" >{{order.nPlanSGWQty||0}}</td>
-					<td  class="text-center" >
+					<td  class="text-center"  ng-class="{'bg-success':order.lotReleased}"> <span  ng-if="order.lotReleased">Released</span></td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.WorkOrder}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.FullScanCode|displayBatch}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.totalQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{order.nPlanSGWQty||0}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
 							<input type='number' class='col-sm-12 col-xs-12 no-padding-right'
                             min="0"
 							name='planForQuarQty'
@@ -28,15 +30,17 @@
 							class='full-width form-control'
 							ng-class="{'submitted':submitted}"
 							ng-model="order.nPlanQuarQty"
-							ng-change="reCalulate(order)">
+							ng-change="reCalulate(order)"
+							ng-disabled="order.lotReleased"
+							>
 					</td>
-					<td  class="text-center" >{{::order.nScanSGWQty}}</td>
-					<td  class="text-center" >{{::order.nScanQuarQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.nRcptSGWQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.nRcptQuarQty}}</td>
 				</tr>
 			</tbody> 
 			<tfoot>
 				<tr> 
-					<td  class="text-center" colspan="2">Total:</td>
+					<td  class="text-center" colspan="3">Total:</td>
 					<td  class="text-center">{{::su.totalQty}}</td>
 					<td  class="text-center">{{su.planSGWQty||0}}</td>
 					<td  class="text-center">{{su.planQuarQty}}</td>
