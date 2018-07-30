@@ -177,7 +177,7 @@ exports.addItem=function(req,res){
 				}
 			}
 			//update workorder quantities
-			
+
 
 			return res.status(200).send([]);
 		} catch (error) {
@@ -238,15 +238,9 @@ exports.unlinkSapDo=function(req,res){
 			console.log("SubconOrder:"+req.body.subconOrderNo);
 			console.log("DONumber:"+req.body.DONumber);
 			if (req.body.DONumber==='D123456789'){
-				for (let i = 0; i < dummyData.sapOrders.length; i++) {
-					let DO = dummyData.sapOrders[i];
-					if (DO.DONumber===req.body.DONumber){
-						DO.HUList=[];
-						prepackOrder.linkToSapStatus = undefined;
-						prepackOrder.linkSapOrder = undefined;
-						break;
-					}
-				}
+				dummyData.sapOrders[0].HUList=[];
+				prepackOrder.linkToSapStatus = undefined;
+				prepackOrder.linkSapOrder = undefined;
 			} 
 			let data={order:prepackOrder,confirm:"success"};
 			return res.status(200).send(data);
