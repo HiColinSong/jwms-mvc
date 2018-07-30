@@ -6,6 +6,7 @@
     .controller('subconOrdersForPlannerCtrl', ['$scope','$location','utilSvc','bxService',
             function($scope,$location,utilSvc,apiSvc){
             $scope.order = {};
+            $scope.type = 'quarPlan';
             $scope.title=" Choose Subcon PO for Planning"
             apiSvc.getSubconOrderList()
                 .$promise.then(function(data){

@@ -33,7 +33,7 @@
 					</tr> 
 				</thead> 
 				<tbody> 
-						  <tr ng-repeat="(idx,sOrder) in subconOrders"> 
+						  <tr ng-repeat="(idx,sOrder) in subconOrders" ng-if="sOrder.quarShptConfirmStatus!=='C'||type!=='quarPlan'"> 
 							  <td class="text-center" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}">
 									<input type="radio" name="order{{idx}}" ng-model="order.orderNo" value="{{sOrder.SubCOnPORefNo}}">
 							  </td> 

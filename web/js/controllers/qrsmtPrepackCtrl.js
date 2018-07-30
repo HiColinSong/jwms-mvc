@@ -95,7 +95,7 @@
         }
         $scope.unlinkSapDo = function() {
             utilSvc.pageLoading("start");
-            apiSvc.linkToSapDo({DONumber:order.linkSapOrder,subconOrderNo:order.DONumber}).$promise.
+            apiSvc.unlinkSapDo({DONumber:order.linkSapOrder,subconOrderNo:order.DONumber}).$promise.
             then(function(data){
                 utilSvc.pageLoading("stop");
                 if (data&&data.confirm==='success'){

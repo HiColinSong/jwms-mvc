@@ -177,6 +177,9 @@ exports.addItem=function(req,res){
 				}
 			}
 			//update workorder quantities
+			dummyData.workOrders[0].nRcptQuarQty=20;
+			dummyData.workOrders[1].nRcptQuarQty=60;
+			dummyData.workOrders[2].nRcptQuarQty=90;
 
 
 			return res.status(200).send([]);
@@ -191,12 +194,11 @@ exports.confirmPacking=function(req,res){
 		var args,info,ret;
 		try {
 			prepackOrder.confirmStatus = "C";
+			//update subcon PO status
+			dummyData.subconOrder.quarShptConfirmStatus="C";
 			let data={order:prepackOrder,confirm:"success"};
 			return res.status(200).send(data);
 		} catch (error) {
-			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
-			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
-			// logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
 			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()
@@ -218,6 +220,7 @@ exports.linkToSapDo=function(req,res){
 						break;
 					}
 				}
+
 			} else if (req.body.DONumber==='D987654321'){
 				throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
 			} else {

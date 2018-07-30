@@ -140,6 +140,7 @@ exports.updateReturn=function(req,res){
 				dummyData.prepackOrder.linkToSapStatus = undefined;
 				dummyData.prepackOrder.linkSapOrder = undefined;
 				dummyData.sapOrders[0].HUList=[];
+				dummyData.subconOrder.quarShptConfirmStatus=undefined;
 			}
 			if (amount>0){
 				for (let i = 0; i < dummyData.workOrders.length; i++) {
