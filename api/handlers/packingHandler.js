@@ -96,6 +96,33 @@ exports.getOrder=function(req,res){
 	})()
 
 };
+
+//dummy code
+var dummyData =require('../dummyData/data.json'); 
+exports.getOrder=function(req,res){
+	(async function () {
+		try {
+			var order;
+			for (let i = 0; i < dummyData.sapOrders.length; i++) {
+				let DO = dummyData.sapOrders[i];
+				if (DO.DONumber===req.body.orderNo){
+					order=DO;
+					break;
+				}
+			}
+			
+			if (order&&order.DONumber){
+				return res.status(200).send(order);
+			} else {
+				return res.status(200).send({error:true,message:"The Delivery Order "+req.body.orderNo+" doesn't exist!"});
+			}
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message||error});
+		}
+	})()
+
+};
+//end dummy code
 exports.getPkgMtlList=function(req,res){
 	(async function () {
 		try {

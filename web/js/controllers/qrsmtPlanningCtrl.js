@@ -49,13 +49,14 @@
                     .then(function(data){
                         utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
-                            $scope.confirm={
-                                type:"success",
-                                modalHeader: 'Quarantine Shipment Plan Save Success',
-                                message:"The Quarantine Shipment Plan is saved successfully!"
-                            }
+                            utilSvc.addAlert("The Quarantine Shipment Plan is saved successfully!", "success", true);
+                            // $scope.confirm={
+                            //     type:"success",
+                            //     modalHeader: 'Quarantine Shipment Plan Save Success',
+                            //     message:"The Quarantine Shipment Plan is saved successfully!"
+                            // }
                         } 
-                        confirmSubmit.do($scope);
+                        // confirmSubmit.do($scope);
                         utilSvc.pageLoading("stop");
                     },function(err){
                         utilSvc.pageLoading("stop");

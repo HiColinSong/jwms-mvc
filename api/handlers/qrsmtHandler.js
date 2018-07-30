@@ -30,7 +30,7 @@ exports.saveQuarShptPlan=function(req,res){
 	})()
 };
 
-var prepackOrder={};
+var prepackOrder=dummyData.prepackOrder;
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
@@ -176,6 +176,8 @@ exports.addItem=function(req,res){
 					hu.scannedItems=scannedItems;
 				}
 			}
+			//update workorder quantities
+			
 
 			return res.status(200).send([]);
 		} catch (error) {
@@ -188,13 +190,67 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
-			prepackOrder.packingStatus = true;
+			prepackOrder.confirmStatus = "C";
 			let data={order:prepackOrder,confirm:"success"};
 			return res.status(200).send(data);
 		} catch (error) {
 			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
 			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
 			// logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
+			return res.status(400).send({error:true,message:error.message||error});
+		}
+	})()
+};
+
+exports.linkToSapDo=function(req,res){
+	(async function () {
+		var order;
+		try {
+			console.log("SubconOrder:"+req.body.subconOrderNo);
+			console.log("DONumber:"+req.body.DONumber);
+			if (req.body.DONumber==='D123456789'){
+				for (let i = 0; i < dummyData.sapOrders.length; i++) {
+					let DO = dummyData.sapOrders[i];
+					if (DO.DONumber===req.body.DONumber){
+						DO.HUList=prepackOrder.HUList;
+						prepackOrder.linkToSapStatus = "C";
+						prepackOrder.linkSapOrder = DO.DONumber;
+						break;
+					}
+				}
+			} else if (req.body.DONumber==='D987654321'){
+				throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
+			} else {
+				throw new Error("The SAP DO "+req.body.DONumber+" can't be found! ");
+			}
+			let data={order:prepackOrder,confirm:"success"};
+			return res.status(200).send(data);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message||error});
+		}
+	})()
+};
+
+exports.unlinkSapDo=function(req,res){
+	(async function () {
+		var order;
+		try {
+			console.log("SubconOrder:"+req.body.subconOrderNo);
+			console.log("DONumber:"+req.body.DONumber);
+			if (req.body.DONumber==='D123456789'){
+				for (let i = 0; i < dummyData.sapOrders.length; i++) {
+					let DO = dummyData.sapOrders[i];
+					if (DO.DONumber===req.body.DONumber){
+						DO.HUList=[];
+						prepackOrder.linkToSapStatus = undefined;
+						prepackOrder.linkSapOrder = undefined;
+						break;
+					}
+				}
+			} 
+			let data={order:prepackOrder,confirm:"success"};
+			return res.status(200).send(data);
+		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()

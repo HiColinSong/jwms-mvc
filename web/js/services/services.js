@@ -236,6 +236,22 @@
                 },
                 isArray:false
               },
+              linkToSapDo:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'link-to-sap-do'
+                },
+                isArray:false
+              },
+              unlinkSapDo:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'unlink-sap-do'
+                },
+                isArray:false
+              },
               getSubconPendingList:{
                 method: 'POST',
                 params:{

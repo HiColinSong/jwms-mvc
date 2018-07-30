@@ -133,20 +133,33 @@ exports.updateReturn=function(req,res){
 				amount=parseInt(req.body.sFullScanCode)
 			} else if (req.body.sFullScanCode==="reset"){
 				dummyData.workOrders=Object.assign([],dummyData.originalWorkOrders);
-				// dummyData.subconOrder=dummyData.originalSubconOrder;
-				// dummyData.workOrders=dummyData.originalWorkOrders;
+				dummyData.prepackOrder.plannedItems=undefined;
+				dummyData.prepackOrder.HUList=undefined;
+				dummyData.prepackOrder.DONumber=undefined;
+				dummyData.prepackOrder.confirmStatus=undefined;
+				dummyData.prepackOrder.linkToSapStatus = undefined;
+				dummyData.prepackOrder.linkSapOrder = undefined;
+				dummyData.sapOrders[0].HUList=[];
 			}
 			if (amount>0){
-				if (dummyData.workOrders[0].nRcptSGWQty<50){
-					dummyData.workOrders[0].nRcptSGWQty=Math.min(amount,50);
-					dummyData.workOrders[0].nRcptSGQQty=5;
-				} else if (dummyData.workOrders[1].nRcptSGWQty<100){
-					dummyData.workOrders[1].nRcptSGWQty=Math.min(amount,100);
-					dummyData.workOrders[1].nRcptSGQQty=10;
-				} else  if (dummyData.workOrders[2].nRcptSGWQty<200){
-					dummyData.workOrders[2].nRcptSGWQty=Math.min(amount,200);
-					dummyData.workOrders[2].nRcptSGQQty=20;
-				} 
+				for (let i = 0; i < dummyData.workOrders.length; i++) {
+					const wo = dummyData.workOrders[i];
+					if (wo.nRcptSGWQty<wo.nPlanSGWQty){
+						wo.nRcptSGWQty=Math.min(amount,wo.nPlanSGWQty);
+						wo.nRcptSGQQty=wo.nPlanSGQQty;
+						break
+					}
+				}
+				// if (dummyData.workOrders[0].nRcptSGWQty<dummyData.workOrders[0].nPlanSGWQty){
+				// 	dummyData.workOrders[0].nRcptSGWQty=Math.min(amount,dummyData.workOrders[0].nPlanSGWQty);
+				// 	dummyData.workOrders[0].nRcptSGQQty=dummyData.workOrders[0].nPlanSGQQty;
+				// } else if (dummyData.workOrders[1].nRcptSGWQty<100){
+				// 	dummyData.workOrders[1].nRcptSGWQty=Math.min(amount,100);
+				// 	dummyData.workOrders[1].nRcptSGQQty=10;
+				// } else  if (dummyData.workOrders[2].nRcptSGWQty<200){
+				// 	dummyData.workOrders[2].nRcptSGWQty=Math.min(amount,200);
+				// 	dummyData.workOrders[2].nRcptSGQQty=20;
+				// } 
 			}
 			return res.status(200).send(data);//return serial number
 		} catch (error) {
