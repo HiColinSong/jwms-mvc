@@ -134,4 +134,4 @@ Barcode.prototype.getFullBarcode=function(){
     return (this.barcode1||"")+(this.barcode2||"")
 }
 
-module.exports = Barcode;
+// module.exports = Barcode;
