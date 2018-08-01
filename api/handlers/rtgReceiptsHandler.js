@@ -151,7 +151,7 @@ exports.confirmRga=function(req,res){
 			
 
 
-			var args = util.getTransParams(req.body.order,"RGA",req.session.user.UserID);
+			var args = util.getTransParams(order,"RGA",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 
