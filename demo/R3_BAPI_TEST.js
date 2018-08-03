@@ -8,11 +8,17 @@ const configuration  = {
   // "applicationServer": "172.32.70.71",
   // "instanceNumber": "00",
   // "client": "500"
-  username: 'yd.zhu',
-  password: 'yadong123',
-  applicationServer: '172.32.70.67',
-  instanceNumber: '02',
-  client: '200'
+  // username: 'yd.zhu',
+  // password: 'yadong123',
+  // applicationServer: '172.32.70.67',
+  // instanceNumber: '02',
+  // client: '200'
+
+    "username": "BX_USER",
+    "password": "@Bx_ud1;",
+    "applicationServer": "172.32.70.60",
+    "instanceNumber": "00",
+    "client": "800"
 };
 
 var test_BAPI_DELIVERY_GETLIST = function(){
@@ -173,7 +179,7 @@ var test_Z_SD_UPDATE_DN_STATUS = function(){
   var param ={IM_VBELN :'0800401204'};
     return invokeBAPI("Z_SD_UPDATE_DN_STATUS",param,false,true);
 }
-var test_Z_WS_DELIVERY_UPDATE = function(){
+var _WELLGO = function(){
   let param = {
                 "VBKOK_WA": {
                   "VBELN_VL": "0800401239",
@@ -226,6 +232,21 @@ var test_ZIM_INVENTORY_REPORTX = function(){
   return invokeBAPI("ZIM_INVENTORY_REPORTX",param);
 }
 
+var test_Z_WS_DELIVERY_UPDATE_WELLGO = function(){
+  var param ={
+    "VBKOK_WA": {
+      "VBELN_VL": "0800540094",
+      "WABUC": "X",
+      "WADAT_IST": "20180803",
+      "SPE_RESET_VLSTK": "X"
+    },
+    "COMMIT": "X",
+    "DELIVERY": "0800540094",
+    "IF_DATABASE_UPDATE": "1"
+  };
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param);
+}
+
 var invokeBAPI = function(BAPI,param){
   r3connect.Pool.get(configuration).acquire()
   .then(function (client) {
@@ -256,9 +277,10 @@ var invokeBAPI = function(BAPI,param){
 // test_BAPI_RESERVATION_GETDETAIL();
 // test_BAPI_CUSTOMER_GETDETAIL2();
 // test_BAPI_WHSE_TO_GET_DETAIL();
-// test_Z_WS_DELIVERY_UPDATE();
+// _WELLGO();
 // test_Z_WS_REVERSE_GOODS_ISSUE();
 // test_L_TO_CONFIRM();
 // test_BAPI_TRANSACTION_COMMIT();
 // test_ZIM_INVENTORY_REPORTX();
-test_Z_SD_UPDATE_DN_STATUS
+// test_Z_SD_UPDATE_DN_STATUS
+test_Z_WS_DELIVERY_UPDATE_WELLGO()

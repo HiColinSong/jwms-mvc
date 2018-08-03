@@ -233,6 +233,10 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
             throw new Error(res.RETURN[0].MESSAGE);
             transactionCommit=false;
+          } else if (res&&res.PROT&&res.PROT.length>0&&res.PROT[0].MSGTY==='E'){ 
+            console.log("Invoking "+bapiName+" failed:"+res.PROT[0]);
+            throw new Error(JSON.stringify(res.PROT[0],null,2));
+            transactionCommit=false;
           } else if (transactionCommit){
               console.log("Invoking BAPI_TRANSACTION_COMMIT");
               return client.invoke('BAPI_TRANSACTION_COMMIT',{WAIT:'X'});

@@ -22,8 +22,8 @@ var gulp = require('gulp'),
     removeLines = require('gulp-remove-empty-lines'),
     templateCache = require('gulp-angular-templatecache'),
     jeditor = require("gulp-json-editor"),
-    destFolder="../bxDest",
-    deployFolder=destFolder+"/deploy",
+    destFolder="../bxDest/",
+    deployFolder=destFolder+"deploy/",
 
     paths = {
         //the order matters for all app.xxx.js
@@ -42,11 +42,11 @@ var gulp = require('gulp'),
             'web/js/filters/*.*',
             'web/js/services/*.*'
             // ,'!web/js/mock/**'//exclude path
-        ],
+        ], //order matters
         css: ['web/css/base.css','web/css/bx.css'],//order matters
         // json: ['json/*.json'],
 	    htmlPartials: ['web/partials/*.html'],
-        unifiedjs:[deployFolder+'/web/js/bx.min.js',deployFolder+'/web/partials/templates.js'],
+        unifiedjs:[deployFolder+'web/js/bx.min.js',deployFolder+'web/partials/templates.js'],
         index:['web/index.html'],
 	    jsCssLibrary: ['bower_components/*/*.*']
     },
@@ -61,26 +61,30 @@ var gulp = require('gulp'),
 
 gulp.task('default', function() {
   // place code for your default task here
-  console.log("from default task!!!")
+  console.log("Done!")
+});
+gulp.task('backupLog', function() {
+  gulp.src(deployFolder+paths.logs)
+        .pipe(gulp.dest(destFolder+'logs/'));
 });
 
-gulp.task('clean', function() {
+gulp.task('clean', ['backupLog'],function() {
     return gulp.src([deployFolder])
         .pipe(clean({force:true}));
 });
 
 gulp.task('bower_components', ['clean'], function() {
-    gulp.src('bower_components/**/*.*')
-        .pipe(gulp.dest(deployFolder+'/bower_components/'));
+    gulp.src(paths.jsCssLibrary)
+        .pipe(gulp.dest(deployFolder+'bower_components/'));
 });
 gulp.task('copy-serverjs', ['clean'], function() {
     gulp.src('./server.js')
     .pipe(uglify())
-    .pipe(gulp.dest(deployFolder+'/'));
+    .pipe(gulp.dest(deployFolder));
 });
 
 gulp.task('copy-mediaFolders', ['clean'], function() {
-    gulp.src('web/media/**/*.*').pipe(gulp.dest(deployFolder+'/web/media/'));
+    gulp.src('web/media/**/*.*').pipe(gulp.dest(deployFolder+'web/media/'));
 });
 
 gulp.task('localScripts', ['clean'], function() {
@@ -89,34 +93,34 @@ gulp.task('localScripts', ['clean'], function() {
         .pipe(replace(/\.html\'/g, '\.html?ts='+timestamp+'\''))
         .pipe(uglify())
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest(deployFolder+'/web/js'));
+        .pipe(gulp.dest(deployFolder+'web/js'));
 });
 
 gulp.task('apiScripts', ['clean'], function() {
     return gulp.src(paths.apiScripts)
         .pipe(uglify())
-        .pipe(gulp.dest(deployFolder+'/api'));
+        .pipe(gulp.dest(deployFolder+'api'));
 });
 gulp.task('apiJson', ['clean'], function() {
     return gulp.src(paths.apiJson)
         .pipe(jsonminify())
-        .pipe(gulp.dest(deployFolder+'/api'));
+        .pipe(gulp.dest(deployFolder+'api'));
 });
 gulp.task('dbConfig', ['clean'], function() {
     return gulp.src(paths.dbConfig)
         .pipe(jsonminify())
-        .pipe(gulp.dest(deployFolder+'/db-config'));
+        .pipe(gulp.dest(deployFolder+'db-config'));
 });
 gulp.task('logs', ['clean'], function() {
-    return gulp.src(paths.logs)
-        .pipe(gulp.dest(deployFolder+'/logs'));
+    return gulp.src(destFolder+paths.logs)
+        .pipe(gulp.dest(deployFolder+'logs/'));
 });
 
 gulp.task('css', ['clean'], function() {
     return gulp.src(paths.css)
         .pipe(cleanCss())
         .pipe(concat('bx.min.css'))
-        .pipe(gulp.dest(deployFolder+'/web/css'));
+        .pipe(gulp.dest(deployFolder+'web/css'));
 });
 
 
@@ -138,13 +142,13 @@ gulp.task('template',['clean'], function() {
             return url.replace(/\.html/, '.html?ts='+timestamp)
         }
     }))
-    .pipe(gulp.dest(deployFolder+'/web/partials'));
+    .pipe(gulp.dest(deployFolder+'web/partials'));
 });
 
 gulp.task('mergeJsWithPartials',['localScripts','template'], function() {
     return gulp.src(paths.unifiedjs)
         .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest(deployFolder+'/web/js'));
+        .pipe(gulp.dest(deployFolder+'web/js'));
     });
 
 gulp.task('index', ['clean'], function() {
@@ -168,10 +172,10 @@ gulp.task('index', ['clean'], function() {
             loose: true
         }))
         .pipe(removeLines())
-        .pipe(gulp.dest(deployFolder+'/web'));
+        .pipe(gulp.dest(deployFolder+'web'));
 });
 gulp.task('remove-partials',['mergeJsWithPartials'], function() {
-    return gulp.src([deployFolder+'/web/partials'])
+    return gulp.src([deployFolder+'web/partials'])
         .pipe(clean({force:true}));
 });
 gulp.task('dependencies',['clean'],function(){
@@ -188,7 +192,7 @@ gulp.task('watch', function() {
     gulp.watch(paths.htmlPartials, ['htmlPartials']);
 });
 gulp.task('default', ['bower_components','localScripts','apiScripts','apiJson','css','template',
-                        'dbConfig','logs','copy-serverjs',
+                        'dbConfig','copy-serverjs','logs',
                         'mergeJsWithPartials','copy-mediaFolders','remove-partials','dependencies','index']);
 //gulp.task('default', ['bower_components','copy-mediaFolders','scripts','aceCss','css','template','index']);
 
