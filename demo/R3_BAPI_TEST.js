@@ -8,17 +8,17 @@ const configuration  = {
   // "applicationServer": "172.32.70.71",
   // "instanceNumber": "00",
   // "client": "500"
-  // username: 'yd.zhu',
-  // password: 'yadong123',
-  // applicationServer: '172.32.70.67',
-  // instanceNumber: '02',
-  // client: '200'
+  username: 'yd.zhu',
+  password: 'yadong123',
+  applicationServer: '172.32.70.67',
+  instanceNumber: '02',
+  client: '200'
 
-    "username": "BX_USER",
-    "password": "@Bx_ud1;",
-    "applicationServer": "172.32.70.60",
-    "instanceNumber": "00",
-    "client": "800"
+    // "username": "BX_USER",
+    // "password": "@Bx_ud1;",
+    // "applicationServer": "172.32.70.60",
+    // "instanceNumber": "00",
+    // "client": "800"
 };
 
 var test_BAPI_DELIVERY_GETLIST = function(){
@@ -247,6 +247,28 @@ var test_Z_WS_DELIVERY_UPDATE_WELLGO = function(){
     return invokeBAPI("Z_WS_DELIVERY_UPDATE",param);
 }
 
+var test_Z_MESSAGE_TEXT_BUILD = function(){
+  var param ={
+    "MSGNO": "053",
+    "MSGID": "M7",
+    "MSGV1": "2019/07",
+    "MSGV2": "2019/06",
+    "MSGV3": "6150",
+    "MSGV4": ""
+  }
+  
+  
+  // {
+  //   "MSGNO": "022",
+  //   "MSGID": "M7",
+  //   "MSGV1": "PU Ordered quantity",
+  //   "MSGV2": "1.000",
+  //   "MSGV3": "PC",
+  //   "MSGV4": ": 401535M 6150 1000 17766246"
+  // };
+    return invokeBAPI("Z_MESSAGE_TEXT_BUILD",param);
+}
+
 var invokeBAPI = function(BAPI,param){
   r3connect.Pool.get(configuration).acquire()
   .then(function (client) {
@@ -283,4 +305,5 @@ var invokeBAPI = function(BAPI,param){
 // test_BAPI_TRANSACTION_COMMIT();
 // test_ZIM_INVENTORY_REPORTX();
 // test_Z_SD_UPDATE_DN_STATUS
-test_Z_WS_DELIVERY_UPDATE_WELLGO()
+// test_Z_WS_DELIVERY_UPDATE_WELLGO()
+test_Z_MESSAGE_TEXT_BUILD()

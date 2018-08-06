@@ -24,7 +24,7 @@ exports.getDeliveryOrder=function(orderNo,isHU_DATA){
     if (isHU_DATA){
       param.IS_DLV_DATA_CONTROL.HU_DATA="X";
     }
-    return invokeBAPI("BAPI_DELIVERY_GETLIST",param);
+    return invokeBAPI("BAPI_DELIVERY_GETLIST",param,{});
 };
 
 exports.confirmPacking=function(order){
@@ -61,17 +61,17 @@ exports.confirmPacking=function(order){
         }
       }
     }
-    return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,true,true);
+    return invokeBAPI("BAPI_OUTB_DELIVERY_CONFIRM_DEC",params,{commit:true,reconnect:true});
 };
 
 exports.packingReversal = function(orderNo,HUNumber){
   var param ={DELIVERY:orderNo,HUKEY:HUNumber};
-    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,true,true);
+    return invokeBAPI("BAPI_HU_DELETE_FROM_DEL",param,{commit:true,reconnect:true});
 }
 
 exports.packingStatusUpdate = function(orderNo){
   var param ={IM_VBELN :orderNo};
-    return invokeBAPI("Z_SD_UPDATE_DN_STATUS",param,false,true);
+    return invokeBAPI("Z_SD_UPDATE_DN_STATUS",param,{commit:false,reconnect:true});
 }
 
 exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
@@ -87,7 +87,7 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
-    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,false,true);
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,{commit:false,reconnect:true});
 }
 
 exports.pgrUpdate = function(orderNo,currentDate,warehouseNo){
@@ -104,7 +104,7 @@ exports.pgrUpdate = function(orderNo,currentDate,warehouseNo){
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
     };
-    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,false,true);
+    return invokeBAPI("Z_WS_DELIVERY_UPDATE",param,{commit:false,reconnect:true});
 }
 
 exports.pgiReversal = function(orderNo,deliveryType,currentDate){
@@ -116,7 +116,7 @@ exports.pgiReversal = function(orderNo,deliveryType,currentDate){
       I_TCODE:'VL09',
       I_COMMIT:'X'
     }
-    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
+    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,{commit:false,reconnect:true});
 }
 exports.pgrReversal = function(orderNo,deliveryType,currentDate){
   var param ={
@@ -128,7 +128,7 @@ exports.pgrReversal = function(orderNo,deliveryType,currentDate){
       I_TCODE:'VL09',
       I_COMMIT:'X'
     }
-    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,false,true);
+    return invokeBAPI("Z_WS_REVERSE_GOODS_ISSUE",param,{commit:false,reconnect:true});
 }
 
 // exports.rgaReversal = function(orderNo,currentDate,warehouseNo){
@@ -155,21 +155,21 @@ exports.reservation = function(order,currentDate){
       )
     }
   }
-    return invokeBAPI("BAPI_GOODSMVT_CREATE",param,true,true);
+    return invokeBAPI("BAPI_GOODSMVT_CREATE",param,{commit:true,reconnect:true});
 }
 
 exports.getPurchaseOrder=function(orderNo){
 	var param ={PURCHASEORDER : orderNo};
-    return invokeBAPI("BAPI_PO_GETDETAIL",param);
+    return invokeBAPI("BAPI_PO_GETDETAIL",param,{});
 };
 
 exports.getTransferOrder=function(orderNo,warehouseNo){
 	var param ={WHSENUMBER : warehouseNo,TRANSFERORDERNO:orderNo};
-    return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
+    return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param,{});
 };
 
 exports.getCustomerDetail=function(customerNo){
-    return invokeBAPI("BAPI_CUSTOMER_GETDETAIL2",{CUSTOMERNO:customerNo});
+    return invokeBAPI("BAPI_CUSTOMER_GETDETAIL2",{CUSTOMERNO:customerNo},{});
 };
 
 exports.confirmPicking=function(orderNo,warehouseNo,items){
@@ -189,7 +189,7 @@ exports.confirmPicking=function(orderNo,warehouseNo,items){
             SQUIT:"X"
           });
       }
-    return invokeBAPI("L_TO_CONFIRM",param,false,true);
+    return invokeBAPI("L_TO_CONFIRM",param,{commit:false,reconnect:true});
 };
 
 exports.PickingReversals=function(order,warehouseNo){
@@ -208,18 +208,18 @@ exports.PickingReversals=function(order,warehouseNo){
         })
       }
     }
-    return invokeBAPI("L_TO_CANCEL",param,false,true);
+    return invokeBAPI("L_TO_CANCEL",param,{commit:false,reconnect:true});
 };
 
 exports.serialNoUpdate=function(param){
-    return invokeBAPI("ZIM_BX_STOCK_UPDATE",param,false,true);
+    return invokeBAPI("ZIM_BX_STOCK_UPDATE",param,{commit:false,reconnect:true});
 };
 exports.getReservationDoc=function(resvNo){
     var param = {RESERVATION:resvNo};
-    return invokeBAPI("BAPI_RESERVATION_GETDETAIL",param);
+    return invokeBAPI("BAPI_RESERVATION_GETDETAIL",param,{});
 };
 
-var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
+var invokeBAPI = function(bapiName,param,options){
 	return new Promise(function(resolve,reject){
     r3connect.Pool.get(configuration).acquire()
     .then(function (rfcClient) {
@@ -232,30 +232,49 @@ var invokeBAPI = function(bapiName,param,transactionCommit,reconnectRequired){
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
             throw new Error(res.RETURN[0].MESSAGE);
-            transactionCommit=false;
+            // options.transactionCommit=false;
           } else if (res&&res.PROT&&res.PROT.length>0&&res.PROT[0].MSGTY==='E'){ 
-            console.log("Invoking "+bapiName+" failed:"+res.PROT[0]);
-            throw new Error(JSON.stringify(res.PROT[0],null,2));
-            transactionCommit=false;
-          } else if (transactionCommit){
+            // console.log("Invoking "+bapiName+" failed:"+res.PROT[0]);
+            // throw new Error(JSON.stringify(res.PROT[0],null,2));
+            // transactionCommit=false;
+            let errorMsgParm={
+              "MSGNO": res.PROT[0].MSGNO,
+              "MSGID": res.PROT[0].MSGID,
+              "MSGV1": res.PROT[0].MSGV1,
+              "MSGV2": res.PROT[0].MSGV2,
+              "MSGV3": res.PROT[0].MSGV3,
+              "MSGV4": res.PROT[0].MSGV4
+            },
+            errorMsgOptions={
+              commit:false,
+              reconnect:false,
+              originalBapiName:bapiName,
+              originalParam:param
+            };
+            return invokeBAPI('Z_MESSAGE_TEXT_BUILD',errorMsgParm,errorMsgOptions);
+          } else if (options.commit){
               console.log("Invoking BAPI_TRANSACTION_COMMIT");
               return client.invoke('BAPI_TRANSACTION_COMMIT',{WAIT:'X'});
-          }else {
+
+          }else if (bapiName==='Z_MESSAGE_TEXT_BUILD'){
+            console.log("Invoking "+bapiName+" successfully");
+            throw new Error(res.MESSAGE_TEXT_OUTPUT);            
+          } else {
             console.log("Invoking "+bapiName+" successfully");
             return response;
           }
     })
     .then(function(response){
            resolve(response[0]);
-           if (reconnectRequired)
+           if (options.reconnect)
               reconnect();
     })
     .catch(function (error) {
       // Output error
         console.error('Error invoking'+bapiName+' :', error);
 
-        logger.error({bapiName:bapiName,param:param,error:(error.message||error)});
-        if (reconnectRequired)
+        logger.error({bapiName:options.originalBapiName||bapiName,param:options.originalParam||param,error:(error.message||error)});
+        if (options.reconnect)
           reconnect();
         reject (error);
     });
