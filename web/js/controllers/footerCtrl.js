@@ -6,4 +6,4 @@
     .controller('footerCtrl', ['$scope', function($scope){
     	$scope.currentDate = new Date();
     }])
- }())
+ }());

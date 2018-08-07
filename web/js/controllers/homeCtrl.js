@@ -25,4 +25,4 @@
     	// $scope.fullCode1=$scope.barcode1+$scope.barcode2;
     	// $scope.fullCode1Length=$scope.fullCode1.length;
     }])
- }())
+ }());
