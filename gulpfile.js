@@ -48,7 +48,7 @@ var gulp = require('gulp'),
 	    htmlPartials: ['web/partials/*.html'],
         unifiedjs:[deployFolder+'web/js/bx.min.js',deployFolder+'web/partials/templates.js'],
         index:['web/index.html'],
-	    jsCssLibrary: ['bower_components/*/*.*']
+	    jsCssLibrary: ['bower_components/**/*.*']
     },
     argv = require('yargs').argv,
     isProduction=argv.prod,
