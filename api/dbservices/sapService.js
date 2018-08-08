@@ -82,7 +82,7 @@ exports.pgiUpdate = function(orderNo,currentDate,warehouseNo){
         WADAT_IST: currentDate,
         SPE_RESET_VLSTK:'X'
       },
-      COMMIT:'X',
+      // COMMIT:'X',
       // SYNCHRON:'X',
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"
@@ -99,7 +99,7 @@ exports.pgrUpdate = function(orderNo,currentDate,warehouseNo){
         WADAT_IST: currentDate,
         SPE_RESET_VLSTK:'X'
       },
-      COMMIT:'X',
+      // COMMIT:'X',
       SYNCHRON:'X',
       DELIVERY:orderNo,
       IF_DATABASE_UPDATE:"1"

@@ -8,17 +8,17 @@ const configuration  = {
   // "applicationServer": "172.32.70.71",
   // "instanceNumber": "00",
   // "client": "500"
-  username: 'yd.zhu',
-  password: 'yadong123',
-  applicationServer: '172.32.70.67',
-  instanceNumber: '02',
-  client: '200'
+  // username: 'yd.zhu',
+  // password: 'yadong123',
+  // applicationServer: '172.32.70.67',
+  // instanceNumber: '02',
+  // client: '200'
 
-    // "username": "BX_USER",
-    // "password": "@Bx_ud1;",
-    // "applicationServer": "172.32.70.60",
-    // "instanceNumber": "00",
-    // "client": "800"
+    "username": "BX_USER",
+    "password": "@Bx_ud1;",
+    "applicationServer": "172.32.70.60",
+    "instanceNumber": "00",
+    "client": "800"
 };
 
 var test_BAPI_DELIVERY_GETLIST = function(){
@@ -162,7 +162,7 @@ var test_BAPI_PO_GETDETAIL = function(){
 }
 
 var test_BAPI_RESERVATION_GETDETAIL = function(){
-  let param = {RESERVATION:'0001687562'};
+  let param = {RESERVATION:'0002656680'};
   return invokeBAPI("BAPI_RESERVATION_GETDETAIL",param);
 }
 
@@ -296,7 +296,7 @@ var invokeBAPI = function(BAPI,param){
 // test_L_TO_CONFIRM();
 // test_BAPI_OUTB_DELIVERY_CONFIRM_DEC();
 // test_BAPI_PO_GETDETAIL();
-// test_BAPI_RESERVATION_GETDETAIL();
+test_BAPI_RESERVATION_GETDETAIL();
 // test_BAPI_CUSTOMER_GETDETAIL2();
 // test_BAPI_WHSE_TO_GET_DETAIL();
 // _WELLGO();
@@ -306,4 +306,4 @@ var invokeBAPI = function(BAPI,param){
 // test_ZIM_INVENTORY_REPORTX();
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
-test_Z_MESSAGE_TEXT_BUILD()
+// test_Z_MESSAGE_TEXT_BUILD()

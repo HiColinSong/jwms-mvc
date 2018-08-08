@@ -79,7 +79,7 @@ gulp.task('bower_components', ['clean'], function() {
 });
 gulp.task('copy-serverjs', ['clean'], function() {
     gulp.src('./server.js')
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest(deployFolder));
 });
 
@@ -91,14 +91,14 @@ gulp.task('localScripts', ['clean'], function() {
     return gulp.src(paths.localScripts)
         .pipe(ngAnnotate())
         .pipe(replace(/\.html\'/g, '\.html?ts='+timestamp+'\''))
-        // .pipe(uglify())
+        .pipe(uglify())
         .pipe(concat('bx.min.js'))
         .pipe(gulp.dest(deployFolder+'web/js'));
 });
 
 gulp.task('apiScripts', ['clean'], function() {
     return gulp.src(paths.apiScripts)
-        // .pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest(deployFolder+'api'));
 });
 gulp.task('apiJson', ['clean'], function() {
@@ -179,11 +179,11 @@ gulp.task('remove-partials',['mergeJsWithPartials'], function() {
         .pipe(clean({force:true}));
 });
 gulp.task('dependencies',['clean'],function(){
-    gulp.src("./package.json")
-    .pipe(jeditor(function(json) {
-      json.devDependencies = undefined;
-      return json; // must return JSON object.
-    }))
+    gulp.src(["./package.json","./package-lock.json"])
+    // .pipe(jeditor(function(json) {
+    //   json.devDependencies = undefined;
+    //   return json; // must return JSON object.
+    // }))
     .pipe(gulp.dest(destFolder));
 })
 gulp.task('watch', function() {
