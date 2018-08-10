@@ -59,8 +59,8 @@ BEGIN
                 SET @availableQty=( select dbo.BX_FnGetSerialCountByWorkOrder(@workorder,'SGW',5))
                 IF(@availableQty<@qty)
                     BEGIN
-                        SELECT @errorMsg=CONCAT('Error:Planned quantity exceeds the available quantity for workorder: ', @workorder);
-                        RAISERROR (@errorMsg,16,1 );
+                        SELECT @errMsg=CONCAT('Error:Planned quantity exceeds the available quantity for workorder: ', @workorder);
+                        RAISERROR (@errMsg,16,1 );
                     END 
                 --delete old records and insert new one
                 DELETE FROM dbo.BX_QuarShptPlan WHERE qsNo = @qsNo and workorder=@workorder and  batchNo=@batchNo 
