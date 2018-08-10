@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[BX_InserOrUpdateQuarShptPlan] 
+ALTER PROCEDURE [dbo].[BX_InserOrUpdateQuarShptPlan] 
 (
 	@qsNo varchar(22),
 	@planOn varchar(10),
@@ -22,18 +22,18 @@ BEGIN
 
     BEGIN TRY
 
---insert or update for table BX_QuarShptHead
+--insert or update for table BX_QuarShptHeader
         BEGIN
-            IF EXISTS (SELECT qsNo from dbo.BX_QuarShptHead where qsNo = @qsNo )
+            IF EXISTS (SELECT qsNo from dbo.BX_QuarShptHeader where qsNo = @qsNo )
                 BEGIN
-                    UPDATE dbo.BX_QuarShptHead 
+                    UPDATE dbo.BX_QuarShptHeader 
                         SET planOn = Convert(datetime,@planOn) ,
                             planBy = @planBy,
                             SubconPORefNo=@SubconPORefNo
                     WHERE	qsNo = @qsNo
                 END
             ELSE
-                INSERT INTO dbo.BX_QuarShptHead (qsNo,planOn,planBy,SubconPORefNo)
+                INSERT INTO dbo.BX_QuarShptHeader (qsNo,planOn,planBy,SubconPORefNo)
                     VALUES (@qsNo,Convert(datetime,@planOn),@planBy,@SubconPORefNo)
 
 
@@ -56,7 +56,16 @@ BEGIN
                 SET @qty = CAST(@qty AS NUMERIC(18,0));
                 
                 -- check if the qty is greater than the available qty
-                SET @availableQty=( select dbo.BX_FnGetSerialCountByWorkOrder(@workorder,'SGW',5))
+                SET @availableQty=( 
+                    (select dbo.BX_FnGetSerialCountByWorkOrder(@workorder,'SGW',5)) - 
+                    (select sum(p.qty)  
+                            from BX_QuarShptPlan p,BX_QuarShptHeader h 
+                            where p.SubconPORefNo=@SubconPORefNo and 
+                                p.SubconPORefNo=h.SubconPORefNo and 
+                                p.workorder=@workorder and
+                                p.qsNo=h.qsNo and
+                                h.prepackConfirmOn is not NULL)
+                )
                 IF(@availableQty<@qty)
                     BEGIN
                         SELECT @errMsg=CONCAT('Error:Planned quantity exceeds the available quantity for workorder: ', @workorder);
