@@ -5,50 +5,44 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[BX_GetQuarShptPlan] 
+ALTER PROCEDURE [dbo].[BX_GetQuarShptPlan] 
 (
-    @SubconPORefNo varchar(20)
+    @sSubconPORefNo varchar(20)
 )
 AS
 
-SELECT 
-    p.qsNo, 
-    p.workorder,
-    w.batchno,
-    p.qty,
-    dbo.BX_FnGetSerialCountByWorkOrder(p.workorder ,'SGW',0) as totalBITQty,
-    dbo.BX_FnGetSerialCountByWorkOrder(p.workorder ,'SGW',5) as availableBITQty
-FROM 
-    dbo.BX_QuarShptPlan p,  
-    dbo.BX_QuarShptHeader h,
-    dbo. dbo.WorkOrders w
-WHERE p.SubconPORefNo=@SubconPORefNo AND
-      p.workorder=w.project AND 
-      p.qsNo=h.qsNo AND
-       h.prepackConfirmOn is not Null
-GROUP BY p.qsNo
 
 SELECT 
-    p.qsNo, 
-    p.SubconPORefNo, 
-    p.workorder,
-    w.batchno,
-    p.qty,
-    w.itemCode as mateiral,
-    dbo.BX_FnGetSerialCountByWorkOrder(p.workorder ,'SGW',7,p.qsNo) as scannedQuarQty,
-    h.planBy,
-    h.planOn,
-    h.prepackCoinfirmOn,
-    h.linkedDONumber
-FROM 
-    dbo.BX_QuarShptPlan p,  
-    dbo.BX_QuarShptHeader h,
-    dbo. dbo.WorkOrders w
-WHERE p.SubconPORefNo=@SubconPORefNo AND
-      p.workorder=w.project AND 
-      p.qsNo=h.qsNo
-GROUP BY p.qsNo
-      
-
+ d.subconPORefNo,
+ ISNULL(p.qsNo,(SELECT qsNo FROM dbo.BX_QuarShptHeader WHERE prepackConfirmOn IS NULL)) AS qsNo,
+ d.workOrder AS WorkOrder,
+ ISNULL(p.qty,0) AS planQty,
+ w.batchNo AS BatchNo,
+ w.itemCode AS mateiral,
+ h.planBy AS PlanBy,
+ h.planOn AS PlanOn,
+ h.prepackConfirmOn AS prepackConfirmOn,
+   CASE 
+    WHEN prepackConfirmOn IS NULL 
+    THEN dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL)
+    ELSE NULL
+  END AS TotalBITQty,
+   CASE 
+    WHEN prepackConfirmOn IS NULL 
+    THEN ISNULL((SELECT count(serialNo) FROM  dbo.BX_SubconShipments WHERE qsNo=p.qsNo AND workorder=d.WorkOrder),0)
+    ELSE NULL
+  END AS scannedQuarQty,
+   CASE 
+    WHEN prepackConfirmOn IS NULL 
+    THEN dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) - 
+         ISNULL((SELECT sum(qty) FROM BX_QuarShptPlan WHERE SubconPORefNo=d.SubconPORefNo AND workorder=d.WorkOrder),0)
+    ELSE NULL
+  END AS availbleBITQty
+FROM dbo.BX_SubConDetails d 
+     LEFT OUTER JOIN dbo.BX_QuarShptPlan p ON d.workorder=p.workorder
+     LEFT OUTER JOIN dbo.WorkOrders w ON d.WorkOrder=w.Project
+     LEFT OUTER JOIN dbo.BX_QuarShptHeader h ON p.qsNo=h.qsNo
+WHERE d.SubconPORefNo=@sSubconPORefNo 
+ORDER BY qsNo,WorkOrder
 
 

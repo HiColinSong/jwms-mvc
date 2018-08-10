@@ -42,7 +42,8 @@ BEGIN
             @nth int,
             @workorder varchar (20),
             @batchNo varchar (12),
-            @availableQty NUMERIC(20,0),
+            @maxPlanQty NUMERIC(20,0),
+            @minPlanQty NUMERIC(20,0)=0,
             @qty varchar (22),
             @errMsg NVARCHAR(4000)
 
@@ -55,20 +56,28 @@ BEGIN
                 SET @qty = (select dbo.nth_occur(@qtyList,',',@nth));
                 SET @qty = CAST(@qty AS NUMERIC(18,0));
                 
-                -- check if the qty is greater than the available qty
-                SET @availableQty=( 
-                    (select dbo.BX_FnGetSerialCountByWorkOrder(@workorder,'SGW',5)) - 
-                    (select sum(p.qty)  
-                            from BX_QuarShptPlan p,BX_QuarShptHeader h 
-                            where p.SubconPORefNo=@SubconPORefNo and 
-                                p.SubconPORefNo=h.SubconPORefNo and 
-                                p.workorder=@workorder and
-                                p.qsNo=h.qsNo and
-                                h.prepackConfirmOn is not NULL)
+                -- check if the qty is smaller than the minPlanQty
+                SET @minPlanQty=( 
+                    (select count(s.SerialNo) 
+                            from BX_SubconShipments s,BX_QuarShptHeader h 
+                            where s.subConPo=@SubconPORefNo and 
+                                s.subConPo=h.SubconPORefNo and 
+                                s.workorder=@workorder and
+                                s.qsNo=h.qsNo and
+                                h.prepackConfirmOn is NULL)   -- qty already scanned in current qurantineShipment  (for the current qsNo)                          
                 )
-                IF(@availableQty<@qty)
+                IF(@minPlanQty>@qty)
                     BEGIN
-                        SELECT @errMsg=CONCAT('Error:Planned quantity exceeds the available quantity for workorder: ', @workorder);
+                        SELECT @errMsg=CONCAT('Error:Planned quantity (',@qty,') is smaller than the scanned quantity (',@minPlanQty,') for workorder: ', @workorder);
+                        RAISERROR (@errMsg,16,1 );
+                    END 
+                -- check if the qty is greater than the maxPlanQty
+                SET @maxPlanQty=( 
+                    select dbo.BX_FnGetSerialCountByWorkOrder(@workorder,'SGW',5,NULL,NULL)+ @minPlanQty -- qty not scanned
+                )
+                IF(@maxPlanQty<@qty)
+                    BEGIN
+                        SELECT @errMsg=CONCAT('Error:Planned quantity (',@qty,') exceeds the available quantity (',@maxPlanQty,') for workorder: ', @workorder);
                         RAISERROR (@errMsg,16,1 );
                     END 
                 --delete old records and insert new one
