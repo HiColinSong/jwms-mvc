@@ -1,63 +1,122 @@
-<div class="" style="padding:30px;margin-top:20px">
+<div class="no-padding-bottom" style="padding:30px;margin-top:20px">
 	<h2 class="text-center">Quarantine Shipment Planning</h2>
 </div>
-<h3 class="text-center">Subcon Order:{{workOrders[0].SubConPoRefNo}}</h3>
-<table class="table padding-top table-striped" >
-	<thead> 
-		<tr> 
-			<th width="8%"  class="text-center">Status</th> 
-			<th width="14%"  class="text-center">Work Order</th> 
-			<th width="14%"  class="text-center">Batch</th> 
-			<th width="8%"  class="text-center">Total Qty</th> 
-			<th width="12%"  class="text-center">Plan Qty for BIT</th> 
-			<th width="14%"  class="text-center">Plan Qty for Quar Shpt</th> 
-			<th width="14%"  class="text-center">Scan Qty For BIT</th> 
-			<th width="14%"  class="text-center">Scan Qty For Quar Shpt</th> 
-		</tr> 
-	</thead> 
-	<tbody> 
-				<tr ng-repeat="(woIdx,order) in workOrders"> 
-					<td  class="text-center"  ng-class="{'bg-success':order.lotReleased}"> <span  ng-if="order.lotReleased">Released</span></td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.WorkOrder}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.FullScanCode|displayBatch}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.totalQty}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{order.nPlanSGWQty||0}}</td>
+<h3 class="text-center">Subcon Order:{{plan.subconPORefNo}}</h3>
+
+<!-- tabs -->
+<div ng-init="showTab='currentPlan'" class=" col-sm-12 padding-top-20 no-padding-x" ng-if="plan" >
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs " role="tablist">
+		  <li role="presentation" ng-class="{'active':showTab==='currentPlan'}"><a class="cursor-pointer" 
+				  ng-click="showTab='currentPlan'">Current Plan</a></li>
+		  <li role="presentation" ng-class="{'active':showTab==='previousPlans'}" ng-show="previousPlans&&previousPlans.length>0">
+			  <a class="cursor-pointer" ng-click="showTab='previousPlans'">Previous Plans</a></li>
+	</ul>
+  
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane"  ng-class="{'active':showTab==='currentPlan'}" id="currentPlan">
+				
+				
+				<h4 class="text-center">Quarantine Shipment Plan No.:{{plan.qsNo}}</h4>
+				<table class="table padding-top table-striped" >
+				<thead> 
+				<tr> 
+					<th width="12%"  class="text-center">Work Order</th> 
+					<th width="12%"  class="text-center">Batch</th> 
+					<th width="15%"  class="text-center">Material</th> 
+					<th width="12%"  class="text-center">Total Qty</th> 
+					<th width="12%"  class="text-center">Plan Qty for BIT</th> 
+					<th width="13%"  class="text-center">Plan Qty for Quar Shpt</th> 
+					<th width="12%"  class="text-center">Scan Qty For BIT</th> 
+					<th width="12%"  class="text-center">Scan Qty For Quar Shpt</th> 
+				</tr> 
+				</thead> 
+				<tbody> 
+				<tr ng-repeat="(woIdx,order) in plan.workOrders"> 
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.workOrder}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.batchNo}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.materialCode}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.totalBITQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{order.availbleBITQty||0}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
 							<input type='number' class='col-sm-12 col-xs-12 no-padding-right'
-                            min="0"
-							name='planForQuarQty'
+							min="0"
+							name='planQty'
 							ng-required="true"
 							class='full-width form-control'
 							ng-class="{'submitted':submitted}"
-							ng-model="order.nPlanQuarQty"
+							ng-model="order.planQty"
 							ng-change="reCalulate(order)"
 							ng-disabled="order.lotReleased"
 							>
 					</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.nRcptSGWQty}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.nRcptQuarQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.scannedBITQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.scannedQuarQty}}</td>
 				</tr>
-			</tbody> 
-			<tfoot>
+				</tbody> 
+				<tfoot>
 				<tr> 
 					<td  class="text-center" colspan="3">Total:</td>
-					<td  class="text-center">{{::su.totalQty}}</td>
-					<td  class="text-center">{{su.planSGWQty||0}}</td>
-					<td  class="text-center">{{su.planQuarQty}}</td>
-					<td  class="text-center">{{::su.scanSGWQty||0}}</td>
-					<td  class="text-center">{{::su.scanQuarQty||0}}</td>
+					<td  class="text-center">{{::su.totalBITQty}}</td>
+					<td  class="text-center">{{su.availbleBITQty||0}}</td>
+					<td  class="text-center">{{su.planQty}}</td>
+					<td  class="text-center">{{::su.scannedBITQty||0}}</td>
+					<td  class="text-center">{{::su.scannedQuarQty||0}}</td>
 				</tr>
-			</tfoot>
-</table>
-  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-bottom" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
-		<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Save Quarantine Shipment Plan" 
-		ng-click="saveQuarShptPlan()">
-		<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Save Plan
-	  </button>
-  </div>
-  <div class="clearboth"></div>
+				</tfoot>
+				</table>
+				<div class="col-sm-4 col-xs-12 no-padding-x text-right margin-bottom" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+				<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Save Quarantine Shipment Plan" 
+				ng-click="saveQuarShptPlan()">
+				<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Save Plan
+				</button>
+				</div>
+				<div class="clearboth"></div>
+	  </div>
+	  <div role="tabpanel" class="tab-pane padding-top"  ng-class="{'active':showTab==='previousPlans'}" id="previousPlans">
+			<accordion close-others="true" >
+					<div accordion-group class="panel-default quar-plan margin-y"  
+							is-open="true" is-disabled="false" 
+								ng-repeat="(pidx,ppl) in previousPlans" >
+						<accordion-heading>
+								<h5 class="text-center">Quarantine Shipment Plan No.:{{::ppl.qsNo}}</h5>
+						</accordion-heading>
+						<table class="table table-striped border">
+								<thead> 
+									<tr>
+											<th width="14%"  class="text-center">Work Order</th> 
+											<th width="14%"  class="text-center">Batch</th> 
+											<th width="14%"  class="text-center">Material</th> 
+											<th width="10%"  class="text-center">Plan Qty</th> 
+											<th width="10%"  class="text-center">Plan By</th> 
+											<th width="19%"  class="text-center">Plan On</th> 
+											<th width="19%"  class="text-center">Confirmed On</th> 
+									</tr>
+								</thead> 
+								<tbody> 
+									<tr ng-repeat="(wIdx,pl) in ppl.workOrders">
+											<td class="text-center">{{::pl.workOrder}}</td> 
+											<td class="text-center">{{::pl.batchNo}}</td> 
+											<td class="text-center">{{::pl.materialCode}}</td> 
+											<td class="text-center">{{::pl.planQty}}</td> 
+											<td class="text-center">{{::pl.planBy}}</td> 
+											<td class="text-center">{{::pl.planOn|localDatetime}}</td> 
+											<td class="text-center">{{::pl.confirmedOn|localDatetime}}</td> 
+									</tr>
+								</tbody> 
+							</table>
+					</div>
+					<dir class="clearboth"></dir>
+				</accordion>
+	  </div>
+	</div>
+</div>
+
+
 
 <div class="clearboth"></div>
-<pre ng-if="debug">workOrders:{{workOrders | json}}</pre>	
+<pre ng-if="debug">previousPlans:{{previousPlans | json}}</pre>	
+<pre ng-if="debug">plan:{{plan | json}}</pre>	
 <pre ng-if="debug">temp:{{temp | json}}</pre>	
 

@@ -4,7 +4,7 @@ const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
 
-const dummyData =require('../dummyData/data.json'); //dummy code
+// const dummyData =require('../dummyData/data.json'); //dummy code
 
 exports.getSubconOrderList=function(req,res){
 	(async function () {
@@ -31,7 +31,6 @@ exports.getSubconOrderList=function(req,res){
 					previous=order.SubCOnPORefNo;
 				}
 			}
-			orders.push(dummyData.subconOrder); //dummy code
 			return res.status(200).send(orders);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
@@ -44,19 +43,26 @@ exports.getSubconWorkOrderInfo=function(req,res){
 			var data = {};
 			var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			data.workOrders = list.recordset;
-			if (req.session.user.UserRole==='DocControlQA'){ //only load pendingList for DocControlQA Role.
-				var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
-				list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');
-				data.bitPendingList = list.recordset;
-				list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
-				data.qasPendingList = list.recordset;
-			}
-			//dummy code
-			if (req.body.orderNo==='B12345678'){
-				data={};
-				data.workOrders = dummyData.workOrders;
-			}
-			//end dummy code
+			return res.status(200).send(data);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
+//for DOCControlQA only
+exports.getLotReleaseTable=function(req,res){
+	(async function () {
+		try {
+			var data = {};
+			var list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
+			data.workOrders = util.rebuildLotReleaseTable(list.recordset);
+			// if (req.session.user.UserRole==='DocControlQA'){ //only load pendingList for DocControlQA Role.
+			// 	var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
+			// 	list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');
+			// 	data.bitPendingList = list.recordset;
+			// 	list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGQ');
+			// 	data.qasPendingList = list.recordset;
+			// }
 
 			return res.status(200).send(data);
 		} catch (error) {
@@ -76,16 +82,18 @@ exports.getScanPendingList=function(req,res){
 		}
 	})()
 };
-// exports.getPendingList=function(req,res){
-// 	(async function () {
-// 		try {
-// 			var list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.sShip2Target);
-// 			return res.status(200).send(list.recordset);
-// 		} catch (error) {
-// 			return res.status(400).send([{error:true,message:error.message}]);
-// 		}
-// 	})()
-// };
+exports.getReceiveList=function(req,res){
+	(async function () {
+		try {
+			let data = {};
+			let list = await dbSpoReceiptsSvc.getSubconReceiveList(req.body.subconPO,req.body.ShipToTarget);
+			data.receiveList = list.recordset;
+			return res.status(200).send(data);
+		} catch (error) {
+			return res.status(400).send({error:true,message:error.message});
+		}
+	})()
+};
 exports.getQASampleCategoryList=function(req,res){
 	(async function () {
 		try {
@@ -112,6 +120,7 @@ exports.updateReturn=function(req,res){
 			var data = {};
 			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			// data.workOrders = list.recordset;
+
 			// list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGW');
 			// data.bitPendingList = list.recordset;
 			// list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
@@ -124,104 +133,77 @@ exports.updateReturn=function(req,res){
 	})()
 };
 
-//dummy code
-exports.updateReturn=function(req,res){
+exports.lotRelease=function(req,res){
 	(async function () {
 		try {
-			var data = {},amount=0;
-			if (!isNaN(req.body.sFullScanCode)){
-				amount=parseInt(req.body.sFullScanCode)
-			} else if (req.body.sFullScanCode==="reset"){
-				dummyData.workOrders=Object.assign([],dummyData.originalWorkOrders);
-				dummyData.prepackOrder.plannedItems=undefined;
-				dummyData.prepackOrder.HUList=undefined;
-				dummyData.prepackOrder.DONumber=undefined;
-				dummyData.prepackOrder.confirmStatus=undefined;
-				dummyData.prepackOrder.linkToSapStatus = undefined;
-				dummyData.prepackOrder.linkSapOrder = undefined;
-				dummyData.sapOrders[0].HUList=[];
-				dummyData.subconOrder.quarShptConfirmStatus=undefined;
+			let data={warningMsg:[]};
+			let params={
+				sSubCOnPORefNo:req.body.orderNo,
+				confirmOn:req.body.confirmOn,
+				confirmBy:req.session.user.UserID,
 			}
-			if (amount>0){
-				for (let i = 0; i < dummyData.workOrders.length; i++) {
-					const wo = dummyData.workOrders[i];
-					if (wo.nRcptSGWQty<wo.nPlanSGWQty){
-						wo.nRcptSGWQty=Math.min(amount,wo.nPlanSGWQty);
-						wo.nRcptSGQQty=wo.nPlanSGQQty;
-						break
-					}
-				}
-				// if (dummyData.workOrders[0].nRcptSGWQty<dummyData.workOrders[0].nPlanSGWQty){
-				// 	dummyData.workOrders[0].nRcptSGWQty=Math.min(amount,dummyData.workOrders[0].nPlanSGWQty);
-				// 	dummyData.workOrders[0].nRcptSGQQty=dummyData.workOrders[0].nPlanSGQQty;
-				// } else if (dummyData.workOrders[1].nRcptSGWQty<100){
-				// 	dummyData.workOrders[1].nRcptSGWQty=Math.min(amount,100);
-				// 	dummyData.workOrders[1].nRcptSGQQty=10;
-				// } else  if (dummyData.workOrders[2].nRcptSGWQty<200){
-				// 	dummyData.workOrders[2].nRcptSGWQty=Math.min(amount,200);
-				// 	dummyData.workOrders[2].nRcptSGQQty=20;
-				// } 
+			let workOrderList=[];
+			for (let i=0;i<req.body.releasedOrders.length;i++){
+				workOrderList[i]=req.body.releasedOrders[i];
 			}
-			return res.status(200).send(data);//return serial number
-		} catch (error) {
-			return res.status(400).send({error:error,message:error.message,errorCode:error.number});
-		}
-	})()
-};
-//end dummy data
-
-exports.completeSubconReceipt=function(req,res){
-	(async function () {
-		try {
-			var list = await dbSpoReceiptsSvc.CheckAndCompleteSubConReceipt(req.body.orderNo);
+			params.workOrderList = workOrderList.join(',');
+			let list = await dbSpoReceiptsSvc.CheckAndCompleteWorkordersReceipt(params);
 			list = list.recordset;
 			//call custom bapi to udpate SAP
 			let args = {IT_BX_STOCK:[]};
 			for (let j = 0; j < list.length; j++) {
 				const item = list[j];
-				args.IT_BX_STOCK.push({
-					TRANS:"GR1",
-					WERKS:item.PlantCode,
-					MATNR:item.Itemcode,
-					CHARG: item.batchno,
-					SERIAL:item.SerialNo,
-					DOCNO: item.PostingDocument,
-					ENDCUST:item.ShipToTarget,
-					BXDATE:util.formatDateTime().date,
-					BXTIME:util.formatDateTime().time,
-					BXUSER:req.session.user.UserID
-				});
+				if (!item.ErrorMsg){
+					args.IT_BX_STOCK.push({
+						TRANS:"GR1",
+						WERKS:item.PlantCode,
+						MATNR:item.MaterialCode,
+						CHARG: item.BatchNo,
+						SERIAL:item.SerialNo,
+						DOCNO: item.PostingDocument,
+						ENDCUST:item.ShipToTarget,
+						BXDATE:util.formatDateTime().date,
+						BXTIME:util.formatDateTime().time,
+						BXUSER:req.session.user.UserID
+					});
+				} else {
+					data.warningMsg.push(item.ErrorMsg);
+				}
 			}
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
-			return res.status(200).send({confirm:"success"});
-		} catch (error) {
-			return res.status(400).send([{error:true,message:error.message}]);
-		}
-	})()
-};
 
-//dummy code
-exports.completeSubconReceipt=function(req,res){
-	(async function () {
-		try {
-			console.log(req.body.orderNo);
-			for (let i = 0; i < req.body.releasedOrders.length; i++) {
-				const ro = req.body.releasedOrders[i];
-				for (let j = 0; j < dummyData.workOrders.length; j++) {
-					const wo = dummyData.workOrders[j];
-					if (ro===wo.WorkOrder){
-						wo.lotReleased=true;
-					}
-				}
-			}
-			let data={workOrders:dummyData.workOrders,confirm:"success"}
+			list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
+			data.workOrders = util.rebuildLotReleaseTable(list.recordset);
+			data.confirm="success";
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
 		}
 	})()
 };
+
+//dummy code
+// exports.completeSubconReceipt=function(req,res){
+// 	(async function () {
+// 		try {
+// 			console.log(req.body.orderNo);
+// 			for (let i = 0; i < req.body.releasedOrders.length; i++) {
+// 				const ro = req.body.releasedOrders[i];
+// 				for (let j = 0; j < dummyData.workOrders.length; j++) {
+// 					const wo = dummyData.workOrders[j];
+// 					if (ro===wo.WorkOrder){
+// 						wo.lotReleased=true;
+// 					}
+// 				}
+// 			}
+// 			let data={workOrders:dummyData.workOrders,confirm:"success"}
+// 			return res.status(200).send(data);
+// 		} catch (error) {
+// 			return res.status(400).send([{error:true,message:error.message}]);
+// 		}
+// 	})()
+// };
 // exports.partialRelease=function(req,res){
 // 	(async function () {
 // 		try {

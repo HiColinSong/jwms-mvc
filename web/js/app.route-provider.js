@@ -49,6 +49,42 @@
                     }]                   
                 }
             })
+            .when('/receiving/spoLotRelease', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersCtrl'
+            })
+            .when('/receiving/spoLotRelease/:orderNo?', {
+                templateUrl: 'partials/spo-lot-release.html',
+                controller: 'spoLotReleaseCtrl',
+                resolve:{
+                    info:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.orderNo){
+                            utilSvc.pageLoading("start");
+                            apiSvc.getLotReleaseTable({orderNo:$route.current.params.orderNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                deferred.reject(err);
+                                utilSvc.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            utilSvc.pageLoading("stop");
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
+            })
             .when('/receiving/rtgReceipts/:DONumber?', {
                 templateUrl: 'partials/rtgReceipts.html',
                 controller: 'rtgReceiptsCtrl',
@@ -218,7 +254,7 @@
                 templateUrl: 'partials/qrsmt-planning.html',
                 controller: 'qrsmtPlanningCtrl',
                 resolve:{
-                    info:['$q','$route','utilSvc','bxService',
+                    plans:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
                         if ($route.current.params.orderNo){
@@ -226,7 +262,7 @@
                             apiSvc.getSubconWorkOrderForPlanner({orderNo:$route.current.params.orderNo})
                             .$promise.then(function(data){
                                 if (data){
-                                    deferred.resolve(data);
+                                    deferred.resolve(data.plans);
                                 } else {
                                     deferred.resolve(undefined);
                                 }

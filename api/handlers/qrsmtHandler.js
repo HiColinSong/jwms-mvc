@@ -1,17 +1,16 @@
 'use strict';
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
-const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
-const dbPackingSvc =require('../dbservices/dbPackingSvc');
+const dbQuarShptSvc=require('../dbservices/dbQuarShptSvc');
 
 var dummyData =require('../dummyData/data.json'); //dummy code
 exports.getSubconWorkOrderForPlanner=function(req,res){
 	(async function () {
 		try {
 			var data = {};
-			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
-			// data.workOrders = list.recordset;
-			data.workOrders=dummyData.workOrders;
+			var list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
+			data.plans = util.rebuildQuarShptPlan(list.recordset);
+			// data.workOrders=dummyData.workOrders;
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -22,7 +21,25 @@ exports.getSubconWorkOrderForPlanner=function(req,res){
 exports.saveQuarShptPlan=function(req,res){
 	(async function () {
 		try {
-			dummyData.workOrders=req.body.workOrders;
+			// dummyData.workOrders=req.body.workOrders;
+			var params={
+				qsNo:req.body.plan.qsNo,
+				subconPORefNo:req.body.plan.subconPORefNo,
+				planOn:req.body.plan.planOn,
+				planBy:req.session.user.UserID
+			}
+			var workorderList=[];
+			var batchNoList=[];
+			var qtyList=[];
+			for (let i=0;i<req.body.plan.workOrders.length;i++){
+				workorderList[i]=req.body.plan.workOrders[i].workOrder;
+				batchNoList[i]=req.body.plan.workOrders[i].batchNo;
+				qtyList[i]=req.body.plan.workOrders[i].planQty.toString();
+			}
+			params.workorderList = workorderList.join(',');
+			params.batchNoList = batchNoList.join(',');
+			params.qtyList = qtyList.join(',');
+			await dbQuarShptSvc.saveQuarShptPlan(params);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});

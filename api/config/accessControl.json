@@ -22,7 +22,7 @@
 			"/bxapi/sporeceipts/get-pending-list.json"
 		   ,"/bxapi/sporeceipts/get-qa-category-list.json"
 		   ,"/bxapi/sporeceipts/get-subcon-order-list.json"
-		   ,"/bxapi/sporeceipts/get-subcon-work-order-info.json"
+		   ,"/bxapi/sporeceipts/get-lot-release-table.json.json"
 		   ,"/bxapi/sporeceipts/confirm.json"
 		]
 	},

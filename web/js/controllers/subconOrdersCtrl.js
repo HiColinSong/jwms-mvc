@@ -40,7 +40,7 @@
                         }
                     }
                     if ($scope.order.orderNo){
-                        $location.path("/receiving/spoReceipts/"+$scope.order.orderNo);
+                        $location.path($location.url()+"/"+$scope.order.orderNo);
                     } else {
                         utilSvc.addAlert('The Subcon Order doesn\'t exist!', "fail", false);
                     }

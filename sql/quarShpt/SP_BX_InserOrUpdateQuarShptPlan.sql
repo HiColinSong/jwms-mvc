@@ -8,7 +8,7 @@ GO
 ALTER PROCEDURE [dbo].[BX_InserOrUpdateQuarShptPlan] 
 (
 	@qsNo varchar(22),
-	@planOn varchar(10),
+	@planOn varchar(20),
 	@planBy varchar(20),
     @SubconPORefNo varchar(20),
     @workorderList varchar(8000),
@@ -46,7 +46,8 @@ BEGIN
             @minPlanQty NUMERIC(20,0)=0,
             @qty varchar (22),
             @errMsg NVARCHAR(4000)
-
+                --delete old records and insert new one
+                DELETE FROM dbo.BX_QuarShptPlan WHERE qsNo = @qsNo;
         SET @nth=1
             while 1=1
             BEGIN
@@ -81,7 +82,7 @@ BEGIN
                         RAISERROR (@errMsg,16,1 );
                     END 
                 --delete old records and insert new one
-                DELETE FROM dbo.BX_QuarShptPlan WHERE qsNo = @qsNo and workorder=@workorder and  batchNo=@batchNo 
+               -- DELETE FROM dbo.BX_QuarShptPlan WHERE qsNo = @qsNo and workorder=@workorder and  batchNo=@batchNo 
 
                 INSERT INTO dbo.BX_QuarShptPlan(qsNo,workorder,SubconPORefNo,batchNo,qty)
                 VALUES (@qsNo,@workorder,@SubconPORefNo,@batchNo, CAST(@qty AS NUMERIC(18,0)))

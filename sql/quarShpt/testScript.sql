@@ -64,3 +64,52 @@ from dbo.BX_SubConDetails d
      left outer JOIN dbo.BX_QuarShptHeader h on p.qsNo=h.qsNo
 where d.SubconPORefNo='B20180041' 
 order by qsNo,WorkOrder
+
+
+exec [dbo].[BX_CheckAndCompleteWorkordersReceipt]
+		@sSubCOnPORefNo='B20180041',
+		@workOrderList='210000081717,210000084482',
+		@confirmOn='2018-08-12 22:30:56',
+		@confirmBy='yd.zhu'
+
+
+DECLARE 
+    @sSubCOnPORefNo		Varchar(20)='B20180041',
+    @workOrderList 		varchar(8000)='210000081717,210000084482',
+    @confirmOn 			varchar(20)='2018-08-12 22:30:56',
+    @confirmBy 			varchar(20)='yd.zhu'
+
+
+
+
+--     select * from BX_QuarShptHeader
+-- select * from BX_QuarShptPlan
+-- select * from BX_SubConDetails where SubconPORefNo='B20180041'
+-- select * from BX_SubConPOHeader where SubconPORefNo='B20180041'
+
+-- exec [dbo].[BX_GetQuarShptPlan] '2100180614'
+-- exec [dbo].[BX_GetQuarShptPlan] 'B20180041'
+-- exec BX_GetLotReleaseTable 'B20180041'
+
+-- select * from dbo.BX_SubConDetails where SubconPORefNo='B20180041'
+-- select * from dbo.BX_SubconShipments where subConPo='B20180041' and workorder='210000066596' and ShipToTarget='SGW'
+
+
+-- select * from BX_QuarShptHeader
+
+-- ALTER TABLE dbo.BX_SubConDetails ADD lotReleaseBy VARCHAR(20) NULL;   
+-- COMMIT
+
+-- EXEC SpGetReceivedSerialsBySubconOrder 'QRS','B20180041'
+
+-- 	SELECT s.workorder, s.SerialNo,w.batchno,w.Itemcode,s.CreatedBy,s.CreatedOn
+-- 	FROM   BX_SubconShipments s LEFT JOIN dbo.WorkOrders w ON s.workorder=w.Project
+-- 	WHERE	StatusID = 7
+-- 			AND ShipToTarget = 'SGW' 
+-- 			AND subConPo = 'B20180041'
+
+-- 				SELECT workorder
+-- 	FROM   BX_SubconShipments 
+-- 	WHERE	StatusID = 7
+-- 			AND ShipToTarget = 'SGW' 
+-- 			AND subConPo = 'B20180041'

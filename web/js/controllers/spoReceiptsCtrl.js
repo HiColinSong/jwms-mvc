@@ -133,44 +133,44 @@
                         })
 
                 }
-                $scope.confirmReceipt = function() {
-                    utilSvc.pageLoading("start");
-                    let releasedOrders=[];
-                    for (let i = 0; i < $scope.workOrders.length; i++) {
-                        const wo = $scope.workOrders[i];
-                        if (wo.toRelease){
-                            releasedOrders.push(wo.WorkOrder);
-                        }
-                    }
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo,releasedOrders:releasedOrders}).$promise
-                    .then(function(data){
-                        utilSvc.pageLoading("stop");
-                        if (data&&data.confirm==='success'){
-                            $scope.confirm={
-                                type:"success",
-                                modalHeader: 'Subcon PO Confirmation Success',
-                                message:"The Subcon PO Receipts is confirmed successfully!"
-                            }
-                            $scope.workOrders=data.workOrders;
-                            $scope.checkLotRelease();
-                        } else {
-                            $scope.confirm={
-                                type:"danger",
-                                modalHeader: 'Subcon PO Confirmation Fail',
-                                message:"Unknown error, confirmation is failed!",
-                            }
-                        }
-                        confirmSubmit.do($scope);
-                    },function(err){
-                        utilSvc.pageLoading("stop");
-                        console.error(err);
-                        $scope.confirm={
-                            type:"danger",
-                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
-                        }
-                        confirmSubmit.do($scope);
-                    });
-                }
+                // $scope.confirmReceipt = function() {
+                //     utilSvc.pageLoading("start");
+                //     let releasedOrders=[];
+                //     for (let i = 0; i < $scope.workOrders.length; i++) {
+                //         const wo = $scope.workOrders[i];
+                //         if (wo.toRelease){
+                //             releasedOrders.push(wo.WorkOrder);
+                //         }
+                //     }
+                //     apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo,releasedOrders:releasedOrders}).$promise
+                //     .then(function(data){
+                //         utilSvc.pageLoading("stop");
+                //         if (data&&data.confirm==='success'){
+                //             $scope.confirm={
+                //                 type:"success",
+                //                 modalHeader: 'Subcon PO Confirmation Success',
+                //                 message:"The Subcon PO Receipts is confirmed successfully!"
+                //             }
+                //             $scope.workOrders=data.workOrders;
+                //             $scope.checkLotRelease();
+                //         } else {
+                //             $scope.confirm={
+                //                 type:"danger",
+                //                 modalHeader: 'Subcon PO Confirmation Fail',
+                //                 message:"Unknown error, confirmation is failed!",
+                //             }
+                //         }
+                //         confirmSubmit.do($scope);
+                //     },function(err){
+                //         utilSvc.pageLoading("stop");
+                //         console.error(err);
+                //         $scope.confirm={
+                //             type:"danger",
+                //             message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                //         }
+                //         confirmSubmit.do($scope);
+                //     });
+                // }
                 // $scope.dorder={};
                 // $scope.partialRelease = function() {
                 //     utilSvc.pageLoading("start");
@@ -223,18 +223,18 @@
                             })
         }
 
-        $scope.isLotRelease=false;
-        $scope.checkLotRelease=function(){
-            $scope.isLotRelease=false;
-            for (let i = 0; i < $scope.workOrders.length; i++) {
-                const wo = $scope.workOrders[i];
-                if (wo.toRelease){
-                    $scope.isLotRelease=true;
-                    break;
-                }
-            }
-            return;
-        }
+        // $scope.isLotRelease=false;
+        // $scope.checkLotRelease=function(){
+        //     $scope.isLotRelease=false;
+        //     for (let i = 0; i < $scope.workOrders.length; i++) {
+        //         const wo = $scope.workOrders[i];
+        //         if (wo.toRelease){
+        //             $scope.isLotRelease=true;
+        //             break;
+        //         }
+        //     }
+        //     return;
+        // }
 
 
 

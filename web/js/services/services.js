@@ -212,6 +212,14 @@
                 },
                 isArray:false
               },
+              getLotReleaseTable:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-lot-release-table'
+                },
+                isArray:false
+              },
               getSubconWorkOrderForPlanner:{
                 method: 'POST',
                 params:{
@@ -257,6 +265,14 @@
                 params:{
                   type: 'sporeceipts',
                   subtype:'get-pending-list'
+                },
+                isArray:false
+              },
+              getSubconReceiveList:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-receive-list'
                 },
                 isArray:false
               },

@@ -152,6 +152,113 @@ exports.formatDateTime=function(dateString){
 	return _resv;
 }
 
+//rebuild quarantine shipment plan for FE use
+exports.rebuildQuarShptPlan = function (list){
+	let setWorkOrder=function(plan){
+			return {
+				workOrder:plan.workOrder,
+				batchNo:plan.batchNo,
+				materialCode:plan.materialCode,
+				planQty:plan.planQty,
+				planBy:plan.planBy,
+				planOn:plan.planOn,
+				confirmedOn:plan.prepackConfirmOn,
+				totalBITQty:plan.totalBITQty,
+				scannedBITQty:plan.scannedBITQty,
+				availbleBITQty:plan.availbleBITQty,
+				scannedQuarQty:plan.scannedQuarQty,
+			}
+		};
+	let addToCurrentPlan=function (wo,currentPlan){
+			for (let i = 0; i < currentPlan.workOrders.length; i++) {
+				const cwo = currentPlan.workOrders[i];
+				if (wo.workOrder===cwo.workOrder){ //found the wo in currentPlan, return
+					return;
+				}
+			}
+			//the wo is missed in current plan, need to add to current plan with planQty 0,
+			let temp={}
+			Object.assign(temp,wo);
+			temp.planBy=null;
+			temp.planOn=null;
+			temp.confirmedOn=null;
+			temp.prepackConfirmOn=undefined;
+			temp.planQty=0;
+			temp.scannedQuarQty=0;
+			currentPlan.workOrders.push(temp)
+			return;
+		};
+
+	let previousPlans=[];
+	let currentPlan={};
+	let quarShptNumber;
+	let temp;
+	if (list.length>0){
+		for (let i = 0; i < list.length;i++) {
+			if (list[i].prepackConfirmOn){ //previous plan
+				if (quarShptNumber&&quarShptNumber===list[i].qsNo){ //same qsNo, only append new workorders
+					previousPlans[previousPlans.length-1].workOrders.push(setWorkOrder(list[i]))
+				} else  { //new qsNo
+					temp=setWorkOrder(list[i]);
+					previousPlans.push({
+						qsNo:list[i].qsNo,
+						subconPORefNo:list[i].subconPORefNo,
+						workOrders:[temp]
+					})
+					quarShptNumber=list[i].qsNo;
+				} 
+			} else { //current plan
+				if (!currentPlan.qsNo){
+					temp=setWorkOrder(list[i]);
+					currentPlan={
+						qsNo:list[i].qsNo,
+						subconPORefNo:list[i].subconPORefNo,
+						workOrders:[temp]
+					}
+				} else {
+					currentPlan.workOrders.push(setWorkOrder(list[i]))
+				}
+			}
+		} //end of for loop
+	}
+	if (!currentPlan.qsNo){
+		let previousQsnCount=previousPlans.length;
+		currentPlan.qsNo=currentPlan.subconPORefNo+((previousQsnCount>9)?(previousQsnCount+1):"0"+(previousQsnCount+1));
+	}
+	//loop over previousPlans to find the workorders missed in currentplan
+	for (let i = 0; i < previousPlans.length; i++) {
+		const pplan = previousPlans[i];
+		for (let j = 0; j < pplan.workOrders.length; j++) {
+			const wo = pplan.workOrders[j];
+			addToCurrentPlan(wo,currentPlan);
+		}
+	}
+	currentPlan.workOrders=this.arraySort(currentPlan.workOrders,"workOrder");
+	return {previousPlans:previousPlans,currentPlan:currentPlan}
+}
+//rebuild Lot Release Table for FE use
+exports.rebuildLotReleaseTable = function (list){
+	let lotReleaseTable=[];
+	let woNo,temp;
+
+	//the list is sorted by the workorder
+	if (list.length>0){
+		for (let i = 0; i < list.length;i++) {
+			const wo=list[i];
+			if (wo.workOrder!==woNo){ //new workorder
+				lotReleaseTable.push(wo);
+				woNo=wo.workOrder;
+			} else { //record with same workOrder number as the last one
+				temp=lotReleaseTable[lotReleaseTable.length-1] //last wo
+				temp.quarShptPlanQty+=wo.quarShptPlanQty;
+				temp.scannedQuarQty+=wo.scannedQuarQty;
+			}
+		} //end of for loop
+	}
+	
+	return lotReleaseTable;
+}
+
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
 exports.removeIncompleteItem = function (items){
 	if (items.length>0){
