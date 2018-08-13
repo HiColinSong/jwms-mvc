@@ -295,7 +295,7 @@
                         var deferred = $q.defer();
                         if ($route.current.params.DONumber){
                             utilSvc.pageLoading("start");
-                            apiSvc.getPrepackOrder({orderNo:$route.current.params.orderNo})
+                            apiSvc.getPrepackOrder({orderNo:$route.current.params.DONumber})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);

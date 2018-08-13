@@ -3,7 +3,7 @@ const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbQuarShptSvc=require('../dbservices/dbQuarShptSvc');
 
-var dummyData =require('../dummyData/data.json'); //dummy code
+var Promise = require('Promise').default;
 exports.getSubconWorkOrderForPlanner=function(req,res){
 	(async function () {
 		try {
@@ -51,27 +51,31 @@ var prepackOrder=dummyData.prepackOrder;
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
-			prepackOrder.DONumber=dummyData.workOrders[0].SubConPoRefNo;
-			prepackOrder.plannedItems=[];
-			let j=0
-			for (let i = 0; i < dummyData.workOrders.length; i++) {
-				const wo = dummyData.workOrders[i];
-				if (wo.nPlanQuarQty>0){
-					prepackOrder.plannedItems[j++]={
-						"DONumber": wo.SubConPoRefNo,
-						"MaterialCode": wo.MaterialCode,
-						"BatchNo": wo.BatchNo,
-						"DOItemNumber": "0".repeat(5-j.toString().length)+j.toString(),
-						"DOQuantity": wo.nPlanQuarQty,
-						"EANCode": wo.EANCode,
-						"ScanQty": 1
-					}
+			var list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
+			// data.plans = util.rebuildQuarShptPlan(list.recordset);
+			list=list.recordset;
+			let order={plannedItems:[]};
+			for (let i = 0; i < list.length; i++) {
+				const wo = list[i];
+				if (wo.planQty>0&&!wo.prepackConfirmOn){
+					order.plannedItems.push({
+						"DONumber": wo.qsNo,
+						"MaterialCode": wo.materialCode,
+						"BatchNo": wo.batchNo,
+						"DOItemNumber": wo.workOrder,
+						"workOrder": wo.workOrder,
+						"DOQuantity": wo.planQty,
+						"ScanQty": 0
+					})
 				}
-				
 			}
-			// prepackOrder.HUList=[]
-
-			return res.status(200).send(prepackOrder);
+			if (order.plannedItems.length>0){
+				order.DONumber=order.plannedItems[0].DONumber;
+				order.subconPORefNo=order.plannedItems[0].subconPORefNo;
+			} else {
+				throw new Error("There is no quarantine shipment plan for this subcon PO: "+req.body.orderNo);
+			}
+			return res.status(200).send(order);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
 		}
@@ -92,15 +96,21 @@ exports.refreshHu=function(req,res){
 	})()
 };
 
+var addScannedItemsToHUList=function(huList,scannedItems){
+	for (let i=0;i<huList.length;i++){
+		huList[i].scannedItems=huList[i].scannedItems||[];
+		for (let j=0;j<scannedItems.length;j++){
+				if (scannedItems[j].HUNumber===huList[i].HUNumber){
+					huList[i].scannedItems.push(scannedItems[j]);
+				}
+		}
+	}	
+	return huList;
+}
 exports.addNewHu=function(req,res){
 	(async function () {
-		var date,newHu=[];
-		for (var i=0;i<req.body.NumOfHu;i++){
-			date=new Date();
-			newHu.push(date.getTime()+i.toString())
-		}
 		var params={
-			DONumber:req.body.DONumber,
+			qsNo:req.body.DONumber,
 			// HUNumberList:newHu.join(','),
 			NumToCreate:req.body.NumOfHu,
 			PackMaterial:req.body.MaterialCode,
@@ -109,96 +119,49 @@ exports.addNewHu=function(req,res){
 			CreatedOn:req.body.createdOn
 		}
 		try {
-			// var huList = await dbPackingSvc.createHandlingUnits(params);
-			// huList=huList.recordset;
-			// var scannedItems = await dbPackingSvc.getPackDetails(req.body.DONumber);
-			// scannedItems=scannedItems.recordset;
-			// util.trimValues(scannedItems)
-			// huList=addScannedItemsToHUList(huList,scannedItems);
-			let hu = {};
-			prepackOrder.HUList=prepackOrder.HUList||[]
-			let n = prepackOrder.HUList.length;
-			for (let i = 0; i < params.NumToCreate; i++) {
-				hu={
-					DONumber:params.DONumber,
-					HUNumber:"1180729000"+("0".repeat(2-(n+i).toString().length)+(i+n+1).toString()),
-					PackMaterial: params.PackMaterial,
-					Domain:req.session.user.Domain,
-					CreatedBy:req.session.user.UserID,
-					CreatedOn:req.body.createdOn,
-					scannedItems:[]
-				}
-				prepackOrder.HUList.push(hu);
-			}
+			var huList = await dbQuarShptSvc.createHandlingUnits(params);
+			huList=huList.recordset;
+			var scannedItems = await dbQuarShptSvc.getPrepackDetails(req.body.DONumber);
+			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems)
+			huList=addScannedItemsToHUList(huList,scannedItems);
+			
 			return res.status(200).send(prepackOrder.HUList);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error});
 		}
 	})()
 };
-
+exports.removeHu=function(req,res){
+	(async function () {
+		try {
+			var params={
+				qsNo:req.body.DONumber,
+				HUNumber:req.body.HUNumber
+			}
+			var huList = await dbQuarShptSvc.deleteHandlingUnit(params);
+			huList=huList.recordset;
+			var scannedItems = await dbQuarShptSvc.getPrepackDetails(req.body.DONumber);
+			scannedItems=scannedItems.recordset;
+			util.trimValues(scannedItems);
+			huList=addScannedItemsToHUList(huList,scannedItems);
+			return res.status(200).send(huList);
+		} catch (error) {
+			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
 exports.addItem=function(req,res){
 	(async function () {
-		// console.time("Packing Insert");
 		var info=req.body,params={};
 		params.DONumber=info.orderNo;
 		params.HUNumber=info.HUNumber;
-		params.EANCode=info.EANCode;
-		params.MaterialCode=info.MaterialCode;
-		params.BatchNo=info.BatchNo;
-		// params.DOItemNumber=info.itemNumber;
-		params.Qty = info.Qty||1;
-		if (info.SerialNo){
-			params.SerialNo=info.SerialNo;
-			params.Qty = 1;
-		} 
+		params.sFullScanCode=info.sFullScanCode;
 		params.PackBy=req.session.user.UserID;
 		params.PackedOn=info.scannedOn;
-		params.Status = info.Status
-		params.FullScanCode = info.FullScanCode;
-		params.BinNumber = info.BinNumber;
 
 		try {
-			// var scannedItems = await dbPackingSvc.InsertScanItem(params);
-			var scannedItems=[];
-			// scannedItems=scannedItems.recordset;
-			// util.trimValues(scannedItems);
-			// var huList = await dbPackingSvc.getPackHUnits(params.DONumber);
-			// huList = addScannedItemsToHUList(huList.recordset,scannedItems);
-			// if (huList){
-			// 	return res.status(200).send(huList);
-			// } else {
-			// 	return res.status(200).send([{error:true,message:"failed to insert the scan item"}]);
-			// }
-			// console.timeEnd("Packing Insert");
-
-			for (let i = 0; i < prepackOrder.HUList.length; i++) {
-				const hu = prepackOrder.HUList[i];
-				if (prepackOrder.plannedItems.length>i){
-					const pitem = prepackOrder.plannedItems[i];
-					scannedItems=[
-						{
-							"DONumber": prepackOrder.DONumber,
-							"HUNumber": hu.HUNumber,
-							"MaterialCode": pitem.MaterialCode,
-							"BatchNo": pitem.BatchNo,
-							"SerialNo": null,
-							"PackBy": req.session.user.UserID,
-							"PackedOn": params.PackedOn,
-							"ScanQty":pitem.DOQuantity,
-							"DOItemNumber":pitem.DOItemNumber,
-							"BinNumber": "DEFAULT BIN"
-						}
-					];
-					hu.scannedItems=scannedItems;
-				}
-			}
-			//update workorder quantities
-			dummyData.workOrders[0].nRcptQuarQty=20;
-			dummyData.workOrders[1].nRcptQuarQty=60;
-			dummyData.workOrders[2].nRcptQuarQty=90;
-
-
+			let scannedItems = await dbQuarShptSvc.prepackScanItem(params);
 			return res.status(200).send([]);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
@@ -206,6 +169,36 @@ exports.addItem=function(req,res){
 	})()
 };
 
+var getUpdatedHuAndScanItemList=function(qsNo){
+	return new Promise(function(resolve,reject){
+		dbQuarShptSvc.getHuAndPrepackDetails(qsNo)
+		.then(function(result){
+			var huList,scannedItems;
+			if (result&&result.recordsets.length>0){
+				huList=result.recordsets[0],scannedItems;
+				if (result.recordsets.length>1){
+					scannedItems=result.recordsets[1];
+					util.trimValues(scannedItems);
+					huList=addScannedItemsToHUList(huList,scannedItems)
+				}
+			}
+			resolve(huList||[]);
+		},function(err){
+			reject(err);
+		});
+	});
+}
+exports.removeItem=function(req,res){
+	(async function () {
+		try {
+			await dbQuarShptSvc.removePrepackScanItem(req.body.fullScanCode);
+			var huList = await getUpdatedHuAndScanItemList(req.body.orderNo);
+			return res.status(200).send(huList);
+		} catch (error) {
+			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
 exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;

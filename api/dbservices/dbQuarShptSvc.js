@@ -50,3 +50,67 @@ const sqlSvc=require("./sqlService");
       return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
   }
 
+  //insert Handlig Units list
+  exports.createHandlingUnits=function(info){
+    if (info.Domain=='BESA'){
+      info.Domain='BBV'
+    }
+    var params={
+      qsNo:{type:"sql.VarChar(22)",value:info.qsNo},
+      NumToCreate:{type:'sql.Int',value:info.NumToCreate},
+      PackMaterial:{type:'sql.VarChar(18)',value:info.PackMaterial},
+      CreatedBy:{type:'sql.VarChar(20)',value:info.CreatedBy},
+      BUnit:{type:'sql.VarChar(10)',value:info.Domain},
+      CreatedOn:{type:'sql.VarChar(22)',value:info.CreatedOn}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_InsertPrepackHandlingUnits",params)
+  }
+
+    //Delete a Handling Unit
+    exports.deleteHandlingUnit=function(info){
+      var params={
+        qsNo:{type:"sql.VarChar(22)",value:info.qsNo},
+        HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber}
+      }
+      return sqlSvc.callStoredProcedure("dbo.BX_DeletePrepackHandlingUnit",params)
+    }
+
+    exports.getPrepackDetails=function(qsNo){
+      var stmt = "select s.SerialNo,s.workorder,s.HUNumber,s.FullScanCode,w.batchno,w.Itemcode from dbo.BX_SubconShipments s,dbo.WorkOrders w where s.workorder=w.Project and qsNO=@qsNo";
+      let paramTypes={qsNo:'sql.VarChar(22)'};
+      let paramValues={qsNo:qsNo};
+      return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+    }
+
+  exports.getPrepackHUnits=function(qsNo){
+    var stmt = "select * from dbo.BX_QuarShpt_PrepackHUnits where qsNo=@qsNo";
+    let paramTypes={qsNo:'sql.VarChar(22)'};
+    let paramValues={qsNo:qsNo};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
+
+  prepackScanItem
+  //when retrieving the DO from SAP, initialze the BX db
+exports.prepackScanItem=function(info){
+  var params={
+    qsNo:{type:'sql.VarChar(12)',value:info.DONumber},
+    HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
+    sFullScanCode:{type:'sql.VarChar(60)',value:info.sFullScanCode},
+    ModifiedBy:{type:'sql.VarChar(20)',value:info.PackBy},
+    ModifiedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
+  }
+
+  return sqlSvc.callStoredProcedure("dbo.BX_PrepackScanItem",params)
+}
+exports.removePrepackScanItem=function(FullScanCode){
+  var stmt = "Update dbo.BX_SubconShipments SET StatusID=5,qsNo=NULL,HUNumber=NULL WHERE FullScanCode=@FullScanCode";
+  let paramTypes={FullScanCode:'sql.VarChar(60)'};
+  let paramValues={FullScanCode:FullScanCode};
+  return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+}
+exports.getHuAndPrepackDetails=function(qsNo){
+  var params={
+    qsNo:{type:"sql.VarChar(22)",value:qsNo}
+  }
+  return sqlSvc.callStoredProcedure("dbo.BX_GetPrepackHandlingUnitAndScannedItems",params)
+}
