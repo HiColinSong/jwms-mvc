@@ -87,6 +87,13 @@ Barcode.prototype.parseBarcode=function(){
                 self.valid=false;
                 return;
             }
+        } else if (marker==="37"){ //Expiry
+            if (code.length>3){
+                return parser(code.substring(3));
+            } else {
+                self.valid=true;
+                return;
+            }
         } else if (marker==="10"||marker==="21"||marker==="30"||marker==="37"){
             var prop;
 
