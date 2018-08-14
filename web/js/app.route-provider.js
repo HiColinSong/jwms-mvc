@@ -250,16 +250,16 @@
                 templateUrl: 'partials/subconOrders.html',
                 controller: 'subconOrdersForPlannerCtrl'
             })
-            .when('/qrsmt/planning/:orderNo?', {
+            .when('/qrsmt/planning/:qsNo?', {
                 templateUrl: 'partials/qrsmt-planning.html',
                 controller: 'qrsmtPlanningCtrl',
                 resolve:{
                     plans:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
-                        if ($route.current.params.orderNo){
+                        if ($route.current.params.qsNo){
                             utilSvc.pageLoading("start");
-                            apiSvc.getSubconWorkOrderForPlanner({orderNo:$route.current.params.orderNo})
+                            apiSvc.getSubconWorkOrderForPlanner({qsNo:$route.current.params.qsNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data.plans);
@@ -286,16 +286,16 @@
                 templateUrl: 'partials/subconOrders.html',
                 controller: 'subconOrdersForPrepackCtrl'
             })
-            .when('/qrsmt/prepack/:DONumber?', {
+            .when('/qrsmt/prepack/:qsNo?', {
                 templateUrl: 'partials/qrsmt-prepack.html',
                 controller: 'qrsmtPrepackCtrl',
                 resolve:{
-                    order:['$q','$route','utilSvc','bxService',
+                    orders:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
-                        if ($route.current.params.DONumber){
+                        if ($route.current.params.qsNo){
                             utilSvc.pageLoading("start");
-                            apiSvc.getPrepackOrder({orderNo:$route.current.params.DONumber})
+                            apiSvc.getPrepackOrder({qsNo:$route.current.params.qsNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);

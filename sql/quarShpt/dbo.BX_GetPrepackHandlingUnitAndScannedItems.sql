@@ -17,7 +17,7 @@ AS
 BEGIN
     select * from dbo.BX_QuarShpt_PrepackHUnits where qsNo=@qsNo
 
-	select s.SerialNo,s.workorder,s.HUNumber,s.FullScanCode,w.batchno,w.Itemcode 
+	select s.SerialNo,s.workorder as DOItemNumber,s.HUNumber,s.FullScanCode,w.batchno as BatchNo,w.Itemcode as MaterialCode,1 as ScanQty
     from dbo.BX_SubconShipments s,dbo.WorkOrders w
     where s.workorder=w.Project and  qsNO=@qsNo
 END

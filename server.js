@@ -129,7 +129,9 @@ app.post('/bxapi/qrsmt/get-subcon-work-order-for-planner.json',auth.authCheck,qr
 app.post('/bxapi/qrsmt/save-plan.json',auth.authCheck,qrsmtHandler.saveQuarShptPlan);
 app.post('/bxapi/qrsmt/get-prepack-order.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
 app.post('/bxapi/qrsmt/add-new-hu.json',auth.authCheck,qrsmtHandler.addNewHu);
+app.post('/bxapi/qrsmt/remove-hu.json',auth.authCheck,qrsmtHandler.removeHu);
 app.post('/bxapi/qrsmt/add-item.json',auth.authCheck,qrsmtHandler.addItem);
+app.post('/bxapi/qrsmt/remove-item.json',auth.authCheck,qrsmtHandler.removeItem);
 // app.post('/bxapi/qrsmt/refresh-scanned-items.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
 app.get('/bxapi/qrsmt/refresh-hu/:orderNo.json',auth.authCheck,qrsmtHandler.refreshHu);
 app.post('/bxapi/qrsmt/confirm.json',auth.authCheck,qrsmtHandler.confirmPrepacking);

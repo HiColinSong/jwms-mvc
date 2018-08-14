@@ -52,7 +52,7 @@
             
 
             $scope.removeHU=function(HUNumber){
-                apiSvc.removeHu({DONumber:order.DONumber,HUNumber:HUNumber}).$promise.
+                apiSvc.removeHu({type:$scope.type},{DONumber:order.DONumber,HUNumber:HUNumber}).$promise.
                     then(function(data){
                         if (data&&data.length>0&&data[0].error){
                             console.error(data[0].message.originalError.info.message);
@@ -134,7 +134,7 @@
                 };
 
                 $scope.removeItem=function(item){
-                    apiSvc.removeScanItem({type:"packing"},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
+                    apiSvc.removeScanItem({type:$scope.type},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
                         then(function(data){
                             if (data&&data.length>0&&data[0].error)
                                 console.error(data[0].message.originalError.info.message);

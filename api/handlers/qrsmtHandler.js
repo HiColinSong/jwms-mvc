@@ -8,9 +8,8 @@ exports.getSubconWorkOrderForPlanner=function(req,res){
 	(async function () {
 		try {
 			var data = {};
-			var list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
+			var list = await dbQuarShptSvc.getQuarShptPlan(req.body.qsNo);
 			data.plans = util.rebuildQuarShptPlan(list.recordset);
-			// data.workOrders=dummyData.workOrders;
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -51,9 +50,13 @@ exports.saveQuarShptPlan=function(req,res){
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
-			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
-			let order=util.buildPrepackOrder(list.recordset)
-			return res.status(200).send(order);
+			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.qsNo);
+			let orders=util.buildPrepackOrder(list.recordset)
+			for (let i = 0; i < orders.length; i++) {
+				const order = orders[i];
+				order.HUList = await getUpdatedHuAndScanItemList(order.qsNo);
+			}
+			return res.status(200).send(orders);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
 		}
@@ -62,12 +65,8 @@ exports.getPrepackOrder=function(req,res){
 exports.refreshHu=function(req,res){
 	(async function () {
 		try {
-			var huList = prepackOrder.HUList;
-			if (huList){
-				return res.status(200).send(huList);
-			} else {
-				return res.status(200).send([{error:true,message:"failed to refresh the scan item"}]);
-			}
+			var huList = await getUpdatedHuAndScanItemList(req.params.orderNo);
+			return res.status(200).send(huList);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
 		}
@@ -104,7 +103,7 @@ exports.addNewHu=function(req,res){
 			util.trimValues(scannedItems)
 			huList=addScannedItemsToHUList(huList,scannedItems);
 			
-			return res.status(200).send(prepackOrder.HUList);
+			return res.status(200).send(huList);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error});
 		}
@@ -132,7 +131,7 @@ exports.removeHu=function(req,res){
 exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
-		params.DONumber=info.orderNo;
+		params.DONumber=info.qsNo;
 		params.HUNumber=info.HUNumber;
 		params.sFullScanCode=info.sFullScanCode;
 		params.PackBy=req.session.user.UserID;
@@ -181,7 +180,7 @@ exports.confirmPrepacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
-			var scannedItems = await dbQuarShptSvc.getPrepackDetails(req.body.DONumber);
+			var scannedItems = await dbQuarShptSvc.getPrepackDetails(req.body.qsNo);
 			scannedItems = scannedItems.recordset;
 			//call custom bapi to udpate SAP
 			let args = {IT_BX_STOCK:[]};
@@ -200,8 +199,8 @@ exports.confirmPrepacking=function(req,res){
 					BXUSER:req.session.user.UserID
 				});
 			}
-			if (args.IT_BX_STOCK.length>0)
-				await sapSvc.serialNoUpdate(args);
+			// if (args.IT_BX_STOCK.length>0)
+			// 	await sapSvc.serialNoUpdate(args);
 
 			let params={
 				qsNo:req.body.qsNo,
@@ -226,7 +225,7 @@ exports.linkToSapDo=function(req,res){
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
 			let order = util.deliveryOrderConverter(sapOrder);
 			if (!order||!order.DONumber){
-				throw new Error("The Delivery Order "+req.body.orderNo+" doesn't exist!");
+				throw new Error("The Delivery Order "+req.body.DONumber+" doesn't exist!");
 			}
 			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.qsNo);
 			let prepackOrder=util.buildPrepackOrder(list.recordset)
@@ -255,17 +254,13 @@ exports.linkToSapDo=function(req,res){
 				throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
 			}
 			//the sap order and prepack order matches, copy data from prepack to sap do
-			await dbQuarShptSvc.linkPrepackToPack(params);
-
-
-
-			if (req.body.DONumber==='D123456789'){
-				
-
-			} else if (req.body.DONumber==='D987654321'){
-			} else {
-				throw new Error("The SAP DO "+req.body.DONumber+" can't be found! ");
+			let params={
+				qsNo:prepackOrder.qsNo,
+				DONumber:order.DONumber,
+				workorderList:workorderList.join(","),
+				DOItemNumberList:DOItemNumberList.join(","),
 			}
+			await dbQuarShptSvc.linkPrepackToPack(params);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
@@ -277,15 +272,12 @@ exports.unlinkSapDo=function(req,res){
 	(async function () {
 		var order;
 		try {
-			console.log("SubconOrder:"+req.body.subconOrderNo);
-			console.log("DONumber:"+req.body.DONumber);
-			if (req.body.DONumber==='D123456789'){
-				dummyData.sapOrders[0].HUList=[];
-				prepackOrder.linkToSapStatus = undefined;
-				prepackOrder.linkSapOrder = undefined;
-			} 
-			let data={order:prepackOrder,confirm:"success"};
-			return res.status(200).send(data);
+			let params={
+				qsNo:request.body.qsNo,
+				DONumber:request.body.DONumber
+			}
+			await dbQuarShptSvc.linkPrepackToPack(params);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}

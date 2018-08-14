@@ -124,7 +124,7 @@
               removeHu:{
                 method: 'POST',
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype: 'remove-hu'
                 },
                 isArray:true
@@ -242,7 +242,7 @@
                   type: 'qrsmt',
                   subtype:'get-prepack-order'
                 },
-                isArray:false
+                isArray:true
               },
               linkToSapDo:{
                 method: 'POST',

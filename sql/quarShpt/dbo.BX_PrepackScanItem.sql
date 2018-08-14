@@ -23,9 +23,9 @@ BEGIN
             HUNumber=@HUNumber,
             ModifiedBy = @ModifiedBy,
             ModifiedOn = Convert(datetime,ModifiedOn)
-    WHERE	FullScanCode = @sFullScanCode 
+    WHERE	FullScanCode = @sFullScanCode AND StatusID<>7
     IF @@ROWCOUNT = 0  
-        RAISERROR ('Error:Item cannot be found!',16,1 ); 
+        RAISERROR ('Error:Item cannot be found or is already scanned!',16,1 ); 
 
 	-- select s.SerialNo,s.workorder,s.HUNumber,w.batchno,w.Itemcode from dbo.BX_SubconShipments s,dbo.WorkOrders w
     -- where s.workorder=w.Project and  qsNO=@qsNo

@@ -190,7 +190,7 @@ exports.rebuildQuarShptPlan = function (list){
 		};
 
 	let previousPlans=[];
-	let currentPlan={};
+	let currentPlan;
 	let quarShptNumber;
 	let temp;
 	if (list.length>0){
@@ -208,22 +208,20 @@ exports.rebuildQuarShptPlan = function (list){
 					quarShptNumber=list[i].qsNo;
 				} 
 			} else { //current plan
-				if (!currentPlan.qsNo){
-					temp=setWorkOrder(list[i]);
-					currentPlan={
-						qsNo:list[i].qsNo,
-						subconPORefNo:list[i].subconPORefNo,
-						workOrders:[temp]
-					}
-				} else {
-					currentPlan.workOrders.push(setWorkOrder(list[i]))
+				currentPlan=currentPlan||{
+					qsNo:list[i].qsNo,
+					subconPORefNo:list[i].subconPORefNo,
+					workOrders:[]
 				}
+				currentPlan.workOrders.push(setWorkOrder(list[i]))
 			}
 		} //end of for loop
 	}
 	if (!currentPlan.qsNo){
-		let previousQsnCount=previousPlans.length;
-		currentPlan.qsNo=currentPlan.subconPORefNo+((previousQsnCount>9)?(previousQsnCount+1):"0"+(previousQsnCount+1));
+		// let previousQsnCount=previousPlans.length;
+		// currentPlan.qsNo=currentPlan.subconPORefNo+((previousQsnCount>9)?(previousQsnCount+1):"0"+(previousQsnCount+1));
+		let runningNumber=parseInt(previousPlans[previousPlans.length-1].qsNo.slice(-2))+1;
+		currentPlan.qsNo=currentPlan.subconPORefNo+((runningNumber>9)?(runningNumber):"0"+runningNumber);
 	}
 	//loop over previousPlans to find the workorders missed in currentplan
 	for (let i = 0; i < previousPlans.length; i++) {
@@ -260,28 +258,37 @@ exports.rebuildLotReleaseTable = function (list){
 }
 
 exports.buildPrepackOrder = function(list){
-	let order={plannedItems:[]};
+	let orders=[];
+	let _qsNo;//hold the qsNo for previous item
 		for (let i = 0; i < list.length; i++) {
 			const wo = list[i];
-			if (wo.planQty>0&&!wo.prepackConfirmOn){
-				order.plannedItems.push({
-					"qsNo": wo.qsNo,
-					"MaterialCode": wo.materialCode,
-					"BatchNo": wo.batchNo,
-					"DOItemNumber": wo.workOrder,
-					"workOrder": wo.workOrder,
-					"DOQuantity": wo.planQty,
-					"ScanQty": 0
-				})
+			if (wo.qsNo&&wo.planQty>0){
+				if (wo.qsNo!==_qsNo){
+					orders.push({
+						qsNo:wo.qsNo,
+						prepackConfirmOn:wo.prepackConfirmOn,
+						subconPORefNo:wo.subconPORefNo
+					})
+					_qsNo=wo.qsNo;
+				}
+				if (orders.length>0){
+					orders[orders.length-1].plannedItems=orders[orders.length-1].plannedItems||[];
+					orders[orders.length-1].plannedItems.push({
+						"qsNo": wo.qsNo,
+						"MaterialCode": wo.materialCode,
+						"BatchNo": wo.batchNo,
+						"DOItemNumber": wo.workOrder,
+						"workOrder": wo.workOrder,
+						"DOQuantity": wo.planQty,
+						"ScanQty": 0
+					})
+				}
 			}
 		}
-		if (order.plannedItems.length>0){
-			order.qsNo=order.plannedItems[0].qsNo;
-			order.subconPORefNo=list[0].subconPORefNo;
-		} else {
+		if (orders.length===0){
 			throw new Error("There is no quarantine shipment plan for the subcon PO!");
 		}
-	return order;
+	return orders;
 }
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
 exports.removeIncompleteItem = function (items){
