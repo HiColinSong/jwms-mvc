@@ -259,6 +259,30 @@ exports.rebuildLotReleaseTable = function (list){
 	return lotReleaseTable;
 }
 
+exports.buildPrepackOrder = function(list){
+	let order={plannedItems:[]};
+		for (let i = 0; i < list.length; i++) {
+			const wo = list[i];
+			if (wo.planQty>0&&!wo.prepackConfirmOn){
+				order.plannedItems.push({
+					"qsNo": wo.qsNo,
+					"MaterialCode": wo.materialCode,
+					"BatchNo": wo.batchNo,
+					"DOItemNumber": wo.workOrder,
+					"workOrder": wo.workOrder,
+					"DOQuantity": wo.planQty,
+					"ScanQty": 0
+				})
+			}
+		}
+		if (order.plannedItems.length>0){
+			order.qsNo=order.plannedItems[0].qsNo;
+			order.subconPORefNo=list[0].subconPORefNo;
+		} else {
+			throw new Error("There is no quarantine shipment plan for the subcon PO!");
+		}
+	return order;
+}
  //for DO order items, remove the item that misses BatchNo or MaterialCode or DOQuantity is 0
 exports.removeIncompleteItem = function (items){
 	if (items.length>0){

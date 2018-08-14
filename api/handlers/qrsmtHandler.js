@@ -47,34 +47,12 @@ exports.saveQuarShptPlan=function(req,res){
 	})()
 };
 
-var prepackOrder=dummyData.prepackOrder;
+// var prepackOrder=dummyData.prepackOrder;
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
-			var list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
-			// data.plans = util.rebuildQuarShptPlan(list.recordset);
-			list=list.recordset;
-			let order={plannedItems:[]};
-			for (let i = 0; i < list.length; i++) {
-				const wo = list[i];
-				if (wo.planQty>0&&!wo.prepackConfirmOn){
-					order.plannedItems.push({
-						"DONumber": wo.qsNo,
-						"MaterialCode": wo.materialCode,
-						"BatchNo": wo.batchNo,
-						"DOItemNumber": wo.workOrder,
-						"workOrder": wo.workOrder,
-						"DOQuantity": wo.planQty,
-						"ScanQty": 0
-					})
-				}
-			}
-			if (order.plannedItems.length>0){
-				order.DONumber=order.plannedItems[0].DONumber;
-				order.subconPORefNo=order.plannedItems[0].subconPORefNo;
-			} else {
-				throw new Error("There is no quarantine shipment plan for this subcon PO: "+req.body.orderNo);
-			}
+			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.orderNo);
+			let order=util.buildPrepackOrder(list.recordset)
 			return res.status(200).send(order);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -199,45 +177,96 @@ exports.removeItem=function(req,res){
 		}
 	})()
 };
-exports.confirmPacking=function(req,res){
+exports.confirmPrepacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
-			prepackOrder.confirmStatus = "C";
-			//update subcon PO status
-			dummyData.subconOrder.quarShptConfirmStatus="C";
-			let data={order:prepackOrder,confirm:"success"};
-			return res.status(200).send(data);
+			var scannedItems = await dbQuarShptSvc.getPrepackDetails(req.body.DONumber);
+			scannedItems = scannedItems.recordset;
+			//call custom bapi to udpate SAP
+			let args = {IT_BX_STOCK:[]};
+			for (let j = 0; j < scannedItems.length; j++) {
+				const item = scannedItems[j];
+				args.IT_BX_STOCK.push({
+					TRANS:"GR1",
+					WERKS:'2100',
+					MATNR:item.MaterialCode,
+					CHARG: item.BatchNo,
+					SERIAL:item.SerialNo,
+					DOCNO: item.workorder,
+					ENDCUST:'SGW',
+					BXDATE:util.formatDateTime().date,
+					BXTIME:util.formatDateTime().time,
+					BXUSER:req.session.user.UserID
+				});
+			}
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
+
+			let params={
+				qsNo:req.body.qsNo,
+				SubconPORefNo:req.body.SubconPORefNo,
+				planBy:req.session.user.UserID,
+				planOn:req.body.planOn,
+				prepackConfirmOn:req.body.prepackConfirmOn,
+			}
+			await dbQuarShptSvc.updateQuarShptStatus(params);
+
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			return res.status(400).send({error:true,message:error.message||error});
+			return res.status(400).send([{error:true,message:error.message}]);
 		}
 	})()
 };
 
 exports.linkToSapDo=function(req,res){
 	(async function () {
-		var order;
 		try {
-			console.log("SubconOrder:"+req.body.subconOrderNo);
-			console.log("DONumber:"+req.body.DONumber);
-			if (req.body.DONumber==='D123456789'){
-				for (let i = 0; i < dummyData.sapOrders.length; i++) {
-					let DO = dummyData.sapOrders[i];
-					if (DO.DONumber===req.body.DONumber){
-						DO.HUList=prepackOrder.HUList;
-						prepackOrder.linkToSapStatus = "C";
-						prepackOrder.linkSapOrder = DO.DONumber;
-						break;
+			//get SAP DO:
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
+			let order = util.deliveryOrderConverter(sapOrder);
+			if (!order||!order.DONumber){
+				throw new Error("The Delivery Order "+req.body.orderNo+" doesn't exist!");
+			}
+			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.qsNo);
+			let prepackOrder=util.buildPrepackOrder(list.recordset)
+			let match,workorderList=[],DOItemNumberList=[];
+			if (order.plannedItems.length===prepackOrder.plannedItems.length){
+				for (let i = 0; i < order.plannedItems.length; i++) {
+					match=false;
+					const dpi = order.plannedItems[i];
+					for (let j = 0; j < prepackOrder.plannedItems.length; j++) {
+						const ppi = prepackOrder.plannedItems[j];
+						//compare material,batch and qty of two planned items
+						if (dpi.MaterialCode===ppi.MaterialCode&&
+							dpi.BatchNo===ppi.BatchNo&&
+							dpi.DOQuantity===ppi.DOQuantity	){
+								workorderList.push(dpi.workOrder);
+								DOItemNumberList.push(ppi.DOItemNumber);
+								match=true;
+								break;
+							}
 					}
+					if (!match){
+						throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
+					}				
 				}
+			} else {
+				throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
+			}
+			//the sap order and prepack order matches, copy data from prepack to sap do
+			await dbQuarShptSvc.linkPrepackToPack(params);
+
+
+
+			if (req.body.DONumber==='D123456789'){
+				
 
 			} else if (req.body.DONumber==='D987654321'){
-				throw new Error("The configuration of the SAP DO "+req.body.DONumber+" doesn't match the Pre-Packing Order! ");
 			} else {
 				throw new Error("The SAP DO "+req.body.DONumber+" can't be found! ");
 			}
-			let data={order:prepackOrder,confirm:"success"};
-			return res.status(200).send(data);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}

@@ -76,7 +76,7 @@ const sqlSvc=require("./sqlService");
     }
 
     exports.getPrepackDetails=function(qsNo){
-      var stmt = "select s.SerialNo,s.workorder,s.HUNumber,s.FullScanCode,w.batchno,w.Itemcode from dbo.BX_SubconShipments s,dbo.WorkOrders w where s.workorder=w.Project and qsNO=@qsNo";
+      var stmt = "select s.SerialNo,s.workorder,s.HUNumber,s.FullScanCode,w.batchno as BatchNo,w.Itemcode as MaterialCode from dbo.BX_SubconShipments s,dbo.WorkOrders w where s.workorder=w.Project and qsNO=@qsNo";
       let paramTypes={qsNo:'sql.VarChar(22)'};
       let paramValues={qsNo:qsNo};
       return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
@@ -89,7 +89,6 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
-  prepackScanItem
   //when retrieving the DO from SAP, initialze the BX db
 exports.prepackScanItem=function(info){
   var params={
@@ -113,4 +112,24 @@ exports.getHuAndPrepackDetails=function(qsNo){
     qsNo:{type:"sql.VarChar(22)",value:qsNo}
   }
   return sqlSvc.callStoredProcedure("dbo.BX_GetPrepackHandlingUnitAndScannedItems",params)
+}
+exports.updateQuarShptStatus=function(info){
+  var params={
+    qsNo:{type:"sql.VarChar(22)",value:info.qsNo},
+    SubconPORefNo:{type:"sql.VarChar(20)",value:info.SubconPORefNo},
+    planBy:{type:"sql.VarChar(22)",value:info.planBy},
+    planOn:{type:"sql.VarChar(22)",value:info.planOn},
+    linkedDONUmber:{type:"sql.VarChar(12)",value:info.qsNo},
+    prepackConfirmOn:{type:"sql.VarChar(22)",value:info.prepackConfirmOn}
+  }
+  return sqlSvc.callStoredProcedure("dbo.BX_UpdateQuarShptStatus",params)
+}
+exports.linkPrepackToPack=function(info){
+  var params={
+    qsNo:{type:"sql.VarChar(22)",value:info.qsNo},
+    DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
+    workorderList:{type:"sql.VarChar(8000)",value:info.DONumber},
+    DOItemList:{type:"sql.VarChar(8000",value:info.DONumber}
+  }
+  return sqlSvc.callStoredProcedure("dbo.BX_LinkPrepackToPack",params)
 }

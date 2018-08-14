@@ -132,7 +132,7 @@ app.post('/bxapi/qrsmt/add-new-hu.json',auth.authCheck,qrsmtHandler.addNewHu);
 app.post('/bxapi/qrsmt/add-item.json',auth.authCheck,qrsmtHandler.addItem);
 // app.post('/bxapi/qrsmt/refresh-scanned-items.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
 app.get('/bxapi/qrsmt/refresh-hu/:orderNo.json',auth.authCheck,qrsmtHandler.refreshHu);
-app.post('/bxapi/qrsmt/confirm.json',auth.authCheck,qrsmtHandler.confirmPacking);
+app.post('/bxapi/qrsmt/confirm.json',auth.authCheck,qrsmtHandler.confirmPrepacking);
 app.post('/bxapi/qrsmt/link-to-sap-do.json',auth.authCheck,qrsmtHandler.linkToSapDo);
 app.post('/bxapi/qrsmt/unlink-sap-do.json',auth.authCheck,qrsmtHandler.unlinkSapDo);
 
