@@ -44,6 +44,7 @@ BEGIN
   h.planBy AS planBy,
   h.planOn AS planOn,
   h.prepackConfirmOn AS prepackConfirmOn,
+  h.linkedDONumber AS linkedDONumber,
   dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) AS totalBITQty,
   dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',6,NULL,NULL) AS scannedBITQty,
   ISNULL((SELECT count(serialNo) FROM  dbo.BX_SubconShipments WHERE qsNo=p.qsNo AND workorder=d.WorkOrder),0) AS scannedQuarQty,

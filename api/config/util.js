@@ -267,7 +267,8 @@ exports.buildPrepackOrder = function(list){
 					orders.push({
 						qsNo:wo.qsNo,
 						prepackConfirmOn:wo.prepackConfirmOn,
-						subconPORefNo:wo.subconPORefNo
+						subconPORefNo:wo.subconPORefNo,
+						linkedDONumber:wo.linkedDONumber
 					})
 					_qsNo=wo.qsNo;
 				}

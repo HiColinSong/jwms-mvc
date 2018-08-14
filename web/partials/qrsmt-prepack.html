@@ -24,7 +24,7 @@
 									</td>
 								  <td class="text-center cursor-pointer" 
 										  ng-click="selectOrder(idx)">
-										  {{order.linkToSapDo}}
+										  {{order.linkedDONumber}}
 									</td>
 								  
 							  </tr>
@@ -180,24 +180,24 @@
 	  <!-- link to sap do -->
 	  <form>
 		  <div class="margin-top padding-top" ng-if="order.prepackConfirmOn">
-			  <div class="form-group col-sm-4 col-xs-12 no-padding-left" ng-if="!order.linkToSapStatus">
+			  <div class="form-group col-sm-4 col-xs-12 no-padding-left" ng-if="!order.linkedDONumber">
 				  <input type="text" class="form-control" placeholder="Scan or Input DO Number" 
 								  ng-model="sapDo.DONumber">
 			  </div>
-			  <div class="col-sm-4 col-xs-12 no-padding-x text-right" ng-if="!order.linkToSapStatus">
+			  <div class="col-sm-4 col-xs-12 no-padding-x text-right" ng-if="!order.linkedDONumber">
 				  <button type="submit" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Link to SAP DO" 
 				  ng-click="linkToSapDo()" ng-disabled="!sapDo.DONumber">
 				  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link to SAP DO
 				  </button>
 			  </div>
-			  <div class="col-sm-4 col-xs-12 no-padding-left text-right" ng-if="order.linkToSapStatus">
+			  <div class="col-sm-4 col-xs-12 no-padding-left text-right" ng-if="order.linkedDONumber">
 				  <button type="submit" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Link to SAP DO" 
 				  ng-click="unlinkSapDo()">
 				  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Unlink SAP DO
 				  </button>
 			  </div>
-			  <div class="form-group col-sm-8 col-xs-12 bold" ng-if="order.linkToSapStatus" style="margin-top:10px">
-				  The SAP Do {{order.linkSapOrder}} has been linked
+			  <div class="form-group col-sm-8 col-xs-12 bold" ng-if="order.linkedDONumber" style="margin-top:10px">
+				  The SAP Do {{order.linkedDONumber}} has been linked
 			  </div>
 			  <div class="clearboth"></div>
 		  </div>
