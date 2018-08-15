@@ -12,8 +12,8 @@ ALTER PROCEDURE [dbo].[BX_LinkPrepackToPack]
 (
 	@qsNo varchar(22),
 	@DONumber varchar(12),
-	@workorderList varchar(8000) NULL, --if NULL, will do the unlink
-	@DOItemNumberList varchar(8000) NULL
+	@workorderList varchar(8000)= NULL, --if NULL, will do the unlink
+	@DOItemNumberList varchar(8000)= NULL
 )
 AS
 --copy subcon items to pack
@@ -21,10 +21,11 @@ AS
 --define a temp table for finding the doItemNumber
 
 DELETE FROM BX_PackDetails WHERE DONumber=@DONumber
-DELETE FROM BX_QuarShpt_PrepackHUnits WHERE qsNo=@qsNo
+--DELETE FROM BX_QuarShpt_PrepackHUnits WHERE qsNo=@qsNo
+UPDATE BX_QuarShptHeader SET linkedDONumber=NULL
 
 
-IF (workorderList IS NOT NULL)  
+IF (@workorderList IS NOT NULL)  
     BEGIN          
         DECLARE @temp_DOItemNumber TABLE
         (
@@ -53,6 +54,7 @@ IF (workorderList IS NOT NULL)
         --copy the prepack Handling Unit Number into pack one 
         INSERT INTO BX_PackHUnits
         SELECT  qsNo,HUNumber,PackMaterial,CreatedBy,CreatedOn
+		FROM BX_QuarShpt_PrepackHUnits
         WHERE qsNO=@qsNo
 
         --copy the prepack items  into pack table 
@@ -76,6 +78,8 @@ IF (workorderList IS NOT NULL)
             left outer join dbo.BX_QuarShpt_PrepackHUnits h on s.HUNumber=h.HUNumber
             left outer join @temp_DOItemNumber t on t.workorder=s.workorder
         WHERE s.qsNo=@qsNo
+
+        UPDATE BX_QuarShptHeader SET linkedDONumber=@DONumber
     END     
 
 

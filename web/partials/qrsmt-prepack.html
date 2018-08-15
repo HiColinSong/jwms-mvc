@@ -12,7 +12,7 @@
 							<th  class="text-center">Link to DO Status</th> 
 						</tr> 
 					</thead> 
-					<tbody> 
+					<tbody class="hover-table"> 
 							  <tr ng-repeat="(idx,order) in orders"> 
 								  <td class="text-center cursor-pointer" 
 										  ng-click="selectOrder(idx)">
@@ -20,11 +20,11 @@
 									</td>
 								  <td class="text-center cursor-pointer" 
 										  ng-click="selectOrder(idx)">
-										  {{order.prepackConfirmOn|localDatetime}}
+										  {{(order.prepackConfirmOn|localDatetime)||"Not Confirmed"}}
 									</td>
 								  <td class="text-center cursor-pointer" 
 										  ng-click="selectOrder(idx)">
-										  {{order.linkedDONumber}}
+										  {{order.linkedDONumber||"Not Linked"}}
 									</td>
 								  
 							  </tr>

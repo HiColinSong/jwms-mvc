@@ -12,9 +12,9 @@
         if (order&&order.DONumber){
             // $scope.info={itemInfo:{orderNo:order.DONumber,temp:$scope.temp,order:$scope.order,type:"packing"}};
             if (order.confirmStatus!=='C'){
-                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" found", "success", true);
+                utilSvc.addAlert("The delivery order "+order.DONumber+" found", "success", true);
             } else {
-                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" has been confirmed", "warning", false);
+                utilSvc.addAlert("The delivery order "+order.DONumber+" has been confirmed", "warning", false);
             }
             $scope.order=order;
             order.HUList=order.HUList||[];

@@ -81,35 +81,19 @@ DECLARE
 
 
 
+ exec [dbo].[BX_PrepackScanItem] 
+	@qsNo ='B2018004103',
+	@HUNumber ='118081400006',
+	@batchNo ='W18070115',
+	@workOrder ='210000066596',
+    @sFullScanCode ='01088888930163751720071110W18070115|21180616868',
+    @ModifiedBy ='yd.zhu',
+    @ModifiedOn ='2018-08-15 12:23:34'
 
---     select * from BX_QuarShptHeader
--- select * from BX_QuarShptPlan
--- select * from BX_SubConDetails where SubconPORefNo='B20180041'
--- select * from BX_SubConPOHeader where SubconPORefNo='B20180041'
-
--- exec [dbo].[BX_GetQuarShptPlan] '2100180614'
--- exec [dbo].[BX_GetQuarShptPlan] 'B20180041'
--- exec BX_GetLotReleaseTable 'B20180041'
-
--- select * from dbo.BX_SubConDetails where SubconPORefNo='B20180041'
--- select * from dbo.BX_SubconShipments where subConPo='B20180041' and workorder='210000066596' and ShipToTarget='SGW'
-
-
--- select * from BX_QuarShptHeader
-
--- ALTER TABLE dbo.BX_SubConDetails ADD lotReleaseBy VARCHAR(20) NULL;   
--- COMMIT
-
--- EXEC SpGetReceivedSerialsBySubconOrder 'QRS','B20180041'
-
--- 	SELECT s.workorder, s.SerialNo,w.batchno,w.Itemcode,s.CreatedBy,s.CreatedOn
--- 	FROM   BX_SubconShipments s LEFT JOIN dbo.WorkOrders w ON s.workorder=w.Project
--- 	WHERE	StatusID = 7
--- 			AND ShipToTarget = 'SGW' 
--- 			AND subConPo = 'B20180041'
-
--- 				SELECT workorder
--- 	FROM   BX_SubconShipments 
--- 	WHERE	StatusID = 7
--- 			AND ShipToTarget = 'SGW' 
--- 			AND subConPo = 'B20180041'
+exec BX_UpdateQuarShptStatus
+	@qsNo ='B2018004102',
+	@SubconPORefNo ='B20180041',
+	@planBy ='yd.zhu',
+	@planOn ='2018-08-15 12:12:12',
+	@linkedDONumber ='nullValue',
+	@prepackConfirmOn ='2018-08-15 12:12:12'

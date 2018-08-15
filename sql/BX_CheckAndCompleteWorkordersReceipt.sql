@@ -27,6 +27,7 @@ BEGIN
 	DECLARE	@nPlanSGQQty	Int
 	DECLARE	@nPlanCHWQty	Int
 	DECLARE	@nPlanQRSQty	Int -- quarantine shipment 
+	DECLARE	@nPendingScanQty	Int -- quarantine shipment 
 
 	DECLARE	@nRcptSGWQty	Int = 0
 	DECLARE	@nRcptSGQQty	Int = 0
@@ -85,18 +86,36 @@ BEGIN
 					FROM	BX_SubConDetails 
 					WHERE	SubConPoRefNo = @sSubCOnPORefNo AND
 							WorkOrder=@workorder
-				SELECT 
-					@nRcptSGWQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',6,NULL,NULL),
-					@nRcptSGQQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGQ',6,NULL,NULL),
-					@nRcptCHWQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'CHW',6,NULL,NULL),
-					@nRcptQRSQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',7,NULL,NULL)
 
-					IF @nPlanSGWQty+ @nPlanSGQQty <> @nRcptSGWQty+@nRcptSGQQty+@nRcptQRSQty
+				--check if there is any unconfirmed quarantine shipment workorder:
+				IF EXISTS (select h.qsNo,h.prepackConfirmOn,d.workorder 
+							from BX_QuarShptHeader h 
+								left outer join BX_QuarShptPlan p on h.qsNo=p.qsNo
+								left outer join BX_SubConDetails d on d.SubconPORefNo = p.SubconPORefNo
+							where d.WorkOrder=@workorder and h.prepackConfirmOn is NULL)
+				BEGIN
+					SET @sErrorMessages = 'Error : Quarantine Shipment for workOrder ('+@workorder+') has not been confirmed' ;
+						THROW 51000, @sErrorMessages, 1;
+				END
+
+				SELECT 
+					-- @nRcptSGWQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',6,NULL,NULL),
+					-- @nRcptSGQQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGQ',6,NULL,NULL),
+					-- @nRcptCHWQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'CHW',6,NULL,NULL),
+					-- @nRcptQRSQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',7,NULL,NULL),
+					@nPendingScanQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',7,NULL,NULL)
+
+					-- IF @nPlanSGWQty+ @nPlanSGQQty <> @nRcptSGWQty+@nRcptSGQQty+@nRcptQRSQty
+					-- 	BEGIN
+					-- 		SET @sErrorMessages = 'Warning : Receiving for BIT & QA Samples in workOrder ('+@workorder+') does not match plan quantity' ;
+					-- 		--THROW 51000, @sErrorMessages, 1;
+					-- 		INSERT INTO @temp_item (SubconPORefNo,WorkOrder,ErrorMsg)
+					-- 		VALUES (@sSubCOnPORefNo,@workorder,@sErrorMessages)
+					-- 	END
+					IF @nPendingScanQty>0
 						BEGIN
-							SET @sErrorMessages = 'Warning : Receiving for BIT & QA Samples in workOrder ('+@workorder+') does not match plan quantity' ;
-							--THROW 51000, @sErrorMessages, 1;
-							INSERT INTO @temp_item (SubconPORefNo,WorkOrder,ErrorMsg)
-							VALUES (@sSubCOnPORefNo,@workorder,@sErrorMessages)
+							SET @sErrorMessages = 'Error : Receiving for BIT & QA Samples in workOrder ('+@workorder+') has not completed';
+							THROW 51000, @sErrorMessages, 1;
 						END
 					ELSE
 						BEGIN

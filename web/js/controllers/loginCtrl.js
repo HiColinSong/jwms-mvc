@@ -2,15 +2,15 @@
 (function() {
     'use strict';
     angular.module('bx.controllers')
-    .controller("loginCtrl",[ "$scope",'$route','$location', "bxService",
-					function($scope, $route,$location, apiSvc) {
+    .controller("loginCtrl",[ "$scope",'$route','$location', "bxService","localStorageService",
+					function($scope, $route,$location, apiSvc,cacheSvc) {
 						$scope.login = {
 							username : "",
 							password : "",
 							domain: "BITSG"
 						};
+
 						$scope.submitForm = function() {
-							// form:"+$scope.login.username+":"+$scope.login.password);
 							apiSvc.login($scope.login).$promise.then(function(data) {
                                 if (data.loginUser){
 								    console.log("login callback:" + data.loginUser.name);
@@ -29,6 +29,11 @@
 
 							})
 						};
+						if (cacheSvc.get("login")){
+							$scope.login=cacheSvc.get("login")
+							$scope.login.domain="BITSG";
+							$scope.submitForm();
+						}
 					} 
 		]);
 }());

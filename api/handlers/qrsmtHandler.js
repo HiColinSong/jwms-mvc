@@ -136,6 +136,7 @@ exports.addItem=function(req,res){
 		params.sFullScanCode=info.sFullScanCode;
 		params.PackBy=req.session.user.UserID;
 		params.PackedOn=info.scannedOn;
+		params.batchNo=info.batchNo;
 
 		try {
 			let scannedItems = await dbQuarShptSvc.prepackScanItem(params);
@@ -209,9 +210,9 @@ exports.confirmPrepacking=function(req,res){
 				planOn:req.body.planOn,
 				prepackConfirmOn:req.body.prepackConfirmOn,
 			}
-			await dbQuarShptSvc.updateQuarShptStatus(params);
+			let status=await dbQuarShptSvc.updateQuarShptStatus(params);
 
-			return res.status(200).send({confirm:"success"});
+			return res.status(200).send({status:status.recordset,confirm:"success"});
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
 		}
@@ -224,11 +225,21 @@ exports.linkToSapDo=function(req,res){
 			//get SAP DO:
 			var sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
 			let order = util.deliveryOrderConverter(sapOrder);
-			if (!order||!order.DONumber){
+			if (order&&order.DONumber){
+				util.removeIncompleteItem(order.plannedItems);
+			} else {
 				throw new Error("The Delivery Order "+req.body.DONumber+" doesn't exist!");
 			}
-			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.qsNo);
-			let prepackOrder=util.buildPrepackOrder(list.recordset)
+			let list = await dbQuarShptSvc.getQuarShptPlan(req.body.subconPORefNo);
+			let prepackOrders=util.buildPrepackOrder(list.recordset)
+			let prepackOrder;
+			for (let i = 0; i < prepackOrders.length; i++) {
+				const element = prepackOrders[i];
+				if (element.qsNo===req.body.qsNo){
+					prepackOrder=element;
+					break;
+				}
+			}
 			let match,workorderList=[],DOItemNumberList=[];
 			if (order.plannedItems.length===prepackOrder.plannedItems.length){
 				for (let i = 0; i < order.plannedItems.length; i++) {
@@ -273,8 +284,8 @@ exports.unlinkSapDo=function(req,res){
 		var order;
 		try {
 			let params={
-				qsNo:request.body.qsNo,
-				DONumber:request.body.DONumber
+				qsNo:req.body.qsNo,
+				DONumber:req.body.DONumber
 			}
 			await dbQuarShptSvc.linkPrepackToPack(params);
 			return res.status(200).send({confirm:"success"});

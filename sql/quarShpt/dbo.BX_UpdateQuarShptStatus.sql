@@ -13,7 +13,7 @@ ALTER PROCEDURE [dbo].[BX_UpdateQuarShptStatus]
 	@SubconPORefNo varchar(20),
 	@planBy varchar(20)=NULL,
 	@planOn varchar(22)=NULL,
-	@linkedDONUmber varchar(12)=NULL,
+	@linkedDONumber varchar(12)=NULL,
 	@prepackConfirmOn varchar(22)=NULL
 )
 AS
@@ -25,36 +25,38 @@ when completing quaratine shipment plan,SAP link or confirm
 BEGIN
         IF (@planBy IS NOT NULL) OR 
            (@planOn IS NOT NULL) OR 
-           (@linkedDONUmber IS NOT NULL) OR 
+           (@linkedDONumber IS NOT NULL) OR 
            (@prepackConfirmOn IS NOT NULL) 
            BEGIN
                 UPDATE dbo.BX_QuarShptHeader 
                      SET
 					 planBy  =  ISNULL(@planBy,planBy) ,
                      planOn  = CASE WHEN ISNULL(@planOn,'') = '' THEN planOn ELSE Convert(datetime,@planOn) END,
-					 linkedDONUmber  =  --if passed value 'nullValue' then change it to NULL
+					 linkedDONumber  =   --if passed value 'nullValue' then change it to NULL
                      CASE 
-                        WHEN ISNULL(@linkedDONUmber,'') = '' 
-                        THEN linkedDONUmber 
+                        WHEN ISNULL(@linkedDONumber,'') = '' 
+                        THEN linkedDONumber 
                         ELSE 
                             CASE
-                                WHEN  @linkedDONUmber = 'nullValue'
+                                WHEN  @linkedDONumber = 'nullValue'
                                 THEN  NULL
-                                ELSE  @linkedDONUmber
+                                ELSE  @linkedDONumber
                             END
                         END,
 					 prepackConfirmOn  = CASE WHEN ISNULL(@prepackConfirmOn,'') = '' THEN prepackConfirmOn ELSE Convert(datetime,@prepackConfirmOn) END
                     
                 WHERE qsNo = @qsNo
                 IF @@ROWCOUNT=0
+                    BEGIN
                     INSERT INTO dbo.BX_QuarShptHeader 
                         VALUES(@qsNo,
                             @SubconPORefNo,
                             @planBy,
                             Convert(datetime,@planOn),
-                            @linkedDONUmber,
+                            ISNULL(@linkedDONumber,''),
                             Convert(datetime,@prepackConfirmOn)
                             )
-
+                    END;    
+                    SELECT * FROM dbo.BX_QuarShptHeader WHERE qsNo=@qsNo
             END;
 END;

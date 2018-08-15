@@ -94,6 +94,7 @@ exports.prepackScanItem=function(info){
   var params={
     qsNo:{type:'sql.VarChar(12)',value:info.DONumber},
     HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
+    batchNo:{type:'sql.VarChar(18)',value:info.batchNo},
     sFullScanCode:{type:'sql.VarChar(60)',value:info.sFullScanCode},
     ModifiedBy:{type:'sql.VarChar(20)',value:info.PackBy},
     ModifiedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
@@ -119,7 +120,7 @@ exports.updateQuarShptStatus=function(info){
     SubconPORefNo:{type:"sql.VarChar(20)",value:info.SubconPORefNo},
     planBy:{type:"sql.VarChar(22)",value:info.planBy},
     planOn:{type:"sql.VarChar(22)",value:info.planOn},
-    linkedDONUmber:{type:"sql.VarChar(12)",value:info.qsNo},
+    linkedDONumber:{type:"sql.VarChar(12)",value:info.linkedDONumber},
     prepackConfirmOn:{type:"sql.VarChar(22)",value:info.prepackConfirmOn}
   }
   return sqlSvc.callStoredProcedure("dbo.BX_UpdateQuarShptStatus",params)
@@ -128,8 +129,8 @@ exports.linkPrepackToPack=function(info){
   var params={
     qsNo:{type:"sql.VarChar(22)",value:info.qsNo},
     DONumber:{type:"sql.VarChar(12)",value:info.DONumber},
-    workorderList:{type:"sql.VarChar(8000)",value:info.DONumber},
-    DOItemList:{type:"sql.VarChar(8000",value:info.DONumber}
+    workorderList:{type:"sql.VarChar(8000)",value:info.workorderList},
+    DOItemNumberList:{type:"sql.VarChar(8000)",value:info.DOItemNumberList}
   }
   return sqlSvc.callStoredProcedure("dbo.BX_LinkPrepackToPack",params)
 }

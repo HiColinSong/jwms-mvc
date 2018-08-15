@@ -240,6 +240,19 @@ form.form select{
 	padding-bottom: 0px
 }
 
+
+  	.bx .hover-table{
+		width:100%; 
+		border-collapse:collapse; 
+	}
+
+	/* Define the hover highlight color for the table row */
+    .bx .hover-table tr:hover {
+		background-color: #dff0d8;
+    }
+
+
+
 @media only screen and (max-width: 1180px) {
 	.bx .letter{display:none;}
 	.bx .highlight-letter {

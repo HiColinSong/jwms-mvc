@@ -45,3 +45,13 @@
   	// }]);
 }());
 
+(function() {
+    'use strict';
+    angular.module('bx')
+   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+            localStorageServiceProvider.setPrefix('bx');
+            localStorageServiceProvider.setStorageType('sessionStorage');
+             localStorageServiceProvider.setNotify(true, true);
+        }]);
+}());
+

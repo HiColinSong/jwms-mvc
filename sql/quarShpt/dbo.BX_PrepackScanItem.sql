@@ -10,13 +10,42 @@ ALTER PROCEDURE [dbo].[BX_PrepackScanItem]
 (
 	@qsNo varchar(22),
 	@HUNumber varchar(20),
+	@batchNo varchar(18),
     @sFullScanCode Varchar(60),
     @ModifiedBy varchar(20),
     @ModifiedOn varchar(22)
 )
 AS
-
+DECLARE
+    @workOrder varchar(20),
+    @quarShptPlanQty int,
+    @scannedQty int,
+    @itemStatusID char(1) --hold the StatusID for the item with the passed sFullScanCode
 BEGIN
+    --find plan quantity and the statusID of the item
+    BEGIN TRY
+    select 
+        @workOrder=p.workorder,
+        @quarShptPlanQty=p.qty,
+        @itemStatusID=s.StatusID
+    from BX_SubconShipments s 
+    left outer join BX_QuarShptPlan p on p.workorder=s.workorder
+    where s.FullScanCode=@sFullScanCode and p.qsNo=@qsNo
+    
+    IF @@ROWCOUNT=0
+        RAISERROR ('Error:Item cannot be found!',16,1 ); 
+    ELSE IF @itemStatusID=7
+        RAISERROR ('Error:Item is already scanned!',16,1 ); 
+
+    --find the quantity already scanned for the item
+    SELECT @scannedQty=count(SerialNo)   
+    FROM BX_SubconShipments
+	where workorder=@workOrder and 
+          FullScanCode like '%'+@batchNo+'%' and 
+          qsNO=@qsNo and StatusID='7'
+    IF (@scannedQty>=@quarShptPlanQty)
+        RAISERROR ('Error:Exceed the planned quantity!',16,1 ); 
+
    UPDATE Bx_SubConShipments 
         SET StatusID = 7,
             qsNO=@qsNo,  
@@ -24,11 +53,24 @@ BEGIN
             ModifiedBy = @ModifiedBy,
             ModifiedOn = Convert(datetime,ModifiedOn)
     WHERE	FullScanCode = @sFullScanCode AND StatusID<>7
-    IF @@ROWCOUNT = 0  
-        RAISERROR ('Error:Item cannot be found or is already scanned!',16,1 ); 
+    END TRY
+    BEGIN CATCH  
+        DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
 
-	-- select s.SerialNo,s.workorder,s.HUNumber,w.batchno,w.Itemcode from dbo.BX_SubconShipments s,dbo.WorkOrders w
-    -- where s.workorder=w.Project and  qsNO=@qsNo
+        SELECT   
+            @ErrorMessage = ERROR_MESSAGE(),  
+            @ErrorSeverity = ERROR_SEVERITY(),  
+            @ErrorState = ERROR_STATE();  
 
+        -- Use RAISERROR inside the CATCH block to return error  
+        -- information about the original error that caused  
+        -- execution to jump to the CATCH block.  
+        RAISERROR (@ErrorMessage, -- Message text.  
+                @ErrorSeverity, -- Severity.  
+                @ErrorState -- State.  
+                );  
+    END CATCH; 
 END
 

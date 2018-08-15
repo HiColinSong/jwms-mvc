@@ -75,12 +75,12 @@
 				<div class="clearboth"></div>
 	  </div>
 	  <div role="tabpanel" class="tab-pane padding-top"  ng-class="{'active':showTab==='previousPlans'}" id="previousPlans">
-			<accordion close-others="true" >
+			<accordion close-others="false" >
 					<div accordion-group class="panel-default quar-plan margin-y"  
 							is-open="true" is-disabled="false" 
 								ng-repeat="(pidx,ppl) in previousPlans" >
 						<accordion-heading>
-								<h5 class="text-center">Quarantine Shipment Plan No.:{{::ppl.qsNo}}</h5>
+								<h4 class="text-center bold">Quarantine Shipment Plan No.:{{::ppl.qsNo}}</h4>
 						</accordion-heading>
 						<table class="table table-striped border">
 								<thead> 
