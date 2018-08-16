@@ -218,9 +218,10 @@ exports.rebuildQuarShptPlan = function (list){
 		} //end of for loop
 	}
 	if (!currentPlan.qsNo){
-		// let previousQsnCount=previousPlans.length;
-		// currentPlan.qsNo=currentPlan.subconPORefNo+((previousQsnCount>9)?(previousQsnCount+1):"0"+(previousQsnCount+1));
-		let runningNumber=parseInt(previousPlans[previousPlans.length-1].qsNo.slice(-2))+1;
+		let runningNumber=1;
+		if (previousPlans.length>0)
+			runningNumber=parseInt(previousPlans[previousPlans.length-1].qsNo.slice(-2))+1;
+			
 		currentPlan.qsNo=currentPlan.subconPORefNo+((runningNumber>9)?(runningNumber):"0"+runningNumber);
 	}
 	//loop over previousPlans to find the workorders missed in currentplan

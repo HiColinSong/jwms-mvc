@@ -30,7 +30,7 @@ BEGIN
         @itemStatusID=s.StatusID
     from BX_SubconShipments s 
     left outer join BX_QuarShptPlan p on p.workorder=s.workorder
-    where s.FullScanCode=@sFullScanCode and p.qsNo=@qsNo
+    where s.FullScanCode=@sFullScanCode and p.qsNo=@qsNo and ShipToTarge='SGW'
     
     IF @@ROWCOUNT=0
         RAISERROR ('Error:Item cannot be found!',16,1 ); 

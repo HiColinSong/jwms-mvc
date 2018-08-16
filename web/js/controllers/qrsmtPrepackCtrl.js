@@ -125,7 +125,7 @@
             $scope.sapDo={};
             $scope.linkToSapDo = function() {
                 utilSvc.pageLoading("start");
-                apiSvc.linkToSapDo({DONumber:$scope.sapDo.DONumber,subconPORefNo:order.subconPORefNo,qsNo:order.qsNo}).$promise.
+                apiSvc.linkToSapDo({DONumber:utilSvc.formalizeOrderNo($scope.sapDo.DONumber),subconPORefNo:order.subconPORefNo,qsNo:order.qsNo}).$promise.
                 then(function(data){
                     utilSvc.pageLoading("stop");
                     if (data&&data.confirm==='success'){
@@ -134,7 +134,7 @@
                             modalHeader: 'Linked to SAP DO Success',
                             message:"The Pre-Packing order is linked to SAP DO successfully!"
                         }
-                        $scope.order.linkToSapStatus="C";
+                        $scope.order.linkedDONumber=utilSvc.formalizeOrderNo($scope.sapDo.DONumber);
                         $scope.order.linkSapOrder=$scope.sapDo.DONumber;
                     } else if(data&&data.error&&data.message){
                         $scope.confirm={
@@ -177,7 +177,7 @@
                             modalHeader: 'Unlinked to SAP DO Success',
                             message:"The Pre-Packing order is unlinked to SAP DO successfully!"
                         }
-                        $scope.order.linkToSapStatus="";
+                        $scope.order.linkedDONumber="";
                         $scope.order.linkSapOrder=undefined;
                     } else if(data&&data.error&&data.message){
                         $scope.confirm={

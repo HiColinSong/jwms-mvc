@@ -170,8 +170,8 @@ exports.lotRelease=function(req,res){
 					data.warningMsg.push(item.ErrorMsg);
 				}
 			}
-			if (args.IT_BX_STOCK.length>0)
-				await sapSvc.serialNoUpdate(args);
+			// if (args.IT_BX_STOCK.length>0)
+			// 	await sapSvc.serialNoUpdate(args);
 
 			list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
 			data.workOrders = util.rebuildLotReleaseTable(list.recordset);

@@ -88,11 +88,9 @@ BEGIN
 							WorkOrder=@workorder
 
 				--check if there is any unconfirmed quarantine shipment workorder:
-				IF EXISTS (select h.qsNo,h.prepackConfirmOn,d.workorder 
-							from BX_QuarShptHeader h 
-								left outer join BX_QuarShptPlan p on h.qsNo=p.qsNo
-								left outer join BX_SubConDetails d on d.SubconPORefNo = p.SubconPORefNo
-							where d.WorkOrder=@workorder and h.prepackConfirmOn is NULL)
+				IF EXISTS (
+					select qsNo from BX_QuarShptHeader where prepackConfirmOn is NULL and 
+					qsNo in (select qsNo from BX_QuarShptPlan where workorder=@workorder))
 				BEGIN
 					SET @sErrorMessages = 'Error : Quarantine Shipment for workOrder ('+@workorder+') has not been confirmed' ;
 						THROW 51000, @sErrorMessages, 1;
@@ -103,7 +101,7 @@ BEGIN
 					-- @nRcptSGQQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGQ',6,NULL,NULL),
 					-- @nRcptCHWQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'CHW',6,NULL,NULL),
 					-- @nRcptQRSQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',7,NULL,NULL),
-					@nPendingScanQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',7,NULL,NULL)
+					@nPendingScanQty = dbo.BX_FnGetSerialCountByWorkOrder(@workorder ,'SGW',5,NULL,NULL)
 
 					-- IF @nPlanSGWQty+ @nPlanSGQQty <> @nRcptSGWQty+@nRcptSGQQty+@nRcptQRSQty
 					-- 	BEGIN

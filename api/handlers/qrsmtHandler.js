@@ -223,7 +223,7 @@ exports.linkToSapDo=function(req,res){
 	(async function () {
 		try {
 			//get SAP DO:
-			var sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
+			let sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
 			let order = util.deliveryOrderConverter(sapOrder);
 			if (order&&order.DONumber){
 				util.removeIncompleteItem(order.plannedItems);
@@ -251,8 +251,8 @@ exports.linkToSapDo=function(req,res){
 						if (dpi.MaterialCode===ppi.MaterialCode&&
 							dpi.BatchNo===ppi.BatchNo&&
 							dpi.DOQuantity===ppi.DOQuantity	){
-								workorderList.push(dpi.workOrder);
-								DOItemNumberList.push(ppi.DOItemNumber);
+								workorderList.push(ppi.workOrder);
+								DOItemNumberList.push(dpi.DOItemNumber);
 								match=true;
 								break;
 							}
@@ -281,14 +281,22 @@ exports.linkToSapDo=function(req,res){
 
 exports.unlinkSapDo=function(req,res){
 	(async function () {
-		var order;
 		try {
+			let sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
+			let order = util.deliveryOrderConverter(sapOrder);
+			
+			if (order&&order.DONumber)
+				util.removeIncompleteItem(order.plannedItems);
+			if (order.confirmStatus==='C'){
+				throw new Error("The SAP Packing DO "+req.body.DONumber+" has been confirmed!")
+			}
 			let params={
 				qsNo:req.body.qsNo,
 				DONumber:req.body.DONumber
 			}
 			await dbQuarShptSvc.linkPrepackToPack(params);
 			return res.status(200).send({confirm:"success"});
+			
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}

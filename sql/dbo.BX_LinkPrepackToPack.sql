@@ -21,8 +21,8 @@ AS
 --define a temp table for finding the doItemNumber
 
 DELETE FROM BX_PackDetails WHERE DONumber=@DONumber
---DELETE FROM BX_QuarShpt_PrepackHUnits WHERE qsNo=@qsNo
-UPDATE BX_QuarShptHeader SET linkedDONumber=NULL
+DELETE FROM BX_PackHUnits WHERE  DONumber=@DONumber
+UPDATE BX_QuarShptHeader SET linkedDONumber=NULL WHERE qsNo=@qsNo
 
 
 IF (@workorderList IS NOT NULL)  
@@ -53,7 +53,7 @@ IF (@workorderList IS NOT NULL)
 
         --copy the prepack Handling Unit Number into pack one 
         INSERT INTO BX_PackHUnits
-        SELECT  qsNo,HUNumber,PackMaterial,CreatedBy,CreatedOn
+        SELECT  @DONumber,HUNumber,PackMaterial,CreatedBy,CreatedOn
 		FROM BX_QuarShpt_PrepackHUnits
         WHERE qsNO=@qsNo
 
@@ -79,7 +79,7 @@ IF (@workorderList IS NOT NULL)
             left outer join @temp_DOItemNumber t on t.workorder=s.workorder
         WHERE s.qsNo=@qsNo
 
-        UPDATE BX_QuarShptHeader SET linkedDONumber=@DONumber
+        UPDATE BX_QuarShptHeader SET linkedDONumber=@DONumber WHERE qsNo=@qsNo
     END     
 
 
