@@ -90,45 +90,24 @@
                             $scope.barcode.reset();
                         },function(err){
                             soundSvc.play("badSound");
-                            let errMsg = err.data.message.trim();
-                            
-                            //overwrite the scan
-                            let sourceTarget,sourceQACategory,regex,requiredTarget,requiredQACategory;
-                            if (errMsg){
-                                sourceTarget = (errMsg.match(/SG[A-Z]/i))?errMsg.match(/SG[A-Z]/i)[0]:undefined;
-                                sourceQACategory=errMsg.match(/00[0-9]/i);
-                                sourceQACategory=(sourceQACategory)?sourceQACategory[0]:undefined;
-                                requiredTarget=($scope.barcode.isQaSample)?"SGQ":"SGW";
-                                requiredQACategory = ($scope.barcode.qaCategory)?$scope.barcode.qaCategory.QASampleID:undefined;
-                                if ((sourceTarget === requiredTarget&&sourceQACategory&&sourceQACategory!==requiredQACategory)||
-                                      (sourceTarget&&sourceTarget !== requiredTarget)){
-                                        let msg1="This serial No is already assgined to ";
-                                        let msg2 = (sourceTarget==="SGW")?"BIT Warehouse":"QA Sample";
-                                        let msg3 = (sourceQACategory)?utilSvc.findItemById(sourceQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
-                                        let msg4 = (msg3)?"  in Category of \""+msg3+"\"":".";
-                                        let msg5 = "Are you sure move to ";
-                                        let msg6 = (requiredTarget==="SGW")?"BIT Warehouse":"QA Sample in Category of \"";
-                                        let msg7 = ($scope.barcode.isQaSample&&requiredQACategory)?utilSvc.findItemById(requiredQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
-                                        let msg8 = "?";
-                                        $scope.confirmMessage = [];
-                                        $scope.confirmMessage[0] = [msg1,msg2,msg4].join("");
-                                        $scope.confirmMessage[1] = [msg5,msg6,msg7,msg8].join("");
-                                        var modalInstance = $modal.open({
-                                            templateUrl: 'partials/confirm-modal.html',
-                                            scope: $scope
-                                        });
-                                        $scope.yes = function() {
-                                            modalInstance.close("yes");
-                                            $scope.barcode.sOverWritePreviousScan = "X";
-                                            $scope.findItem();
-                                            return;
-                                        }
-
-                                } else {
-                                    $scope.barcode.errMsg=[];
-                                    $scope.barcode.errMsg.push(err.data.message.trim()||"Unknow error");
+                            if (err.data&&err.data.error&&err.data.error.class===15){
+                                $scope.confirmMessage = [];
+                                $scope.confirmMessage[0]=err.data.message.trim()
+                                var modalInstance = $modal.open({
+                                    templateUrl: 'partials/confirm-modal.html',
+                                    scope: $scope
+                                });
+                                $scope.yes = function() {
+                                    modalInstance.close("yes");
+                                    $scope.barcode.sOverWritePreviousScan = "X";
+                                    $scope.findItem();
                                     return;
                                 }
+                            } else{
+                            // } else if (err.data&&err.data.errorCode===51000){
+                                $scope.barcode.errMsg=[];
+                                $scope.barcode.errMsg.push(err.data.message.trim()||"Unknow error");
+                                return;
                             }
                         })
 

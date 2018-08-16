@@ -97,3 +97,11 @@ exec BX_UpdateQuarShptStatus
 	@planOn ='2018-08-15 12:12:12',
 	@linkedDONumber ='nullValue',
 	@prepackConfirmOn ='2018-08-15 12:12:12'
+
+
+exec [dbo].[BX_SubconBitAndQAScan]
+		@sFullScanCode			='01088888930165421720071110W18070131|21180616610',
+		@sReturnToTarget		='SGW',  
+		@sLogonUser				='yd.zhu',
+		@sQACategory			='',
+		@sOverWritePreviousScan	=''    

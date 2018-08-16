@@ -73,13 +73,13 @@ const sqlSvc=require("./sqlService");
       sFullScanCode:{type:'sql.VarChar(60)',value:args.sFullScanCode},
       sReturnToTarget:{type:'sql.VarChar(3)',value:args.sReturnToTarget},
       sLogonUser:{type:'sql.VarChar(20)',value:args.sLogonUser},
-      sQACategory:{type:'sql.VarChar(12)',value:args.sQACategory},
-      dCurrDate:{type:'sql.DateTime',value:new Date()}
+      sQACategory:{type:'sql.VarChar(12)',value:args.sQACategory}
       // dCurrDate:{type:'sql.DateTime',value:args.dCurrDate}
     }
       if (args.sOverWritePreviousScan){
         params.sOverWritePreviousScan={type:'sql.VarChar(1)',value:args.sOverWritePreviousScan};
       }
-      return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
+      return sqlSvc.callStoredProcedure("dbo.BX_SubconBitAndQAScan",params);
+      // return sqlSvc.callStoredProcedure("dbo.SPUpdateSubConReturns",params);
   }
 
