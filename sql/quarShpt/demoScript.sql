@@ -38,19 +38,19 @@ update BX_SubconShipments set StatusID=5, qsNo=Null,HUNumber=NULL,ReceivedOn=NUL
 01088888930162211720071110W18070116|21180619860
 01088888930162211720071110W18070116|21180619861
 
-update top (10) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081600016' 
+update top (10) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081700008' 
 ,ReceivedOn=Convert(datetime,'2018-08-16 12:12:12'),ReceivedBy='yd.zhu'
 where workorder='210000078391' and subConPo='B20180041' and StatusID=5 and ShipToTarget='SGW'
 
-update top (20) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081600017'
+update top (20) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081700009'
 ,ReceivedOn=Convert(datetime,'2018-08-16 12:12:12'),ReceivedBy='yd.zhu'
 where workorder='210000084488' and subConPo='B20180041' and StatusID=5 and ShipToTarget='SGW'
 
-update top (25) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081600018' 
+update top (25) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081700010' 
 ,ReceivedOn=Convert(datetime,'2018-08-16 12:12:12'),ReceivedBy='yd.zhu'
 where workorder='210000088885' and subConPo='B20180041' and StatusID=5 and ShipToTarget='SGW'
 
-update top (15) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081600019' 
+update top (15) BX_SubconShipments set StatusID=7,qsNo='B2018004101',HUNumber='118081700011' 
 ,ReceivedOn=Convert(datetime,'2018-08-16 12:12:12'),ReceivedBy='yd.zhu'
 where workorder='210000089213' and subConPo='B20180041' and StatusID=5 and ShipToTarget='SGW'
 

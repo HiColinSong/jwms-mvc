@@ -2,9 +2,6 @@
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbSpoReceiptsSvc=require('../dbservices/dbSpoReceiptsSvc');
-const dbPackingSvc =require('../dbservices/dbPackingSvc');
-
-// const dummyData =require('../dummyData/data.json'); //dummy code
 
 exports.getSubconOrderList=function(req,res){
 	(async function () {
@@ -170,8 +167,8 @@ exports.lotRelease=function(req,res){
 					data.warningMsg.push(item.ErrorMsg);
 				}
 			}
-			// if (args.IT_BX_STOCK.length>0)
-			// 	await sapSvc.serialNoUpdate(args);
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 
 			list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
 			data.workOrders = util.rebuildLotReleaseTable(list.recordset);
@@ -182,58 +179,6 @@ exports.lotRelease=function(req,res){
 		}
 	})()
 };
-
-//dummy code
-// exports.completeSubconReceipt=function(req,res){
-// 	(async function () {
-// 		try {
-// 			console.log(req.body.orderNo);
-// 			for (let i = 0; i < req.body.releasedOrders.length; i++) {
-// 				const ro = req.body.releasedOrders[i];
-// 				for (let j = 0; j < dummyData.workOrders.length; j++) {
-// 					const wo = dummyData.workOrders[j];
-// 					if (ro===wo.WorkOrder){
-// 						wo.lotReleased=true;
-// 					}
-// 				}
-// 			}
-// 			let data={workOrders:dummyData.workOrders,confirm:"success"}
-// 			return res.status(200).send(data);
-// 		} catch (error) {
-// 			return res.status(400).send([{error:true,message:error.message}]);
-// 		}
-// 	})()
-// };
-// exports.partialRelease=function(req,res){
-// 	(async function () {
-// 		try {
-// 			var list = await dbPackingSvc.getScannedItemsWithWorkOrder(req.body.orderNo,req.body.subconPO);
-// 			list = list.recordset;
-// 			//call custom bapi to udpate SAP
-// 			let args = {IT_BX_STOCK:[]};
-// 			for (let j = 0; j < list.length; j++) {
-// 				const item = list[j];
-// 				args.IT_BX_STOCK.push({
-// 					TRANS:"GR1",
-// 					WERKS:'2100',
-// 					MATNR:item.MaterialCode,
-// 					CHARG: item.BatchNo,
-// 					SERIAL:item.SerialNo,
-// 					DOCNO: item.workorder,
-// 					ENDCUST:'SGW',
-// 					BXDATE:util.formatDateTime().date,
-// 					BXTIME:util.formatDateTime().time,
-// 					BXUSER:req.session.user.UserID
-// 				});
-// 			}
-// 			if (args.IT_BX_STOCK.length>0)
-// 				await sapSvc.serialNoUpdate(args);
-// 			return res.status(200).send({confirm:"success"});
-// 		} catch (error) {
-// 			return res.status(400).send([{error:true,message:error.message}]);
-// 		}
-// 	})()
-// };
 
 exports.removeItem=function(req,res){
 

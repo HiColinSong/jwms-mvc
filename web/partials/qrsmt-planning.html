@@ -26,10 +26,9 @@
 					<th width="12%"  class="text-center">Batch</th> 
 					<th width="15%"  class="text-center">Material</th> 
 					<th width="12%"  class="text-center">Total Qty</th> 
-					<th width="12%"  class="text-center">Plan Qty for BIT</th> 
-					<th width="13%"  class="text-center">Plan Qty for Quar Shpt</th> 
-					<th width="12%"  class="text-center">Scan Qty For BIT</th> 
-					<th width="12%"  class="text-center">Scan Qty For Quar Shpt</th> 
+					<th width="20%"  class="text-center">BIT Recv/Plan</th> 
+					<th width="14%"  class="text-center">Quar Shpt Recv</th> 
+					<th width="16%"  class="text-center">Quar Shpt Plan</th> 
 				</tr> 
 				</thead> 
 				<tbody> 
@@ -38,9 +37,14 @@
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.batchNo}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.materialCode}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.totalBITQty}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{order.availbleBITQty||0}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
-							<input type='number' class='col-sm-12 col-xs-12 no-padding-right'
+							{{::order.scannedBITQty}} / {{order.availbleBITQty||0}}
+					</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
+							{{::order.scannedQuarQty}}
+					</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
+							<input type='number' class='col-sm12 col-xs-12 no-padding-right'
 							min="0"
 							name='planQty'
 							ng-required="true"
@@ -51,18 +55,15 @@
 							ng-disabled="order.lotReleased"
 							>
 					</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.scannedBITQty}}</td>
-					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.scannedQuarQty}}</td>
 				</tr>
 				</tbody> 
 				<tfoot>
 				<tr> 
 					<td  class="text-center" colspan="3">Total:</td>
 					<td  class="text-center">{{::su.totalBITQty}}</td>
-					<td  class="text-center">{{su.availbleBITQty||0}}</td>
-					<td  class="text-center">{{su.planQty}}</td>
-					<td  class="text-center">{{::su.scannedBITQty||0}}</td>
+					<td  class="text-center">{{::su.scannedBITQty||0}} / {{su.availbleBITQty||0}}</td>
 					<td  class="text-center">{{::su.scannedQuarQty||0}}</td>
+					<td  class="text-center">{{su.planQty}}</td>
 				</tr>
 				</tfoot>
 				</table>

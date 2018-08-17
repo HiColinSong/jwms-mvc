@@ -20,7 +20,6 @@ exports.getSubconWorkOrderForPlanner=function(req,res){
 exports.saveQuarShptPlan=function(req,res){
 	(async function () {
 		try {
-			// dummyData.workOrders=req.body.workOrders;
 			var params={
 				qsNo:req.body.plan.qsNo,
 				subconPORefNo:req.body.plan.subconPORefNo,
@@ -46,7 +45,6 @@ exports.saveQuarShptPlan=function(req,res){
 	})()
 };
 
-// var prepackOrder=dummyData.prepackOrder;
 exports.getPrepackOrder=function(req,res){
 	(async function () {
 		try {
@@ -88,7 +86,6 @@ exports.addNewHu=function(req,res){
 	(async function () {
 		var params={
 			qsNo:req.body.DONumber,
-			// HUNumberList:newHu.join(','),
 			NumToCreate:req.body.NumOfHu,
 			PackMaterial:req.body.MaterialCode,
 			CreatedBy:req.session.user.UserID,
@@ -200,8 +197,8 @@ exports.confirmPrepacking=function(req,res){
 					BXUSER:req.session.user.UserID
 				});
 			}
-			// if (args.IT_BX_STOCK.length>0)
-			// 	await sapSvc.serialNoUpdate(args);
+			if (args.IT_BX_STOCK.length>0)
+				await sapSvc.serialNoUpdate(args);
 
 			let params={
 				qsNo:req.body.qsNo,
@@ -222,7 +219,6 @@ exports.confirmPrepacking=function(req,res){
 exports.linkToSapDo=function(req,res){
 	(async function () {
 		try {
-			//get SAP DO:
 			let sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber);
 			let order = util.deliveryOrderConverter(sapOrder);
 			if (order&&order.DONumber){
