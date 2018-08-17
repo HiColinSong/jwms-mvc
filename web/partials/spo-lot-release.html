@@ -1,0 +1,94 @@
+<div class="" style="padding-top:30px;margin-top:20px">
+	<h2 class="text-center">Subcon PO Lot Release</h2>
+</div>
+<h3 class="text-center margin-bottom">Subcon Order:{{workOrders[0].subconPORefNo}}</h3>
+<section>
+	<ul class="nav nav-tabs margin-bottom" role="tablist">
+		<li role="presentation" ng-class="{'active':temp.showTab==='workOrders'}">
+			<a class="cursor-pointer" ng-click="temp.showTab='workOrders'">Work Orders</a>
+		</li>
+		<li role="presentation" ng-class="{'active':temp.showTab==='bitScanItem'}">
+			<a class="cursor-pointer" ng-click="temp.showTab='bitScanItem'">BIT Items</a>
+		</li>
+		<li role="presentation" ng-class="{'active':temp.showTab==='qasScanItem'}">
+			<a class="cursor-pointer" ng-click="temp.showTab='qasScanItem'"> QA Samples</a>
+		</li>
+		<li role="presentation" ng-class="{'active':temp.showTab==='quarShptScanItem'}">
+			<a class="cursor-pointer" ng-click="temp.showTab='quarShptScanItem'">Quarantine Shipment</a>
+		</li>
+		
+	</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+		<div role="tabpanel" class="tab-pane"  ng-class="{'active':temp.showTab==='workOrders'}" id="workOrders">
+			  <table class="table padding-top table-striped" >
+				  <thead> 
+					  <tr> 
+						  <th width="10%"  class="text-center">Work Order</th> 
+						  <th width="10%"  class="text-center">Batch</th> 
+						  <th width="16%"  class="text-center">Material</th> 
+						  <th width="10%"  class="text-center">Total BIT</th> 
+						  <th width="13%"  class="text-center">Recv/Plan BIT</th> 
+						  <th width="13%"  class="text-center">Recv/Plan QuarShpt</th> 
+						  <th width="13%"  class="text-center">Recv/Plan QA</th> 
+						  <th width="13%"  class="text-center">Release(d)</th> 
+					  </tr> 
+				  </thead> 
+				  <tbody> 
+							<tr ng-repeat="(woIdx,order) in workOrders"> 
+								<td  class="text-center" >{{::order.workOrder}}</td>
+								<td  class="text-center" >{{::order.batchNo}}</td>
+								<td  class="text-center" >{{::order.materialCode}}</td>
+								<td  class="text-center" >{{::order.totalBITQty}}</td>
+								<td  class="text-center" ng-class="{'bg-success':order.scannedBITQty===order.bitPlanQty}">{{::order.scannedBITQty}} / {{::order.bitPlanQty}}</td>
+								<td  class="text-center" ng-class="{'bg-success':order.scannedQuarQty===order.quarShptPlanQty}">{{::order.scannedQuarQty}} / {{::order.quarShptPlanQty}}</td>
+								<td  class="text-center" ng-class="{'bg-success':order.scannedQaQty===order.qaPlanQty}">{{::order.scannedQaQty}} / {{::order.qaPlanQty}}</td>
+								<td class="text-center"  ng-class="{'bg-success':order.lotReleaseOn}">
+									<input type="checkbox" ng-model="order.toRelease" style="height:16px;width:20px;" ng-change="checkLotRelease()"
+									ng-disabled="order.bitPlanQty>order.scannedBITQty||order.qaPlanQty>order.scannedQaQty||order.quarShptPlanQty>order.scannedQuarQty"
+									 ng-if="!order.lotReleaseOn">
+									<span ng-if="order.lotReleaseOn">{{order.lotReleaseOn|localDatetime}}</span>
+								</td>
+							</tr>
+						</tbody> 
+						<tfoot>
+							<tr> 
+								<td  class="text-center" colspan="3">Total:</td>
+								<td  class="text-center">{{su.totalBITQty||0}}</td>
+								<td  class="text-center" ng-class="{'bg-success':su.scannedBITQty===su.bitPlanQty}">{{su.scannedBITQty}} / {{su.bitPlanQty}}</td>
+								<td  class="text-center" ng-class="{'bg-success':su.scannedQuarQty===su.quarShptPlanQty}">{{su.scannedQuarQty}} / {{su.quarShptPlanQty}}</td>
+								<td  class="text-center" ng-class="{'bg-success':su.scannedQaQty===su.qaPlanQty}">{{su.scannedQaQty}} / {{su.qaPlanQty}}</td>
+								<td  class="text-center"></td>
+							</tr>
+						</tfoot>
+			  </table>
+			  
+			  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
+					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Lot Release" 
+					ng-click="lotRelease()" ng-disabled="!isLotRelease">
+					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Lot Release
+				  </button>
+			  </div>
+			  <div class="clearboth"></div>
+		</div> 
+		<!-- endof first tab -->
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='bitScanItem'}" 
+			id="bitScanItem" spo-receive-list subcon-no="{{workOrders[0].subconPORefNo}}" target="SGW"></div>
+		<!-- endof second tab -->
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='qasScanItem'}" 
+			id="qasScanItem" spo-receive-list subcon-no="{{workOrders[0].subconPORefNo}}" target="SGQ"></div>
+		<!-- endof Third tab -->
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='quarShptScanItem'}" 
+			id="quarShptScanItem" spo-receive-list subcon-no="{{workOrders[0].subconPORefNo}}" target="QRS"></div>
+		<!-- endof fourth tab -->
+</div> <!-- end of tab panes -->
+	<div class="clearboth"></div>
+</section>
+
+
+<div class="clearboth"></div>
+<pre ng-if="debug">workOrders:{{workOrders | json}}</pre>	
+<pre ng-if="debug">bitList:{{bitList | json}}</pre>	
+
+<pre ng-if="debug">temp:{{temp | json}}</pre>	
+

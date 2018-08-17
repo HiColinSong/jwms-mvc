@@ -8,7 +8,7 @@
              $scope.pkgMtlList=pkgMtlList;
     	 	$scope.addNewHu=function(){
 
-                apiSvc.createHu({MaterialCode:$scope.temp.material.MaterialCode,
+                apiSvc.createHu({type:$scope.type},{MaterialCode:$scope.temp.material.MaterialCode,
                                  DONumber:$scope.DONumber,
                                  NumOfHu:$scope.temp.newHuNo,
                                  createdOn:utilSvc.formatDateTime()})

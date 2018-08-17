@@ -12,9 +12,9 @@
         if (order&&order.DONumber){
             // $scope.info={itemInfo:{orderNo:order.DONumber,temp:$scope.temp,order:$scope.order,type:"packing"}};
             if (order.confirmStatus!=='C'){
-                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" found", "success", true);
+                utilSvc.addAlert("The delivery order "+order.DONumber+" found", "success", true);
             } else {
-                utilSvc.addAlert("The delivery order "+$routeParams.DONumber+" has been confirmed", "warning", false);
+                utilSvc.addAlert("The delivery order "+order.DONumber+" has been confirmed", "warning", false);
             }
             $scope.order=order;
             order.HUList=order.HUList||[];
@@ -52,7 +52,7 @@
             
 
             $scope.removeHU=function(HUNumber){
-                apiSvc.removeHu({DONumber:order.DONumber,HUNumber:HUNumber}).$promise.
+                apiSvc.removeHu({type:$scope.type},{DONumber:order.DONumber,HUNumber:HUNumber}).$promise.
                     then(function(data){
                         if (data&&data.length>0&&data[0].error){
                             console.error(data[0].message.originalError.info.message);
@@ -114,7 +114,7 @@
                         return;
                     }
 
-                    itemSvc.insertScanItem($scope.barcode,"packing",order.DONumber,$scope.temp.showHU.HUNumber,
+                    itemSvc.insertScanItem($scope.barcode,$scope.type,order.DONumber,$scope.temp.showHU.HUNumber,
                     function(err,data){
                         if (err&&err.message){
                             if (err.message==='Error:Material Code cannot be found'){
@@ -134,7 +134,7 @@
                 };
 
                 $scope.removeItem=function(item){
-                    apiSvc.removeScanItem({type:"packing"},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
+                    apiSvc.removeScanItem({type:$scope.type},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
                         then(function(data){
                             if (data&&data.length>0&&data[0].error)
                                 console.error(data[0].message.originalError.info.message);
@@ -146,7 +146,7 @@
                     )
                 }
                 $scope.refreshScannedItems=function(){
-                    apiSvc.refreshPacking({param1:order.DONumber}).$promise.
+                    apiSvc.refreshPacking({type:$scope.type,param1:order.DONumber}).$promise.
                         then(function(data){
                             if (data&&data.length>0&&data[0].error)
                                 console.error(data[0].message.originalError.info.message);

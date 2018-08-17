@@ -1,0 +1,214 @@
+{
+    "subconOrder":{
+        "SubCOnPORefNo": "B12345678",
+        "PoDate": "2018-07-11T00:00:00.000Z",
+        "SAPSTORefNo": "DummySAPTO",
+        "woNos": [
+          "210000000001",
+          "210000000002",
+          "210000000003"
+        ],
+        "fullScanCodeList": [
+          "01088888930163751720071110W18070001|21180616861",
+          "01088888930162211720071110W18070002|21180619851",
+          "01088888930163201720071110W18070003|21180618971"
+        ]
+      },
+      "workOrders":[
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000001",
+          "FullScanCode": "01088888930163751720071110W18070001|21180616861",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 50,
+          "nPlanSGQQty": 5,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 50,
+          "nPendingSGQQty": 0,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000002",
+          "FullScanCode": "01088888930162211720071110W18070002|21180619851",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 100,
+          "nPlanSGQQty": 10,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 100,
+          "nPendingSGQQty": 10,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000003",
+          "FullScanCode": "01088888930163201720071110W18070003|21180618971",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 200,
+          "nPlanSGQQty": 20,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 200,
+          "nPendingSGQQty": 20,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        }
+    ],
+    "originalWorkOrders":[
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000001",
+          "FullScanCode": "01088888930163751720071110W18070001|21180616861",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 50,
+          "nPlanSGQQty": 5,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 50,
+          "nPendingSGQQty": 0,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000002",
+          "FullScanCode": "01088888930162211720071110W18070002|21180619851",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 100,
+          "nPlanSGQQty": 10,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 100,
+          "nPendingSGQQty": 10,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        },
+        {
+          "SubConPoRefNo": "B12345678",
+          "WorkOrder": "210000000003",
+          "FullScanCode": "01088888930163201720071110W18070003|21180618971",
+          "nPlanCHWQty": 0,
+          "nPlanSGWQty": 200,
+          "nPlanSGQQty": 20,
+          "nPendingCHWQty": 0,
+          "nPendingSGWQty": 200,
+          "nPendingSGQQty": 20,
+          "nRcptCHWQty": 0,
+          "nRcptSGWQty": 0,
+          "nRcptSGQQty": 0,
+          "nPlanQuarQty":0,
+          "nRcptQuarQty":0
+        }
+    ],
+    "prepackOrder":{},
+    "sapOrders":[
+      {
+        "DONumber": "D123456789",
+        "DOCreationUser": "I.LOPEZ",
+        "DOCreationDate": "20170313",
+        "ShipToCustomer": "0000501597",
+        "Plant": "",
+        "WarehouseNo": "",
+        "ShippingPoint": "3500",
+        "PlannedGoodsDeliveryDate": "20170313",
+        "DeliveryType": "J",
+        "confirmStatus": "",
+        "pgiStatus": "",
+        "pickingStatus": "",
+        "totalPlannedQty": 170,
+        "endUser": "0000400978",
+        "ShipToCustomerName": "Hospital Jerez Puerta del Sur",
+        "plannedItems": [
+          {
+            "DONumber": "D123456789",
+            "MaterialCode": "BMX-4028",
+            "BatchNo": "W18070001",
+            "DOItemNumber": "00001",
+            "DOQuantity": 20,
+            "EANCode": "08888893016375",
+            "ScanQty": 20
+          },
+          {
+            "DONumber": "D123456789",
+            "MaterialCode": "BMX-4028",
+            "BatchNo": "W18070002",
+            "DOItemNumber": "00002",
+            "DOQuantity": 60,
+            "EANCode": "08888893016221",
+            "ScanQty": 60
+          },
+          {
+            "DONumber": "D123456789",
+            "MaterialCode": "BMX-4028",
+            "BatchNo": "W18070003",
+            "DOItemNumber": "00003",
+            "DOQuantity": 90,
+            "EANCode": "08888893016320",
+            "ScanQty": 90
+          }
+        ],
+        "HUList": []
+      },
+      {
+        "DONumber": "D987654321",
+        "DOCreationUser": "I.LOPEZ",
+        "DOCreationDate": "20170313",
+        "ShipToCustomer": "0000501597",
+        "Plant": "",
+        "WarehouseNo": "",
+        "ShippingPoint": "3500",
+        "PlannedGoodsDeliveryDate": "20170313",
+        "DeliveryType": "J",
+        "confirmStatus": "",
+        "pgiStatus": "",
+        "pickingStatus": "",
+        "totalPlannedQty": 170,
+        "endUser": "0000400978",
+        "ShipToCustomerName": "Hospital Jerez Puerta del Sur",
+        "plannedItems": [
+          {
+            "DONumber": "D987654321",
+            "MaterialCode": "BMX-4029",
+            "BatchNo": "W18070001",
+            "DOItemNumber": "00001",
+            "DOQuantity": 20,
+            "EANCode": "08888893016375",
+            "ScanQty": 20
+          },
+          {
+            "DONumber": "D987654321",
+            "MaterialCode": "BMX-4029",
+            "BatchNo": "W18070002",
+            "DOItemNumber": "00002",
+            "DOQuantity": 60,
+            "EANCode": "08888893016221",
+            "ScanQty": 60
+          },
+          {
+            "DONumber": "D987654321",
+            "MaterialCode": "BMX-4029",
+            "BatchNo": "W18070003",
+            "DOItemNumber": "00003",
+            "DOQuantity": 90,
+            "EANCode": "08888893016320",
+            "ScanQty": 90
+          }
+        ],
+        "HUList": []
+      }
+    ]
+}

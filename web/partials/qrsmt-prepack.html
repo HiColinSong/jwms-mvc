@@ -1,0 +1,215 @@
+
+
+	<h2 class="text-center" style="padding-top:60px">Quarantine Shipment Pre-Packing</h2>
+<section ng-if="!order">
+		<h3 class="text-center margin-top-20">Please choose Quratine shipment</h3>
+		<div role="tabpanel" class="tab-pane" ng-init="temp={}">
+				<table class="table padding-top">
+					<thead> 
+						<tr> 
+							<th  class="text-center">Quaratine Shipment No</th> 
+							<th  class="text-center">Confirm Status</th> 
+							<th  class="text-center">Link to DO Status</th> 
+						</tr> 
+					</thead> 
+					<tbody class="hover-table"> 
+							  <tr ng-repeat="(idx,order) in orders"> 
+								  <td class="text-center cursor-pointer" 
+										  ng-click="selectOrder(idx)">
+										  {{order.qsNo}}
+									</td>
+								  <td class="text-center cursor-pointer" 
+										  ng-click="selectOrder(idx)">
+										  {{(order.prepackConfirmOn|localDatetime)||"Not Confirmed"}}
+									</td>
+								  <td class="text-center cursor-pointer" 
+										  ng-click="selectOrder(idx)">
+										  {{order.linkedDONumber||"Not Linked"}}
+									</td>
+								  
+							  </tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clearboth"></div>
+</section>
+<section ng-if="order">
+	<div class="margin-top-20 col-sm-3 no-padding-x"  ng-init="temp.showHU=order.HUList[0];temp.showHUIdx=0" ng-if="DONumber">
+  
+		  <table class="table padding-top" style="background-color: #EEE">
+				<thead> 
+					<tr> 
+						<th  class="text-left position-rel" colspan="2">
+							HU list
+							<a ng-if="!order.prepackConfirmOn" data-toggle="tab" ng-click="addNewHu()" class="cursor-pointer add-button position-abs" style="right:7px">
+							  <i class=" fa  fa-plus-circle fa-6" style="font-size: 18px;margin-right:5px"></i>Add New HU
+							  <div class="clearfix"></div>
+						  </a>
+						</th> 
+					</tr> 
+				</thead> 
+				<tbody class=" block overflow-auto" style="max-height: 300px"> 
+					<tr ng-repeat="(idx,item) in order.HUList track by idx" class="margin-right" ng-if="order.HUList.length>0" > 
+						  
+						<td ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber}">
+						  <a data-toggle="tab" class="full-height full-width pull-left block" ng-click="temp.showHU=item;temp.showHUIdx=idx;setFocus('barcode1')" 
+								  ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber,'cursor-pointer':temp.showHU.HUNumber!==item.HUNumber}">
+										  <i class="blue ace-icon fa bigger-120 pull-left" 
+										  ng-class="{'fa-file':temp.showHU.HUNumber===item.HUNumber,'fa-file-o':temp.showHU.HUNumber!==item.HUNumber}"></i>
+										  <span class='pull-left'>{{idx+1}} of {{order.HUList.length}}</span>
+										  
+						  </a>
+						  </td> 
+						  <td width="25%" ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber}">
+							  {{item.scanQty||0}}
+						  </td>
+						<td width="10%" ng-class="{'hu-highlight':temp.showHU.HUNumber===item.HUNumber}">
+							<i class="text-danger fa fa-times-circle fa-lg cursor-pointer"
+							  ng-show="temp.showHU.HUNumber===item.HUNumber&&!order.prepackConfirmOn"
+							  confirm-required="{{item.HUNumber}}" 
+							  ng-click="removeHU(item.HUNumber)"></i> 
+						</td>
+					</tr>
+					<tr ng-if="!order.HUList||order.HUList.length==0">
+					  <td colspan="2" class='empty-message no-border'>No Hu.</td>
+				  </tr>
+				</tbody> 
+				<tfoot ng-show="order.HUList.length>0">
+					<tr>
+						<td colspan="2" style="background-color: #777;color:#EEE" class="text-center" >
+							Hotkey &#8679;+&uarr; and &#8679;+&darr;
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+	</div>
+  
+  
+	<div ng-init="showTab='orderDetail'" class=" col-sm-9 padding-top-20" ng-if="DONumber" >
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs " role="tablist">
+		  <li role="presentation" ng-class="{'active':showTab==='orderDetail'||order.HUList.length===0}"><a class="cursor-pointer" 
+				  ng-click="showTab='orderDetail'">Pre-Packing Detail</a></li>
+		  <li role="presentation" ng-class="{'active':showTab==='scanItem'}" ng-show="order.HUList.length>0"><a class="cursor-pointer" 
+				  ng-click="showTab='scanItem'">Scan Item</a></li>
+		  <!-- <button type="button" class="btn btn-default pull-right" ng-click="refreshPacking()">Refresh</button> -->
+	</ul>
+  
+	<!-- Tab panes -->
+	<div class="tab-content">
+	  <div role="tabpanel" class="tab-pane"  ng-class="{'active':showTab==='orderDetail'||order.HUList.length===0}" id="packing">
+		  
+			<table class="table padding-top margin-top table-striped">
+				<thead> 
+					<tr> 
+						<th  class="text-center" colspan="2" ng-show="order.HUList.length>0">
+							  <span>Selected HU:{{temp.showHUIdx+1}} of {{order.HUList.length}} </span>
+							  <span class="margin-left">HU Number: {{temp.showHU.HUNumber}}</span>
+					  </th> 
+					</tr> 
+				</thead> 
+				<tbody> 
+					<tr> 
+						<td >Quarantine Shipment No.</td> 
+						<td>{{order.qsNo}}</td>
+					</tr>
+					<tr> 
+						<td >Subcon PO No.</td> 
+						<td>{{order.subconPORefNo}}</td>
+					</tr>
+					
+					<tr> 
+						<td >Packing Status</td> 
+						<td>{{(order.prepackConfirmOn|localDatetime)||'Not confirmed yet'}}</td>
+					</tr> 
+					<tr> 
+						<td >Picking Status</td> 
+						<td>{{order.pickingStatus||'Not done yet'}}</td>
+					</tr> 
+					<tr> 
+						<td >SAP DO Link Status</td> 
+						<td>{{order.linkStatus||'Not done yet'}}</td>
+					</tr> 
+					<tr> 
+						<td >Number of Items</td> 
+						<td>{{order.plannedItems.length||0}}</td>
+					</tr> 
+					<tr ng-show="temp.showHU"> 
+						<td >HU Number</td> 
+						<td>{{temp.showHU.HUNumber}}</td>
+					</tr> 
+					<tr ng-show="temp.showHU"> 
+						<td >HU Package Material</td> 
+						<td>{{temp.showHU.PackMaterial}}</td>
+					</tr> 
+					<tr ng-show="temp.showHU"> 
+						<td >HU Created By</td> 
+						<td>{{temp.showHU.CreatedBy}}</td>
+					</tr> 
+					<tr ng-show="temp.showHU"> 
+						<td >HU Create Date time</td> 
+						<td>{{temp.showHU.CreatedOn}}</td>
+						<!-- <td>{{temp.showHU.CreatedOn|localDatetime}}</td> -->
+					</tr> 
+				</tbody> 
+			</table>
+	  </div>
+	  <div role="tabpanel" class="tab-pane" ng-class="{'active':showTab==='scanItem'}" id="scanItem"  ng-if="order.HUList.length>0">
+			  <table class="table padding-top table-striped" style="margin-bottom:5px">
+		   <thead> 
+			   <tr> 
+					  <th  class="text-center" colspan="2" ng-show="order.HUList.length>0">
+						  <span>Selected HU:{{temp.showHUIdx+1}} of {{order.HUList.length}} </span>
+						  <span class="margin-left">HU Number: {{temp.showHU.HUNumber}}</span>
+						</th> 
+			   </tr> 
+		   </thead> 
+	   </table>
+			  <!-- <span scan-items info="info"></span> -->
+			  <div ng-include src="'partials/scan-items.html'"></div>
+		  
+	  </div>
+		<!--confirm button-->
+		<div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" >
+			<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm packing" 
+			ng-click="confirmPacking()" ng-disabled="!confirmReady||order.prepackConfirmOn">
+			<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Pre-Packing
+		  </button>
+	  </div>
+	  <div class="clearboth"></div>
+	  <!-- link to sap do -->
+	  <form>
+		  <div class="margin-top padding-top" ng-if="order.prepackConfirmOn">
+			  <div class="form-group col-sm-4 col-xs-12 no-padding-left" ng-if="!order.linkedDONumber">
+				  <input type="text" class="form-control" placeholder="Scan or Input DO Number" 
+								  ng-model="sapDo.DONumber">
+			  </div>
+			  <div class="col-sm-4 col-xs-12 no-padding-x text-right" ng-if="!order.linkedDONumber">
+				  <button type="submit" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Link to SAP DO" 
+				  ng-click="linkToSapDo()" ng-disabled="!sapDo.DONumber">
+				  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link to SAP DO
+				  </button>
+			  </div>
+			  <div class="col-sm-4 col-xs-12 no-padding-left text-right" ng-if="order.linkedDONumber">
+				  <button type="submit" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Link to SAP DO" 
+				  ng-click="unlinkSapDo()">
+				  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Unlink SAP DO
+				  </button>
+			  </div>
+			  <div class="form-group col-sm-8 col-xs-12 bold" ng-if="order.linkedDONumber" style="margin-top:10px">
+				  The SAP Do {{order.linkedDONumber}} has been linked
+			  </div>
+			  <div class="clearboth"></div>
+		  </div>
+	  </form>
+	</div>
+  
+  </div>
+</section>
+<div class="clearboth"></div>
+
+<pre ng-if="debug">sapDo:{{sapDo | json}}</pre>	
+<pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">temp:{{temp | json}}</pre>	
+<pre ng-if="debug">order:{{order | json}}</pre>	
+<!-- <pre ng-show="debug">categories:{{categories | json}}</pre>	 -->

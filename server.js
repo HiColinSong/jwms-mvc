@@ -108,9 +108,11 @@ app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandl
 app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceiptsHandler.getQASampleCategoryList);
 app.get('/bxapi/sporeceipts/get-subcon-order-list.json',auth.authCheck,spoReceiptsHandler.getSubconOrderList);
 app.post('/bxapi/sporeceipts/get-subcon-work-order-info.json',auth.authCheck,spoReceiptsHandler.getSubconWorkOrderInfo);
-app.post('/bxapi/sporeceipts/confirm.json',auth.authCheck,spoReceiptsHandler.completeSubconReceipt);
-app.post('/bxapi/sporeceipts/partial-release.json',auth.authCheck,spoReceiptsHandler.partialRelease);
+app.post('/bxapi/sporeceipts/get-lot-release-table.json',auth.authCheck,spoReceiptsHandler.getLotReleaseTable);
+app.post('/bxapi/sporeceipts/confirm.json',auth.authCheck,spoReceiptsHandler.lotRelease);
+// app.post('/bxapi/sporeceipts/partial-release.json',auth.authCheck,spoReceiptsHandler.partialRelease);
 app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getScanPendingList);
+app.post('/bxapi/sporeceipts/get-receive-list.json',auth.authCheck,spoReceiptsHandler.getReceiveList);
 // app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
 // app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
 
@@ -121,6 +123,20 @@ app.get('/bxapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
 app.post('/bxapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/bxapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
+
+var qrsmtHandler = require('./api/handlers/qrsmtHandler');
+app.post('/bxapi/qrsmt/get-subcon-work-order-for-planner.json',auth.authCheck,qrsmtHandler.getSubconWorkOrderForPlanner);
+app.post('/bxapi/qrsmt/save-plan.json',auth.authCheck,qrsmtHandler.saveQuarShptPlan);
+app.post('/bxapi/qrsmt/get-prepack-order.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
+app.post('/bxapi/qrsmt/add-new-hu.json',auth.authCheck,qrsmtHandler.addNewHu);
+app.post('/bxapi/qrsmt/remove-hu.json',auth.authCheck,qrsmtHandler.removeHu);
+app.post('/bxapi/qrsmt/add-item.json',auth.authCheck,qrsmtHandler.addItem);
+app.post('/bxapi/qrsmt/remove-item.json',auth.authCheck,qrsmtHandler.removeItem);
+// app.post('/bxapi/qrsmt/refresh-scanned-items.json',auth.authCheck,qrsmtHandler.getPrepackOrder);
+app.get('/bxapi/qrsmt/refresh-hu/:orderNo.json',auth.authCheck,qrsmtHandler.refreshHu);
+app.post('/bxapi/qrsmt/confirm.json',auth.authCheck,qrsmtHandler.confirmPrepacking);
+app.post('/bxapi/qrsmt/link-to-sap-do.json',auth.authCheck,qrsmtHandler.linkToSapDo);
+app.post('/bxapi/qrsmt/unlink-sap-do.json',auth.authCheck,qrsmtHandler.unlinkSapDo);
 
 
 app.get('*', function(req, res){

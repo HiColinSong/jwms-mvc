@@ -183,7 +183,7 @@
 										<a class="cursor-pointer margin-left-20 text-danger"  
 											confirm-required="item {{item.serialNo||item.SerialNo}}" 
 											ng-click="removeItem(item)" 
-											ng-if="((!order.confirmStatus||order.confirmStatus!=='C')&&type!=='reservation')||
+											ng-if="((!order.confirmStatus||order.confirmStatus!=='C')&&!order.prepackConfirmOn&&type!=='reservation')||
 													(type==='reservation'&&plannedItem.ResvStatus!=='X')">
 											<i class="text-danger fa fa-times-circle fa-lg"></i>
 										</a>

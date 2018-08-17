@@ -12,6 +12,7 @@
             })
             .when('/receiving', {templateUrl: 'partials/receiving.html'})
             .when('/fulfillment', {templateUrl: 'partials/fulfillment.html'})
+            .when('/qrsmt', {templateUrl: 'partials/quarantine-shipment.html'})
             .when('/receiving/spoReceipts', {
                 templateUrl: 'partials/subconOrders.html',
                 controller: 'subconOrdersCtrl'
@@ -26,6 +27,42 @@
                         if ($route.current.params.orderNo){
                             utilSvc.pageLoading("start");
                             apiSvc.getSubconWorkOrderInfo({orderNo:$route.current.params.orderNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                deferred.reject(err);
+                                utilSvc.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            utilSvc.pageLoading("stop");
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
+            })
+            .when('/receiving/spoLotRelease', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersCtrl'
+            })
+            .when('/receiving/spoLotRelease/:orderNo?', {
+                templateUrl: 'partials/spo-lot-release.html',
+                controller: 'spoLotReleaseCtrl',
+                resolve:{
+                    info:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.orderNo){
+                            utilSvc.pageLoading("start");
+                            apiSvc.getLotReleaseTable({orderNo:$route.current.params.orderNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
@@ -208,6 +245,81 @@
                 templateUrl: 'partials/tools.html',
                 controller: 'toolsCtrl'
             })
+            //quarantine shipment
+            .when('/qrsmt/planning', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersForPlannerCtrl'
+            })
+            .when('/qrsmt/planning/:qsNo?', {
+                templateUrl: 'partials/qrsmt-planning.html',
+                controller: 'qrsmtPlanningCtrl',
+                resolve:{
+                    plans:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.qsNo){
+                            utilSvc.pageLoading("start");
+                            apiSvc.getSubconWorkOrderForPlanner({qsNo:$route.current.params.qsNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data.plans);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                deferred.reject(err);
+                                utilSvc.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            utilSvc.pageLoading("stop");
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
+            })
+            .when('/qrsmt/prepack', {
+                templateUrl: 'partials/subconOrders.html',
+                controller: 'subconOrdersForPrepackCtrl'
+            })
+            .when('/qrsmt/prepack/:qsNo?', {
+                templateUrl: 'partials/qrsmt-prepack.html',
+                controller: 'qrsmtPrepackCtrl',
+                resolve:{
+                    orders:['$q','$route','utilSvc','bxService',
+                    function($q,$route,utilSvc,apiSvc){
+                        var deferred = $q.defer();
+                        if ($route.current.params.qsNo){
+                            utilSvc.pageLoading("start");
+                            apiSvc.getPrepackOrder({qsNo:$route.current.params.qsNo})
+                            .$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                utilSvc.pageLoading("stop");
+                            },function(err){
+                                if (err.data&&err.data.message){
+                                    utilSvc.addAlert(err.data.message, "fail", true);
+                                }
+                                deferred.reject(err);
+                                utilSvc.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            utilSvc.pageLoading("stop");
+                        }
+                        return deferred.promise;
+                    }]                   
+                }
+            })
+
+
             .when('/admin', {
                 templateUrl: 'partials/admin.html',
                 controller: 'adminCtrl',

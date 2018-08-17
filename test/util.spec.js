@@ -25,3 +25,12 @@ describe('return formatted date and time', function() {
       assert.equal([1,2,3].indexOf(4), -1);
     });
 });
+describe('rebuild quarShpt plan', function() {
+    it('convert original array to the one used in FE', function() {
+        var util = require('./../api/config/util');
+        var list = require('./quarShptPlan.json')
+        var d= util.rebuildQuarShptPlan(list);
+        console.log(d);
+      assert.equal([1,2,3].indexOf(4), -1);
+    });
+});

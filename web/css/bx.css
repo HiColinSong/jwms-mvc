@@ -234,9 +234,24 @@ form.form select{
 .bx .scan-item .panel-heading:hover{
 	background-color:#DDD;
 }
-/* .bx .form-group input{
-	height:50px;
-} */
+.bx .panel-default.quar-plan .panel-body{
+	padding-left:2px;
+	padding-right:2px;
+	padding-bottom: 0px
+}
+
+
+  	.bx .hover-table{
+		width:100%; 
+		border-collapse:collapse; 
+	}
+
+	/* Define the hover highlight color for the table row */
+    .bx .hover-table tr:hover {
+		background-color: #dff0d8;
+    }
+
+
 
 @media only screen and (max-width: 1180px) {
 	.bx .letter{display:none;}

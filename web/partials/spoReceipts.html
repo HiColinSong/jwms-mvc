@@ -24,8 +24,9 @@
 			  <table class="table padding-top table-striped" >
 				  <thead> 
 					  <tr> 
-						  <th width="20%"  class="text-center">Work Order</th> 
-						  <th width="20%"  class="text-center">Batch</th> 
+						  <!-- <th width="10%"  class="text-center">Status</th>  -->
+						  <th width="15%"  class="text-center">Work Order</th> 
+						  <th width="15%"  class="text-center">Batch</th> 
 						  <th width="15%"  class="text-center">Recv/Plan Qty BIT</th> 
 						  <th width="15%"  class="text-center">Recv Qty BIT Incr</th> 
 						  <th width="15%"  class="text-center">Recv/Plan Qty QA</th> 
@@ -34,8 +35,13 @@
 				  </thead> 
 				  <tbody> 
 							<tr ng-repeat="(woIdx,order) in workOrders"> 
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.WorkOrder}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.FullScanCode|displayBatch}}</td>
+								<!-- <td class="text-center"  ng-class="{'bg-success':order.lotReleased}">
+									<input type="checkbox" ng-model="order.toRelease" style="height:16px;width:20px;" ng-change="checkLotRelease()"
+									ng-disabled="order.nPlanSGWQty>order.nRcptSGWQty||order.nPlanSGQQty>order.nRcptSGQQty" ng-if="!order.lotReleased">
+									<span ng-if="order.lotReleased">Released</span>
+								</td> -->
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.WorkOrder}}</td>
+								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.FullScanCode|displayBatch}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGWQty===order.nRcptSGWQty}">{{order.nRcptSGWQty}} / {{order.nPlanSGWQty}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQtyIncr||0}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGQQty===order.nRcptSGQQty}">{{order.nRcptSGQQty}} / {{order.nPlanSGQQty}}</td>
@@ -88,11 +94,11 @@
 			  </table> -->
 			  <!-- <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
 					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Lot Release" 
-					ng-click="confirmReceipt()" ng-disabled="bitList.length>0||qasList.length>0">
+					ng-click="confirmReceipt()" ng-disabled="!isLotRelease">
 					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Lot Release
 				  </button>
 			  </div> -->
-			  <div class="form-group col-sm-4 col-xs-12" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+			  <!-- <div class="form-group col-sm-4 col-xs-12" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
 					<input type="text" class="form-control" placeholder="Scan or Input DO Number" 
 								 ng-model="dorder.DONumber" autofocus focus-me="true">
 				</div>
@@ -101,7 +107,7 @@
 					ng-click="partialRelease()" ng-disabled="!dorder.DONumber">
 					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Partial Lot Release
 				  </button>
-			  </div>
+			  </div> -->
 			  <div class="clearboth"></div>
 		</div> 
 		<!-- endof first tab -->
@@ -261,10 +267,10 @@
 
 
 <div class="clearboth"></div>
-<pre ng-show="debug">dorder:{{dorder | json}}</pre>	
-<pre ng-show="debug">barcode:{{barcode | json}}</pre>	
-<pre ng-show="debug">workOrders:{{workOrders | json}}</pre>	
-<pre ng-show="debug">bitList:{{bitList | json}}</pre>	
-<pre ng-show="debug">qasList:{{qasList | json}}</pre>	
-<pre ng-show="debug">temp:{{temp | json}}</pre>	
+<pre ng-if="debug">dorder:{{dorder | json}}</pre>	
+<pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">workOrders:{{workOrders | json}}</pre>	
+<pre ng-if="debug">bitList:{{bitList | json}}</pre>	
+<pre ng-if="debug">qasList:{{qasList | json}}</pre>	
+<pre ng-if="debug">temp:{{temp | json}}</pre>	
 

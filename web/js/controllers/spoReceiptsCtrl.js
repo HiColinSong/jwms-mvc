@@ -90,110 +90,97 @@
                             $scope.barcode.reset();
                         },function(err){
                             soundSvc.play("badSound");
-                            let errMsg = err.data.message.trim();
-                            
-                            //overwrite the scan
-                            let sourceTarget,sourceQACategory,regex,requiredTarget,requiredQACategory;
-                            if (errMsg){
-                                sourceTarget = (errMsg.match(/SG[A-Z]/i))?errMsg.match(/SG[A-Z]/i)[0]:undefined;
-                                sourceQACategory=errMsg.match(/00[0-9]/i);
-                                sourceQACategory=(sourceQACategory)?sourceQACategory[0]:undefined;
-                                requiredTarget=($scope.barcode.isQaSample)?"SGQ":"SGW";
-                                requiredQACategory = ($scope.barcode.qaCategory)?$scope.barcode.qaCategory.QASampleID:undefined;
-                                if ((sourceTarget === requiredTarget&&sourceQACategory&&sourceQACategory!==requiredQACategory)||
-                                      (sourceTarget&&sourceTarget !== requiredTarget)){
-                                        let msg1="This serial No is already assgined to ";
-                                        let msg2 = (sourceTarget==="SGW")?"BIT Warehouse":"QA Sample";
-                                        let msg3 = (sourceQACategory)?utilSvc.findItemById(sourceQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
-                                        let msg4 = (msg3)?"  in Category of \""+msg3+"\"":".";
-                                        let msg5 = "Are you sure move to ";
-                                        let msg6 = (requiredTarget==="SGW")?"BIT Warehouse":"QA Sample in Category of \"";
-                                        let msg7 = ($scope.barcode.isQaSample&&requiredQACategory)?utilSvc.findItemById(requiredQACategory,$scope.qaSampleCategoryList,"QASampleID")["QASampleDesc"]+"\"":"";
-                                        let msg8 = "?";
-                                        $scope.confirmMessage = [];
-                                        $scope.confirmMessage[0] = [msg1,msg2,msg4].join("");
-                                        $scope.confirmMessage[1] = [msg5,msg6,msg7,msg8].join("");
-                                        var modalInstance = $modal.open({
-                                            templateUrl: 'partials/confirm-modal.html',
-                                            scope: $scope
-                                        });
-                                        $scope.yes = function() {
-                                            modalInstance.close("yes");
-                                            $scope.barcode.sOverWritePreviousScan = "X";
-                                            $scope.findItem();
-                                            return;
-                                        }
-
-                                } else {
-                                    $scope.barcode.errMsg=[];
-                                    $scope.barcode.errMsg.push(err.data.message.trim()||"Unknow error");
+                            if (err.data&&err.data.error&&err.data.error.class===15){
+                                $scope.confirmMessage = [];
+                                $scope.confirmMessage[0]=err.data.message.trim()
+                                var modalInstance = $modal.open({
+                                    templateUrl: 'partials/confirm-modal.html',
+                                    scope: $scope
+                                });
+                                $scope.yes = function() {
+                                    modalInstance.close("yes");
+                                    $scope.barcode.sOverWritePreviousScan = "X";
+                                    $scope.findItem();
                                     return;
                                 }
+                            } else{
+                            // } else if (err.data&&err.data.errorCode===51000){
+                                $scope.barcode.errMsg=[];
+                                $scope.barcode.errMsg.push(err.data.message.trim()||"Unknow error");
+                                return;
                             }
                         })
 
                 }
-                $scope.confirmReceipt = function() {
-                    utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo}).$promise
-                    .then(function(data){
-                        utilSvc.pageLoading("stop");
-                        if (data&&data.confirm==='success'){
-                            $scope.confirm={
-                                type:"success",
-                                modalHeader: 'Subcon PO Confirmation Success',
-                                message:"The Subcon PO Receipts is confirmed successfully!",
-                                resetPath:"/receiving"
-                            }
-                        } else {
-                            $scope.confirm={
-                                type:"danger",
-                                modalHeader: 'Subcon PO Confirmation Fail',
-                                message:"Unknown error, confirmation is failed!",
-                            }
-                        }
-                        confirmSubmit.do($scope);
-                    },function(err){
-                        utilSvc.pageLoading("stop");
-                        console.error(err);
-                        $scope.confirm={
-                            type:"danger",
-                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
-                        }
-                        confirmSubmit.do($scope);
-                    });
-                }
-                $scope.dorder={};
-                $scope.partialRelease = function() {
-                    utilSvc.pageLoading("start");
-                    apiSvc.partialRelease({orderNo:utilSvc.formalizeOrderNo($scope.dorder.DONumber),subconPO:$scope.workOrders[0].SubConPoRefNo}).$promise
-                    .then(function(data){
-                        utilSvc.pageLoading("stop");
-                        if (data&&data.confirm==='success'){
-                            $scope.confirm={
-                                type:"success",
-                                modalHeader: 'Partial Release Confirmation Success',
-                                message:"The Partial Release is confirmed successfully!",
-                                resetPath:"/receiving"
-                            }
-                        } else {
-                            $scope.confirm={
-                                type:"danger",
-                                modalHeader: 'Partial Release Confirmation Fail',
-                                message:"Unknown error, confirmation is failed!",
-                            }
-                        }
-                        confirmSubmit.do($scope);
-                    },function(err){
-                        utilSvc.pageLoading("stop");
-                        console.error(err);
-                        $scope.confirm={
-                            type:"danger",
-                            message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
-                        }
-                        confirmSubmit.do($scope);
-                    });
-                }
+                // $scope.confirmReceipt = function() {
+                //     utilSvc.pageLoading("start");
+                //     let releasedOrders=[];
+                //     for (let i = 0; i < $scope.workOrders.length; i++) {
+                //         const wo = $scope.workOrders[i];
+                //         if (wo.toRelease){
+                //             releasedOrders.push(wo.WorkOrder);
+                //         }
+                //     }
+                //     apiSvc.confirmOperation({type:"spoReceipts"},{orderNo:$scope.workOrders[0].SubConPoRefNo,releasedOrders:releasedOrders}).$promise
+                //     .then(function(data){
+                //         utilSvc.pageLoading("stop");
+                //         if (data&&data.confirm==='success'){
+                //             $scope.confirm={
+                //                 type:"success",
+                //                 modalHeader: 'Subcon PO Confirmation Success',
+                //                 message:"The Subcon PO Receipts is confirmed successfully!"
+                //             }
+                //             $scope.workOrders=data.workOrders;
+                //             $scope.checkLotRelease();
+                //         } else {
+                //             $scope.confirm={
+                //                 type:"danger",
+                //                 modalHeader: 'Subcon PO Confirmation Fail',
+                //                 message:"Unknown error, confirmation is failed!",
+                //             }
+                //         }
+                //         confirmSubmit.do($scope);
+                //     },function(err){
+                //         utilSvc.pageLoading("stop");
+                //         console.error(err);
+                //         $scope.confirm={
+                //             type:"danger",
+                //             message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                //         }
+                //         confirmSubmit.do($scope);
+                //     });
+                // }
+                // $scope.dorder={};
+                // $scope.partialRelease = function() {
+                //     utilSvc.pageLoading("start");
+                //     apiSvc.partialRelease({orderNo:utilSvc.formalizeOrderNo($scope.dorder.DONumber),subconPO:$scope.workOrders[0].SubConPoRefNo}).$promise
+                //     .then(function(data){
+                //         utilSvc.pageLoading("stop");
+                //         if (data&&data.confirm==='success'){
+                //             $scope.confirm={
+                //                 type:"success",
+                //                 modalHeader: 'Partial Release Confirmation Success',
+                //                 message:"The Partial Release is confirmed successfully!",
+                //                 resetPath:"/receiving"
+                //             }
+                //         } else {
+                //             $scope.confirm={
+                //                 type:"danger",
+                //                 modalHeader: 'Partial Release Confirmation Fail',
+                //                 message:"Unknown error, confirmation is failed!",
+                //             }
+                //         }
+                //         confirmSubmit.do($scope);
+                //     },function(err){
+                //         utilSvc.pageLoading("stop");
+                //         console.error(err);
+                //         $scope.confirm={
+                //             type:"danger",
+                //             message:err.data.message||err.data[0].message||"System error, confirmation is failed!",
+                //         }
+                //         confirmSubmit.do($scope);
+                //     });
+                // }
 
         $scope.refreshPendList=function(ShipToTarget){
             utilSvc.pageLoading("start");
@@ -215,8 +202,17 @@
                             })
         }
 
-
-
-        
+        // $scope.isLotRelease=false;
+        // $scope.checkLotRelease=function(){
+        //     $scope.isLotRelease=false;
+        //     for (let i = 0; i < $scope.workOrders.length; i++) {
+        //         const wo = $scope.workOrders[i];
+        //         if (wo.toRelease){
+        //             $scope.isLotRelease=true;
+        //             break;
+        //         }
+        //     }
+        //     return;
+        // }
     }])
  }());

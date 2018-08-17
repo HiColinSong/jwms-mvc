@@ -115,7 +115,7 @@
                 method: 'POST',
                 headers: {'Accept': 'application/json'},
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype: 'add-new-hu'
                 },
                 isArray:true
@@ -124,7 +124,7 @@
               removeHu:{
                 method: 'POST',
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype: 'remove-hu'
                 },
                 isArray:true
@@ -160,7 +160,7 @@
               refreshPacking:{
                 method: 'GET',
                 params:{
-                  type: 'packing',
+                  type: '@type',
                   subtype:'refresh-hu',
                   param1:'@param1'
                 },
@@ -212,11 +212,67 @@
                 },
                 isArray:false
               },
+              getLotReleaseTable:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-lot-release-table'
+                },
+                isArray:false
+              },
+              getSubconWorkOrderForPlanner:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'get-subcon-work-order-for-planner'
+                },
+                isArray:false
+              },
+              saveQuarShptPlan:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'save-plan'
+                },
+                isArray:false
+              },
+              getPrepackOrder:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'get-prepack-order'
+                },
+                isArray:true
+              },
+              linkToSapDo:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'link-to-sap-do'
+                },
+                isArray:false
+              },
+              unlinkSapDo:{
+                method: 'POST',
+                params:{
+                  type: 'qrsmt',
+                  subtype:'unlink-sap-do'
+                },
+                isArray:false
+              },
               getSubconPendingList:{
                 method: 'POST',
                 params:{
                   type: 'sporeceipts',
                   subtype:'get-pending-list'
+                },
+                isArray:false
+              },
+              getSubconReceiveList:{
+                method: 'POST',
+                params:{
+                  type: 'sporeceipts',
+                  subtype:'get-receive-list'
                 },
                 isArray:false
               },

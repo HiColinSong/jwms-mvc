@@ -1,5 +1,5 @@
 <div class="" style="padding:30px;margin-top:20px">
-	<h2 class="text-center">Post Sterile Receipts</h2>
+	<h2 class="text-center">{{title||'Post Sterile Receipts'}}</h2>
 </div>
 <section>
 	<!-- <div class="form-group">
@@ -23,7 +23,7 @@
 	</div>
 	<div class="clearboth"></div>
 	<div role="tabpanel" class="tab-pane">
-			<table class="table padding-top">
+			<table class="table padding-top hover-table">
 				<thead> 
 					<tr> 
 						<th  class="text-center">Choose</th> 
@@ -33,7 +33,7 @@
 					</tr> 
 				</thead> 
 				<tbody> 
-						  <tr ng-repeat="(idx,sOrder) in subconOrders"> 
+						  <tr ng-repeat="(idx,sOrder) in subconOrders" ng-if="sOrder.quarShptConfirmStatus!=='C'||type!=='quarPlan'"> 
 							  <td class="text-center" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}">
 									<input type="radio" name="order{{idx}}" ng-model="order.orderNo" value="{{sOrder.SubCOnPORefNo}}">
 							  </td> 

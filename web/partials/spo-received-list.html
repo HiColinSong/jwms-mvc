@@ -1,0 +1,80 @@
+
+<button type="button" class="btn btn-default pull-right" ng-click="refreshItemList(target)">{{buttonText}}</button>
+<div class="clearboth"></div>
+<!-- <form ng-if="itemList&&itemList.length>0" class="margin-top">
+		<div class="form-group">
+			<div class="input-group">
+			<div class="input-group-addon"><i class="fa fa-search"></i></div>
+			<input type="text" class="form-control" placeholder="Search item" ng-model="searchItem">
+			</div>      
+		</div>
+	</form> -->
+	<table class="table padding-top table-striped border" style="max-height: 200px">
+		<thead> 
+			<tr>
+				<td>Line No</td>
+				<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'SerialNo'; sortReverse = !sortReverse">
+				Serials No
+				<span ng-show="sortType == 'SerialNo' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'SerialNo' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'workorder'; sortReverse = !sortReverse">
+				Work Order
+				<span ng-show="sortType == 'workorder' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'workorder' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'batchno'; sortReverse = !sortReverse">
+				Batch
+				<span ng-show="sortType == 'batchno' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'batchno' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'Itemcode'; sortReverse = !sortReverse">
+				Material
+				<span ng-show="sortType == 'Itemcode' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'Itemcode' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'CreatedBy'; sortReverse = !sortReverse">
+				Created By 
+				<span ng-show="sortType == 'CreatedBy' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'CreatedBy' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<a class="cursor-pointer" ng-click="sortType = 'CreatedOn'; sortReverse = !sortReverse">
+				Created On
+				<span ng-show="sortType == 'CreatedOn' && !sortReverse" class="fa fa-caret-down"></span>
+				<span ng-show="sortType == 'CreatedOn' && sortReverse" class="fa fa-caret-up"></span>
+				</a>
+			</td>
+			</tr>
+		</thead> 
+		<tbody> 
+			<tr ng-if="itemList&&itemList.length>0" 
+				ng-repeat="(idx,item) in itemList | orderBy:sortType:sortReverse">
+
+			<td class="text-center">{{idx+1}}</td>
+			<td class="text-center">{{item.SerialNo}}</td>
+			<td class="text-center">{{item.workorder}}</td>
+			<td class="text-center">{{item.batchno}}</td>
+			<td class="text-center">{{item.Itemcode}}</td>
+			<td class="text-center">{{item.CreatedBy}}</td>
+			<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+		</tr>
+	
+		<tr>
+			<td class="text-center" colspan="6" class='empty-message'  ng-show="!itemList||itemList.length==0">No item.</td>
+			<td class="text-center" colspan="6" class='empty-message'  ng-show="itemList&&itemList.length>0">Total Quantity: {{itemList.length}}</td>
+		</tr>
+		</tbody> 
+	</table>	
+
+	<!-- <pre ng-if="debug">itemList:{{itemList | json}}</pre>	 -->
