@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 19/7/2018 7:38:23 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 17-Aug-18 5:21:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -9,7 +9,7 @@ GO
 ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
 (
 	@DONumber varchar(12),
-	@EANCode varchar(16),
+	@EANCode varchar(20),
 	@HUNumber varchar(20),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
@@ -127,31 +127,31 @@ BEGIN
                 @sMaterialCode=@MaterialCode,
                 @sBatchNo = @BatchNo                    
 */
-        IF (@SerialNo is NULL) AND 
-            EXISTS (SELECT DONumber from dbo.BX_PackDetails 
-                    WHERE	SerialNo is NULL AND
-                            DONumber=@DONumber and 
-                            DOItemNumber=@DOItemNumber and
-                            HUNumber=@HUNumber and 
-                            MaterialCode=@MaterialCode and 
-                            BatchNo=@BatchNo and 
-							BinNumber=@BinNumber and 
-                            PackBy=@PackBy and
-                            PackedOn=@PackedOn)
-		BEGIN
-			UPDATE dbo.BX_PackDetails 
-				SET ScanQty = @Qty+ ScanQty
-			WHERE	DONumber=@DONumber and 
-                    DOItemNumber=@DOItemNumber and
-                    HUNumber=@HUNumber and 
-                    MaterialCode=@MaterialCode and 
-                    BatchNo=@BatchNo and 
-					BinNumber=@BinNumber and 
-                    PackBy=@PackBy and
-                    PackedOn=@PackedOn and 
-					SerialNo is NULL
-		END
-	ELSE
+ --       IF (@SerialNo is NULL) AND 
+ --           EXISTS (SELECT DONumber from dbo.BX_PackDetails 
+ --                   WHERE	SerialNo is NULL AND
+ --                           DONumber=@DONumber and 
+ --                           DOItemNumber=@DOItemNumber and
+ --                           HUNumber=@HUNumber and 
+ --                           MaterialCode=@MaterialCode and 
+ --                           BatchNo=@BatchNo and 
+	--						BinNumber=@BinNumber and 
+ --                           PackBy=@PackBy and
+ --                           PackedOn=@PackedOn)
+	--	BEGIN
+	--		UPDATE dbo.BX_PackDetails 
+	--			SET ScanQty = @Qty+ ScanQty
+	--		WHERE	DONumber=@DONumber and 
+ --                   DOItemNumber=@DOItemNumber and
+ --                   HUNumber=@HUNumber and 
+ --                   MaterialCode=@MaterialCode and 
+ --                   BatchNo=@BatchNo and 
+	--				BinNumber=@BinNumber and 
+ --                   PackBy=@PackBy and
+ --                   PackedOn=@PackedOn and 
+	--				SerialNo is NULL
+	--	END
+	--ELSE
 		INSERT INTO dbo.BX_PackDetails
 			VALUES (newid(),@DONumber,@HUNumber,@MaterialCode,@BatchNo,@SerialNo,@PackBy,Convert(datetime,@PackedOn),@Status,@FullScanCode,@Qty,@DOItemNumber,@BinNumber)
 
@@ -175,7 +175,7 @@ BEGIN
                 );  
     END CATCH; 
 	--return freshed items detail
-	SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
+	--SELECT * FROM dbo.BX_PackDetails where DONumber=@DONumber
 
 END
 

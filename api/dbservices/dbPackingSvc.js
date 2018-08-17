@@ -6,7 +6,7 @@ const dbSvc=require("./dbCommonSvc");
 exports.InsertScanItem=function(info){
   var params={
     DONumber:{type:'sql.VarChar(12)',value:info.DONumber},
-    EANCode:{type:'sql.VarChar(16)',value:info.EANCode},
+    EANCode:{type:'sql.VarChar(20)',value:info.EANCode},
     HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
     MaterialCode:{type:'sql.VarChar(18)',value:info.MaterialCode},
     BatchNo:{type:'sql.VarChar(20)',value:info.BatchNo},

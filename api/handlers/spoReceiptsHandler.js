@@ -110,7 +110,8 @@ exports.updateReturn=function(req,res){
 					sReturnToTarget:req.body.sReturnToTarget,
 					sLogonUser:req.session.user.UserID,
 					sQACategory:req.body.sQACategory,
-					sOverWritePreviousScan:req.body.sOverWritePreviousScan
+					sOverWritePreviousScan:req.body.sOverWritePreviousScan,
+					statusId:req.body.statusId
 				}
 			var list = await dbSpoReceiptsSvc.updateSubConReturns(param);
 			

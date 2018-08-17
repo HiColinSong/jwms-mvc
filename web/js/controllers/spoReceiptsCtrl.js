@@ -90,7 +90,7 @@
                             $scope.barcode.reset();
                         },function(err){
                             soundSvc.play("badSound");
-                            if (err.data&&err.data.error&&err.data.error.class===15){
+                            if (err.data&&err.data.error&&(err.data.error.class===15||err.data.error.class===14)){
                                 $scope.confirmMessage = [];
                                 $scope.confirmMessage[0]=err.data.message.trim()
                                 var modalInstance = $modal.open({
