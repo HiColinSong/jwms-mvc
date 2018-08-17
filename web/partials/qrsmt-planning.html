@@ -67,7 +67,8 @@
 				</tr>
 				</tfoot>
 				</table>
-				<div class="col-sm-4 col-xs-12 no-padding-x text-right margin-bottom" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
+				<div class="col-sm-4 col-xs-12 no-padding-x text-right margin-bottom">
+				<!-- <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-bottom" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1"> -->
 				<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Save Quarantine Shipment Plan" 
 				ng-click="saveQuarShptPlan()">
 				<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Save Plan
