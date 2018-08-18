@@ -260,11 +260,11 @@
                 },
                 isArray:false
               },
-              getSubconPendingList:{
+              getSubconScanList:{
                 method: 'POST',
                 params:{
                   type: 'sporeceipts',
-                  subtype:'get-pending-list'
+                  subtype:'get-scan-list'
                 },
                 isArray:false
               },

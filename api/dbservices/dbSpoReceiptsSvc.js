@@ -52,12 +52,12 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.sqlQuery(stmt);
   }
 
-  exports.getSubconPendingList=function(orderNo,shipTotarget){
+  exports.getSubconScanList=function(orderNo,shipTotarget){
     var params={
       sSubCOnPORefNo:{type:'sql.VarChar(20)',value:orderNo},
       sShip2Target:{type:'sql.VarChar(3)',value:shipTotarget}
     }
-    return sqlSvc.callStoredProcedure("dbo.SpGetPendingReceiptsSerialsBySubconOrder",params);
+    return sqlSvc.callStoredProcedure("dbo.SpGetSubconReceiptsSerialsBySubconOrder",params);
   }
 
   exports.getSubconReceiveList=function(orderNo,shipTotarget){

@@ -15,6 +15,11 @@
       <div ng-repeat="msg in confirmMessage">
         {{msg}}
       </div>
+      <div class="checkbox" ng-if="errClass===14">
+        <label>
+          <input type="checkbox" ng-model="temp.doNotConfirmForUnscan"> Do not confirm the unscan during this session
+        </label>
+      </div>
     </div>
     <div class="modal-footer text-center">
       <button type="button" class="btn btn-default" ng-click="yes()">

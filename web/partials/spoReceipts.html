@@ -2,17 +2,17 @@
 	<h2 class="text-center">Post Sterile Receipts</h2>
 </div>
 <!-- DocControlQA won't see the scan box -->
-<div ng-include src="'partials/scan-input.html'" ng-if="authUser.UserRole.indexOf('DocControlQA')===-1"></div>
+<div ng-include src="'partials/scan-input.html'"></div>
 <section>
 	<ul class="nav nav-tabs margin-bottom" role="tablist">
 		<li role="presentation" ng-class="{'active':temp.showTab==='workOrders'}">
 			<a class="cursor-pointer" ng-click="temp.showTab='workOrders'">Work Orders</a>
 		</li>
-		<li role="presentation" ng-class="{'active':temp.showTab==='bitScanItem'}">
-			<a class="cursor-pointer" ng-click="temp.showTab='bitScanItem'">Scan BIT Items</a>
+		<li role="presentation" ng-class="{'active':temp.showTab==='bitScanItem'}"  ng-if="authUser.UserRole.indexOf('qa')===-1">
+			<a class="cursor-pointer" ng-click="temp.showTab='bitScanItem'">BIT Items</a>
 		</li>
-		<li role="presentation" ng-class="{'active':temp.showTab==='qasScanItem'}">
-			<a class="cursor-pointer" ng-click="temp.showTab='qasScanItem'">Scan QA Samples</a>
+		<li role="presentation" ng-class="{'active':temp.showTab==='qasScanItem'}"  ng-if="authUser.UserRole.indexOf('wh')===-1">
+			<a class="cursor-pointer" ng-click="temp.showTab='qasScanItem'">QA Samples</a>
 		</li>
 		
 	</ul>
@@ -58,62 +58,11 @@
 							</tr>
 						</tfoot>
 			  </table>
-			  <!-- <table class="table padding-top table-striped" ng-repeat="(woIdx,order) in workOrders">
-				  <thead> 
-					  <tr> 
-						  <th  class="text-center" colspan="2">Work Order No: {{order.WorkOrder}}</th> 
-					  </tr> 
-				  </thead> 
-				  <tbody> 
-							<tr> 
-								<td >Plan Qty for BIT</td> 
-								<td>{{order.nPlanSGWQty}}</td>
-							</tr>
-							<tr> 
-								<td >Receive Qty for BIT</td> 
-								<td>{{order.nRcptSGWQty}}</td>
-							</tr>
-							<tr> 
-								<td >Plan Qty for QA Samples</td> 
-								<td>{{order.nPlanSGQQty}}</td>
-							</tr>
-							<tr> 
-								<td >Receive Qty for QA Samples</td> 
-								<td>{{order.nRcptSGQQty}}</td>
-							</tr>							
-							
-							<tr> 
-								<td >Plan Qty for BESA</td> 
-								<td>{{order.nPlanCHWQty}}</td>
-							</tr>
-							<tr> 
-								<td >Receive Quantity for BESA</td> 
-								<td>{{order.nRcptCHWQty}}</td>
-							</tr>
-						</tbody> 
-			  </table> -->
-			  <!-- <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
-					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Lot Release" 
-					ng-click="confirmReceipt()" ng-disabled="!isLotRelease">
-					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Lot Release
-				  </button>
-			  </div> -->
-			  <!-- <div class="form-group col-sm-4 col-xs-12" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
-					<input type="text" class="form-control" placeholder="Scan or Input DO Number" 
-								 ng-model="dorder.DONumber" autofocus focus-me="true">
-				</div>
-			  <div class="col-sm-4 col-xs-12 no-padding-x text-right" ng-if="authUser.UserRole.indexOf('wh')===-1&&authUser.UserRole.indexOf('qa')===-1">
-					<button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm Partial Lot Release" 
-					ng-click="partialRelease()" ng-disabled="!dorder.DONumber">
-					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Partial Lot Release
-				  </button>
-			  </div> -->
 			  <div class="clearboth"></div>
 		</div> 
 		<!-- endof first tab -->
-		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='bitScanItem'}" >
-			<button type="button" class="btn btn-default pull-right" ng-click="refreshPendList('SGW')">Refresh BIT Pending Scan List</button>
-				<h4 class="margin-top">Subcon pending list for return scan</h4>	
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='bitScanItem'}"  ng-if="authUser.UserRole.indexOf('qa')===-1">
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGW')">Refresh BIT Scan List</button>
 				<div class="clearboth"></div>
 				<form ng-show="bitList&&bitList.length>0" class="margin-top">
 						<div class="form-group">
@@ -162,17 +111,25 @@
 								<span ng-show="sortType == 'CreatedOn' && sortReverse" class="fa fa-caret-up"></span>
 								</a>
 							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'StatusID'; sortReverse = !sortReverse">
+								Status
+								<span ng-show="sortType == 'StatusID' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'StatusID' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
 							</tr>
 						</thead> 
 						<tbody> 
 							<tr ng-if="bitList&&bitList.length>0" 
 								ng-repeat="(idx,item) in bitList | orderBy:sortType:sortReverse | filter:searchItem">
 		
-							<td class="text-center">{{item.SerialNo}}</td>
-							<td class="text-center">{{item.WorkOrder}}</td>
-							<td class="text-center">{{item.FullScanCode|displayBatch}}</td>
-							<td class="text-center">{{item.CreatedBy}}</td>
-							<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.SerialNo}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.WorkOrder}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.FullScanCode|displayBatch}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedBy}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{(item.StatusID==='5')?"pending":"scanned"}}</td>
 						</tr>
 					
 						<tr>
@@ -183,11 +140,11 @@
 					</table>		
 		</div>
 				<!-- endof second tab -->
-		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='qasScanItem'}" >
-			<button type="button" class="btn btn-default pull-right" ng-click="refreshPendList('SGQ')">Refresh QA Sample Pending Scan List</button>
+		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='qasScanItem'}"  ng-if="authUser.UserRole.indexOf('wh')===-1">
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGQ')">Refresh QA Sample Scan List</button>
 				<h4 class="margin-top">Subcon pending list for return scan</h4>	
 				<div class="clearboth"></div>
-				<form ng-show="qasList&&qasList.length>0" class="margin-top">
+				<form ng-if="qasList&&qasList.length>0" class="margin-top">
 						<div class="form-group">
 							<div class="input-group">
 							<div class="input-group-addon"><i class="fa fa-search"></i></div>
@@ -234,17 +191,25 @@
 								<span ng-show="sortType == 'CreatedOn' && sortReverse" class="fa fa-caret-up"></span>
 								</a>
 							</td>
+							<td class="text-center">
+								<a class="cursor-pointer" ng-click="sortType = 'StatusID'; sortReverse = !sortReverse">
+								Status
+								<span ng-show="sortType == 'StatusID' && !sortReverse" class="fa fa-caret-down"></span>
+								<span ng-show="sortType == 'StatusID' && sortReverse" class="fa fa-caret-up"></span>
+								</a>
+							</td>
 							</tr>
 						</thead> 
 						<tbody> 
 							<tr ng-if="qasList&&qasList.length>0" 
 								ng-repeat="(idx,item) in qasList | orderBy:sortType:sortReverse | filter:searchItem">
 		
-							<td class="text-center">{{item.SerialNo}}</td>
-							<td class="text-center">{{item.WorkOrder}}</td>
-							<td class="text-center">{{item.FullScanCode|displayBatch}}</td>
-							<td class="text-center">{{item.CreatedBy}}</td>
-							<td class="text-center">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.SerialNo}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.WorkOrder}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.FullScanCode|displayBatch}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedBy}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{(item.StatusID==='5')?"pending":"scanned"}}</td>
 						</tr>
 					
 						<tr>

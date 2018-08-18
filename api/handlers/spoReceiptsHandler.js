@@ -67,12 +67,12 @@ exports.getLotReleaseTable=function(req,res){
 		}
 	})()
 };
-exports.getScanPendingList=function(req,res){
+exports.getScanList=function(req,res){
 	(async function () {
 		try {
 			let data = {};
-			let list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.subconPO,req.body.ShipToTarget);
-			data.pendingList = list.recordset;
+			let list = await dbSpoReceiptsSvc.getSubconScanList(req.body.subconPO,req.body.ShipToTarget);
+			data.scanList = list.recordset;
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message});
@@ -105,7 +105,7 @@ exports.getQASampleCategoryList=function(req,res){
 exports.updateReturn=function(req,res){
 	(async function () {
 		try {
-			var param={
+			let param={
 					sFullScanCode:req.body.sFullScanCode,
 					sReturnToTarget:req.body.sReturnToTarget,
 					sLogonUser:req.session.user.UserID,
@@ -113,9 +113,9 @@ exports.updateReturn=function(req,res){
 					sOverWritePreviousScan:req.body.sOverWritePreviousScan,
 					statusId:req.body.statusId
 				}
-			var list = await dbSpoReceiptsSvc.updateSubConReturns(param);
+			await dbSpoReceiptsSvc.updateSubConReturns(param);
 			
-			var data = {};
+			// var data = {};
 			// var list = await dbSpoReceiptsSvc.getSubconWorkOrders(req.body.orderNo);
 			// data.workOrders = list.recordset;
 
@@ -124,7 +124,7 @@ exports.updateReturn=function(req,res){
 			// list = await dbSpoReceiptsSvc.getSubconPendingList(req.body.orderNo,'SGQ');
 			// data.qasPendingList = list.recordset;
 
-			return res.status(200).send(data);//return serial number
+			return res.status(200).send({});//return serial number
 		} catch (error) {
 			return res.status(400).send({error:error,message:error.message,errorCode:error.number});
 		}

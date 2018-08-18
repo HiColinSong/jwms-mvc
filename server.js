@@ -104,17 +104,14 @@ app.post('/bxapi/rtgReceipts/refresh-scanned-items.json',auth.authCheck,rtgRecei
 
 var spoReceiptsHandler = require('./api/handlers/spoReceiptsHandler');
 app.post('/bxapi/sporeceipts/update-return.json',auth.authCheck,spoReceiptsHandler.updateReturn);
-// app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getPendingList);
 app.get('/bxapi/sporeceipts/get-qa-category-list.json',auth.authCheck,spoReceiptsHandler.getQASampleCategoryList);
 app.get('/bxapi/sporeceipts/get-subcon-order-list.json',auth.authCheck,spoReceiptsHandler.getSubconOrderList);
 app.post('/bxapi/sporeceipts/get-subcon-work-order-info.json',auth.authCheck,spoReceiptsHandler.getSubconWorkOrderInfo);
 app.post('/bxapi/sporeceipts/get-lot-release-table.json',auth.authCheck,spoReceiptsHandler.getLotReleaseTable);
 app.post('/bxapi/sporeceipts/confirm.json',auth.authCheck,spoReceiptsHandler.lotRelease);
 // app.post('/bxapi/sporeceipts/partial-release.json',auth.authCheck,spoReceiptsHandler.partialRelease);
-app.post('/bxapi/sporeceipts/get-pending-list.json',auth.authCheck,spoReceiptsHandler.getScanPendingList);
+app.post('/bxapi/sporeceipts/get-scan-list.json',auth.authCheck,spoReceiptsHandler.getScanList);
 app.post('/bxapi/sporeceipts/get-receive-list.json',auth.authCheck,spoReceiptsHandler.getReceiveList);
-// app.get('/bxapi/sporeceipts/add-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.addItem);
-// app.get('/bxapi/sporeceipts/remove-item/:orderNo/:serialNo.json',auth.authCheck,spoReceiptsHandler.removeItem);
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/bxapi/find-material/:eanCode.json',auth.authCheck,commonHandler.getMaterial);

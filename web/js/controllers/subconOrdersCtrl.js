@@ -3,10 +3,13 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('subconOrdersCtrl', ['$scope','$location','$routeParams','$filter','utilSvc',
-                'bxService','constants','modalConfirmSubmit','scanItemSvc','soundSvc',
-            function($scope,$location,$routeParams,$filter,utilSvc,
-                     apiSvc,constants,confirmSubmit,itemSvc,soundSvc){
+    .controller('subconOrdersCtrl', ['$scope','$location','utilSvc','bxService',
+            function($scope,$location,utilSvc,apiSvc){
+            if ($location.url().match('spoLotRelease')){
+                $scope.title = "Subcon PO Lot Release";
+            } else if ($location.url().match('spoReceipts')){
+                $scope.title = "Post Sterile Receipts";
+            }
             $scope.order = {};
             apiSvc.getSubconOrderList()
                 .$promise.then(function(data){

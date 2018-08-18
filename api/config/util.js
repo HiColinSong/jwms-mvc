@@ -217,6 +217,10 @@ exports.rebuildQuarShptPlan = function (list){
 			}
 		} //end of for loop
 	}
+	currentPlan=currentPlan||{
+		subconPORefNo:list[0].subconPORefNo,
+		workOrders:[]
+	}
 	if (!currentPlan.qsNo){
 		let runningNumber=1;
 		if (previousPlans.length>0)
