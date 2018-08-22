@@ -8,17 +8,13 @@ const configuration  = {
   // "applicationServer": "172.32.70.71",
   // "instanceNumber": "00",
   // "client": "500"
-  // username: 'yd.zhu',
-  // password: 'yadong123',
-  // applicationServer: '172.32.70.67',
-  // instanceNumber: '02',
-  // client: '200'
+  username: 'yd.zhu',
+  password: 'yadong123',
+  applicationServer: '172.32.70.67',
+  instanceNumber: '02',
+  client: '200'
 
-    "username": "BX_USER",
-    "password": "@Bx_ud1;",
-    "applicationServer": "172.32.70.60",
-    "instanceNumber": "00",
-    "client": "800"
+
 };
 
 var test_BAPI_DELIVERY_GETLIST = function(){
