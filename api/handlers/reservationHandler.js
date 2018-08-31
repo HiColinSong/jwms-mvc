@@ -102,7 +102,17 @@ exports.removeItem=function(req,res){
 		}
 	})()
 };
-
+exports.refresh=function(req,res){
+	(async function () {
+		try {
+			var scannedItems = await dbResvSvc.getScannedItems(req.body.orderNo);
+			scannedItems=scannedItems.recordset;
+			return res.status(200).send(scannedItems);
+		} catch (error) {
+			return res.status(200).send([{error:true,message:error}]);
+		}
+	})()
+};
 exports.confirmReservation=function(req,res){
 	(async function () {
 		try {

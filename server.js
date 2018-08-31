@@ -93,6 +93,7 @@ app.post('/bxapi/reservation/add-item.json',auth.authCheck,reservationHandler.ad
 app.post('/bxapi/reservation/remove-item.json',auth.authCheck,reservationHandler.removeItem);
 app.post('/bxapi/reservation/confirm.json',auth.authCheck,reservationHandler.confirmReservation);
 app.post('/bxapi/reservation/reversal.json',auth.authCheck,reservationHandler.reservationReversal);
+app.post('/bxapi/reservation/refresh-scanned-items.json',auth.authCheck,reservationHandler.refresh);
 
 var rtgReceiptsHandler = require('./api/handlers/rtgReceiptsHandler');
 app.post('/bxapi/rtgreceipts/get-order.json',auth.authCheck,rtgReceiptsHandler.getOrder);
