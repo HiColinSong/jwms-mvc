@@ -51,8 +51,8 @@
                     for (let j = 0; j < huList.length; j++) {
                         scannedItems=huList[j].scannedItems=huList[j].scannedItems||[];
                         for (let k = 0; k < scannedItems.length; k++) {
-                            if (scannedItems[k].MaterialCode.toUpperCase()===plannedItems[i].MaterialCode&&
-                                scannedItems[k].BatchNo.toUpperCase()===plannedItems[i].BatchNo&&
+                            if (scannedItems[k].MaterialCode.toUpperCase()===plannedItems[i].MaterialCode.toUpperCase()&&
+                                scannedItems[k].BatchNo.toUpperCase()===plannedItems[i].BatchNo.toUpperCase()&&
                                 scannedItems[k].DOItemNumber===plannedItems[i].DOItemNumber){
                                     plannedItems[i].ScanQty+=scannedItems[k].ScanQty;
                                 }
