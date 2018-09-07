@@ -1,10 +1,13 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[SPUpdateSubConReturns]    Script Date: 18-Jul-18 3:59:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SPUpdateSubConReturns]    Script Date: 31-Aug-18 3:29:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+
 
 
 
@@ -21,7 +24,8 @@ ALTER PROCEDURE [dbo].[SPUpdateSubConReturns]
 		@sLogonUser				Varchar(20),
 		@sQACategory			Varchar(12) = NULL,
 		@sOverWritePreviousScan	Varchar(1) = '',    -- X to overwrite existing values with new scanned values
-		@dCurrDate				datetime=NULL
+		@dCurrDate				datetime=NULL,
+		@nBatchQty				Int = 1
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -36,12 +40,44 @@ BEGIN
 	DECLARE @sCurrentQACategory	Varchar(12)
 
 
-	DECLARE	@sErrorMessages	Varchar(300)
-	DECLARE	@nErrorCount	Int
+	DECLARE	@sErrorMessages		Varchar(300)
+	DECLARE	@nErrorCount		Int
+	DECLARE	@sIsNoSerialNo		Varchar(1)
+	DECLARE	@nAvailableQty		Int = 0
+	DECLARE	@sBatchNo			Varchar(20) = ''
+	DECLARE	@nBatchPos			Int=0
+	DECLARE	@nSerialPos			Int=0
+	DECLARE	@nUpdatedCount		Int = 0
 
 	SET		@nErrorCount = 0
 	SET		@sErrorMessages = ''
+
+	SET		@nSerialPos = PATINDEX('%|21%',@sFullScanCode)
+
 	BEGIN TRY
+
+		SET @sIsNoSerialNo = CASE WHEN  @nSerialPos > 0 THEN 'N' ELSE 'Y' END
+
+
+	IF @sIsNoSerialNo = 'Y' --non-UDI
+	BEGIN
+		EXEC BX_UpdateSubConReceiptByBatchNo 
+				@sFullScanCode	,
+				@sReturnToTarget,
+				@sQACategory,
+				@sLogonUser	,
+				@nBatchQty,
+				@nUpdatedCount OUTPUT,
+				@sErrorMessages OUTPUT
+		IF ISNULL(@nUpdatedCount,0) = 0 
+		BEGIN
+			SET @sErrorMessages = 'Error : Failed to Update Subcon Receipts : ' + @sErrorMessages ;
+			THROW 51000, @sErrorMessages, 1;
+		END
+	END
+	
+	IF @sIsNoSerialNo = 'N'
+	BEGIN
 		Select	@sSerialNo = SerialNo,
 				@sWorkOrder = WorkOrder,
 				@sSubConPO = SubConPO,
@@ -123,6 +159,7 @@ BEGIN
 					END
 */
 			END
+	END
 	END TRY
 
 	BEGIN CATCH

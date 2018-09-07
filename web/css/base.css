@@ -47,7 +47,7 @@
 .on-right{right:0;}
 .full-width{width:100%!important;}
 .full-height{height:100%;}
-.half-width{width:50%;}
+.half-width{width: 50%!important;}
 .half-height{height:50%;}
 .capitalized{text-transform: capitalize;}
 .text-left{text-align:left;}

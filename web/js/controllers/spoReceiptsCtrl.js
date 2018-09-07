@@ -71,6 +71,7 @@
                 $scope.findItem=function(){
                     $scope.bitList=undefined;
                     $scope.qaList=undefined;
+                    $scope.barcode.parseBarcode();
                     var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$routeParams.orderNo};
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
                     param.sOverWritePreviousScan = $scope.barcode.sOverWritePreviousScan;

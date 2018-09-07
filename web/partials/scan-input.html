@@ -61,18 +61,24 @@
 							</div>
 						</td>
 					</tr>
-					<!-- <tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="(barcode.valid&&!barcode.infoComplete)" >
+					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
+										   ng-show="(barcode.valid&&!barcode.serialNo)" >
 						<td width="35%" class="padding-top">
 							<label for="quantity" class="block margin-top">Enter Quantity:</label>		
 						</td>
 						<td width="65%">	
-								<div class="form-group">
-									<input type="number" class="form-control full-width" id="quantity" placeholder="Enter Qty" 
+							<div class="form-group col-sm-4 no-padding-left">
+									<input type="number" class="form-control" id="quantity" placeholder="Enter Qty" 
 												ng-model="barcode.quantity" min="1" autocomplete="off">
 							</div>
+							<div class="form-group col-sm-4 text-right">
+								<label for="" class="block margin-top">Cross Scan</label>
+							</div>
+							<div class="form-group col-sm-4 no-padding-right text-left">
+								<input type="checkbox" ng-model="barcode.crossScan" style="height:16px;width:20px;margin-top:10px">
+							</div>
 						</td>
-					</tr> -->
+					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.materialRequired&&!barcode.materialCode}"
 										   ng-show="barcode.materialRequired||barcode.materialCode">
 						<td width="35%" class="padding-top">
