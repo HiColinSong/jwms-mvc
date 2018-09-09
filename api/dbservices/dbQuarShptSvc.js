@@ -91,19 +91,33 @@ const sqlSvc=require("./sqlService");
 
   //when retrieving the DO from SAP, initialze the BX db
 exports.prepackScanItem=function(info){
-  var params={
-    qsNo:{type:'sql.VarChar(12)',value:info.DONumber},
-    HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
-    batchNo:{type:'sql.VarChar(18)',value:info.batchNo},
-    sFullScanCode:{type:'sql.VarChar(60)',value:info.sFullScanCode},
-    ModifiedBy:{type:'sql.VarChar(20)',value:info.PackBy},
-    ModifiedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
+  let params
+  if (info.serialNo){ //UDI Scan
+      params={
+      qsNo:{type:'sql.VarChar(12)',value:info.DONumber},
+      HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
+      batchNo:{type:'sql.VarChar(18)',value:info.batchNo},
+      sFullScanCode:{type:'sql.VarChar(60)',value:info.sFullScanCode},
+      ModifiedBy:{type:'sql.VarChar(20)',value:info.PackBy},
+      ModifiedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_PrepackScanItem",params)
+  } else { //Non UDI Scan
+        params={
+        subConPo:{type:'sql.VarChar(20)',value:info.subConPo},
+        qsNo:{type:'sql.VarChar(22)',value:info.DONumber},
+        HUNumber:{type:'sql.VarChar(20)',value:info.HUNumber},
+        batchNo:{type:'sql.VarChar(18)',value:info.batchNo},
+        sFullScanCode:{type:'sql.VarChar(60)',value:info.sFullScanCode},
+        ModifiedBy:{type:'sql.VarChar(20)',value:info.PackBy},
+        ModifiedOn:{type:'sql.VarChar(22)',value:info.PackedOn},
+        sQty:{type:'sql.Int',value:info.sQty}
+      }
+      return sqlSvc.callStoredProcedure("dbo.BX_PrepackScanItemByBatch",params)
   }
-
-  return sqlSvc.callStoredProcedure("dbo.BX_PrepackScanItem",params)
 }
 exports.removePrepackScanItem=function(FullScanCode){
-  var stmt = "Update dbo.BX_SubconShipments SET StatusID=5,qsNo=NULL,HUNumber=NULL WHERE FullScanCode=@FullScanCode";
+  var stmt = "Update dbo.BX_SubconShipments SET StatusID=5,qsNo=NULL,HUNumber=NULL,ReceivedOn=NULL WHERE FullScanCode=@FullScanCode";
   let paramTypes={FullScanCode:'sql.VarChar(60)'};
   let paramValues={FullScanCode:FullScanCode};
   return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)

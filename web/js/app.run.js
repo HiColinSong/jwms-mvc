@@ -25,6 +25,7 @@
               })
               $rootScope.setFocus=function(elementId){
                 $window.document.getElementById(elementId).focus()
+                $window.document.getElementById(elementId).select()
               }
             $rootScope.$on("$routeChangeStart", function(event, next, current) {
                   if (next.$$route&&next.$$route.bannedRoles&&$rootScope.authUser){

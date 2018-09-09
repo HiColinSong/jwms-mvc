@@ -128,12 +128,15 @@ exports.removeHu=function(req,res){
 exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
+		params.subConPo=info.subConPo;
 		params.DONumber=info.qsNo;
 		params.HUNumber=info.HUNumber;
 		params.sFullScanCode=info.sFullScanCode;
 		params.PackBy=req.session.user.UserID;
 		params.PackedOn=info.scannedOn;
 		params.batchNo=info.batchNo;
+		params.serialNo=info.serialNo;
+		params.sQty=info.sQty;
 
 		try {
 			let scannedItems = await dbQuarShptSvc.prepackScanItem(params);

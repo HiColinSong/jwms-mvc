@@ -41,7 +41,7 @@
 									<span ng-if="order.lotReleased">Released</span>
 								</td> -->
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.WorkOrder}}</td>
-								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{::order.FullScanCode|displayBatch}}</td>
+								<td  class="text-center bold" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'text-success':order.FullScanCode.length>20,'text-danger':order.FullScanCode.length<=20}">{{::order.batchno}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGWQty===order.nRcptSGWQty}">{{order.nRcptSGWQty}} / {{order.nPlanSGWQty}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0}">{{order.nRcptSGWQtyIncr||0}}</td>
 								<td  class="text-center" ng-class="{'bg-highlight':order.nRcptSGWQtyIncr>0||order.nRcptSGQQtyIncr>0,'bg-success':order.nPlanSGQQty===order.nRcptSGQQty}">{{order.nRcptSGQQty}} / {{order.nPlanSGQQty}}</td>
@@ -126,7 +126,7 @@
 		
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.SerialNo}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.WorkOrder}}</td>
-							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.FullScanCode|displayBatch}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.batchno}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedBy}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{(item.StatusID==='5')?"pending":"scanned"}}</td>
@@ -206,7 +206,7 @@
 		
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.SerialNo}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.WorkOrder}}</td>
-							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.FullScanCode|displayBatch}}</td>
+							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.batchno}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedBy}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{item.CreatedOn|date:"dd/MMM/yyyy"}}</td>
 							<td class="text-center" ng-class="{'success':item.StatusID==='6'}">{{(item.StatusID==='5')?"pending":"scanned"}}</td>

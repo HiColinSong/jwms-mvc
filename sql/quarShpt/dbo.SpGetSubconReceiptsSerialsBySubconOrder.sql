@@ -21,9 +21,10 @@ BEGIN
 
 	SET NOCOUNT ON;
 			
-	Select WorkOrder, FullScanCode, SerialNo, CreatedBy, CreatedOn, StatusID
-	--Select * 
-	from   BX_SubconShipments
+	Select WorkOrder, FullScanCode, SerialNo, CreatedBy, CreatedOn, StatusID,batchno,QASampleCategory,QASampleDesc
+	from   BX_SubconShipments s
+			left outer join WorkOrders w on w.Project=s.workorder
+			left outer join BX_QASampleCategory q on s.QASampleCategory=q.QASampleID,QASampleDesc
 	where	(StatusID = 5 OR StatusID = 6)
 			AND ShipToTarget = @sShip2Target 
 			AND subConPo = @sSubCOnPORefNo

@@ -20,10 +20,15 @@ exports.getSubconOrderList=function(req,res){
 						// orders.push(order);
 						order.fullScanCodeList=[order.FullScanCode];
 						order.FullScanCode=undefined;
+						// orders.push(order);
+						// orders.push(order);
+						order.batchNoList=[order.batchNo];
+						order.batchNo=undefined;
 						orders.push(order);
 					} else {
 						orders[orders.length-1].woNos.push(order.WorkOrder);
 						orders[orders.length-1].fullScanCodeList.push(order.FullScanCode);
+						orders[orders.length-1].batchNoList.push(order.batchNo);
 					}
 					previous=order.SubCOnPORefNo;
 				}
@@ -111,7 +116,13 @@ exports.updateReturn=function(req,res){
 					sLogonUser:req.session.user.UserID,
 					sQACategory:req.body.sQACategory,
 					sOverWritePreviousScan:req.body.sOverWritePreviousScan,
-					statusId:req.body.statusId
+					statusId:req.body.statusId,
+					sEANCode:req.body.sEANCode,
+					sBatchNo:req.body.sBatchNo,
+					sSubConPo:req.body.orderNo,
+					serialNo:req.body.serialNo,
+					sScanType:req.body.sScanType,
+					nReceivedQty:req.body.nReceivedQty
 				}
 			await dbSpoReceiptsSvc.updateSubConReturns(param);
 			

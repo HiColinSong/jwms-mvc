@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_DeletePrepackHandlingUnit]    Script Date: 8/13/2018 11:16:30 PM ******/
+/****** Object:  StoredProcedure [dbo].[BX_DeletePrepackHandlingUnit]    Script Date: 9/10/2018 12:41:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +20,7 @@ BEGIN
     BEGIN TRY  
         --DELETE from dbo.BX_PackDetails where qsNo=@qsNo and HUNumber=@HUNumber
         UPDATE dbo.BX_SubconShipments 
-        SET qsNO=NULL,HUNumber=NULL
+        SET qsNO=NULL,HUNumber=NULL,ReceivedBy=NULL,ReceivedOn=NULL,StatusID=5
         WHERE qsNo=@qsNo AND HUNumber=@HUNumber
 
 		DELETE FROM dbo.BX_QuarShpt_PrepackHUnits where HUNumber=@HUNumber;
