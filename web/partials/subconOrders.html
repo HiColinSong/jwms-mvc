@@ -30,6 +30,7 @@
 						<th  class="text-center">SubconPO No</th> 
 						<th  class="text-center">WorkOrder No</th> 
 						<th  class="text-center">Batch No</th> 
+						<th  class="text-center">is UDI</th> 
 					</tr> 
 				</thead> 
 				<tbody> 
@@ -46,7 +47,14 @@
 								  <div ng-repeat="wo in sOrder.woNos">{{wo}}</div>
 							  </td>
 							  <td class="text-center cursor-pointer" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
-								  <div ng-repeat="bc in sOrder.fullScanCodeList">{{bc|displayBatch}}</div>
+								  <div ng-repeat="bc in sOrder.batchNoList">{{bc}}</div>
+							  </td>
+							  <td class="text-center cursor-pointer " ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
+								  <div ng-repeat="code in sOrder.fullScanCodeList">
+									  <!-- {{code.length>20}} -->
+									  <span ng-if="code.length>20" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+									  <span ng-if="code.length<=20"class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+									</div>
 							  </td>
 						  </tr>
 				</tbody>

@@ -3,9 +3,9 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('spoReceiptsCtrl', ['$scope','$rootScope','$routeParams','$interval','utilSvc','info',
+    .controller('spoReceiptsCtrl', ['$scope','$rootScope','$routeParams','$interval','$timeout','utilSvc','info',
                 'bxService','constants','modalConfirmSubmit','$modal','scanItemSvc','soundSvc',
-            function($scope,$rootScope,$routeParams,$interval,utilSvc,info,
+            function($scope,$rootScope,$routeParams,$interval,$timeout,utilSvc,info,
                      apiSvc,constants,confirmSubmit,$modal,itemSvc,soundSvc){
 
                     // $scope.categories=constants.categories;
@@ -72,10 +72,24 @@
                     $scope.bitList=undefined;
                     $scope.qaList=undefined;
                     $scope.barcode.parseBarcode();
-                    var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$routeParams.orderNo};
+                    if (!$scope.barcode.serialNo&&!$scope.barcode.quantity&&!$scope.barcode.scanType){
+                        $scope.barcode.quantity=1;
+                        $scope.barcode.scanType="1";
+                        $timeout(function(){
+                            $rootScope.setFocus("scanQuantity");
+                        },10)
+                        return;
+                    }
+                    var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$scope.workOrders[0].SubConPoRefNo};
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
                     param.sOverWritePreviousScan = $scope.barcode.sOverWritePreviousScan;
                     param.statusId=$scope.barcode.statusId;
+                    param.sEANCode=$scope.barcode.eanCode;
+                    param.sBatchNo=$scope.barcode.batchNo;
+                    param.serialNo=$scope.barcode.serialNo;
+                    param.nReceivedQty=$scope.barcode.quantity;
+                    param.sScanType=$scope.barcode.scanType;
+
                     if ($scope.barcode.isQaSample){
                         if ($scope.barcode.qaCategory){
                             param.sQACategory = $scope.barcode.qaCategory.QASampleID

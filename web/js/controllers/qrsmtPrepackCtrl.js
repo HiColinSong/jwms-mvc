@@ -3,8 +3,8 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('qrsmtPrepackCtrl', ['$scope', '$controller', 'orders','utilSvc','bxService','modalConfirmSubmit','soundSvc',
-        function ($scope, $controller,orders,utilSvc,apiSvc,confirmSubmit,soundSvc){
+    .controller('qrsmtPrepackCtrl', ['$scope','$rootScope','$timeout', '$controller', 'orders','utilSvc','bxService','modalConfirmSubmit','soundSvc',
+        function ($scope,$rootScope,$timeout, $controller,orders,utilSvc,apiSvc,confirmSubmit,soundSvc){
         let setOrder=function(){
             order.DONumber=order.qsNo;
             $controller('packingCtrl', {$scope: $scope,order:order})
@@ -30,13 +30,23 @@
                     soundSvc.play("badSound");
                     return;
                 }
+                if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
+                    $scope.barcode.quantity=1;
+                    $timeout(function(){
+                        $rootScope.setFocus("scanQuantity");
+                    },10)
+                    return;
+                }
 
                 let params={};
+                params.subConPo=order.subconPORefNo;
                 params.qsNo=order.qsNo;
                 params.scannedOn=utilSvc.formatDateTime();
                 params.sFullScanCode=$scope.barcode.barcode1;
                 params.HUNumber=$scope.temp.showHU.HUNumber;
                 params.batchNo=$scope.barcode.batchNo;
+                params.serialNo = $scope.barcode.serialNo;
+                params.sQty = $scope.barcode.quantity;
     
                 apiSvc.insertScanItem({type:$scope.type},params).$promise.then(
                     function(data){

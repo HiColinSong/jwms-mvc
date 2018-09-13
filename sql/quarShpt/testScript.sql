@@ -105,3 +105,17 @@ exec [dbo].[BX_SubconBitAndQAScan]
 		@sLogonUser				='yd.zhu',
 		@sQACategory			='',
 		@sOverWritePreviousScan	=''    
+
+
+EXEC dbo.BX_SubconBitAndQAScanByBatchNo 
+		@sFullScanCode='180900012',
+		@sEANCode='08888893021737',
+		@sBatchNo			='W18090005',
+		@sSubConPo			='B20180042',
+		@sReturnToTarget	='SGW',
+		@sQACategory		='',
+		@sLogonUser			='yd.zhu',
+		@sScanType			='1', --1 scan, --2 undo scan, --3:take from other (Store/QA)
+		@nReceivedQty		=8 ,
+		@nUpdatedCount		=0,
+		@sErrorMessages		=''        

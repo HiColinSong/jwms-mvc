@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_PrepackScanItem]    Script Date: 19/7/2018 7:38:23 PM ******/
+/****** Object:  StoredProcedure [dbo].[BX_PrepackScanItem]    Script Date: 9/9/2018 6:20:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30,12 +30,14 @@ BEGIN
         @itemStatusID=s.StatusID
     from BX_SubconShipments s 
     left outer join BX_QuarShptPlan p on p.workorder=s.workorder
-    where s.FullScanCode=@sFullScanCode and p.qsNo=@qsNo and ShipToTarge='SGW'
+    where s.FullScanCode=@sFullScanCode and p.qsNo=@qsNo and ShipToTarget='SGW' 
     
     IF @@ROWCOUNT=0
         RAISERROR ('Error:Item cannot be found!',16,1 ); 
     ELSE IF @itemStatusID=7
         RAISERROR ('Error:Item is already scanned!',16,1 ); 
+    ELSE IF @itemStatusID=6
+			RAISERROR ('Error:Item is already scanned for Subcon Receipt!',16,1 ); 
 
     --find the quantity already scanned for the item
     SELECT @scannedQty=count(SerialNo)   
@@ -52,7 +54,7 @@ BEGIN
             HUNumber=@HUNumber,
             ModifiedBy = @ModifiedBy,
             ModifiedOn = Convert(datetime,ModifiedOn)
-    WHERE	FullScanCode = @sFullScanCode AND StatusID<>7
+    WHERE	FullScanCode = @sFullScanCode AND StatusID=5
     END TRY
     BEGIN CATCH  
         DECLARE @ErrorMessage NVARCHAR(4000);  

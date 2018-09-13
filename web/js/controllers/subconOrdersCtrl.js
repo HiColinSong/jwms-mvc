@@ -19,7 +19,7 @@
                 })
 
                 $scope.getWorkOrders = function() {
-                    if ($scope.order.userInput&&$scope.order.userInput.length>20){
+                    if ($scope.order.userInput&&$scope.order.userInput.indexOf("|21")>-1){
                         $scope.order.orderNo=$scope.order.userInput;
                     } else if ($scope.order.userInput){
                         let userInput = $scope.order.userInput;
@@ -34,6 +34,15 @@
                                     for (let j = 0; j < so.woNos.length; j++) {
                                         const wo = so.woNos[j];
                                         if (userInput===wo){
+                                            $scope.order.orderNo = so.SubCOnPORefNo;;
+                                            break topLoop;
+                                        }
+                                    }
+                                }
+                                if (so.batchNoList&&so.batchNoList.length>0){
+                                    for (let j = 0; j < so.batchNoList.length; j++) {
+                                        const batchNo = so.batchNoList[j];
+                                        if (userInput.indexOf(batchNo)>-1){
                                             $scope.order.orderNo = so.SubCOnPORefNo;;
                                             break topLoop;
                                         }
