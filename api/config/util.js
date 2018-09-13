@@ -338,6 +338,7 @@ exports.getTransParams = function(order,TRANS,bxUser){
 						CHARG: item.BatchNo,
 						SERIAL:item.SerialNo,
 						DOCNO: (TRANS==='PGI'||TRANS==='PGIX')?order.DONumber:item.HUNumber,
+						ITEMNO:item.DOItemNumber,
 						ENDCUST:order.ShipToCustomer,
 						BXDATE:this.formatDateTime().date,//real time 
 						BXTIME:this.formatDateTime().time,//real time
@@ -357,6 +358,7 @@ exports.getTransParams = function(order,TRANS,bxUser){
 					CHARG: item.BatchNo,
 					SERIAL:item.SerialNo,
 					DOCNO: order.DONumber||order.ResvNo||order.orderNo,
+					ITEMNO:item.DOItemNumber||item.ResvItemNumber,
 					ENDCUST:order.ShipToCustomer,
 					BXDATE:this.formatDateTime().date,
 					BXTIME:this.formatDateTime().time,

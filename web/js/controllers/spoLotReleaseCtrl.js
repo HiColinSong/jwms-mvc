@@ -32,7 +32,7 @@
 
                 $scope.lotRelease = function() {
                     utilSvc.pageLoading("start");
-                    let releasedOrders=["210000078391"];
+                    let releasedOrders=[];
                     for (let i = 0; i < $scope.workOrders.length; i++) {
                         const wo = $scope.workOrders[i];
                         if (wo.toRelease){
