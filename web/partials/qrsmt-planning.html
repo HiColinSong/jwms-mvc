@@ -26,9 +26,10 @@
 					<th width="12%"  class="text-center">Batch</th> 
 					<th width="15%"  class="text-center">Material</th> 
 					<th width="12%"  class="text-center">Total Qty</th> 
-					<th width="20%"  class="text-center">BIT Recv/Plan</th> 
-					<th width="14%"  class="text-center">Quar Shpt Recv</th> 
-					<th width="16%"  class="text-center">Quar Shpt Plan</th> 
+					<th width="12%"  class="text-center">Shipped Qty</th> 
+					<th width="12%"  class="text-center">BIT Recv/Plan</th> 
+					<th width="12%"  class="text-center">Quar Shpt Recv</th> 
+					<th width="14%"  class="text-center">Quar Shpt Plan</th> 
 				</tr> 
 				</thead> 
 				<tbody> 
@@ -37,6 +38,7 @@
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.batchNo}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.materialCode}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.totalBITQty}}</td>
+					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >{{::order.shippedQty}}</td>
 					<td  class="text-center" ng-class="{'bg-success':order.lotReleased}" >
 							{{::order.scannedBITQty}} / {{order.availbleBITQty||0}}
 					</td>
@@ -61,6 +63,7 @@
 				<tr> 
 					<td  class="text-center" colspan="3">Total:</td>
 					<td  class="text-center">{{::su.totalBITQty}}</td>
+					<td  class="text-center">{{::su.shippedQty}}</td>
 					<td  class="text-center">{{::su.scannedBITQty||0}} / {{su.availbleBITQty||0}}</td>
 					<td  class="text-center">{{::su.scannedQuarQty||0}}</td>
 					<td  class="text-center">{{su.planQty}}</td>
@@ -118,6 +121,7 @@
 
 
 <div class="clearboth"></div>
+<pre ng-if="debug">shippedQty:{{shippedQty | json}}</pre>	
 <pre ng-if="debug">previousPlans:{{previousPlans | json}}</pre>	
 <pre ng-if="debug">plan:{{plan | json}}</pre>	
 <pre ng-if="debug">temp:{{temp | json}}</pre>	

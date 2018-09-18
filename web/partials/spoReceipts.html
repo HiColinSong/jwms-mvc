@@ -20,7 +20,7 @@
 <div class="tab-content">
 		<h3 class="text-center">Subcon Order:{{workOrders[0].SubConPoRefNo}}</h3>
 		<div role="tabpanel" class="tab-pane"  ng-class="{'active':temp.showTab==='workOrders'}" id="workOrders">
-			<button type="button" class="btn btn-default pull-right" ng-click="refresh()">Refresh Scan Count</button>
+			<button type="button" class="btn btn-default pull-right" ng-click="refresh();setFocus('barcode1')">Refresh Scan Count</button>
 			  <table class="table padding-top table-striped" >
 				  <thead> 
 					  <tr> 
@@ -62,7 +62,7 @@
 		</div> 
 		<!-- endof first tab -->
 		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='bitScanItem'}"  ng-if="authUser.UserRole.indexOf('qa')===-1">
-			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGW')">Refresh BIT Scan List</button>
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGW');setFocus('barcode1')">Refresh BIT Scan List</button>
 				<div class="clearboth"></div>
 				<form ng-show="bitList&&bitList.length>0" class="margin-top">
 						<div class="form-group">
@@ -141,7 +141,7 @@
 		</div>
 				<!-- endof second tab -->
 		<div role="tabpanel" class="tab-pane" ng-class="{'active':temp.showTab==='qasScanItem'}"  ng-if="authUser.UserRole.indexOf('wh')===-1">
-			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGQ')">Refresh QA Sample Scan List</button>
+			<button type="button" class="btn btn-default pull-right" ng-click="refreshScanList('SGQ');setFocus('barcode1')">Refresh QA Sample Scan List</button>
 				<h4 class="margin-top">Subcon pending list for return scan</h4>	
 				<div class="clearboth"></div>
 				<form ng-if="qasList&&qasList.length>0" class="margin-top">

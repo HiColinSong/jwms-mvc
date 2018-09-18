@@ -18,6 +18,7 @@
                 const wo = $scope.plan.workOrders[i];
 
                 su.totalBITQty=(su.totalBITQty||0)+wo.totalBITQty;
+                su.shippedQty=(su.shippedQty||0)+(wo.shippedQty||0);
                 su.availbleBITQty=(su.availbleBITQty||0)+wo.availbleBITQty;
                 su.planQty=(su.planQty||0)+wo.planQty;
                 su.scannedBITQty=(su.scannedBITQty||0)+wo.scannedBITQty;
@@ -25,8 +26,7 @@
             }
             $scope.su=su;
         }
-        calcSummary();
-        let totalQtyFromPreviousPlans=(function(ppls){
+        let totalQtyFromPreviousPlans=(function(ppls,cpl){
             let ret={};
             for (let i = 0; i < ppls.length; i++) {
                 const wos = ppls[i].workOrders;
@@ -34,10 +34,12 @@
                     const wo = wos[j];
                     ret[wo.workOrder]=ret[wo.workOrder]||0;
                     ret[wo.workOrder]+=(wo.planQty||0);
+                    cpl.workOrders[j].shippedQty=ret[wo.workOrder];
                 }
             }
             return ret;
-        })(plans.previousPlans);
+        })(plans.previousPlans,plans.currentPlan);
+        calcSummary();
         $scope.reCalulate=function(order){
             let maxQty=order.totalBITQty-order.scannedBITQty-(totalQtyFromPreviousPlans[order.workOrder]||0);
             order.planQty=order.planQty||0

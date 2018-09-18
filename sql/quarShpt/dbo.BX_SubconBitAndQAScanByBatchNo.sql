@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_SubconBitAndQAScanByBatchNo]    Script Date: 9/9/2018 1:44:04 PM ******/
+/****** Object:  StoredProcedure [dbo].[BX_SubconBitAndQAScanByBatchNo]    Script Date: 18-Sep-18 9:19:07 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -42,10 +42,11 @@ BEGIN
 				SET @nAvailableQty = ( --availabltyQty is unscanned qty minus qurantine shipment planned Qty (for SGW)
 							SELECT Count(SerialNo)
 							FROM	BX_SubconShipments S
-										Left Outer Join WorkOrders W on W.Project = S.workorder 
-										-- Left Outer Join SAP_EANCodes E on E.EANCode = @sEANCode
+										Left Outer Join SAP_EANCodes E on E.EANCode = @sEANCode
+										Left Outer Join WorkOrders W on W.Project = S.workorder and  E.MaterialCode=W.Itemcode
+										
 							WHERE	W.batchno = @sBatchNo
-										-- AND E.MaterialCode = W.Itemcode
+										AND S.subConPo=@sSubConPo
 										AND	S.ShipToTarget = @sReturnToTarget
 										AND S.StatusID = 5
 					) - (
@@ -67,10 +68,10 @@ BEGIN
 							WHERE	S.SerialNo IN (
 										SELECT TOP (@nReceivedQty)  S1.SerialNo 
 											FROM	BX_SubconShipments S1
-											Left Outer Join WorkOrders W on W.Project = S1.workorder 
-											-- Left Outer Join SAP_EANCodes E on E.EANCode = SUBSTRING(@sFullScanCode,3,14)
+											Left Outer Join SAP_EANCodes E on E.EANCode = @sEANCode
+											Left Outer Join WorkOrders W on W.Project = S1.workorder and E.MaterialCode=w.Itemcode
 								WHERE	W.batchno = @sBatchNo
-											-- AND E.MaterialCode = W.Itemcode
+											AND S1.subConPo = @sSubConPo
 											AND	S1.ShipToTarget = @sReturnToTarget
 											AND S1.StatusID = 5
 								Order by S1.SerialNo
@@ -97,7 +98,8 @@ BEGIN
 							w.Project = S.workorder AND
 							--S.QASampleCategory = ISNULL(@sQACategory,'') AND 
 							S.ShipToTarget = @sReturnToTarget AND
-							S.StatusID = 6  --exclude quantine shipment items
+							S.StatusID = 6 AND --exclude quantine shipment items
+							S.subConPo=@sSubConPo
 					SET @nUpdatedCount = @@ROWCOUNT
 					IF  @@ROWCOUNT=0 
 					BEGIN
@@ -112,10 +114,11 @@ BEGIN
 				SET @nAvailableQty = ( --availabltyQty is unscanned qty minus qurantine shipment planned Qty (for SGW)
 							SELECT Count(SerialNo)
 							FROM	BX_SubconShipments S
-										Left Outer Join WorkOrders W on W.Project = S.workorder 
-										-- Left Outer Join SAP_EANCodes E on E.EANCode = @sEANCode
+										Left Outer Join SAP_EANCodes E on E.EANCode = @sEANCode
+										Left Outer Join WorkOrders W on W.Project = S.workorder AND E.MaterialCode=W.Itemcode
+										-- 
 							WHERE	W.batchno = @sBatchNo
-										-- AND E.MaterialCode = W.Itemcode
+										AND S.subConPo=@sSubConPo
 										AND	S.ShipToTarget = @sScanFromTarget
 										AND S.StatusID = 5
 					) - (
@@ -138,7 +141,8 @@ BEGIN
 							w.Project = S.workorder AND
 							--S.QASampleCategory = ISNULL(@sQACategory,'') AND 
 							S.ShipToTarget = @sScanFromTarget AND
-							S.StatusID = 5  --only for unscanned items
+							S.StatusID = 5  AND--only for unscanned items
+							S.subConPo=@sSubConPo
 					END
 				ELSE 
 					BEGIN
