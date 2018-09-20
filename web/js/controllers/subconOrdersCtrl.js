@@ -11,11 +11,14 @@
                 $scope.title = "Post Sterile Receipts";
             }
             $scope.order = {};
+            utilSvc.pageLoading("start");
             apiSvc.getSubconOrderList()
                 .$promise.then(function(data){
                     $scope.subconOrders = data;
+                    utilSvc.pageLoading("stop");
                 },function(err){
                     console.log(err);
+                    utilSvc.pageLoading("stop");
                 })
 
                 $scope.getWorkOrders = function() {

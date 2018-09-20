@@ -31,7 +31,7 @@ BEGIN
 					@nQuraShptReservedQty	Int = 0, --how many unscanned quaratine shipment qty that should be reserved from subcon scan/unscan/takeFromQA
 					@sScanFromTarget		Varchar(3),
 					@sErrorMessages			nVarchar(1000)
-		SET @nQuraShptReservedQty = (SELECT sum(qty) FROM BX_QuarShptPlan WHERE SubconPORefNo=@sSubConPo AND batchNo=@sBatchNo)-
+		SET @nQuraShptReservedQty = ISNULL((SELECT sum(qty) FROM BX_QuarShptPlan WHERE SubconPORefNo=@sSubConPo AND batchNo=@sBatchNo),0)-
 									(SELECT count(serialNo) 
 										FROM BX_SubconShipments s 
 											 LEFT OUTER JOIN WorkOrders w on w.Project=s.workorder
@@ -57,6 +57,7 @@ BEGIN
 					)
 					--select @nAvailableQty
 				IF @nReceivedQty <= ISNULL(@nAvailableQty,0)
+
 					BEGIN
 							Update	S 
 							SET		S.StatusID = 6 ,   -- Received from SubCOn
@@ -82,7 +83,7 @@ BEGIN
 					BEGIN
 					--select 'error' as error
 						SET @nUpdatedCount = 0
-						SET @sErrorMessages = 'Error : Not Enough Qty available ('+CONVERT(varchar(5),@nAvailableQty)+') for assignments' ;
+						SET @sErrorMessages = 'Error : Not Enough Qty available ('+CONVERT(varchar(5),ISNULL(@nAvailableQty,0))+') for assignments' ;
 						RAISERROR (@sErrorMessages,16,1); 
 					END	
 			END
@@ -93,10 +94,11 @@ BEGIN
 							S.ReceivedON = NULL,
 							S.QASampleCategory = '',
 							S.ReceivedBy = NULL
-					FROM	BX_SubconShipments S,WorkOrders w
+					FROM	BX_SubconShipments S 
+							inner join WorkOrders w on s.workorder=w.Project
+							inner join SAP_EANCodes E on e.MaterialCode = w.Itemcode
 					WHERE	w.batchNo=@sBatchNo AND
-							w.Project = S.workorder AND
-							--S.QASampleCategory = ISNULL(@sQACategory,'') AND 
+							E.EANCode = @sEANCode AND
 							S.ShipToTarget = @sReturnToTarget AND
 							S.StatusID = 6 AND --exclude quantine shipment items
 							S.subConPo=@sSubConPo
@@ -136,12 +138,13 @@ BEGIN
 							S.ShipToTarget = @sReturnToTarget,
 							S.QASampleCategory = ISNULL(@sQACategory,'') ,
 							S.ReceivedBy = @sLogonUser
-					FROM	BX_SubconShipments S,WorkOrders w
+					FROM	BX_SubconShipments S 
+							inner join WorkOrders w on s.workorder=w.Project
+							inner join SAP_EANCodes E on e.MaterialCode = w.Itemcode
 					WHERE	w.batchNo=@sBatchNo AND
-							w.Project = S.workorder AND
-							--S.QASampleCategory = ISNULL(@sQACategory,'') AND 
-							S.ShipToTarget = @sScanFromTarget AND
-							S.StatusID = 5  AND--only for unscanned items
+							E.EANCode = @sEANCode AND
+							S.ShipToTarget = @sReturnToTarget AND
+							S.StatusID = 5 AND --exclude quantine shipment items
 							S.subConPo=@sSubConPo
 					END
 				ELSE 

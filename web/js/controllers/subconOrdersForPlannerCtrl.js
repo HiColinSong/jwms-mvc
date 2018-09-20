@@ -8,11 +8,14 @@
             $scope.order = {};
             $scope.type = 'quarPlan';
             $scope.title=" Choose Subcon PO for Planning"
+            utilSvc.pageLoading("start");
             apiSvc.getSubconOrderList()
                 .$promise.then(function(data){
                     $scope.subconOrders = data;
+                    utilSvc.pageLoading("stop");
                 },function(err){
                     console.log(err);
+                    utilSvc.pageLoading("stop");
                 })
 
                 $scope.getWorkOrders = function() {

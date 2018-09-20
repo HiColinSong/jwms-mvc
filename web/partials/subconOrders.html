@@ -34,7 +34,7 @@
 					</tr> 
 				</thead> 
 				<tbody> 
-						  <tr ng-repeat="(idx,sOrder) in subconOrders" ng-if="sOrder.quarShptConfirmStatus!=='C'||type!=='quarPlan'"> 
+						  <tr ng-repeat="(idx,sOrder) in subconOrders track by idx" ng-if="sOrder.quarShptConfirmStatus!=='C'||type!=='quarPlan'"> 
 							  <td class="text-center" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}">
 									<input type="radio" name="order{{idx}}" ng-model="order.orderNo" value="{{sOrder.SubCOnPORefNo}}">
 							  </td> 
@@ -44,13 +44,13 @@
 									  {{sOrder.SubCOnPORefNo}}
 								</td>
 							  <td class="text-center cursor-pointer" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
-								  <div ng-repeat="wo in sOrder.woNos">{{wo}}</div>
+								  <div ng-repeat="(idxWo,wo) in sOrder.woNos track by idxWo">{{wo}}</div>
 							  </td>
 							  <td class="text-center cursor-pointer" ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
-								  <div ng-repeat="bc in sOrder.batchNoList">{{bc}}</div>
+								  <div ng-repeat="(idxBc,bc) in sOrder.batchNoList track by idxBc">{{bc}}</div>
 							  </td>
 							  <td class="text-center cursor-pointer " ng-class="{'info':order.orderNo===sOrder.SubCOnPORefNo}"  ng-click="order.orderNo=sOrder.SubCOnPORefNo">
-								  <div ng-repeat="code in sOrder.fullScanCodeList">
+								  <div ng-repeat="(idxCode,code) in sOrder.fullScanCodeList track by idxCode">
 									  <!-- {{code.length>20}} -->
 									  <span ng-if="code.length>20" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 									  <span ng-if="code.length<=20"class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
