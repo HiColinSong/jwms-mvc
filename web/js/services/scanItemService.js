@@ -79,7 +79,9 @@
                     for (let j = 0; j < scannedItems.length; j++) {
                         if (scannedItems[j].MaterialCode.toUpperCase()===plannedItems[i].MaterialCode&&
                             scannedItems[j].BatchNo.toUpperCase()===plannedItems[i].BatchNo&&
-                            scannedItems[j][itemNoFieldName]===plannedItems[i][itemNoFieldName]){
+                            scannedItems[j][itemNoFieldName]&&
+                            plannedItems[i][itemNoFieldName]&&
+                            scannedItems[j][itemNoFieldName].trim()===plannedItems[i][itemNoFieldName].trim()){
                                 plannedItems[i].ScanQty+=scannedItems[j].ScanQty;
                             }
                     }

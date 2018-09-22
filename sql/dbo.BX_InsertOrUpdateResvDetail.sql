@@ -1,14 +1,12 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    
-this SP will be called when scan a reservation item
-Script Date: 25-May-18 9:45:34 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_InsertOrUpdateResvDetails]    Script Date: 9/22/2018 9:56:42 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[BX_InsertOrUpdateResvDetails] 
+ALTER PROCEDURE [dbo].[BX_InsertOrUpdateResvDetails] 
 (
 	@ResvNumber varchar(12),
 	@EANCode varchar(16),
@@ -36,7 +34,7 @@ BEGIN
         IF (@MaterialCode is NULL) 
             BEGIN
                 --SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
-				SELECT @MaterialCode=MaterialCode,@Qty=ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
+				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
             --define a temp table for finding the ResvItemNumber
@@ -59,7 +57,7 @@ BEGIN
                 WHERE ResvOrder = @ResvNumber and MaterialCode = @MaterialCode and BatchNumber = @BatchNo
 
             IF NOT EXISTS (SELECT 1 from @temp_item)
-            RAISERROR ('Error:Material/Batch cannot be found in Delivery order',16,1 ); 
+            RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
 
             -- Find ResvItemNumber
              DECLARE @actualQty int = 0,@planQty int

@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 17-Aug-18 5:21:54 PM ******/
+/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 9/22/2018 9:26:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -9,7 +9,7 @@ GO
 ALTER PROCEDURE [dbo].[InsertOrUpdatePacking] 
 (
 	@DONumber varchar(12),
-	@EANCode varchar(20),
+	@EANCode varchar(16),
 	@HUNumber varchar(20),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
@@ -38,7 +38,7 @@ BEGIN
         IF (@MaterialCode is NULL) 
             BEGIN
                 --SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
-				SELECT @MaterialCode=MaterialCode,@Qty=ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
+				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
             --define a temp table for finding the doItemNumber
@@ -116,7 +116,7 @@ BEGIN
             RAISERROR ('Error:Handling Unit cannot be found.',16,1 );  
  
 
-        IF EXISTS (select * from dbo.BX_PackDetails where SerialNo=@SerialNo)
+        IF EXISTS (select * from dbo.BX_PackDetails where SerialNo=@SerialNo and DONumber=@DONumber)
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
         --check if the serialNo is valid

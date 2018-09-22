@@ -1,26 +1,26 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertOrUpdatePacking]    Script Date: 05-May-18 3:19:08 PM ******/
+/****** Object:  StoredProcedure [dbo].[BX_InsertOrUpdateRga]    Script Date: 9/22/2018 11:04:35 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[BX_InsertOrUpdateRga] 
+ALTER PROCEDURE [dbo].[BX_InsertOrUpdateRga] 
 (
 	@DONumber varchar(12),
 	@EANCode varchar(16),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
-    @SerialNo varchar(8) = NULL,
+    @SerialNo varchar(10) = NULL,
     @ReceiptBy varchar(20),
-    @ReceivedOn varchar(10),
+    @ReceivedOn varchar(22),
     @Status char(1),
     @FullScanCode varchar(60),
     @Qty int = 1
 )
 AS
-DECLARE @effectiveBatch int = 180601 --change this if the effective batch changes
+DECLARE @effectiveBatch int = 180600 --change this if the effective batch changes
 
 DECLARE @DOItemNumber char(6),@batchDate int,@isSerialNoRequired char(1)
 
@@ -34,7 +34,8 @@ BEGIN
         --find material code and assign the value
         IF (@MaterialCode is NULL) 
             BEGIN
-                SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+                --SET @MaterialCode = (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
+				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
             --define a temp table for finding the doItemNumber
@@ -45,7 +46,7 @@ BEGIN
                         EANCode varchar(16),
                         MaterialCode varchar(18),
                         BatchNo varchar(20),
-                        SerialNo varchar(8),
+                        SerialNo varchar(10),
                         ActualQty int,
                         PlanQty int
                     );
@@ -84,10 +85,24 @@ BEGIN
                 RAISERROR ('Error:Exceed planned quantity.',16,1 );  
 
         -- check if the serial no is required if it is null
-		IF (@SerialNo IS NULL) AND (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+		--IF (@SerialNo IS NULL) AND (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+  --          BEGIN
+  --              --check if the the serial no is enabled for the material
+  --              SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+  --              IF (@isSerialNoRequired='X')
+  --                   RAISERROR ('Error:Serial Number is required',16,1 );
+  --          END
+        -- check if the serial no is required if it is null
+		IF (@SerialNo IS NULL) 
             BEGIN
+		        BEGIN TRY
                 --check if the the serial no is enabled for the material
-                SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+                IF (CAST(SUBSTRING(@BatchNo,2,6) AS INT) - @effectiveBatch>0)
+                    SELECT @isSerialNoRequired=EnableSerialNo FROM dbo.SAP_Materials WHERE ItemCode=@MaterialCode
+		        END TRY
+                BEGIN CATCH
+                    print 'BATCH NO does not follow X180602xxxx format';
+                END CATCH
                 IF (@isSerialNoRequired='X')
                      RAISERROR ('Error:Serial Number is required',16,1 );
             END
@@ -103,27 +118,27 @@ BEGIN
         IF EXISTS (select * from dbo.BX_RgaDetails where SerialNo=@SerialNo)
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
-        IF (@SerialNo is NULL) AND 
-            EXISTS (SELECT DONumber from dbo.BX_RgaDetails 
-                    WHERE	SerialNo is NULL AND
-                            DONumber=@DONumber and 
-                            DOItemNumber=@DOItemNumber and
-                            MaterialCode=@MaterialCode and 
-                            BatchNo=@BatchNo and 
-                            ReceiptBy=@ReceiptBy and
-                            ReceivedOn=@ReceivedOn)
-		BEGIN
-			UPDATE dbo.BX_RgaDetails 
-				SET ScanQty = @Qty+ ScanQty
-			WHERE	DONumber=@DONumber and 
-                    DOItemNumber=@DOItemNumber and
-                    MaterialCode=@MaterialCode and 
-                    BatchNo=@BatchNo and 
-                    ReceiptBy=@ReceiptBy and
-                    ReceivedOn=@ReceivedOn and 
-					SerialNo is NULL
-		END
-	ELSE
+ --       IF (@SerialNo is NULL) AND 
+ --           EXISTS (SELECT DONumber from dbo.BX_RgaDetails 
+ --                   WHERE	SerialNo is NULL AND
+ --                           DONumber=@DONumber and 
+ --                           DOItemNumber=@DOItemNumber and
+ --                           MaterialCode=@MaterialCode and 
+ --                           BatchNo=@BatchNo and 
+ --                           ReceiptBy=@ReceiptBy and
+ --                           ReceivedOn=@ReceivedOn)
+	--	BEGIN
+	--		UPDATE dbo.BX_RgaDetails 
+	--			SET ScanQty = @Qty+ ScanQty
+	--		WHERE	DONumber=@DONumber and 
+ --                   DOItemNumber=@DOItemNumber and
+ --                   MaterialCode=@MaterialCode and 
+ --                   BatchNo=@BatchNo and 
+ --                   ReceiptBy=@ReceiptBy and
+ --                   ReceivedOn=@ReceivedOn and 
+	--				SerialNo is NULL
+	--	END
+	--ELSE
 		INSERT INTO dbo.BX_RgaDetails
 			VALUES (newid(),@DONumber,@MaterialCode,@BatchNo,@SerialNo,@ReceiptBy,Convert(datetime,@ReceivedOn),@Status,@FullScanCode,@Qty,@DOItemNumber)
 
@@ -147,7 +162,7 @@ BEGIN
                 );  
     END CATCH; 
 	--return freshed items detail
-	SELECT * FROM dbo.BX_RgaDetails where DONumber=@DONumber
+	--SELECT * FROM dbo.BX_RgaDetails where DONumber=@DONumber
 
 END
 

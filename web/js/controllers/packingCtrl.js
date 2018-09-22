@@ -3,9 +3,9 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('packingCtrl', ['$scope','$location','$routeParams','$modal','order',
+    .controller('packingCtrl', ['$scope','$rootScope','$location','$routeParams','$modal','$timeout','order',
                 'utilSvc','scanItemSvc','bxService','modalConfirmSubmit','hotkeys','soundSvc',
-            function($scope,$location,$routeParams,$modal,order,
+            function($scope,$rootScope,$location,$routeParams,$modal,$timeout,order,
                      utilSvc,itemSvc,apiSvc,confirmSubmit,hotkeys,soundSvc){
                     $scope.temp={};
 
@@ -111,6 +111,14 @@
                     $scope.temp.showHU.scannnedItems=undefined;
                     $scope.barcode.parseBarcode();
                     if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
+                        return;
+                    }
+                    if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
+                        $scope.barcode.quantity=1;
+                        $scope.barcode.scanType="1";
+                        $timeout(function(){
+                            $rootScope.setFocus("scanQuantity");
+                        },10)
                         return;
                     }
 

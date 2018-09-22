@@ -37,6 +37,14 @@
                             if (!scope.barcode.valid||!scope.barcode.infoComplete){
                                 return;
                             }
+                            if (!scope.barcode.serialNo&&!scope.barcode.quantity){
+                                scope.barcode.quantity=1;
+                                scope.barcode.scanType="1";
+                                $timeout(function(){
+                                    scope.setFocus("scanQuantity");
+                                },10)
+                                return;
+                            }
         
                             itemSvc.insertScanItem(scope.barcode,scope.type,scope.orderNo,undefined,
                             function(err,data){
@@ -100,6 +108,7 @@
                         }
                         scope.setFocus=function(elementId){
                             $window.document.getElementById(elementId).focus()
+                            $window.document.getElementById(elementId).select()
                           }
                         scope.$watchCollection( "items", function( items ) {
                             if (items){

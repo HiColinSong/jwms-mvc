@@ -71,7 +71,9 @@
 							</td>
 						</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="((type==='subcon'||type==='qrsmt')&&barcode.valid&&!barcode.serialNo)" >
+										   ng-show="(barcode.valid&&!barcode.serialNo)" >
+					<!-- <tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
+										   ng-show="((type==='subcon'||type==='qrsmt')&&barcode.valid&&!barcode.serialNo)" > -->
 						<td width="35%" class="padding-top">
 							<label for="scanQuantity" class="block margin-top">Enter Quantity:</label>		
 						</td>
