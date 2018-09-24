@@ -32,3 +32,24 @@ select
 
 	from BX_SubconShipments 
 	where workorder = @sWorkOrder   
+
+
+		@sFullScanCode	Varchar(100)='01088888930217371720092010W18100004',
+		@sEANCode			Varchar(20)='08888893021737',
+		@sBatchNo			Varchar(20)='W18100004',
+		@sSubConPo			Varchar(12)='B20180045',
+		@sReturnToTarget	Varchar(3)='SGW',
+		@sQACategory		Varchar(20)=NULL,
+		@sLogonUser			Varchar(30)='yd.zhu',
+		@sScanType			char(1)='1', --1 scan, --2 undo scan, --3:take from other (Store/QA)
+		@nReceivedQty		Int=1
+
+				@sFullScanCode='01088888930217371720092010W18100004',
+		@sEANCode='08888893021737',
+		@sBatchNo='W18100004',
+		@sSubConPo='B20180045',
+		@sReturnToTarget='SGW',
+		@sQACategory=NULL,
+		@sLogonUser='yd.zhu',
+		@sScanType='1',
+		@nReceivedQty=1

@@ -36,8 +36,8 @@
 				  </thead> 
 				  <tbody> 
 							<tr ng-repeat="(woIdx,order) in workOrders"> 
-								<td  class="text-center" >{{::order.workOrder}}</td>
-								<td  class="text-center" >{{::order.batchNo}}</td>
+								<td  class="text-center" >{{::order.WorkOrder}}</td>
+								<td  class="text-center" >{{::order.batchno}}</td>
 								<td  class="text-center" >{{::order.materialCode}}</td>
 								<td  class="text-center" >{{::order.totalBITQty}}</td>
 								<td  class="text-center" ng-class="{'bg-success':order.scannedBITQty===order.bitPlanQty}">{{::order.scannedBITQty}} / {{::order.bitPlanQty}}</td>

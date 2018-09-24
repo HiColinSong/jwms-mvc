@@ -57,7 +57,8 @@ exports.getLotReleaseTable=function(req,res){
 		try {
 			var data = {};
 			var list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
-			data.workOrders = util.rebuildLotReleaseTable(list.recordset);
+			data.workOrders = list.recordset;
+			// data.workOrders = util.rebuildLotReleaseTable(list.recordset);
 			// if (req.session.user.UserRole==='DocControlQA'){ //only load pendingList for DocControlQA Role.
 			// 	var subconPO = (data.workOrders.length>0)?data.workOrders[0].SubConPoRefNo:"";
 			// 	list = await dbSpoReceiptsSvc.getSubconPendingList(subconPO,'SGW');

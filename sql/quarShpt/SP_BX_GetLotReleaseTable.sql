@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_GetLotReleaseTable]    Script Date: 8/12/2018 1:11:02 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_GetLotReleaseTable]    Script Date: 24-Sep-18 3:44:27 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -35,23 +35,52 @@ BEGIN
 	   END
 
   SELECT 
-  d.subconPORefNo,
-  d.workOrder AS workOrder,
-  w.batchNo AS batchNo,
-  w.itemCode AS materialCode,
-  dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) AS totalBITQty,
-  dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) - 
-          ISNULL((SELECT sum(qty) FROM BX_QuarShptPlan WHERE SubconPORefNo=d.SubconPORefNo AND workorder=d.WorkOrder),0) AS bitPlanQty,
-  dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',6,NULL,NULL) AS scannedBITQty,
-  dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGQ',0,NULL,NULL) AS qaPlanQty,
-  dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGQ',6,NULL,NULL) AS scannedQaQty,
-  ISNULL(p.qty,0) AS quarShptPlanQty,
-  ISNULL((SELECT count(serialNo) FROM  dbo.BX_SubconShipments WHERE qsNo=p.qsNo AND workorder=d.WorkOrder),0) AS scannedQuarQty,
-  d.lotReleaseOn,
-  d.lotReleaseBy
-  FROM dbo.BX_SubConDetails d 
-      LEFT OUTER JOIN dbo.BX_QuarShptPlan p ON d.workorder=p.workorder
-      LEFT OUTER JOIN dbo.WorkOrders w ON d.WorkOrder=w.Project
-  WHERE d.SubconPORefNo=@sSubconPORefNo 
-  ORDER BY WorkOrder
+			D.SubConPoRefNo,
+			D.WorkOrder,
+			w.batchno,
+			w.itemCode as materialCode,
+			count(case when S.ShipToTarget='SGW' then 1 else null end) AS totalBITQty,
+			count(case when S.ShipToTarget='SGW' then 1 else null end) -
+			ISNULL((select sum(qty) from BX_QuarShptPlan where workorder=D.WorkOrder and SubconPORefNo=@sSubconPORefNo),0)
+			as bitPlanQty,  
+			count(case when S.ShipToTarget='SGW' and StatusID=6 then 1 else null end) as scannedBITQty, 
+			count(case when S.ShipToTarget='SGQ' and (StatusID=5 or StatusID=6) then 1 else null end) as qaPlanQty,
+			count(case when S.ShipToTarget='SGQ' and StatusID=6 then 1 else null end) as scannedQaQty,
+			ISNULL((select sum (qty) from dbo.BX_QuarShptPlan where workorder=d.WorkOrder),0) as quarShptPlanQty,
+			ISNULL((SELECT count(serialNo) FROM  dbo.BX_SubconShipments WHERE workorder=d.WorkOrder and StatusID=7),0) AS scannedQuarQty,
+			d.lotReleaseOn,	
+			d.lotReleaseBy		
+		from [BX_SubConDetails]  D 
+				Left Outer Join bx_subconPOHeader H on H.[SubconPORefNo] = d.[SubconPORefNo] 
+				Left Outer Join WorkOrders w on w.Project = d.WorkOrder 
+				left outer join BX_SubconShipments S on S.workorder=D.WorkOrder
+		where D.SubConPoRefNo = @sSubconPORefNo
+		Group by  D.SubConPoRefNo,D.WorkOrder,w.batchno,w.itemCode,d.lotReleaseOn,d.lotReleaseBy
 END
+
+--   select
+--   d.subconPORefNo,
+--   ISNULL(p.qsNo,(SELECT qsNo FROM dbo.BX_QuarShptHeader WHERE SubconPORefNo='B20180043' and  prepackConfirmOn IS NULL)) AS qsNo,
+--   d.workOrder AS workOrder,
+--   ISNULL(p.qty,0) AS planQty,
+--   w.batchNo AS batchNo,
+--   w.itemCode AS materialCode,
+--   h.planBy AS planBy,
+--   h.planOn AS planOn,
+--   h.prepackConfirmOn AS prepackConfirmOn,
+--   h.linkedDONumber AS linkedDONumber,
+--   count(case when S.ShipToTarget='SGW' then 1 else null end) AS totalBITQty,
+--  -- dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) AS totalBITQty,
+--   --dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',6,NULL,NULL) AS scannedBITQty,
+--   count(case when S.ShipToTarget='SGW' and StatusID=6 then 1 else null end) as scannedBITQty,
+--   ISNULL((SELECT count(serialNo) FROM  dbo.BX_SubconShipments WHERE qsNo=p.qsNo AND workorder=d.WorkOrder),0) AS scannedQuarQty,
+--   --dbo.BX_FnGetSerialCountByWorkOrder(d.WorkOrder ,'SGW',0,NULL,NULL) - 
+--   count(case when S.ShipToTarget='SGW' then 1 else null end) - 
+--           ISNULL((SELECT sum(qty) FROM BX_QuarShptPlan WHERE SubconPORefNo=d.SubconPORefNo AND workorder=d.WorkOrder),0) AS availbleBITQty
+--   FROM dbo.BX_SubConDetails d 
+--       LEFT OUTER JOIN dbo.BX_QuarShptPlan p ON d.workorder=p.workorder
+--       LEFT OUTER JOIN dbo.WorkOrders w ON d.WorkOrder=w.Project
+--       LEFT OUTER JOIN dbo.BX_QuarShptHeader h ON p.qsNo=h.qsNo
+-- 	  left outer join BX_SubconShipments S on S.workorder=D.WorkOrder
+--   WHERE d.SubconPORefNo='B20180043' 
+--   group BY D.SubConPoRefNo,D.WorkOrder,p.qsNo,p.qty,w.batchno,w.Itemcode,h.planBy,h.planOn,h.prepackConfirmOn,h.linkedDONumber
