@@ -31,9 +31,12 @@
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                element.bind('click', function () {
+                element.on('click', function () {
                     element[0].select();
                 });
+                scope.$on('$destroy', function() {
+                    element.off(); // deregister all event handlers
+                })
             }
         };
     })
@@ -61,6 +64,9 @@
                                 scope.$eval(clickAction);
                             }
                         });
+                        scope.$on('$destroy', function() {
+                            elem.off(); // deregister all event handlers
+                        })
                     }
                 };
             }

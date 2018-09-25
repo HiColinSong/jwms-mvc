@@ -5,7 +5,7 @@
    
     // angular.module('bx.mockBackend', ['ngMockE2E']);
 
-    angular.module('bx.services', ['ngResource','ngAudio']);
+    angular.module('bx.services', ['ngResource']);
     angular.module('bx.filters', []);
     angular.module('bx.directives', []);
     angular.module('bx.controllers', []);      
