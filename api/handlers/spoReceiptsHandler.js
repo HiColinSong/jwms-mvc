@@ -184,8 +184,10 @@ exports.lotRelease=function(req,res){
 				await sapSvc.serialNoUpdate(args);
 
 			list = await dbSpoReceiptsSvc.getLotReleaseTable(req.body.orderNo);
-			data.workOrders = util.rebuildLotReleaseTable(list.recordset);
+			// data.workOrders = util.rebuildLotReleaseTable(list.recordset);
+			data.workOrders = list.recordset;
 			data.confirm="success";
+			// data.confirm="success";
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error.message}]);
