@@ -36,13 +36,13 @@
                     for (let i = 0; i < $scope.workOrders.length; i++) {
                         const wo = $scope.workOrders[i];
                         if (wo.toRelease){
-                            releasedOrders.push(wo.workOrder);
+                            releasedOrders.push(wo.WorkOrder);
                         }
                     }
                     console.log("$scope.workOrders[0].SubConPoRefNo="+$scope.workOrders[0].SubConPoRefNo);
                     apiSvc.confirmOperation(
                         {type:"spoReceipts"},
-                        {   orderNo:$scope.workOrders[0].subconPORefNo,
+                        {   orderNo:$scope.workOrders[0].SubConPoRefNo,
                             releasedOrders:releasedOrders,
                             confirmOn:utilSvc.formatDateTime()
                         }).$promise
