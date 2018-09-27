@@ -65,7 +65,7 @@ Barcode.prototype.parseBarcode=function(){
         var marker= code.substring(0,2);
         if (marker==="01"||marker==="02"){ //EAN code
             if (code.length>=16){
-                self.eanCode=code.substring(2,16);
+                self.eanCode=self.eanCode||code.substring(2,16); //ignore the second occurrence
                 if (code.length>16){
                     return parser(code.substring(16));
                 } else {
@@ -78,7 +78,7 @@ Barcode.prototype.parseBarcode=function(){
             }
         } else if (marker==="17"){ //Expiry
             if (code.length>=6){
-                self.expiry=code.substring(2,8);
+                self.expiry=self.expiry||code.substring(2,8);//ignore the second occurrence
                 if (code.length>8){
                     return parser(code.substring(8));
                 } else {
@@ -119,7 +119,7 @@ Barcode.prototype.parseBarcode=function(){
                     break;
                 }
             }
-            self[prop]=code.substring(2,stopPosition);
+            self[prop]=self[prop]||code.substring(2,stopPosition);//ignore the second occurrence
             if (code.length>stopPosition+1){
                 return parser(code.substring(stopPosition+1));
             } else {
