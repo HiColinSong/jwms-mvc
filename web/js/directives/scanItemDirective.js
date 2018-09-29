@@ -35,6 +35,9 @@
                             scope.items=scope.order.scannedItems=undefined;
                             scope.barcode.parseBarcode();
                             if (!scope.barcode.valid||!scope.barcode.infoComplete){
+                                soundSvc.play("badSound");
+                                scope.barcode.errMsg=[];
+                                scope.barcode.errMsg.push("Invalid barcode!");
                                 return;
                             }
                             if (!scope.barcode.serialNo&&!scope.barcode.quantity){

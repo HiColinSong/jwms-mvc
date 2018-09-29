@@ -16,22 +16,10 @@ Barcode.prototype.checkInfoComplete=function(){
         self.infoComplete = false;
         self.errMsg.push("Expiry is required")
     }
-    if (!self.batchNo||self.batchNo.legnth<7){
+    if (!self.batchNo||self.batchNo.length<7){
         self.infoComplete = false;
         self.errMsg.push("Batch No is required")
     }
-    // if (!self.serialNo){
-    //     //check if the batch is after the effective batch
-    //     var batchDate=0;
-    //     if (self.batchNo&&self.batchNo.length>7){
-    //         batchDate = parseInt(self.batchNo.substring(1,7));
-    //     }
-    //     if (batchDate>=self.effectiveBatch&&!self.serialNo){
-    //         self.infoComplete = false;
-    //         self.errMsg.push("Missing Serial No")
-    //     }
-    // }
-
 };
 Barcode.prototype.reset=function(){
     this.barcode1 = undefined;
@@ -53,19 +41,27 @@ Barcode.prototype.reset=function(){
 Barcode.prototype.parseBarcode=function(){
     var self = this;
     if (!self.barcode1&&!self.barcode2) return;
+    if (self.barcode1&&self.barcode1.length>60){
+        self.valid=false;
+        return
+    } ;
+    if (self.barcode2&&self.barcode2.length>60){
+        self.valid=false;
+        return
+    } ;
     // var barcode = (self.barcode1||"")+(self.barcode2||"");
     // var ascii29 = String.fromCharCode(29);
     var ascii29 = "|";
     var parser = function(code){ 
         self.valid=self.valid||true;
-        if (code.legnth<3){
+        if (code.length<3){
             self.valid=false;
             return;
         }
         var marker= code.substring(0,2);
         if (marker==="01"||marker==="02"){ //EAN code
             if (code.length>=16){
-                self.eanCode=self.eanCode||code.substring(2,16); //ignore the second occurrence
+                self.eanCode=code.substring(2,16); //ignore the second occurrence
                 if (code.length>16){
                     return parser(code.substring(16));
                 } else {
@@ -78,7 +74,7 @@ Barcode.prototype.parseBarcode=function(){
             }
         } else if (marker==="17"){ //Expiry
             if (code.length>=6){
-                self.expiry=self.expiry||code.substring(2,8);//ignore the second occurrence
+                self.expiry=code.substring(2,8);//ignore the second occurrence
                 if (code.length>8){
                     return parser(code.substring(8));
                 } else {
@@ -119,7 +115,7 @@ Barcode.prototype.parseBarcode=function(){
                     break;
                 }
             }
-            self[prop]=self[prop]||code.substring(2,stopPosition);//ignore the second occurrence
+            self[prop]=code.substring(2,stopPosition);//ignore the second occurrence
             if (code.length>stopPosition+1){
                 return parser(code.substring(stopPosition+1));
             } else {

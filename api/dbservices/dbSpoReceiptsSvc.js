@@ -72,6 +72,7 @@ const sqlSvc=require("./sqlService");
     let params;
     if (args.serialNo){ //scan UDI item
       params={
+       sSubConPo:{type:'sql.VarChar(12)',value:args.sSubConPo},
        sFullScanCode:{type:'sql.VarChar(60)',value:args.sFullScanCode},
        sReturnToTarget:{type:'sql.VarChar(3)',value:args.sReturnToTarget},
        sLogonUser:{type:'sql.VarChar(20)',value:args.sLogonUser},

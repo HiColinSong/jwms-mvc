@@ -116,15 +116,26 @@ exports.refresh=function(req,res){
 exports.confirmReservation=function(req,res){
 	(async function () {
 		try {
-			// if (req.body.order.pgiStatus==="C"){
-			// 	throw new Error("The document has been PGR!");
-			// }
-			var ret = await sapSvc.reservation(req.body.order,req.body.postedOn);
+			let sapDoc = await sapSvc.getReservationDoc(req.body.resvNo);
+			let resvDoc = util.reservationConverter(sapDoc);
+			for (let i = 0; i < resvDoc.plannedItems.length; i++) {
+				const item =  resvDoc.plannedItems[i];
+				for (let j = 0; j < req.body.postingItemsIndexes.length; j++) {
+					const idx = req.body.postingItemsIndexes[j];
+					if (i===idx){
+						item.posting=true;
+						break;
+					}
+				}
+				
+			}
+			
+			let ret = await sapSvc.reservation(resvDoc,req.body.postedOn);
 
-			var args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
+			let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
-			var info={
+			let info={
 				Warehouse:req.session.user.DefaultWH,
 				ResvNumber:req.body.order.ResvNo,
 				PostedOn:req.body.postedOn,
@@ -132,7 +143,7 @@ exports.confirmReservation=function(req,res){
 				PostingStatus:'C',
 				Push2SAPStatus:'C',
 			}
-			var status=await dbResvSvc.setStatus(info);
+			let status=await dbResvSvc.setStatus(info);
 			return res.status(200).send({confirm:"success",status:status.recordset[0]});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});

@@ -72,6 +72,12 @@
                     $scope.bitList=undefined;
                     $scope.qaList=undefined;
                     $scope.barcode.parseBarcode();
+                    if (!$scope.barcode.valid){
+                        soundSvc.play("badSound");
+                        $scope.barcode.errMsg=[];
+                        $scope.barcode.errMsg.push("Invalid barcode!");
+                        return;
+                    }
                     if (!$scope.barcode.serialNo&&!$scope.barcode.quantity&&!$scope.barcode.scanType){
                         $scope.barcode.quantity=1;
                         $scope.barcode.scanType="1";

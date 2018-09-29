@@ -23,20 +23,20 @@
             $scope.confirmReservation = function() {
                 //check if any of items is selected for posting
                 let posting = false;
+                let postingItemsIndexes = [];
                 for (let i = 0; i < $scope.resvDoc.plannedItems.length; i++) {
                     const plannedItem = $scope.resvDoc.plannedItems[i];
                     if (plannedItem.posting){
-                        posting=true;
-                        break;
+                        postingItemsIndexes.push(i);
                     }
                 }
-                if (!posting){
+                if (postingItemsIndexes.length===0){
                     utilSvc.addAlert("Please select posting item", "danger", true);
                     return;
                 }
 
                 utilSvc.pageLoading("start");
-                apiSvc.confirmOperation({type:"reservation"},{order:$scope.resvDoc,postedOn:utilSvc.formatDate()}).$promise.
+                apiSvc.confirmOperation({type:"reservation"},{resvNo:$scope.resvDoc.ResvNo,postingItemsIndexes:postingItemsIndexes,postedOn:utilSvc.formatDate()}).$promise.
                 then(function(data){
                     utilSvc.pageLoading("stop");
                     if (data&&data.confirm==='success'){
