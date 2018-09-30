@@ -276,11 +276,12 @@
                 },
                 isArray:false
               },
-              partialRelease:{
+              getCountingDoc:{
                 method: 'POST',
                 params:{
-                  type: 'sporeceipts',
-                  subtype:'partial-release'
+                  type: 'store-ops',
+                  subtype:'@subtype',
+                  param1:'get-pi-doc'
                 },
                 isArray:false
               },

@@ -70,5 +70,24 @@
         "Plant":"PLANT",
         "Movement":"MOVEMENT"
     },
-    "purchaseOrderFields":{}
+    "purchaseOrderFields":{},
+    "countImDocHeaderFields":{
+        "docNo":"PHYSINVENTORY",
+        "fiscalYear":"FISCALYEAR",
+        "EventType":"EVENT_TYPE",
+        "Plant":"PLANT",
+        "DocDate":"DOC_DATE",
+        "PlanDate":"PLAN_DATE",
+        "CountDate":"COUNT_DATE",
+        "PostingDate":"PSTNG_DATE",
+        "userName":"USERNAME",
+        "StageLoc":"STGE_LOC"
+    },
+    "countImDocItemFields":{
+        "item":"ITEM",
+        "MaterialCode":"MATERIAL",
+        "BatchNo":"BATCH",
+        "Quantity":"QUANTITY",
+        "Plant":"PLANT"
+    }
 }

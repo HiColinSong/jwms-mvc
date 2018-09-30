@@ -136,6 +136,9 @@ app.post('/bxapi/qrsmt/confirm.json',auth.authCheck,qrsmtHandler.confirmPrepacki
 app.post('/bxapi/qrsmt/link-to-sap-do.json',auth.authCheck,qrsmtHandler.linkToSapDo);
 app.post('/bxapi/qrsmt/unlink-sap-do.json',auth.authCheck,qrsmtHandler.unlinkSapDo);
 
+var countingImHandler = require('./api/handlers/countingImHandler');
+app.post('/bxapi/store-ops/counting-im/get-pi-doc.json',auth.authCheck,countingImHandler.getPiDoc);
+
 
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, '+req.originalUrl+' is an invalid URL.'});

@@ -201,10 +201,13 @@ var test_L_TO_CONFIRM = function(){
   return invokeBAPI("L_TO_CONFIRM",param);
 }
 
-var test_BAPI_TRANSACTION_COMMIT = function(){
-  let param = {WAIT:'X'};
-  return invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
-}
+var test_BAPI_MATPHYSINV_GETDETAIL=function(){
+  var param = {
+    PHYSINVENTORY:'0100005780',
+    FISCALYEAR:'2019'
+  };
+  return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param);
+};
 
 var test_BAPI_TRANSACTION_COMMIT = function(){
   let param = {WAIT:'X'};
@@ -292,7 +295,7 @@ var invokeBAPI = function(BAPI,param){
 // test_L_TO_CONFIRM();
 // test_BAPI_OUTB_DELIVERY_CONFIRM_DEC();
 // test_BAPI_PO_GETDETAIL();
-test_BAPI_RESERVATION_GETDETAIL();
+// test_BAPI_RESERVATION_GETDETAIL();
 // test_BAPI_CUSTOMER_GETDETAIL2();
 // test_BAPI_WHSE_TO_GET_DETAIL();
 // _WELLGO();
@@ -303,3 +306,4 @@ test_BAPI_RESERVATION_GETDETAIL();
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
+test_BAPI_MATPHYSINV_GETDETAIL()

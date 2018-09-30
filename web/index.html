@@ -51,10 +51,14 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
         'js/app.js'
         ],function(){
           $script([//remove place holder
-            'js/app.http-provider.js',
-            'js/app.local-storage-service-provider.js',
-            'js/app.route-provider.js',
-            'js/app.run.js',
+            'js/app/app.http-provider.js',
+            'js/app/app.local-storage-service-provider.js',
+            'js/app/app.route-main.js',
+            'js/app/app.route-receiving.js',
+            'js/app/app.route-fullfillment.js',
+            'js/app/app.route-quarantine-shipment.js',
+            'js/app/app.route-store-operations.js',
+            'js/app/app.run.js',
             'js/controllers/addNewHuCtrl.js',
             'js/controllers/loginCtrl.js',
             'js/controllers/footerCtrl.js',
@@ -77,6 +81,8 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
             'js/controllers/spoLotReleaseCtrl.js',
             'js/controllers/qrsmtPlanningCtrl.js',
             'js/controllers/qrsmtPrepackCtrl.js',
+            'js/controllers/countingImCtrl.js',
+            'js/controllers/countingWmCtrl.js',
             'js/services/services.js',
             'js/services/authService.js',
     	      'js/services/modalLogin.js',

@@ -125,7 +125,6 @@ exports.formatDateTime=function(dateString){
 		 let postedItem=undefined;
 		 let nonPostedItem=undefined;
 		 items = doc.RESERVATION_ITEMS;
-		 items = doc.RESERVATION_ITEMS;
 		 _resv.totalPlannedQty=0;
 		for (let i = 0; i < items.length; i++) {
 			item = items[i];
@@ -150,6 +149,32 @@ exports.formatDateTime=function(dateString){
 		}
 	}
 	return _resv;
+}
+ exports.countingImDocConverter = function (doc){
+	 var _imDoc = {items:[]};
+	 var headerFields=sapFields.countImDocHeaderFields;
+	 var itemFields=sapFields.countImDocItemFields;
+	 var header,items,item;
+
+	 if (doc.HEAD){
+		 header = doc.HEAD;
+	 	for (let key in headerFields) {
+			_imDoc[key]=header[headerFields[key]];
+		 }
+	 }
+	 if (doc.ITEMS&&doc.ITEMS.length>0){
+		 items = doc.ITEMS;
+		for (let i = 0; i < items.length; i++) {
+			item = items[i];
+			_imDoc.items.push({});
+			for (let key in itemFields) {
+				_imDoc.items[i][key]=item[itemFields[key]];
+				// if (_imDoc.items[i][key]&&(key ==="Quantity"))
+				// 	_imDoc.items[i][key]=parseInt(_imDoc.items[i][key]);
+			}
+		}
+	}
+	return _imDoc;
 }
 
 //rebuild quarantine shipment plan for FE use
@@ -240,6 +265,7 @@ exports.rebuildQuarShptPlan = function (list){
 	return {previousPlans:previousPlans,currentPlan:currentPlan}
 }
 //rebuild Lot Release Table for FE use
+//@depreciated
 exports.rebuildLotReleaseTable = function (list){
 	let lotReleaseTable=[];
 	let woNo,temp;

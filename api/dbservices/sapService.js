@@ -219,6 +219,14 @@ exports.getReservationDoc=function(resvNo){
     return invokeBAPI("BAPI_RESERVATION_GETDETAIL",param,{});
 };
 
+exports.getCountingImDoc=function(docNo,fiscalYear){
+    var param = {
+      PHYSINVENTORY:docNo,
+      FISCALYEAR:fiscalYear
+    };
+    return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param,{});
+};
+
 var invokeBAPI = function(bapiName,param,options){
 	return new Promise(function(resolve,reject){
     r3connect.Pool.get(configuration).acquire()
