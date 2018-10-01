@@ -19,8 +19,14 @@
 							<div class="margin-top-20 panel-head">
 										<span  ng-if="type==='reservation'">
 											<div class="col-sm-2 col-xs-3">
-												Status
-											</div>
+													<select-all-checkbox 
+														checkboxes="order.plannedItems" 
+														property="posting" 
+														all-selected="AllSelectedItems"
+														all-clear="NoSelectedItems">
+													</select-all-checkbox>
+													Status
+												</div>
 											<div class="col-sm-1 col-xs-3">Item No</div>
 										</span>
 										<div class="col-sm-3 col-xs-3" ng-if="type!=='reservation'">Item No</div>
@@ -54,64 +60,7 @@
 											</tr>
 										</table>
 									</accordion-heading>
-									<!-- <table class="table table-striped border scan-item">
-											<thead ng-show="plannedItem.ScanQty"> 
-												<tr>
-													<td>Line No</td>
-
-													<td>
-														<a class="cursor-pointer" ng-click="sortType = 'serialNo'; sortReverse = !sortReverse">
-															Serials No
-															<span ng-show="sortType == 'serialNo' && !sortReverse" class="fa fa-caret-down"></span>
-															<span ng-show="sortType == 'serialNo' && sortReverse" class="fa fa-caret-up"></span>
-														</a>
-													</td>
-													<td>
-														<a class="cursor-pointer" ng-click="sortType = 'qty'; sortReverse = !sortReverse">
-															Qty
-															<span ng-show="sortType == 'qty' && !sortReverse" class="fa fa-caret-down"></span>
-															<span ng-show="sortType == 'qty' && sortReverse" class="fa fa-caret-up"></span>
-														</a>
-													</td>
-														<td>
-															<a class="cursor-pointer" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
-															{{createdByFieldDisplay}}
-																<span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
-																<span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
-															</a>
-														</td>
-														<td width="10%" class="text-center">Action</td>
-													
-												</tr>
-											</thead> 
-											<tbody> 
-												<tr ng-if="items&&items.length>0" 
-														ng-repeat="(idx,item) in items | 
-																	orderBy:sortType:sortReverse | 
-																	filter:{MaterialCode:plannedItem.MaterialCode}| 
-																	filter:{BatchNo:plannedItem.BatchNo}|
-																	filter:{DOItemNumber:plannedItem.DOItemNumber}|
-																	filter:{ResvItemNumber:plannedItem.ResvItemNumber}">
-							
-												<td width="20%">{{idx+1}}</td>
-												<td  width="30%">{{item.SerialNo||'-'}}</td>
-												<td  width="15%">{{item.ScanQty||1}}</td>
-												<td  width="20%">{{item[createdByFieldName]}}</td>
-												<td width="10%" class="text-center">
-													<a class="cursor-pointer margin-left-20 text-danger"  
-														confirm-required="item {{item.serialNo||item.SerialNo}}" 
-														ng-click="removeItem(item)" 
-														ng-if="((!order.confirmStatus||order.confirmStatus!=='C')&&type!=='reservation')||(type==='reservation'&&plannedItem.ResvStatus!=='X')">
-														<i class="text-danger fa fa-times-circle fa-lg"></i>
-													</a>
-												</td>
-							
-											</tr>
-											<tr ng-show="!plannedItem.ScanQty">
-												<td colspan="5" class='empty-message text-center'>No scan item.</td>
-											</tr>
-											</tbody> 
-										</table> -->
+									
 								</div>
 								<dir class="clearboth"></dir>
 							</accordion>
