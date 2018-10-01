@@ -26,7 +26,7 @@
                 let postingItemsIndexes = [];
                 for (let i = 0; i < $scope.resvDoc.plannedItems.length; i++) {
                     const plannedItem = $scope.resvDoc.plannedItems[i];
-                    if (plannedItem.posting){
+                    if (plannedItem.posting&&!plannedItem.ResvStatus){
                         postingItemsIndexes.push(i);
                     }
                 }
