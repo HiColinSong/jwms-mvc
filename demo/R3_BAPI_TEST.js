@@ -209,6 +209,14 @@ var test_BAPI_MATPHYSINV_GETDETAIL=function(){
   return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param);
 };
 
+var test_ZIM_L_INV_READ=function(){
+  var param = {
+    I01_LGNUM:'Z01',
+    I01_IVNUM:'9100007563'
+  };
+  return invokeBAPI("ZIM_L_INV_READ",param);
+};
+
 var test_BAPI_TRANSACTION_COMMIT = function(){
   let param = {WAIT:'X'};
   return invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
@@ -281,7 +289,7 @@ var invokeBAPI = function(BAPI,param){
   })
   .catch(function (error) {
     // Output error
-      console.error('Error invoking BAPI_DELIVERY_GETLIST:', error);
+      console.error('Error invoking '+BAPI+':', error);
       r3connect.Pool.remove(configuration);
   });
 }  
@@ -306,4 +314,5 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
-test_BAPI_MATPHYSINV_GETDETAIL()
+// test_BAPI_MATPHYSINV_GETDETAIL()
+test_ZIM_L_INV_READ()
