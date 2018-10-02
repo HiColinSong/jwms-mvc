@@ -1,4 +1,42 @@
 {
+    "CountingImSscannedItems":[
+      {
+        "piDocNo":"0100005780",
+        "fiscalYear":"2019",        
+        "item": "001",
+        "MaterialCode": "11104-002",
+        "BatchNo": "W17110561",
+        "ScanQty": 10,
+        "Plant": "2100"
+      },
+      {
+        "piDocNo":"0100005780",
+        "fiscalYear":"2019",     
+        "item": "002",
+        "MaterialCode": "11104-005",
+        "BatchNo": "W17020620",
+        "ScanQty": 20,
+        "Plant": "2100"
+      },
+      {
+        "piDocNo":"0100005780",
+        "fiscalYear":"2019",     
+        "item": "003",
+        "MaterialCode": "11104-005",
+        "BatchNo": "W17050506",
+        "ScanQty": 30,
+        "Plant": "2100"
+      },
+      {
+        "piDocNo":"0100005780",
+        "fiscalYear":"2019",     
+        "item": "004",
+        "MaterialCode": "11104-006",
+        "BatchNo": "W16120648",
+        "ScanQty": 40,
+        "Plant": "2100"
+      }
+    ],
     "subconOrder":{
         "SubCOnPORefNo": "B12345678",
         "PoDate": "2018-07-11T00:00:00.000Z",

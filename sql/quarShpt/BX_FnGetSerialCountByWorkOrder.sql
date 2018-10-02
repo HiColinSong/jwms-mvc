@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  UserDefinedFunction [dbo].[BX_FnGetSerialCountByWorkOrder]    Script Date: 8/10/2018 8:30:17 PM ******/
+/****** Object:  UserDefinedFunction [dbo].[BX_FnGetSerialCountByWorkOrder]    Script Date: 02-Oct-18 12:05:32 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

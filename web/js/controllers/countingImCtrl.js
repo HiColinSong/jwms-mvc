@@ -18,16 +18,10 @@
             $scope.type = "counting-im";
             $scope.barcode = itemSvc.getBarcodeObj();
 
-            $scope.$watchCollection( "temp.showHU", function( hu ) {
-                if (hu){
-                    $scope.items=hu.scannedItems;
-                    $scope.confirmReady=itemSvc.calculateScannedQtyForHUList(order.HUList,order.plannedItems);
-                }
-            });
-            $scope.$watchCollection( "order.HUList", function( huList ) {
-                if (huList&&huList.length>0){
-                    $scope.items=$scope.temp.showHU.scannedItems=huList[$scope.temp.showHUIdx].scannedItems;
-                    $scope.confirmReady=itemSvc.calculateScannedQtyForHUList(order.HUList,order.plannedItems);
+
+            $scope.$watchCollection( "piDoc.scannedItems", function( item ) {
+                if (item&&item.length>0){
+                    itemSvc.calculateScannedQty(piDoc.scannedItems,piDoc.items,"item","ScanQty")
                 }
             });
             

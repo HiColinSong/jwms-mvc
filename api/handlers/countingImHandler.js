@@ -2,6 +2,7 @@
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbResvSvc =require('../dbservices/dbReservationSvc');
+const dummyData =require('../dummyData/data.json');
 var resvDoc,promise;
 exports.getPiDoc=function(req,res){
 	(async function () {
@@ -48,6 +49,7 @@ exports.getPiDoc=function(req,res){
 			// 		piDoc.scannedItems= ret[1];
 			// 		util.trimValues(piDoc.scannedItems);
 			// 	}
+				piDoc.scannedItems=dummyData.CountingImSscannedItems;
 	
 				return res.status(200).send(piDoc);
 
