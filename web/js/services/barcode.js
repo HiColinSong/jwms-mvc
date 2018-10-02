@@ -16,7 +16,7 @@ Barcode.prototype.checkInfoComplete=function(){
         self.infoComplete = false;
         self.errMsg.push("Expiry is required")
     }
-    if (!self.batchNo||self.batchNo.length<7){
+    if (!self.batchNo){
         self.infoComplete = false;
         self.errMsg.push("Batch No is required")
     }
