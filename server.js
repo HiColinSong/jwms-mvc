@@ -138,6 +138,7 @@ app.post('/bxapi/qrsmt/unlink-sap-do.json',auth.authCheck,qrsmtHandler.unlinkSap
 
 var countingImHandler = require('./api/handlers/countingImHandler');
 app.post('/bxapi/store-ops/counting-im/get-pi-doc.json',auth.authCheck,countingImHandler.getPiDoc);
+app.post('/bxapi/store-ops/counting-wm/get-pi-doc.json',auth.authCheck,countingWmHandler.getPiDoc);
 
 
 app.get('*', function(req, res){

@@ -212,7 +212,7 @@ var test_BAPI_MATPHYSINV_GETDETAIL=function(){
 var test_ZIM_L_INV_READ=function(){
   var param = {
     I01_LGNUM:'Z01',
-    I01_IVNUM:'9100007563'
+    I01_IVNUM:'9000007563'
   };
   return invokeBAPI("ZIM_L_INV_READ",param);
 };

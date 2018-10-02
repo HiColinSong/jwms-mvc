@@ -48,20 +48,20 @@
                     }]  
                 }
             })
-            .when('/store-ops/counting-wm', {
-                templateUrl: 'partials/counting-wm.html',
-                controller: 'countingWmCtrl'
-            })
-            .when('/store-ops/counting-wm/:recNo/', {
+            // .when('/store-ops/counting-wm', {
+            //     templateUrl: 'partials/counting-wm.html',
+            //     controller: 'countingWmCtrl'
+            // })
+            .when('/store-ops/counting-wm/:docNo?', {
                 templateUrl: 'partials/counting-wm.html',
                 controller: 'countingWmCtrl',
                 resolve:{
                     piDoc:['$q','$route','utilSvc','bxService',
                     function($q,$route,utilSvc,apiSvc){
                         var deferred = $q.defer();
-                        if ($route.current.params.recNo){
+                        if ($route.current.params.docNo){
                             utilSvc.pageLoading("start");
-                            apiSvc.getCountingWmDoc({recNo:$route.current.params.recNo})
+                            apiSvc.getCountingWmDoc( {subtype:"counting-wm"},{docNo:$route.current.params.docNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
