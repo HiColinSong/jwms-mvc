@@ -21,6 +21,7 @@
         'LocalStorageModule',
         // 'smart-table',
         'ui.bootstrap',
+        'ui.toggle',
         // 'bx.mockBackend'
         'cfp.hotkeys'
     ]);
