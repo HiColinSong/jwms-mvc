@@ -6,7 +6,7 @@
 			Scan Panel
 		</accordion-heading>
 		<table class="table table-striped border scan-item">
-			<thead ng-show="barcode.errMsg">
+			<thead ng-show="barcode.errMsg&&barcode.errMsg.length>0">
 				<tr>
 					<th class="error" colspan="2">
 						<div ng-repeat="(idx,msg) in barcode.errMsg track by idx">{{msg}}</div>
@@ -14,15 +14,6 @@
 				</tr>
 			</thead>
 				<tbody> 
-					<!-- <tr ng-if="type==='picking'||type==='packing'" class="form-group" ng-class="{'has-error':barcode.error.binNumber}">
-						<td width="35%" class="padding-top ">
-							<label for="binNumber" class="block margin-top">Scan/Enter Bin No:</label>		
-						</td>
-						<td width="65%">	
-							<input type="text" class="form-control full-width" id="binNumber" placeholder="Scan/Enter Bin No" 
-							ng-model="barcode.binNo" autocomplete="off">
-						</td>
-					</tr> -->
 					<tr class="form-group" ng-if="barcode.isQaSample&&qaSampleCategoryList&&qaSampleCategoryList.length>0">
 						<td width="35%" class="padding-top">
 							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
@@ -75,9 +66,8 @@
 							</td>
 						</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="(barcode.valid&&!barcode.serialNo)" >
-					<!-- <tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="((type==='subcon'||type==='qrsmt')&&barcode.valid&&!barcode.serialNo)" > -->
+										   ng-show="(barcode.valid&&!barcode.serialNo&&barcode.isQtyBox)" >
+
 						<td width="35%" class="padding-top">
 							<label for="scanQuantity" class="block margin-top">Enter Quantity:</label>		
 						</td>
@@ -90,7 +80,7 @@
 						</td>
 					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="(type==='subcon'&&barcode.valid&&!barcode.serialNo)" >
+										   ng-show="(type==='subcon'&&barcode.valid&&!barcode.serialNo&&barcode.isQtyBox)" >
 						<td colspan="3" class="padding-top">
 
 							<div class="form-group col-sm-2 text-right">
@@ -141,15 +131,7 @@
 				<tfoot>
 					<tr>
 						<td  class="text-center qty-option-toggle">
-							<div>Enter Quantity option:</div>
-							<style>
-								.qty-option-toggle .toggle{
-									width:109px!important
-								}
-							</style>
-								<toggle ng-model="toggleValue" ng-change="changed()" onstyle="btn-success" off="Qty box off"></toggle>
-								<!-- <toggle ng-model="toggleValue" ng-change="changed()" on="Hello<br>World" off="Goodbye<br>World"></toggle> -->
-							<!-- <toggle ng-model="toggleValue" ng-change="changed()" on="Hello<br>World" off="Goodbye<br>World"></toggle> -->
+								<toggle ng-model="barcode.isQtyBox" ng-change="setFocus('barcode1')" onstyle="btn-success" off="Options Off" on="Options On"></toggle>
 						</td>
 						
 						<td  class="text-center">
@@ -157,10 +139,8 @@
 											ng-disabled="!barcode.barcode1||order.confirmStatus==='C'||order.prepackConfirmOn||order.confrimReady">Submit</button>
 								<button type="button" class="btn btn-default margin-top" ng-click="barcode.reset();setFocus('barcode1');">Reset</button>
 						</td>
-						<td  class="text-center">
-								<button type="submit" class="btn btn-default margin-top" ng-click="findItem()" 
-											ng-disabled="!barcode.barcode1||order.confirmStatus==='C'||order.prepackConfirmOn||order.confrimReady">Submit</button>
-								<button type="button" class="btn btn-default margin-top" ng-click="barcode.reset();setFocus('barcode1');">Reset</button>
+						<td  class="text-center" width="15%">
+							<div class="counter cursor-pointer" ng-click="barcode.counter=0;setFocus('barcode1')" title="Click to reset">{{barcode.counter||0}}</div>
 						</td>
 					</tr>
 				</tfoot>

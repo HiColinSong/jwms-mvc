@@ -251,7 +251,18 @@ form.form select{
 		background-color: #dff0d8;
     }
 
-
+	.bx .qty-option-toggle .toggle{
+		width:114px!important;
+		margin-top:10px
+	}
+	.bx .counter{
+		margin-bottom: 0;
+		margin-top: 5px;
+		font-size: 35px;
+		line-height: 1;
+		color: #C76C6C;
+		letter-spacing: -1px;
+	}
 
 @media only screen and (max-width: 1180px) {
 	.bx .letter{display:none;}

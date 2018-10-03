@@ -38,6 +38,9 @@ Barcode.prototype.reset=function(){
     this.quantity = undefined;
     this.scanType = undefined;
 }
+Barcode.prototype.resetCounter=function(){
+    this.counter=0;
+}
 Barcode.prototype.parseBarcode=function(){
     var self = this;
     if (!self.barcode1&&!self.barcode2) return;
