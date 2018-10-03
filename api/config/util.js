@@ -176,6 +176,32 @@ exports.formatDateTime=function(dateString){
 	}
 	return _imDoc;
 }
+ exports.countingWmDocConverter = function (doc){
+	 var _wmDoc = {items:[]};
+	 var headerFields=sapFields.countWmDocHeaderFields;
+	 var itemFields=sapFields.countWmDocItemFields;
+	 var header,items,item;
+
+	 if (doc){
+		 header = doc;
+	 	for (let key in headerFields) {
+			_wmDoc[key]=header[headerFields[key]];
+		 }
+	 }
+	 if (doc.T_LINV&&doc.T_LINV.length>0){
+		 items = doc.T_LINV;
+		for (let i = 0; i < items.length; i++) {
+			item = items[i];
+			_wmDoc.items.push({});
+			for (let key in itemFields) {
+				_wmDoc.items[i][key]=item[itemFields[key]];
+				// if (_wmDoc.items[i][key]&&(key ==="Quantity"))
+				// 	_wmDoc.items[i][key]=parseInt(_wmDoc.items[i][key]);
+			}
+		}
+	}
+	return _wmDoc;
+}
 
 //rebuild quarantine shipment plan for FE use
 exports.rebuildQuarShptPlan = function (list){

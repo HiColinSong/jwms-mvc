@@ -89,5 +89,25 @@
         "BatchNo":"BATCH",
         "Quantity":"QUANTITY",
         "Plant":"PLANT"
+    },
+    "countWmDocHeaderFields":{
+        "docNo":"I01_IVNUM",
+        "warehouseNo":"I01_LGNUM"
+    },
+    "countWmDocItemFields":{
+        "docNo":"IVNUM",
+        "warehouseNo":"LGNUM",
+        "item":"IVPOS",
+        "quant":"LQNUM",
+        "itemStatus":"ISTAT",
+        "storageType":"LGTYP",
+        "storageBin":"LGPLA",
+        "storageLocation":"LGORT",
+        "MaterialCode":"MATNR",
+        "BatchNo":"CHARG",
+        "Quantity":"QUANTITY",
+        "totalStock":"GESME",
+        "inventoryDate":"IDATU",
+        "Plant":"WERKS"
     }
 }

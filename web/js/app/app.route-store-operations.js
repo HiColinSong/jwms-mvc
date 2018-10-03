@@ -61,7 +61,7 @@
                         var deferred = $q.defer();
                         if ($route.current.params.docNo){
                             utilSvc.pageLoading("start");
-                            apiSvc.getCountingWmDoc( {subtype:"counting-wm"},{docNo:$route.current.params.docNo})
+                            apiSvc.getCountingDoc( {subtype:"counting-wm"},{docNo:$route.current.params.docNo})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);

@@ -46,20 +46,20 @@
 					  </tr>
 					  <tr> 
 						  <td >Warehouse No</td> 
-						  <td>{{piDoc.whse}}</td>
+						  <td>{{piDoc.warehouseNo}}</td>
 					  </tr>
-					  <tr> 
+					  <!-- <tr> 
 						  <td >Created By</td> 
 						  <td>{{piDoc.userName}}</td>
 					  </tr> 
 					  <tr> 
 						  <td >Created On</td> 
 						  <td>{{piDoc.DocDate|ymdDate:"dd MMM yyyy"}}</td>
-					  </tr> 
+					  </tr>  -->
 					  
 					  <tr> 
 						  <td >Plant</td> 
-						  <td>{{piDoc.Plant}}</td>
+						  <td>{{piDoc.items[0].Plant}}</td>
 					  </tr> 
 	
 					  <tr> 
@@ -90,10 +90,13 @@
 						<!-- Total Summary start -->
 					  <div role="tabpanel" class="tab-pane"  ng-class="{'active':showScanItemTab==='totalSummary'}" id="totalSummary">
 							<div class="margin-top-20 panel-head">
-										<div class="col-sm-3 col-xs-3">Item No</div>
-										<div class="col-sm-3 col-xs-3">Material</div>
-										<div class="col-sm-3 col-xs-3">Batch No</div>
-										<div class="col-sm-3 col-xs-3">Scan Qty</div>
+										<div class="col-sm-1 col-xs-1">Line No</div>
+										<div class="col-sm-2 col-xs-2">Item No</div>
+										<div class="col-sm-2 col-xs-2">Stor. Bin</div>
+										<div class="col-sm-2 col-xs-2">Material</div>
+										<div class="col-sm-2 col-xs-2">Batch No</div>
+										<div class="col-sm-2 col-xs-2">Stor. Loc</div>
+										<div class="col-sm-1 col-xs-1">Scan Qty</div>
 							</div>
 							<div class="clearboth"></div>
 							<accordion close-others="true" >
@@ -102,10 +105,13 @@
 									<accordion-heading>
 										<table class="full-width">
 											<tr>
-												<td width="25%" class="text-center">{{item.item}}</td>
-												<td width="25%" class="text-center">{{item.MaterialCode}}</td>
-												<td width="25%" class="text-center">{{item.BatchNo}}</td>
-												<td width="25%" class="text-center">{{item.ScanQty||0}}</td>
+												<td width="8%" class="text-center">{{pidx+1}}</td>
+												<td width="15%" class="text-center">{{item.item}}</td>
+												<td width="18%" class="text-center">{{item.storageBin}}</td>
+												<td width="18%" class="text-center">{{item.MaterialCode}}</td>
+												<td width="18%" class="text-center">{{item.BatchNo}}</td>
+												<td width="15%" class="text-center">{{item.storageLocation}}</td>
+												<td width="15%" class="text-center">{{item.ScanQty||0}}</td>
 											</tr>
 										</table>
 									</accordion-heading>

@@ -49,7 +49,7 @@ exports.getPiDoc=function(req,res){
 			// 		piDoc.scannedItems= ret[1];
 			// 		util.trimValues(piDoc.scannedItems);
 			// 	}
-				piDoc.scannedItems=dummyData.CountingImSscannedItems;
+				// piDoc.scannedItems=dummyData.CountingImSscannedItems;
 	
 				return res.status(200).send(piDoc);
 

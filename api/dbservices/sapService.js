@@ -227,6 +227,14 @@ exports.getCountingImDoc=function(docNo,fiscalYear){
     return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param,{});
 };
 
+exports.getCountingWmDoc=function(docNo,whseNo){
+    var param = {
+      I01_LGNUM:whseNo,
+      I01_IVNUM:docNo
+    };
+    return invokeBAPI("ZIM_L_INV_READ",param,{});
+};
+
 var invokeBAPI = function(bapiName,param,options){
 	return new Promise(function(resolve,reject){
     r3connect.Pool.get(configuration).acquire()
