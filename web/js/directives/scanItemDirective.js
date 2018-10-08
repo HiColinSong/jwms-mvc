@@ -65,7 +65,7 @@
                                 } else if(data){
                                     // scope.items=scope.order.scannedItems = data;
                                     scope.barcode.reset();
-                                    $scope.barcode.counter=($scope.barcode.counter||0)+1;
+                                    scope.barcode.counter=(scope.barcode.counter||0)+1;
                                     soundSvc.play("goodSound");
                                 }
                             })
