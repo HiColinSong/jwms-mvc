@@ -16,7 +16,7 @@ Barcode.prototype.checkInfoComplete=function(){
         self.infoComplete = false;
         self.errMsg.push("Expiry is required")
     }
-    if (!self.batchNo||self.batchNo.length<7){
+    if (!self.batchNo){
         self.infoComplete = false;
         self.errMsg.push("Batch No is required")
     }
@@ -37,6 +37,9 @@ Barcode.prototype.reset=function(){
     this.sOverWritePreviousScan = undefined;
     this.quantity = undefined;
     this.scanType = undefined;
+}
+Barcode.prototype.resetCounter=function(){
+    this.counter=0;
 }
 Barcode.prototype.parseBarcode=function(){
     var self = this;

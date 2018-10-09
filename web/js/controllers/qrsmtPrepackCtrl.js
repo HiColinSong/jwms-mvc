@@ -32,10 +32,12 @@
                 }
                 if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
                     $scope.barcode.quantity=1;
-                    $timeout(function(){
-                        $rootScope.setFocus("scanQuantity");
-                    },10)
-                    return;
+                    if ($scope.barcode.isQtyBox){
+                        $timeout(function(){
+                            $rootScope.setFocus("scanQuantity");
+                        },10)
+                        return;
+                    }
                 }
 
                 let params={};
@@ -58,6 +60,7 @@
                         }
                         else {
                             $scope.barcode.reset();
+                            $scope.barcode.counter=($scope.barcode.counter||0)+1;
                             soundSvc.play("goodSound");
                         }
                     },

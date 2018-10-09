@@ -6,7 +6,7 @@
 			Scan Panel
 		</accordion-heading>
 		<table class="table table-striped border scan-item">
-			<thead ng-show="barcode.errMsg">
+			<thead ng-show="barcode.errMsg&&barcode.errMsg.length>0">
 				<tr>
 					<th class="error" colspan="2">
 						<div ng-repeat="(idx,msg) in barcode.errMsg track by idx">{{msg}}</div>
@@ -14,20 +14,12 @@
 				</tr>
 			</thead>
 				<tbody> 
-					<!-- <tr ng-if="type==='picking'||type==='packing'" class="form-group" ng-class="{'has-error':barcode.error.binNumber}">
-						<td width="35%" class="padding-top ">
-							<label for="binNumber" class="block margin-top">Scan/Enter Bin No:</label>		
-						</td>
-						<td width="65%">	
-							<input type="text" class="form-control full-width" id="binNumber" placeholder="Scan/Enter Bin No" 
-							ng-model="barcode.binNo" autocomplete="off">
-						</td>
-					</tr> -->
 					<tr class="form-group" ng-if="barcode.isQaSample&&qaSampleCategoryList&&qaSampleCategoryList.length>0">
 						<td width="35%" class="padding-top">
 							<label for="qaList" class="block margin-top">Choose QA Sample Category:</label>		
 						</td>
-						<td width="65%">	
+						<td colspan="2">	
+						<!-- <td width="65%">	 -->
 							 <div class="form-group">
 									<select class="chosen-select col-sm-12 form-control"
 									ng-model="barcode.qaCategory"
@@ -43,7 +35,8 @@
 						<td width="35%" class="padding-top">
 							<label for="barcode1" class="block margin-top">Scan/Enter Barcode:</label>		
 						</td>
-						<td width="65%">	
+						<td colspan="2">	
+								<!-- <td width="65%">	 -->	
 							 <div class="form-group">
 									<input type="text" class="form-control full-width" id="barcode1" placeholder="Scan/Enter barcode1" 
 													ng-model="barcode.barcode1" autocomplete="off" autofocus ng-disabled="order.confirmReady">
@@ -54,7 +47,8 @@
 						<td width="35%" class="padding-top">
 							<label for="barcode2" class="block margin-top">Scan/Enter Barcode2:</label>		
 						</td>
-						<td width="65%">	
+						<td colspan="2">	
+								<!-- <td width="65%">	 -->	
 							 <div class="form-group">
 								<input type="text" class="form-control full-width" id="barcode2" placeholder="Scan/Enter barcode2" 
 												ng-model="barcode.barcode2" autocomplete="off">
@@ -66,18 +60,19 @@
 							<td width="35%" class="padding-top">
 								<label for="" class="block margin-top">Scan QA Sample</label>
 							</td>
-							<td width="65%" class="text-left">	
+							<td colspan="2" class="text-left">	
+									<!-- <td width="65%" class="text-left">	 -->
 									<input type="checkbox" ng-model="barcode.isQaSample" style="height:16px;width:20px;margin-top:10px">
 							</td>
 						</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="(barcode.valid&&!barcode.serialNo)" >
-					<!-- <tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="((type==='subcon'||type==='qrsmt')&&barcode.valid&&!barcode.serialNo)" > -->
+										   ng-show="(barcode.valid&&!barcode.serialNo&&barcode.isQtyBox)" >
+
 						<td width="35%" class="padding-top">
 							<label for="scanQuantity" class="block margin-top">Enter Quantity:</label>		
 						</td>
-						<td width="65%">	
+						<td colspan="2">	
+								<!-- <td width="65%" class="text-left">	 -->
 							<div class="form-group col-sm-4 no-padding-left">
 									<input type="number" class="form-control" id="scanQuantity" placeholder="Enter Qty" ng-disabled="barcode.scanType==='2'"
 												ng-model="barcode.quantity" min="1" autocomplete="off" autofocus>
@@ -85,8 +80,8 @@
 						</td>
 					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.quantity&&barcode.quantity<1}"
-										   ng-show="(type==='subcon'&&barcode.valid&&!barcode.serialNo)" >
-						<td colspan="2" class="padding-top">
+										   ng-show="(type==='subcon'&&barcode.valid&&!barcode.serialNo&&barcode.isQtyBox)" >
+						<td colspan="3" class="padding-top">
 
 							<div class="form-group col-sm-2 text-right">
 								<label for="scan" class="block margin-top">Scan</label>
@@ -117,7 +112,8 @@
 						<td width="35%" class="padding-top">
 							<label for="materialCode" class="block margin-top">Material Code:</label>		
 						</td>
-						<td width="65%">	
+						<td colspan="2">	
+								<!-- <td width="65%">	 -->	
 							<div class="form-group">
 									<!-- <input type="text" class="form-control" id="materialCode" placeholder="Material Code" ng-model="barcode.materialCode"> -->
 									<select class="chosen-select col-sm-12 form-control"
@@ -134,10 +130,17 @@
 				</tbody> 
 				<tfoot>
 					<tr>
-						<td colspan="2" class="text-center">
+						<td  class="text-center qty-option-toggle">
+								<toggle ng-model="barcode.isQtyBox" ng-change="setFocus('barcode1')" onstyle="btn-success" off="Options Off" on="Options On"></toggle>
+						</td>
+						
+						<td  class="text-center">
 								<button type="submit" class="btn btn-default margin-top" ng-click="findItem()" 
 											ng-disabled="!barcode.barcode1||order.confirmStatus==='C'||order.prepackConfirmOn||order.confrimReady">Submit</button>
 								<button type="button" class="btn btn-default margin-top" ng-click="barcode.reset();setFocus('barcode1');">Reset</button>
+						</td>
+						<td  class="text-center" width="15%">
+							<div class="counter cursor-pointer" ng-click="barcode.counter=0;setFocus('barcode1')" title="Click to reset">{{barcode.counter||0}}</div>
 						</td>
 					</tr>
 				</tfoot>

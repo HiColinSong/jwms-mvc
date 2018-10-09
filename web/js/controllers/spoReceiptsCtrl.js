@@ -81,10 +81,12 @@
                     if (!$scope.barcode.serialNo&&!$scope.barcode.quantity&&!$scope.barcode.scanType){
                         $scope.barcode.quantity=1;
                         $scope.barcode.scanType="1";
-                        $timeout(function(){
-                            $rootScope.setFocus("scanQuantity");
-                        },10)
-                        return;
+                        if ($scope.barcode.isQtyBox){
+                            $timeout(function(){
+                                $rootScope.setFocus("scanQuantity");
+                            },10)
+                            return;
+                        }
                     }
                     var param = {sFullScanCode:$scope.barcode.barcode1,orderNo:$scope.workOrders[0].SubConPoRefNo};
                     param.sReturnToTarget = ($scope.barcode.isQaSample)?"SGQ":"SGW";
@@ -112,6 +114,7 @@
                             $scope.bitList = [];
                             $scope.qasList = [];
                             $scope.barcode.reset();
+                            $scope.barcode.counter=($scope.barcode.counter||0)+1;
                         },function(err){
                             if (err.data&&err.data.error&&err.data.error.class===14&&$scope.temp.doNotConfirmForUnscan){
                                 $scope.barcode.sOverWritePreviousScan = "X";

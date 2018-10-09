@@ -132,12 +132,12 @@ exports.confirmReservation=function(req,res){
 			
 			let ret = await sapSvc.reservation(resvDoc,req.body.postedOn);
 
-			let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
+			let args = util.getTransParams(resvDoc,"RSV",req.session.user.UserID);
 			if (args.IT_BX_STOCK.length>0)
 				await sapSvc.serialNoUpdate(args);
 			let info={
 				Warehouse:req.session.user.DefaultWH,
-				ResvNumber:req.body.order.ResvNo,
+				ResvNumber:resvDoc.ResvNo,
 				PostedOn:req.body.postedOn,
 				PostedBy:req.session.user.UserID,
 				PostingStatus:'C',
