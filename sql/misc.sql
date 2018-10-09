@@ -53,3 +53,14 @@ select
 		@sLogonUser='yd.zhu',
 		@sScanType='1',
 		@nReceivedQty=1
+
+
+	 SELECT id FROM dbo.BX_CountingWM where
+	docNo ='9000007563' AND
+	warehouse='z01' AND
+	itemNo ='0001' AND
+    storageBinList ='33C07-0200' AND
+    storageLocList ='8027' AND
+    materialList ='BFR1-2208' AND
+    batchList ='W17040456D' AND
+	plantList ='2100'
