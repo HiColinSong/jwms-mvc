@@ -1,56 +1,43 @@
 'use strict';
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
-const dbResvSvc =require('../dbservices/dbReservationSvc');
-const dummyData =require('../dummyData/data.json');
+const dbCountingSvc =require('../dbservices/dbCountingSvc');
 var resvDoc,promise;
 exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc);
-			//check status 
-			// 	//insert data to dbo.SAP_RESVHeader, dbo.SAP_RESVDetail
-			// 	var params={
-			// 		Warehouse:req.session.user.DefaultWH,
-			// 		ResvOrder:piDoc.ResvNo,
-			// 		ResvOrderDate:piDoc.CreatedOn,
-			// 		ResvCreaedBy:piDoc.CreatedBy,
-			// 		DONumber:piDoc.DONumber,
-			// 		Plant:piDoc.plannedItems[0].Plant,
-			// 		PostingStatus:'0' //Incomplete
-			// 	}
-			// 	var ResvItemNumberList=[];
-			// 	var MaterialCodeList=[];
-			// 	var BatchNumberList=[];
-			// 	var VendorBatchList=[];
-			// 	var ResvQuantityList=[];
-			// 	for (let i=0;i<piDoc.plannedItems.length;i++){
-			// 		ResvItemNumberList[i]=piDoc.plannedItems[i].ResvItemNumber;
-			// 		MaterialCodeList[i]=piDoc.plannedItems[i].MaterialCode;
-			// 		BatchNumberList[i]=piDoc.plannedItems[i].BatchNo;
-			// 		VendorBatchList[i]=piDoc.plannedItems[i].VendorBatch;
-			// 		ResvQuantityList[i]=piDoc.plannedItems[i].Quantity||1;
-			// 	}
-			// 	params.ResvItemNumberList = ResvItemNumberList.join(',');
-			// 	params.MaterialCodeList = MaterialCodeList.join(',');
-			// 	params.BatchNumberList = BatchNumberList.join(',');
-			// 	params.VendorBatchList = VendorBatchList.join(',');
-			// 	params.ResvQuantityList = ResvQuantityList.join(',');
-			// 	let ret=await dbResvSvc.InsertOrUpdateResv(params);
-			// 	ret = ret.recordsets;
-			// 	if (ret.length>0&&ret[0].length>0){
-			// 		piDoc.Push2SAPStatus = ret[0][0].Push2SAPStatus||undefined;
-			// 		piDoc.SAPRefNo = ret[0][0].SAPRefNo||undefined;
-			// 		piDoc.postedOn = ret[0][0].postedOn||undefined;
-			// 		piDoc.postedBy = ret[0][0].postedBy||undefined;
-			// 	}
-			// 	if (ret.length>1){
-			// 		piDoc.scannedItems= ret[1];
-			// 		util.trimValues(piDoc.scannedItems);
-			// 	}
-				// piDoc.scannedItems=dummyData.CountingImSscannedItems;
-	
+				// insert data to dbo.BX_CountingWM
+				var params={
+					docNo:piDoc.docNo,
+					warehouse:req.session.user.DefaultWH,
+					itemNo:piDoc.items[0].item
+				}
+				var storageBinList=[];
+				var storageLocList=[];
+				var materialList=[];
+				var batchList=[];
+				var plantList=[];
+				for (let i=0;i<piDoc.items.length;i++){
+					storageBinList[i]=piDoc.items[i].storageBin;
+					storageLocList[i]=piDoc.items[i].storageLocation;
+					materialList[i]=piDoc.items[i].MaterialCode;
+					batchList[i]=piDoc.items[i].BatchNo;
+					plantList[i]=piDoc.items[i].Plant;
+				}
+				params.storageBinList = storageBinList.join(',');
+				params.storageLocList = storageLocList.join(',');
+				params.materialList = materialList.join(',');
+				params.batchList = batchList.join(',');
+				params.plantList = plantList.join(',');
+				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(params);
+				ret = ret.recordsets;
+
+				if (ret.length>1){
+					piDoc.scannedItems= ret[1];
+					util.trimValues(piDoc.scannedItems);
+				}
 				return res.status(200).send(piDoc);
 
 		} catch (error) {
