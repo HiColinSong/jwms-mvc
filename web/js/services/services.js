@@ -454,11 +454,14 @@
               return orderNo;
           },
           pageLoading:function(arg){
-              if (arg==="start"){
-                $rootScope.pageLoading=true;
-              } else {
-                $rootScope.pageLoading=false;
-              }
+            if (arg==="start"&&$rootScope.pageLoading){ //prevent from submit twice before return
+              throw new Error("Please don't submit twice!");
+            }
+            if (arg==="start"){
+              $rootScope.pageLoading=true;
+            } else {
+              $rootScope.pageLoading=false;
+            }
           }
         }
     }])
