@@ -19,17 +19,13 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
         $scope.barcode = itemSvc.getBarcodeObj();
 
 
-        $scope.$watchCollection( "piDoc.scannedItems", function( item ) {
-            if (item&&item.length>0){
-                itemSvc.calculateScannedQty(piDoc.scannedItems,piDoc.items,"item","ScanQty")
-            }
-        });
+        
 
 
 
             //findItem
             $scope.findItem=function(){
-                $scope.temp.showHU.scannnedItems=undefined;
+                $scope.piDoc.scannedItems=undefined;
                 $scope.barcode.parseBarcode();
                 if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
                     soundSvc.play("badSound");
@@ -39,98 +35,130 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                 }
                 if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
                     $scope.barcode.quantity=1;
-                    $scope.barcode.scanType="1";
-                    $timeout(function(){
-                        $rootScope.setFocus("scanQuantity");
-                    },10)
-                    return;
+                    if ($scope.barcode.isQtyBox){
+                        $timeout(function(){
+                            $rootScope.setFocus("scanQuantity");
+                        },10)
+                        return;
+                    }
+                }
+                let params={};
+                params.orderNo=$scope.docNo;
+                params.EANCode=$scope.barcode.eanCode;
+                params.MaterialCode=$scope.barcode.materialCode;
+                params.BatchNo=$scope.barcode.batchNo;
+                params.scannedOn=utilSvc.formatDateTime();
+                params.FullScanCode=$scope.barcode.getFullBarcode();
+                params.Qty=$scope.barcode.quantity||1;
+                if ($scope.barcode.serialNo){
+                    params.SerialNo=$scope.barcode.serialNo
                 }
 
-                itemSvc.insertScanItem($scope.barcode,$scope.type,order.DONumber,$scope.temp.showHU.HUNumber,
-                function(err,data){
-                    if (err&&err.message){
-                        if (err.message==='Error:Material Code cannot be found'){
+                apiSvc.countingInsertScanItem({subtype:$scope.type},params).$promise.then(
+                    function(data){
+                        $scope.barcode.reset();
+                        $scope.barcode.counter=($scope.barcode.counter||0)+1;
+                        soundSvc.play("goodSound");
+                    },
+                    function(err){
+                        let errMsg=err.data[0].message.originalError.info.message;
+                        if (errMsg==='Error:Material Code cannot be found'){
                             $scope.barcode.materialRequired=true;
                         }
-                        if (err.message==='Error:Serial Number is required'){
+                        if (errMsg==='Error:Serial Number is required'){
                             $scope.barcode.serialNoRequired=true;
                         }
-                        $scope.barcode.errMsg.push(err.message)
+                        $scope.barcode.errMsg.push(errMsg)
                         soundSvc.play("badSound");
-                    } else if(data){
-                        // $scope.order.HUList = data;
-                        $scope.barcode.reset();
-                        soundSvc.play("goodSound");
-                    }
-                })
+                    })
             };
 
             $scope.removeItem=function(item){
-                apiSvc.removeScanItem({type:$scope.type},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
-                    then(function(data){
-                        if (data&&data.length>0&&data[0].error)
-                            console.error(data[0].message.originalError.info.message);
-                        else 
-                            $scope.order.HUList = data;
-                    },function(error){
-                        console.error(error);
-                    }
+                utilSvc.pageLoading("start");
+                apiSvc.removeCountingScanItem({subtype:$scope.type},{itemId:item.id,docNo:$scope.docNo}).$promise.
+                    then(
+                        function(data){
+                            $scope.piDoc.scannedItems = data;
+                            calculateScannedQty($scope.piDoc.scannedItems,$scope.piDoc.items);
+                            utilSvc.pageLoading("stop");
+                        },
+                        function(err){
+                            utilSvc.addAlert(err||err.message, "danger", true);
+                            utilSvc.pageLoading("stop");
+                        }
                 )
             }
             $scope.refreshScannedItems=function(){
-                apiSvc.refreshPacking({type:$scope.type,param1:order.DONumber}).$promise.
-                    then(function(data){
-                        if (data&&data.length>0&&data[0].error)
-                            console.error(data[0].message.originalError.info.message);
-                        else 
-                            $scope.order.HUList = data;
-                    },function(error){
-                        console.error(error);
-                    }
-                )
-            }
-            $scope.confirmCountinging = function() {
                 utilSvc.pageLoading("start");
-                apiSvc.confirmOperation({type:"packing"},{order:{DONumber:order.DONumber},PackComplete:utilSvc.formatDateTime()}).$promise.
+                apiSvc.refreshCountingScannedItems({subtype:$scope.type},{docNo:piDoc.docNo}).$promise.
+                    then(
+                        function(data){
+                            $scope.piDoc.scannedItems = data;
+                            calculateScannedQty($scope.piDoc.scannedItems,$scope.piDoc.items);
+                            utilSvc.pageLoading("stop");
+                        },
+                        function(err){
+                            utilSvc.addAlert(err||err.message, "danger", true);
+                            utilSvc.pageLoading("stop");
+                        }
+                    )
+            }
+            $scope.confirmCounting = function() {
+                utilSvc.pageLoading("start");
+                apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo}).$promise.
                 then(function(data){
-                    utilSvc.pageLoading("stop");
                     if (data&&data.confirm==='success'){
                         $scope.confirm={
                             type:"success",
-                            modalHeader: 'Packing Confirmation Success',
-                            message:"The delivery order is confirmed successfully!",
-                            resetPath:"/fulfillment/packing"
+                            modalHeader: 'Counting WM Confirmation Success',
+                            message:"The Counting WM is done successfully!"
                         }
                     } else if(data&&data.error&&data.message){
                         $scope.confirm={
                             type:"danger",
-                            modalHeader: 'Packing Confirmation Fail',
+                            modalHeader: 'Counting WM Confirmation Fail',
                             message:data.message,
                         }
                     } else if(data&&data.confirm==='fail'){
                         $scope.confirm={
                             type:"danger",
-                            modalHeader: 'Packing Confirmation Fail',
-                            message:"The delivery order is invalid, confirmation is failed!",
+                            modalHeader: 'Counting WM Confirmation Fail',
+                            message:"The Counting WM Confirmation is failed!",
                         }
                     } else {
                         $scope.confirm={
                             type:"danger",
-                            modalHeader: 'Packing Confirmation Fail',
+                            modalHeader: 'Counting WM Confirmation Fail',
                             message:"Unknown error, confirmation is failed!",
                         }
                     }
                     confirmSubmit.do($scope);
-                },function(err){
                     utilSvc.pageLoading("stop");
+                },function(err){
                     console.error(err);
                     $scope.confirm={
                         type:"danger",
                         message:err.data.message||"System error, confirmation is failed!",
                     }
                     confirmSubmit.do($scope);
+                    utilSvc.pageLoading("stop");
                 });
             }
+
+            let calculateScannedQty=function(scannedItems,items){
+                for (let i = 0; i < items.length; i++) {
+                    items[i].ScanQty=0;
+                    for (let j = 0; j < scannedItems.length; j++) {
+                        if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
+                            scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
+                            scannedItems[j].storageBin.toUpperCase()===items[i].storageBin&&
+                            scannedItems[j].storageLoc.toUpperCase()===items[i].storageLocation){
+                                items[i].ScanQty+=scannedItems[j].ScanQty;
+                            }
+                    }
+                }
+            } //end of function
+            calculateScannedQty(piDoc.scannedItems,piDoc.items);
         } else {
         $scope.piDoc={};
         if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid

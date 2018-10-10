@@ -140,6 +140,10 @@ var countingImHandler = require('./api/handlers/countingImHandler');
 app.post('/bxapi/store-ops/counting-im/get-pi-doc.json',auth.authCheck,countingImHandler.getPiDoc);
 var countingWmHandler = require('./api/handlers/countingWmHandler');
 app.post('/bxapi/store-ops/counting-wm/get-pi-doc.json',auth.authCheck,countingWmHandler.getPiDoc);
+app.post('/bxapi/store-ops/counting-wm/add-item.json',auth.authCheck,countingWmHandler.addItem);
+app.post('/bxapi/store-ops/counting-wm/refresh-scanned-items.json',auth.authCheck,countingWmHandler.refresh);
+app.post('/bxapi/store-ops/counting-wm/remove-item.json',auth.authCheck,countingWmHandler.removeItem);
+app.post('/bxapi/store-ops/counting-wm/confirm.json',auth.authCheck,countingWmHandler.confirm);
 
 
 app.get('*', function(req, res){

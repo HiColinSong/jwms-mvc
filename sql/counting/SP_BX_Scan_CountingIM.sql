@@ -1,15 +1,15 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_CountingWM_Scan]    Script Date: 10-Oct-18 10:02:13 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_CountingIM_Scan]    Script Date: 10-Oct-18 10:02:13 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[BX_Scan_CountingWM] 
+ALTER PROCEDURE [dbo].[BX_Scan_CountingIM] 
 (
 	@docNo varchar(12),
-	@warehouse char(3),
+	@fiscalYear char(4),
 	@EANCode varchar(16),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
@@ -21,7 +21,7 @@ ALTER PROCEDURE [dbo].[BX_Scan_CountingWM]
 )
 AS
 
-DECLARE @countingWmId int
+DECLARE @countingImId int
 
 BEGIN
     BEGIN TRY  
@@ -36,29 +36,29 @@ BEGIN
 				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
-           SELECT top (1) @countingWmId = id from dbo.BX_CountingWM 
+           SELECT top (1) @countingImId = id from dbo.BX_CountingIM 
            WHERE docNo=@docNo AND
-                 warehouse=@warehouse AND
-                 material=@MaterialCode AND
-                 batch=@BatchNo 
+                 fiscalYear=@fiscalYear AND
+                 MaterialCode=@MaterialCode AND
+                 BatchNo=@BatchNo 
 
 
-            IF @countingWmId IS NULL
+            IF @countingImId IS NULL
                 RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
 
             
       
         IF (@SerialNo is NOT NULL) AND  
-            EXISTS (select 1 from BX_CountingWM_Scan s, BX_CountingWM c 
+            EXISTS (select 1 from BX_CountingIM_Scan s, BX_CountingIM c 
                 where serialNo=@SerialNo and  
-                    s.countingWmId=c.id AND
+                    s.countingImId=c.id AND
                     c.docNo=@docNo AND 
-                    c.warehouse=@warehouse
-                )
+                    c.fiscalYear=@fiscalYear
+               )
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
-		INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
-			VALUES (@countingWmId,@Qty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
+		INSERT INTO dbo.BX_CountingIM_Scan (countingImId,qty,fullScanCode,serialNo,countBy,countOn)
+			VALUES (@countingImId,@Qty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
 
     END TRY  
     BEGIN CATCH  

@@ -56,7 +56,8 @@ SET @nth=1
         continue;
     END
 
-    SELECT c.*,s.qty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s 
+    SELECT s.id,c.id as countingWmId,c.docNo,c.warehouse,c.itemNo,c.storageBin,c.storageLoc,c.material as MaterialCode,c.batch as BatchNo,c.plant,
+    s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s 
     WHERE c.docNo = @docNo and c.warehouse = @warehouse
     AND c.id=s.countingWmId
 

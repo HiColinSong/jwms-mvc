@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[BX_CountingWM_Scan](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[countingWmId] [int] NOT NULL,
 	[qty] [int] NULL,
-	[fullScanCode] [varbinary](60) NULL,
+	[fullScanCode] [varchar](60) NULL,
 	[serialNo] [varchar](10) NULL,
 	[countBy] [varchar](20) NULL,
 	[countOn] [datetime] NULL,

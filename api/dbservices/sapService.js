@@ -235,6 +235,14 @@ exports.getCountingWmDoc=function(docNo,whseNo){
     return invokeBAPI("ZIM_L_INV_READ",param,{});
 };
 
+exports.countingWM=function(piDoc){
+    var param = {
+      I01_LGNUM:whseNo,
+      I01_IVNUM:docNo
+    };
+    return invokeBAPI("L_INV_COUNT_EXT",param,{});
+};
+
 var invokeBAPI = function(bapiName,param,options){
 	return new Promise(function(resolve,reject){
     r3connect.Pool.get(configuration).acquire()

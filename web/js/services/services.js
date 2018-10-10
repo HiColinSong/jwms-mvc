@@ -285,6 +285,41 @@
                 },
                 isArray:false
               },
+              countingInsertScanItem:{
+                method: 'POST',
+                params:{
+                  type: 'store-ops',
+                  subtype:'@subtype',
+                  param1:'add-item'
+                },
+                isArray:false
+              },
+              refreshCountingScannedItems:{
+                method: 'POST',
+                params:{
+                  type: 'store-ops',
+                  subtype:'@subtype',
+                  param1:'refresh-scanned-items'
+                },
+                isArray:true
+              },
+              removeCountingScanItem:{
+                method: 'POST',
+                params:{
+                  type: 'store-ops',
+                  subtype:'@subtype',
+                  param1:'remove-item'
+                },
+                isArray:true
+              },
+              confirmCounting:{
+                method: 'POST',
+                params:{
+                  type: 'store-ops',
+                  subtype:'@subtype',
+                  param1:'confirm'
+                }
+              },
               getQASampleCategoryList:{
                 method: 'GET',
                 params:{

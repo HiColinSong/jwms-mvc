@@ -34,8 +34,8 @@ exports.getPiDoc=function(req,res){
 				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(params);
 				ret = ret.recordsets;
 
-				if (ret.length>1){
-					piDoc.scannedItems= ret[1];
+				if (ret.length>0){
+					piDoc.scannedItems= ret[0];
 					util.trimValues(piDoc.scannedItems);
 				}
 				return res.status(200).send(piDoc);
@@ -49,26 +49,23 @@ exports.getPiDoc=function(req,res){
 exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
-		params.ResvNumber=info.orderNo;
+		params.docNo=info.orderNo;
+		params.warehouse=req.session.user.DefaultWH,
 		params.EANCode=info.EANCode;
 		params.MaterialCode=info.MaterialCode;
 		params.BatchNo=info.BatchNo;
-		// params.DOItemNumber=info.itemNumber;
 		params.Qty = info.Qty||1;
 		if (info.SerialNo){
 			params.SerialNo=info.SerialNo;
 			params.Qty = 1;
 		} 
-		params.PostBy=req.session.user.UserID;
-		params.PostOn=info.scannedOn;
-		params.Status = info.Status
+		params.countBy=req.session.user.UserID;
+		params.countOn=info.scannedOn;
 		params.FullScanCode = info.FullScanCode;
 
 		try {
-			var scannedItems = await dbResvSvc.InsertScanItem(params);
-			scannedItems=scannedItems.recordset;
-			util.trimValues(scannedItems);
-			return res.status(200).send(scannedItems);
+			await dbCountingSvc.InsertWmScanItem(params)
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
 		}
@@ -78,10 +75,9 @@ exports.addItem=function(req,res){
 exports.removeItem=function(req,res){
 	(async function () {
 		try {
-			await dbResvSvc.deleteItemByKey(req.body.RowKey);
-			var scannedItems = await dbResvSvc.getScannedItems(req.body.orderNo);
+			await dbCountingSvc.deleteWMItemById(req.body.itemId);
+			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
 			scannedItems=scannedItems.recordset;
-			util.trimValues(scannedItems);
 			return res.status(200).send(scannedItems);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
@@ -91,7 +87,7 @@ exports.removeItem=function(req,res){
 exports.refresh=function(req,res){
 	(async function () {
 		try {
-			var scannedItems = await dbResvSvc.getScannedItems(req.body.orderNo);
+			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
 			scannedItems=scannedItems.recordset;
 			return res.status(200).send(scannedItems);
 		} catch (error) {
@@ -99,38 +95,29 @@ exports.refresh=function(req,res){
 		}
 	})()
 };
-exports.confirmReservation=function(req,res){
+exports.confirm=function(req,res){
 	(async function () {
 		try {
-			let sapDoc = await sapSvc.getReservationDoc(req.body.resvNo);
-			let resvDoc = util.reservationConverter(sapDoc);
-			for (let i = 0; i < resvDoc.plannedItems.length; i++) {
-				const item =  resvDoc.plannedItems[i];
-				for (let j = 0; j < req.body.postingItemsIndexes.length; j++) {
-					const idx = req.body.postingItemsIndexes[j];
-					if (i===idx){
-						item.posting=true;
-						break;
-					}
-				}
-				
-			}
+			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
+			let piDoc = util.countingWmDocConverter(sapDoc);
+		
 			
-			let ret = await sapSvc.reservation(resvDoc,req.body.postedOn);
+			
+			let ret = await sapSvc.countingWM(piDoc);
 
-			let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
-			if (args.IT_BX_STOCK.length>0)
-				await sapSvc.serialNoUpdate(args);
-			let info={
-				Warehouse:req.session.user.DefaultWH,
-				ResvNumber:req.body.order.ResvNo,
-				PostedOn:req.body.postedOn,
-				PostedBy:req.session.user.UserID,
-				PostingStatus:'C',
-				Push2SAPStatus:'C',
-			}
-			let status=await dbResvSvc.setStatus(info);
-			return res.status(200).send({confirm:"success",status:status.recordset[0]});
+			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
+			// if (args.IT_BX_STOCK.length>0)
+			// 	await sapSvc.serialNoUpdate(args);
+			// let info={
+			// 	Warehouse:req.session.user.DefaultWH,
+			// 	ResvNumber:req.body.order.ResvNo,
+			// 	PostedOn:req.body.postedOn,
+			// 	PostedBy:req.session.user.UserID,
+			// 	PostingStatus:'C',
+			// 	Push2SAPStatus:'C',
+			// }
+			// let status=await dbResvSvc.setStatus(info);
+			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
 		}
