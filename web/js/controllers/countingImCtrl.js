@@ -19,52 +19,64 @@
             $scope.barcode = itemSvc.getBarcodeObj();
 
 
-            $scope.$watchCollection( "piDoc.scannedItems", function( item ) {
-                if (item&&item.length>0){
-                    itemSvc.calculateScannedQty(piDoc.scannedItems,piDoc.items,"item","ScanQty")
-                }
-            });
+            // $scope.$watchCollection( "piDoc.scannedItems", function( item ) {
+            //     if (item&&item.length>0){
+            //         itemSvc.calculateScannedQty(piDoc.scannedItems,piDoc.items,"item","ScanQty")
+            //     }
+            // });
             
 
             
-                //findItem
-                $scope.findItem=function(){
-                    $scope.temp.showHU.scannnedItems=undefined;
-                    $scope.barcode.parseBarcode();
-                    if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
-                        soundSvc.play("badSound");
-                        $scope.barcode.errMsg=[];
-                        $scope.barcode.errMsg.push("Invalid barcode!");
-                        return;
-                    }
-                    if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
-                        $scope.barcode.quantity=1;
-                        $scope.barcode.scanType="1";
+               //findItem
+            $scope.findItem=function(){
+                $scope.piDoc.scannedItems=undefined;
+                $scope.barcode.parseBarcode();
+                if (!$scope.barcode.valid||!$scope.barcode.infoComplete){
+                    soundSvc.play("badSound");
+                    $scope.barcode.errMsg=[];
+                    $scope.barcode.errMsg.push("Invalid barcode!");
+                    return;
+                }
+                if (!$scope.barcode.serialNo&&!$scope.barcode.quantity){
+                    $scope.barcode.quantity=1;
+                    if ($scope.barcode.isQtyBox){
                         $timeout(function(){
                             $rootScope.setFocus("scanQuantity");
                         },10)
                         return;
                     }
+                }
+                let params={};
+                params.orderNo=$scope.docNo;
+                params.fiscalYear=$scope.piDoc.fiscalYear;
+                params.EANCode=$scope.barcode.eanCode;
+                params.MaterialCode=$scope.barcode.materialCode;
+                params.BatchNo=$scope.barcode.batchNo;
+                params.scannedOn=utilSvc.formatDateTime();
+                params.FullScanCode=$scope.barcode.getFullBarcode();
+                params.Qty=$scope.barcode.quantity||1;
+                if ($scope.barcode.serialNo){
+                    params.SerialNo=$scope.barcode.serialNo
+                }
 
-                    itemSvc.insertScanItem($scope.barcode,$scope.type,order.DONumber,$scope.temp.showHU.HUNumber,
-                    function(err,data){
-                        if (err&&err.message){
-                            if (err.message==='Error:Material Code cannot be found'){
-                                $scope.barcode.materialRequired=true;
-                            }
-                            if (err.message==='Error:Serial Number is required'){
-                                $scope.barcode.serialNoRequired=true;
-                            }
-                            $scope.barcode.errMsg.push(err.message)
-                            soundSvc.play("badSound");
-                        } else if(data){
-                            // $scope.order.HUList = data;
-                            $scope.barcode.reset();
-                            soundSvc.play("goodSound");
+                apiSvc.countingInsertScanItem({subtype:$scope.type},params).$promise.then(
+                    function(data){
+                        $scope.barcode.reset();
+                        $scope.barcode.counter=($scope.barcode.counter||0)+1;
+                        soundSvc.play("goodSound");
+                    },
+                    function(err){
+                        let errMsg=err.data[0].message.originalError.info.message;
+                        if (errMsg==='Error:Material Code cannot be found'){
+                            $scope.barcode.materialRequired=true;
                         }
+                        if (errMsg==='Error:Serial Number is required'){
+                            $scope.barcode.serialNoRequired=true;
+                        }
+                        $scope.barcode.errMsg.push(errMsg)
+                        soundSvc.play("badSound");
                     })
-                };
-
+            };
                 $scope.removeItem=function(item){
                     apiSvc.removeScanItem({type:$scope.type},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
                         then(function(data){
@@ -131,6 +143,19 @@
                         confirmSubmit.do($scope);
                     });
                 }
+                let calculateScannedQty=function(scannedItems,items){
+                    for (let i = 0; i < items.length; i++) {
+                        items[i].ScanQty=0;
+                        for (let j = 0; j < scannedItems.length; j++) {
+                            if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
+                                scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
+                                scannedItems[j].itemNo.toUpperCase()===items[i].item){
+                                    items[i].ScanQty+=scannedItems[j].ScanQty;
+                                }
+                        }
+                    }
+                } //end of function
+                calculateScannedQty($scope.piDoc.scannedItems,$scope.piDoc.items);
         } else {
             $scope.piDoc={};
             if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid

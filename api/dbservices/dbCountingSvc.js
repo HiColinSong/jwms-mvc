@@ -60,7 +60,7 @@ const dbSvc=require("./dbCommonSvc");
     if (info.SerialNo){
       params.SerialNo={type:'sql.VarChar(10)',value:info.SerialNo};
     }
-    return sqlSvc.callStoredProcedure("dbo.BX_Scan_CountingIWM",params)
+    return sqlSvc.callStoredProcedure("dbo.BX_Scan_CountingIM",params)
   }
 
   exports.deleteWMItemById=function(id){

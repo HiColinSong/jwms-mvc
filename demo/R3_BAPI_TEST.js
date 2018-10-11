@@ -168,7 +168,8 @@ var test_BAPI_CUSTOMER_GETDETAIL2 = function(){
 }
 
 var test_BAPI_WHSE_TO_GET_DETAIL = function(){
-  let param = {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178345'};
+  let param = {WHSENUMBER : 'Z01',TRANSFERORDERNO:'010888889'};
+  // let param = {WHSENUMBER : 'Z01',TRANSFERORDERNO:'2000178345'};
   return invokeBAPI("BAPI_WHSE_TO_GET_DETAIL",param);
 }
 var test_Z_SD_UPDATE_DN_STATUS = function(){
@@ -305,7 +306,7 @@ var invokeBAPI = function(BAPI,param){
 // test_BAPI_PO_GETDETAIL();
 // test_BAPI_RESERVATION_GETDETAIL();
 // test_BAPI_CUSTOMER_GETDETAIL2();
-// test_BAPI_WHSE_TO_GET_DETAIL();
+test_BAPI_WHSE_TO_GET_DETAIL();
 // _WELLGO();
 // test_Z_WS_REVERSE_GOODS_ISSUE();
 // test_L_TO_CONFIRM();
@@ -314,5 +315,5 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
-test_BAPI_MATPHYSINV_GETDETAIL()
+// test_BAPI_MATPHYSINV_GETDETAIL()
 // test_ZIM_L_INV_READ()

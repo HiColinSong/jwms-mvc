@@ -17,7 +17,7 @@ exports.getPiDoc=function(req,res){
 				var batchList=[];
 				var plantList=[];
 				for (let i=0;i<piDoc.items.length;i++){
-					itemNoList[i]=piDoc.items[i].itemNo;
+					itemNoList[i]=piDoc.items[i].item;
 					materialList[i]=piDoc.items[i].MaterialCode;
 					batchList[i]=piDoc.items[i].BatchNo;
 					plantList[i]=piDoc.items[i].Plant;
@@ -45,7 +45,7 @@ exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
 		params.docNo=info.orderNo;
-		params.warehouse=req.session.user.DefaultWH,
+		params.fiscalYear=info.fiscalYear;
 		params.EANCode=info.EANCode;
 		params.MaterialCode=info.MaterialCode;
 		params.BatchNo=info.BatchNo;
@@ -59,7 +59,7 @@ exports.addItem=function(req,res){
 		params.FullScanCode = info.FullScanCode;
 
 		try {
-			await dbCountingSvc.InsertWmScanItem(params)
+			await dbCountingSvc.InsertImScanItem(params)
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);

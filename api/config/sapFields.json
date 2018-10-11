@@ -99,14 +99,13 @@
         "warehouseNo":"LGNUM",
         "item":"IVPOS",
         "quant":"LQNUM",
+        "totalQty":"GESME",
         "itemStatus":"ISTAT",
         "storageType":"LGTYP",
         "storageBin":"LGPLA",
         "storageLocation":"LGORT",
         "MaterialCode":"MATNR",
         "BatchNo":"CHARG",
-        "Quantity":"QUANTITY",
-        "totalStock":"GESME",
         "inventoryDate":"IDATU",
         "Plant":"WERKS"
     }

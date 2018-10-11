@@ -110,7 +110,7 @@
 											<td width="25%" class="text-center">{{item.item}}</td>
 											<td width="25%" class="text-center">{{item.MaterialCode}}</td>
 											<td width="25%" class="text-center">{{item.BatchNo}}</td>
-											<td width="25%" class="text-center">{{item.ScanQty||0}}</td>
+											<td width="25%" class="text-center">{{item.ScanQty}}</td>
 										</tr>
 									</table>
 								</accordion-heading>
@@ -218,7 +218,6 @@
 
 </div>
 <div class="clearboth"></div>
+<pre ng-if="debug">piDoc111:{{piDoc|json}}</pre>	
 <pre ng-if="debug">barcode:{{barcode | json}}</pre>	
-<pre ng-if="debug">piDoc:{{piDoc | json}}</pre>	
-<pre ng-if="debug">temp:{{temp | json}}</pre>	
 <!-- <pre ng-show="debug">categories:{{categories | json}}</pre>	 -->

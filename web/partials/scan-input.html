@@ -119,7 +119,7 @@
 									<select class="chosen-select col-sm-12 form-control"
 											ng-model="barcode.materialCode"
 											id="materialCode"
-											ng-options="item.MaterialCode as item.MaterialCode for item in order.plannedItems"
+											ng-options="item.MaterialCode as item.MaterialCode for item in (order.plannedItems||piDoc.items)"
 											>
 											<option value="">Select Material Code</option>
 									</select>
