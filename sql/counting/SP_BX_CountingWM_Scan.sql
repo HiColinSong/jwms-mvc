@@ -49,18 +49,24 @@ BEGIN
                         scanQty int
                     );
              INSERT INTO @temp_item 
-                SELECT id,storageBin,storageLoc,@MaterialCode,@BatchNo,plant,totalStock,0
-                FROM dbo.BX_CountingWM
-                WHERE material = @MaterialCode and batch = @BatchNo       
+				SELECT c.id,c.storageBin,c.storageLoc,@MaterialCode,@BatchNo,c.plant,c.totalStock,ISNULL(sum(s.qty),0) as scanQty
+                FROM dbo.BX_CountingWM c left outer join dbo.BX_CountingWM_Scan s on c.id=s.countingWmId
+                WHERE material = @MaterialCode and batch = @BatchNo 
+				group by c.id,c.storageBin,c.storageLoc,c.plant,c.totalStock
 
-           SELECT top (1) @countingWmId = id from dbo.BX_CountingWM 
-           WHERE docNo=@docNo AND
-                 warehouse=@warehouse AND
-                 material=@MaterialCode AND
-                 batch=@BatchNo 
-
-
-            IF @countingWmId IS NULL
+             DECLARE @remainningRecord int,@remainningQty int
+             SELECT  @remainningRecord=count(countingWmId) from  @temp_item  
+             IF (@remainningRecord>0)
+                BEGIN
+                    WHILE   @remainningRecord>0
+                    BEGIN
+                        SET @Qty=(SELECT)
+                        UPDATE 
+                        SET @remainningRecord=@remainningRecord-1
+                    END
+                END
+            ELSE
+--            IF @countingWmId IS NULL
                 BEGIN
                     INSERT INTO [dbo].[BX_CountingWM] (docNo,warehouse,material,batch) VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
                     SET @countingWmId=SCOPE_IDENTITY();  --assign the id of the new record
