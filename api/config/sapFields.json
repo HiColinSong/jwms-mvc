@@ -91,15 +91,16 @@
         "Plant":"PLANT"
     },
     "countWmDocHeaderFields":{
-        "docNo":"I01_IVNUM",
-        "warehouseNo":"I01_LGNUM"
+        "docNo":"IVNUM",
+        "warehouseNo":"LGNUM",
+        "countingStatus":"ISTAT"
     },
     "countWmDocItemFields":{
         "docNo":"IVNUM",
         "warehouseNo":"LGNUM",
         "item":"IVPOS",
         "quant":"LQNUM",
-        "totalQty":"GESME",
+        "totalStock":"GESME",
         "itemStatus":"ISTAT",
         "storageType":"LGTYP",
         "storageBin":"LGPLA",

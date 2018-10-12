@@ -14,7 +14,8 @@ ALTER PROCEDURE [dbo].[BX_InsertOrUpdateCountingWM]
     @storageLocList varchar (8000),
     @materialList varchar(8000),
     @batchList varchar(8000),
-	@plantList varchar(8000)
+	@plantList varchar(8000),
+	@totalStockList varchar(8000)
 )
 AS
 --insert or update for table SAP_DOHeader
@@ -26,7 +27,9 @@ DECLARE
     @storageLoc varchar (20),
     @material varchar(18),
     @batch varchar(20),
-	@plant varchar(10)
+	@plant varchar(10),
+	@totalStock int,
+    @id int
 
 SET @nth=1
     while 1=1
@@ -37,28 +40,46 @@ SET @nth=1
         SET @material = (select dbo.nth_occur(@materialList,',',@nth));
         SET @batch = (select dbo.nth_occur(@batchList,',',@nth));
         SET @plant = (select dbo.nth_occur(@plantList,',',@nth));
+        SET @totalStock = CONVERT (int,(select dbo.nth_occur(@totalStockList,',',@nth)));
 
-		IF NOT EXISTS (
-            SELECT id FROM dbo.BX_CountingWM 
-            WHERE docNo = @docNo  AND
-                warehouse=@warehouse AND
-                storageBin=@storageBin AND
-                storageLoc=@storageLoc AND
-                material=@material AND
-                batch=@batch AND
-                plant=@plant 
-        )
+        UPDATE dbo.BX_CountingWM 
+        SET totalStock=@totalStock,storageBin=@storageBin,storageLoc=@storageLoc,plant=@plant,itemNo=@itemNo
+        WHERE docNo = @docNo  AND
+            warehouse=@warehouse AND
+            (
+                (storageBin=@storageBin AND storageLoc=@storageLoc AND plant=@plant) OR
+                (storageBin IS NULL AND storageLoc IS NULL AND plant IS NULL) -- for those not in the counting sheet previously
+            ) AND
+            material=@material AND
+            batch=@batch 
 
-        INSERT INTO dbo.BX_CountingWM (docNo,warehouse,itemNo,storageBin,storageLoc,material,batch,plant)
-         VALUES (@docNo,@warehouse,@itemNo,@storageBin,@storageLoc,@material,@batch,@plant)
+		IF @@ROWCOUNT=0
+            INSERT INTO dbo.BX_CountingWM (docNo,warehouse,itemNo,storageBin,storageLoc,material,batch,plant,totalStock)
+            VALUES (@docNo,@warehouse,@itemNo,@storageBin,@storageLoc,@material,@batch,@plant,@totalStock)
 
 		SET @nth=@nth+1
         continue;
     END
 
-    SELECT s.id,c.id as countingWmId,c.docNo,c.warehouse,c.itemNo,c.storageBin,c.storageLoc,c.material as MaterialCode,c.batch as BatchNo,c.plant,
-    s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s 
-    WHERE c.docNo = @docNo and c.warehouse = @warehouse
+    SELECT 
+        s.id,
+        c.id AS countingWmId,
+        c.docNo,
+        c.warehouse,
+        c.itemNo,
+        c.storageBin,
+        c.storageLoc,
+        c.material AS MaterialCode,
+        c.batch AS BatchNo,
+        c.plant,
+        c.totalStock,
+        s.qty AS ScanQty,
+        s.fullScanCode,
+        s.serialNo,
+        s.countBy,
+        s.countOn 
+    FROM dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s 
+    WHERE c.docNo = @docNo AND c.warehouse = @warehouse
     AND c.id=s.countingWmId
 
 	END

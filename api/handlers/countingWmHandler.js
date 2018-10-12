@@ -9,28 +9,31 @@ exports.getPiDoc=function(req,res){
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc);
 				// insert data to dbo.BX_CountingWM
-				var params={
+				let params={
 					docNo:piDoc.docNo,
 					warehouse:req.session.user.DefaultWH,
 					itemNo:piDoc.items[0].item
 				}
-				var storageBinList=[];
-				var storageLocList=[];
-				var materialList=[];
-				var batchList=[];
-				var plantList=[];
+				let storageBinList=[];
+				let storageLocList=[];
+				let materialList=[];
+				let batchList=[];
+				let plantList=[];
+				let totalStockList=[];
 				for (let i=0;i<piDoc.items.length;i++){
 					storageBinList[i]=piDoc.items[i].storageBin;
 					storageLocList[i]=piDoc.items[i].storageLocation;
 					materialList[i]=piDoc.items[i].MaterialCode;
 					batchList[i]=piDoc.items[i].BatchNo;
 					plantList[i]=piDoc.items[i].Plant;
+					totalStockList[i]=piDoc.items[i].totalStock;
 				}
 				params.storageBinList = storageBinList.join(',');
 				params.storageLocList = storageLocList.join(',');
 				params.materialList = materialList.join(',');
 				params.batchList = batchList.join(',');
 				params.plantList = plantList.join(',');
+				params.totalStockList = totalStockList.join(',');
 				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(params);
 				ret = ret.recordsets;
 

@@ -36,6 +36,23 @@ BEGIN
 				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
+            --define a temp table for finding the storage bin and storage location
+            DECLARE @temp_item TABLE
+                    (
+                        countingWmId int,
+                        storageBin varchar (20),
+                        storageLoc varchar (20),
+                        material varchar(18),
+                        batch varchar(20),
+                        plant varchar(10),
+                        totalStock int,
+                        scanQty int
+                    );
+             INSERT INTO @temp_item 
+                SELECT id,storageBin,storageLoc,@MaterialCode,@BatchNo,plant,totalStock,0
+                FROM dbo.BX_CountingWM
+                WHERE material = @MaterialCode and batch = @BatchNo       
+
            SELECT top (1) @countingWmId = id from dbo.BX_CountingWM 
            WHERE docNo=@docNo AND
                  warehouse=@warehouse AND
@@ -44,7 +61,11 @@ BEGIN
 
 
             IF @countingWmId IS NULL
-                RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
+                BEGIN
+                    INSERT INTO [dbo].[BX_CountingWM] (docNo,warehouse,material,batch) VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
+                    SET @countingWmId=SCOPE_IDENTITY();  --assign the id of the new record
+                    --RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
+                END
 
             
       

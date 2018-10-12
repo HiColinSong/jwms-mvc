@@ -11,7 +11,8 @@ const dbSvc=require("./dbCommonSvc");
       storageLocList:{type:'sql.VarChar(8000)',value:info.storageLocList},
       materialList:{type:'sql.VarChar(8000)',value:info.materialList},
       batchList:{type:'sql.VarChar(8000)',value:info.batchList},
-      plantList:{type:'sql.VarChar(8000)',value:info.plantList}
+      plantList:{type:'sql.VarChar(8000)',value:info.plantList},
+      totalStockList:{type:'sql.VarChar(8000)',value:info.totalStockList}
     }
     return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateCountingWM",params)
   }

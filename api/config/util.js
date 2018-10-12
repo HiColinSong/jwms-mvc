@@ -183,7 +183,7 @@ exports.formatDateTime=function(dateString){
 	 var header,items,item;
 
 	 if (doc){
-		 header = doc;
+		 header = doc.E_LINK;
 	 	for (let key in headerFields) {
 			_wmDoc[key]=header[headerFields[key]];
 		 }
