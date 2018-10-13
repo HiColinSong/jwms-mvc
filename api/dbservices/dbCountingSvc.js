@@ -85,6 +85,13 @@ const dbSvc=require("./dbCommonSvc");
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
+  exports.getWMExtraItems=function(docNo,warehouse){
+    var stmt = "SELECT id,docNo,warehouse,material as MaterialCode,batch as BatchNo FROM dbo.BX_CountingWM WHERE docNo = @docNo AND warehouse=@warehouse AND storageBin IS NULL";
+    let paramTypes={docNo:'sql.VarChar(12)', warehouse:'sql.Char(3)'};
+    let paramValues={docNo:docNo,warehouse:warehouse};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
+
   exports.getIMScannedItems=function(docNo,fiscalYear){
     var stmt = "SELECT s.id,c.id as countingImId,c.docNo,c.fiscalYear,c.itemNo,c.MaterialCode,c.BatchNo,c.plant,s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s  WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear AND c.id=s.countingWmId";
     let paramTypes={docNo:'sql.VarChar(12)', fiscalYear:'sql.Char(4)'};

@@ -38,7 +38,10 @@ exports.getPiDoc=function(req,res){
 				ret = ret.recordsets;
 
 				if (ret.length>0){
-					piDoc.scannedItems= ret[0];
+					piDoc.extraItems=ret[0];
+				}
+				if (ret.length>1){
+					piDoc.scannedItems= ret[1];
 					util.trimValues(piDoc.scannedItems);
 				}
 				return res.status(200).send(piDoc);
@@ -92,7 +95,10 @@ exports.refresh=function(req,res){
 		try {
 			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
 			scannedItems=scannedItems.recordset;
-			return res.status(200).send(scannedItems);
+			let extraItems = await dbCountingSvc.getWMExtraItems(req.body.docNo,req.session.user.DefaultWH);
+			extraItems=extraItems.recordset;
+			let data={scannedItems:scannedItems,extraItems:extraItems}
+			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
 		}

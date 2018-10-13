@@ -230,6 +230,11 @@ form.form select{
 	background-color: #5cb85c;
 	color:#EEE;
 }
+.bx .scan-item.warn .panel-heading:hover,
+.bx .scan-item.warn .panel-heading{
+    color: #a94442;
+    background-color: #f2dede;
+}
 
 .bx .scan-item .panel-heading:hover{
 	background-color:#DDD;

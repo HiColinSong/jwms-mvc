@@ -301,7 +301,7 @@
                   subtype:'@subtype',
                   param1:'refresh-scanned-items'
                 },
-                isArray:true
+                isArray:false
               },
               removeCountingScanItem:{
                 method: 'POST',

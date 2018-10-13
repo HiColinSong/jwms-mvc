@@ -21,10 +21,16 @@ ALTER PROCEDURE [dbo].[BX_Scan_CountingWM]
 )
 AS
 
-DECLARE @countingWmId int
-
 BEGIN
     BEGIN TRY  
+        IF (@SerialNo is NOT NULL) AND  
+            EXISTS (select 1 from BX_CountingWM_Scan s, BX_CountingWM c 
+                where serialNo=@SerialNo and  
+                    s.countingWmId=c.id AND
+                    c.docNo=@docNo AND 
+                    c.warehouse=@warehouse
+                )
+            RAISERROR ('Error:Serial Number exists!',16,1 ); 
 		
         --if material code is not passed in and it can't be found in table SAP_EANCodes per the passed EANCode
         IF (@MaterialCode is NULL) AND NOT EXISTS (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
@@ -45,48 +51,51 @@ BEGIN
                         material varchar(18),
                         batch varchar(20),
                         plant varchar(10),
-                        totalStock int,
-                        scanQty int
+                        totalStock int
                     );
              INSERT INTO @temp_item 
-				SELECT c.id,c.storageBin,c.storageLoc,@MaterialCode,@BatchNo,c.plant,c.totalStock,ISNULL(sum(s.qty),0) as scanQty
-                FROM dbo.BX_CountingWM c left outer join dbo.BX_CountingWM_Scan s on c.id=s.countingWmId
+				SELECT id,storageBin,storageLoc,@MaterialCode,@BatchNo,plant,totalStock
+                FROM dbo.BX_CountingWM
                 WHERE material = @MaterialCode and batch = @BatchNo 
-				group by c.id,c.storageBin,c.storageLoc,c.plant,c.totalStock
+				
 
-             DECLARE @remainningRecord int,@remainningQty int
+             DECLARE @countingWmId int,@remainningRecord int,@remainningQty int=@Qty,@scanQty int,@scannedQty int,@totalStock int
              SELECT  @remainningRecord=count(countingWmId) from  @temp_item  
-             IF (@remainningRecord>0)
+           
+           IF @remainningRecord = 0 --the scanned item is not in the pi document
+                BEGIN
+                    INSERT INTO dbo.BX_CountingWM (docNo,warehouse,material,batch) 
+                        VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
+
+                    INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
+			            VALUES (SCOPE_IDENTITY(),@remainningQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
+                    --RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
+                END
+            ELSE 
                 BEGIN
                     WHILE   @remainningRecord>0
                     BEGIN
-                        SET @Qty=(SELECT)
-                        UPDATE 
+                        IF  @remainningRecord=1 --last record
+                            BEGIN
+                                IF @remainningQty>0
+                                INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
+			                        SELECT TOP(1) countingWmId,@remainningQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn)
+                                    FROM @temp_item
+                            END
+                        ELSE 
+                            BEGIN
+                                SELECT TOP(1) @countingWmId=countingWmId,@totalStock=totalStock FROM @temp_item;
+                                SET @scannedQty=ISNULL((SELECT sum(qty) FROM dbo.BX_CountingWM_Scan WHERE countingWmId=@countingWmId),0);
+                                SELECT @scanQty=(case when (@totalStock-@scannedQty)>@remainningQty then @remainningQty else (@totalStock-@scannedQty) end) 
+                                SELECT @remainningQty=@remainningQty-@scanQty;
+                                IF @scanQty>0
+                                    INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
+                                        VALUES (@countingWmId,@scanQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
+                                DELETE TOP (1) FROM @temp_item 
+                            END
                         SET @remainningRecord=@remainningRecord-1
                     END
                 END
-            ELSE
---            IF @countingWmId IS NULL
-                BEGIN
-                    INSERT INTO [dbo].[BX_CountingWM] (docNo,warehouse,material,batch) VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
-                    SET @countingWmId=SCOPE_IDENTITY();  --assign the id of the new record
-                    --RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
-                END
-
-            
-      
-        IF (@SerialNo is NOT NULL) AND  
-            EXISTS (select 1 from BX_CountingWM_Scan s, BX_CountingWM c 
-                where serialNo=@SerialNo and  
-                    s.countingWmId=c.id AND
-                    c.docNo=@docNo AND 
-                    c.warehouse=@warehouse
-                )
-            RAISERROR ('Error:Serial Number exists!',16,1 ); 
-
-		INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
-			VALUES (@countingWmId,@Qty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
-
     END TRY  
     BEGIN CATCH  
         DECLARE @ErrorMessage NVARCHAR(4000);  

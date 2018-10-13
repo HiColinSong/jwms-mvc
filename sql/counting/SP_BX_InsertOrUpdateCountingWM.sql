@@ -61,6 +61,16 @@ SET @nth=1
         continue;
     END
 
+    SELECT id,
+           docNo,
+           warehouse,
+           material as MaterialCode,
+           batch as BatchNo
+    FROM dbo.BX_CountingWM 
+    WHERE docNo = @docNo  AND
+          warehouse=@warehouse 
+          AND storageBin IS NULL --user newly added items, not in counting sheet
+
     SELECT 
         s.id,
         c.id AS countingWmId,
