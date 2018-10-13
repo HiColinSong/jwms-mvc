@@ -176,7 +176,7 @@ exports.formatDateTime=function(dateString){
 	}
 	return _imDoc;
 }
- exports.countingWmDocConverter = function (doc){
+ exports.countingWmDocConverter = function (doc,isMergeStorLoc){
 	 var _wmDoc = {items:[]};
 	 var headerFields=sapFields.countWmDocHeaderFields;
 	 var itemFields=sapFields.countWmDocItemFields;
@@ -190,13 +190,21 @@ exports.formatDateTime=function(dateString){
 	 }
 	 if (doc.T_LINV&&doc.T_LINV.length>0){
 		 items = doc.T_LINV;
-		for (let i = 0; i < items.length; i++) {
+		topLoop: for (let i = 0; i < items.length; i++) {
 			item = items[i];
+			if (isMergeStorLoc){
+				for (let j = 0; j < _wmDoc.items.length; j++) {
+					const element = _wmDoc.items[j];
+					if (element.storageBin===item[itemFields["storageBin"]]&&
+					element.MaterialCode===item[itemFields["MaterialCode"]]&&
+					element.BatchNo===item[itemFields["BatchNo"]]){
+						continue topLoop;
+					}
+				}
+			}
 			_wmDoc.items.push({});
 			for (let key in itemFields) {
 				_wmDoc.items[i][key]=item[itemFields[key]];
-				// if (_wmDoc.items[i][key]&&(key ==="Quantity"))
-				// 	_wmDoc.items[i][key]=parseInt(_wmDoc.items[i][key]);
 			}
 		}
 	}

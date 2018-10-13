@@ -107,7 +107,6 @@
         "storageLocation":"LGORT",
         "MaterialCode":"MATNR",
         "BatchNo":"CHARG",
-        "inventoryDate":"IDATU",
         "Plant":"WERKS"
     }
 }

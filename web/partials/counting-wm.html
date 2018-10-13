@@ -90,16 +90,29 @@
 							<div class="clearboth"></div>
 							<accordion close-others="true" >
 								<div accordion-group class="panel-default scan-item"  
-											ng-class="{'warn':!item.storageBin}"
-											ng-repeat="(pidx,item) in piDoc.displayItems track by pidx" >
+											ng-repeat="(pidx,item) in piDoc.items track by pidx" >
 									<accordion-heading>
 										<table class="full-width">
 											<tr>
-												<td width="20%" class="text-center">{{pidx+1}}</td>
-												<td width="20%" class="text-center">{{item.storageBin||'unknown'}}</td>
-												<td width="20%" class="text-center">{{item.MaterialCode}}</td>
-												<td width="20%" class="text-center">{{item.BatchNo}}</td>
-												<td width="20%" class="text-center">{{item.ScanQty||0}}</td>
+												<td width="16%" class="text-center">{{pidx+1}}</td>
+												<td width="21%" class="text-center">{{item.storageBin||'unknown'}}</td>
+												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
+												<td width="21%" class="text-center">{{item.BatchNo}}</td>
+												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
+											</tr>
+										</table>
+									</accordion-heading>
+								</div>
+								<div accordion-group class="panel-default scan-item warn"  
+											ng-repeat="(pidx,item) in piDoc.extraItems track by pidx" >
+									<accordion-heading>
+										<table class="full-width">
+											<tr>
+												<td width="16%" class="text-center">{{pidx+piDoc.items.length+1}}</td>
+												<td width="21%" class="text-center">{{item.storageBin||'N/A'}}</td>
+												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
+												<td width="21%" class="text-center">{{item.BatchNo}}</td>
+												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
 											</tr>
 										</table>
 									</accordion-heading>
@@ -144,13 +157,6 @@
 										</a>
 									</td>
 									<td>
-										<a class="cursor-pointer" ng-click="sortType = 'storageLoc'; sortReverse = !sortReverse">
-											Stor.Loc
-											<span ng-show="sortType == 'storageLoc' && !sortReverse" class="fa fa-caret-down"></span>
-											<span ng-show="sortType == 'storageLoc' && sortReverse" class="fa fa-caret-up"></span>
-										</a>
-									</td>
-									<td>
 										<a class="cursor-pointer" ng-click="sortType = 'serialNo'; sortReverse = !sortReverse">
 										Serials No
 										<span ng-show="sortType == 'serialNo' && !sortReverse" class="fa fa-caret-down"></span>
@@ -164,7 +170,7 @@
 										<span ng-show="sortType == 'ScanQty' && sortReverse" class="fa fa-caret-up"></span>
 										</a>
 									</td>
-									<td width="10%" class="text-center">Action</td>
+									<td width="10%" class="text-center">Remove</td>
 										
 									</tr>
 								</thead> 
@@ -172,10 +178,9 @@
 									<tr ng-if="piDoc.scannedItems&&piDoc.scannedItems.length>0" 
 										ng-repeat="(idx,item) in piDoc.scannedItems | orderBy:sortType:sortReverse | filter:searchItem">
 				
-									<td>{{item.storageBin}}</td>
+									<td>{{item.storageBin||NA}}</td>
 									<td>{{item.MaterialCode}}</td>
 									<td>{{item.BatchNo}}</td>
-									<td>{{item.storageLoc}}</td>
 									<td>{{item.serialNo}}</td>
 									<td>{{item.ScanQty||1}}</td>
 									<td width="10%" class="text-center">
@@ -204,7 +209,7 @@
 		  <!--confirm button-->
 		  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
 			  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm counting" 
-			  ng-click="confirmCounting()" ng-disabled="piDoc.confirmStatus==='C'">
+			  ng-click="confirmCounting()" ng-disabled="piDoc.countingStatus!=='N'">
 			  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Counting
 			</button>
 		</div>

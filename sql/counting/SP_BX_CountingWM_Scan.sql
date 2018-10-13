@@ -41,61 +41,22 @@ BEGIN
             BEGIN
 				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
+        DECLARE @countingWmId int
+        SELECT @countingWmId = id from dbo.BX_CountingWM 
+           WHERE docNo=@docNo AND
+                 warehouse=@warehouse AND
+                 material=@MaterialCode AND
+                 batch=@BatchNo 
 
-            --define a temp table for finding the storage bin and storage location
-            DECLARE @temp_item TABLE
-                    (
-                        countingWmId int,
-                        storageBin varchar (20),
-                        storageLoc varchar (20),
-                        material varchar(18),
-                        batch varchar(20),
-                        plant varchar(10),
-                        totalStock int
-                    );
-             INSERT INTO @temp_item 
-				SELECT id,storageBin,storageLoc,@MaterialCode,@BatchNo,plant,totalStock
-                FROM dbo.BX_CountingWM
-                WHERE material = @MaterialCode and batch = @BatchNo 
-				
 
-             DECLARE @countingWmId int,@remainningRecord int,@remainningQty int=@Qty,@scanQty int,@scannedQty int,@totalStock int
-             SELECT  @remainningRecord=count(countingWmId) from  @temp_item  
-           
-           IF @remainningRecord = 0 --the scanned item is not in the pi document
+            IF @countingWmId IS NULL 
                 BEGIN
-                    INSERT INTO dbo.BX_CountingWM (docNo,warehouse,material,batch) 
-                        VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
-
-                    INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
-			            VALUES (SCOPE_IDENTITY(),@remainningQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
-                    --RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
+                    --insert extra item
+                    INSERT INTO [dbo].[BX_CountingWM] (docNo,warehouse,material,batch) VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
+                    SET @countingWmId=SCOPE_IDENTITY();  --assign the id of the new record
                 END
-            ELSE 
-                BEGIN
-                    WHILE   @remainningRecord>0
-                    BEGIN
-                        IF  @remainningRecord=1 --last record
-                            BEGIN
-                                IF @remainningQty>0
-                                INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
-			                        SELECT TOP(1) countingWmId,@remainningQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn)
-                                    FROM @temp_item
-                            END
-                        ELSE 
-                            BEGIN
-                                SELECT TOP(1) @countingWmId=countingWmId,@totalStock=totalStock FROM @temp_item;
-                                SET @scannedQty=ISNULL((SELECT sum(qty) FROM dbo.BX_CountingWM_Scan WHERE countingWmId=@countingWmId),0);
-                                SELECT @scanQty=(case when (@totalStock-@scannedQty)>@remainningQty then @remainningQty else (@totalStock-@scannedQty) end) 
-                                SELECT @remainningQty=@remainningQty-@scanQty;
-                                IF @scanQty>0
-                                    INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
-                                        VALUES (@countingWmId,@scanQty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
-                                DELETE TOP (1) FROM @temp_item 
-                            END
-                        SET @remainningRecord=@remainningRecord-1
-                    END
-                END
+            INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)
+                VALUES (@countingWmId,@Qty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
     END TRY  
     BEGIN CATCH  
         DECLARE @ErrorMessage NVARCHAR(4000);  

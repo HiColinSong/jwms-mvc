@@ -6,13 +6,9 @@ const dbSvc=require("./dbCommonSvc");
     var params={
       docNo:{type:"sql.VarChar(12)",value:info.docNo},
       warehouse:{type:"sql.Char(3)",value:info.warehouse},
-      itemNo:{type:"sql.Char(6)",value:info.itemNo},
       storageBinList:{type:'sql.VarChar(8000)',value:info.storageBinList},
-      storageLocList:{type:'sql.VarChar(8000)',value:info.storageLocList},
       materialList:{type:'sql.VarChar(8000)',value:info.materialList},
-      batchList:{type:'sql.VarChar(8000)',value:info.batchList},
-      plantList:{type:'sql.VarChar(8000)',value:info.plantList},
-      totalStockList:{type:'sql.VarChar(8000)',value:info.totalStockList}
+      batchList:{type:'sql.VarChar(8000)',value:info.batchList}
     }
     return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateCountingWM",params)
   }
@@ -79,7 +75,7 @@ const dbSvc=require("./dbCommonSvc");
   }
 
   exports.getWMScannedItems=function(docNo,warehouse){
-    var stmt = "SELECT s.id,c.id as countingWmId,c.docNo,c.warehouse,c.itemNo,c.storageBin,c.storageLoc,c.material as MaterialCode,c.batch as BatchNo,c.plant,s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s  WHERE c.docNo = @docNo and c.warehouse = @warehouse AND c.id=s.countingWmId";
+    var stmt = "SELECT s.id,c.id as countingWmId,c.docNo,c.warehouse,c.storageBin,c.material as MaterialCode,c.batch as BatchNo,s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingWM c, dbo.BX_CountingWM_Scan s  WHERE c.docNo = @docNo and c.warehouse = @warehouse AND c.id=s.countingWmId";
     let paramTypes={docNo:'sql.VarChar(12)', warehouse:'sql.Char(3)'};
     let paramValues={docNo:docNo,warehouse:warehouse};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)

@@ -152,53 +152,18 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                     for (let j = 0; j < scannedItems.length; j++) {
                         if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
                             scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
-                            (
-                                (
-                                    (scannedItems[j].storageBin&&scannedItems[j].storageBin.toUpperCase()===items[i].storageBin)&&
-                                    (scannedItems[j].storageLoc&&scannedItems[j].storageLoc.toUpperCase()===items[i].storageLocation)
-                                 )||
-                                 (
-                                    (!scannedItems[j].storageBin&&!items[i].storageBin)&&
-                                    (!scannedItems[j].storageLoc&&!items[i].storageLocation)
-                                 )
-                            )
-                            ){
+                            ((scannedItems[j].storageBin&&scannedItems[j].storageBin.toUpperCase()===items[i].storageBin)||
+                                (!scannedItems[j].storageBin&&!items[i].storageBin)))
+                            {
                                 items[i].ScanQty+=scannedItems[j].ScanQty;
                             }
                     }
                 }
             } //end of function
-            let mergeBinItems=function(displayItems,items){
-                let item,dItem,found=false;
-                for (let i = 0; i < items.length; i++) {
-                    found=false;
-                    item=items[i];
-                    for (let j = 0; j < displayItems.length; j++) {
-                        dItem=displayItems[j];
-                        if ((dItem.storageBin===item.storageBin||(!dItem.storageBin&&!item.storageBin))&&
-                            dItem.MaterialCode===item.MaterialCode&&
-                            dItem.BatchNo===item.BatchNo){
-                                dItem.ScanQty+=item.ScanQty;
-                                found=true
-                                break;
-                            }
-                    }
-                    if (!found){
-                        displayItems.push({
-                            storageBin:item.storageBin,
-                            MaterialCode:item.MaterialCode,
-                            BatchNo:item.BatchNo,
-                            ScanQty:item.ScanQty
-                        });
-                    }
-                }
-            } //end of function
+            
             let rebuildData=function(piDoc){
                 calculateScannedQty(piDoc.scannedItems,piDoc.items);
                 calculateScannedQty(piDoc.scannedItems,piDoc.extraItems);
-                piDoc.displayItems=[];
-                mergeBinItems(piDoc.displayItems,piDoc.items)
-                mergeBinItems(piDoc.displayItems,piDoc.extraItems)
             }
             rebuildData(piDoc);
         } else {
