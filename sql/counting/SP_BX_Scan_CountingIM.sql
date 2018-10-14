@@ -20,12 +20,17 @@ ALTER PROCEDURE [dbo].[BX_Scan_CountingIM]
     @Qty int = 1
 )
 AS
-
-DECLARE @countingImId int
-
 BEGIN
     BEGIN TRY  
-		
+        IF (@SerialNo is NOT NULL) AND  
+            EXISTS (select 1 from BX_CountingIM_Scan s, BX_CountingIM c 
+                where serialNo=@SerialNo and  
+                    s.countingImId=c.id AND
+                    c.docNo=@docNo AND 
+                    c.fiscalYear=@fiscalYear
+               )
+            RAISERROR ('Error:Serial Number exists!',16,1 ); 
+
         --if material code is not passed in and it can't be found in table SAP_EANCodes per the passed EANCode
         IF (@MaterialCode is NULL) AND NOT EXISTS (SELECT MaterialCode from dbo.SAP_EANCodes where EANCode=@EANCode)
         RAISERROR ('Error:Material Code cannot be found',16,1 );  
@@ -36,7 +41,8 @@ BEGIN
 				SELECT @MaterialCode=MaterialCode,@Qty=@Qty*ConversionUnits from dbo.SAP_EANCodes where EANCode=@EANCode
             END
 
-           SELECT top (1) @countingImId = id from dbo.BX_CountingIM 
+        DECLARE @countingImId int
+           SELECT @countingImId = id from dbo.BX_CountingIM 
            WHERE docNo=@docNo AND
                  fiscalYear=@fiscalYear AND
                  MaterialCode=@MaterialCode AND
@@ -44,18 +50,12 @@ BEGIN
 
 
             IF @countingImId IS NULL
-                RAISERROR ('Error:Material/Batch cannot be found!',16,1 ); 
-
-            
-      
-        IF (@SerialNo is NOT NULL) AND  
-            EXISTS (select 1 from BX_CountingIM_Scan s, BX_CountingIM c 
-                where serialNo=@SerialNo and  
-                    s.countingImId=c.id AND
-                    c.docNo=@docNo AND 
-                    c.fiscalYear=@fiscalYear
-               )
-            RAISERROR ('Error:Serial Number exists!',16,1 ); 
+                 BEGIN
+                    --insert extra item
+                    INSERT INTO dbo.BX_CountingIM (docNo,fiscalYear,MaterialCode,BatchNo)
+                         VALUES (@docNo,@fiscalYear,@MaterialCode,@BatchNo)
+                    SET @countingImId=SCOPE_IDENTITY();  --assign the id of the new record
+                END
 
 		INSERT INTO dbo.BX_CountingIM_Scan (countingImId,qty,fullScanCode,serialNo,countBy,countOn)
 			VALUES (@countingImId,@Qty,@FullScanCode,@SerialNo,@countBy,Convert(datetime,@countOn))
@@ -79,8 +79,5 @@ BEGIN
                 @ErrorState -- State.  
                 );  
     END CATCH; 
-	--return freshed items detail
-	--SELECT * FROM dbo.BX_RgaDetails where DONumber=@DONumber
-
 END
 

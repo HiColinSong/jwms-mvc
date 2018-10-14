@@ -48,10 +48,7 @@
                     }]  
                 }
             })
-            // .when('/store-ops/counting-wm', {
-            //     templateUrl: 'partials/counting-wm.html',
-            //     controller: 'countingWmCtrl'
-            // })
+
             .when('/store-ops/counting-wm/:docNo?', {
                 templateUrl: 'partials/counting-wm.html',
                 controller: 'countingWmCtrl',
@@ -83,6 +80,10 @@
                         return deferred.promise;
                     }]  
                 }
+            })
+            .when('/store-ops/consolidated-udi', {
+                templateUrl: 'partials/consolidated-udi.html',
+                controller: 'consolidatedUdiCtrl'
             })
         }
     ])

@@ -78,8 +78,9 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                 apiSvc.removeCountingScanItem({subtype:$scope.type},{itemId:item.id,docNo:$scope.docNo}).$promise.
                     then(
                         function(data){
-                            $scope.piDoc.scannedItems = data;
-                            calculateScannedQty($scope.piDoc.scannedItems,$scope.piDoc.items);
+                            $scope.piDoc.scannedItems = data.scannedItems;
+                            $scope.piDoc.extraItems = data.extraItems;
+                            rebuildData($scope.piDoc);
                             utilSvc.pageLoading("stop");
                         },
                         function(err){

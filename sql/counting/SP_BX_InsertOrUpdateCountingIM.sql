@@ -11,8 +11,7 @@ ALTER PROCEDURE [dbo].[BX_InsertOrUpdateCountingIM]
 	@fiscalYear char(4),
     @itemNoList varchar (8000),
     @materialList varchar(8000),
-    @batchList varchar(8000),
-	@plantList varchar(8000)
+    @batchList varchar(8000)
 )
 AS
 --insert or update for table SAP_DOHeader
@@ -22,8 +21,7 @@ DECLARE
     @nth int,
     @itemNo varchar (20),
     @MaterialCode varchar(18),
-    @BatchNo varchar(20),
-	@plant varchar(10)
+    @BatchNo varchar(20)
 
 SET @nth=1
     while 1=1
@@ -32,28 +30,48 @@ SET @nth=1
         IF LEN(ISNULL(@itemNo, '')) = 0 break;
         SET @MaterialCode = (select dbo.nth_occur(@materialList,',',@nth));
         SET @BatchNo = (select dbo.nth_occur(@batchList,',',@nth));
-        SET @plant = (select dbo.nth_occur(@plantList,',',@nth));
 
-		IF NOT EXISTS (
-            SELECT id FROM dbo.BX_CountingIM 
-            WHERE docNo = @docNo  AND
-                fiscalYear=@fiscalYear AND
-                itemNo=@itemNo AND
+        UPDATE dbo.BX_CountingIM 
+        SET itemNo=@itemNo
+        WHERE docNo = @docNo  AND
+              fiscalYear=@fiscalYear AND
+              (itemNo=@itemNo OR itemNo IS NULL) AND -- for those not in the counting sheet previously
                 MaterialCode=@MaterialCode AND
-                BatchNo=@BatchNo AND
-                plant=@plant 
-        )
+                BatchNo=@BatchNo
 
-        INSERT INTO dbo.BX_CountingIM (docNo,fiscalYear,itemNo,MaterialCode,BatchNo,plant)
-         VALUES (@docNo,@fiscalYear,@itemNo,@MaterialCode,@BatchNo,@plant)
+		IF @@ROWCOUNT=0
+
+        INSERT INTO dbo.BX_CountingIM (docNo,fiscalYear,itemNo,MaterialCode,BatchNo)
+         VALUES (@docNo,@fiscalYear,@itemNo,@MaterialCode,@BatchNo)
 
 		SET @nth=@nth+1
         continue;
     END
 
-    SELECT s.id,c.id as countingImId,c.docNo,c.fiscalYear,c.itemNo,c.MaterialCode,c.BatchNo,c.plant,
-    s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s 
-    WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear
-    AND c.id=s.countingImId
+    SELECT id,
+           docNo,
+           fiscalYear,
+           MaterialCode,
+           BatchNo
+    FROM dbo.BX_CountingIM 
+    WHERE docNo = @docNo  AND
+          fiscalYear=@fiscalYear 
+          AND itemNo IS NULL --extra items, not in counting sheet
 
+    SELECT 
+        s.id,
+        c.id AS countingImId,
+        c.docNo,
+        c.fiscalYear,
+        c.itemNo,
+        c.MaterialCode,
+        c.BatchNo,
+        s.qty AS ScanQty,
+        s.fullScanCode,
+        s.serialNo,
+        s.countBy,
+        s.countOn 
+    FROM dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s 
+    WHERE c.docNo = @docNo AND c.fiscalYear = @fiscalYear
+    AND c.id=s.countingImId
 	END

@@ -18,8 +18,7 @@ const dbSvc=require("./dbCommonSvc");
       fiscalYear:{type:"sql.Char(4)",value:info.fiscalYear},
       itemNoList:{type:'sql.VarChar(8000)',value:info.itemNoList},
       materialList:{type:'sql.VarChar(8000)',value:info.materialList},
-      batchList:{type:'sql.VarChar(8000)',value:info.batchList},
-      plantList:{type:'sql.VarChar(8000)',value:info.plantList}
+      batchList:{type:'sql.VarChar(8000)',value:info.batchList}
     }
     return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateCountingIM",params)
   }
@@ -89,24 +88,17 @@ const dbSvc=require("./dbCommonSvc");
   }
 
   exports.getIMScannedItems=function(docNo,fiscalYear){
-    var stmt = "SELECT s.id,c.id as countingImId,c.docNo,c.fiscalYear,c.itemNo,c.MaterialCode,c.BatchNo,c.plant,s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s  WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear AND c.id=s.countingWmId";
+    var stmt = "SELECT s.id,c.id as countingImId,c.docNo,c.fiscalYear,c.itemNo,c.MaterialCode,c.BatchNo,s.qty as ScanQty,s.fullScanCode,s.serialNo,s.countBy,s.countOn from dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s  WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear AND c.id=s.countingImId";
+    let paramTypes={docNo:'sql.VarChar(12)', fiscalYear:'sql.Char(4)'};
+    let paramValues={docNo:docNo,fiscalYear:fiscalYear};
+    return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
+  }
+  exports.getIMExtraItems=function(docNo,fiscalYear){
+    var stmt = "SELECT id,docNo,fiscalYear,MaterialCode,BatchNo FROM dbo.BX_CountingIM WHERE  docNo = @docNo AND fiscalYear=@fiscalYear AND itemNo IS NULL";
     let paramTypes={docNo:'sql.VarChar(12)', fiscalYear:'sql.Char(4)'};
     let paramValues={docNo:docNo,fiscalYear:fiscalYear};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
-  exports.setStatus=function(info){
-    var params={
-      Warehouse:{type:"sql.VarChar(6)",value:info.Warehouse},
-      ResvNumber:{type:"sql.VarChar(12)",value:info.ResvNumber},
-      PostedOn:{type:"sql.VarChar(22)",value:info.PostedOn},
-      PostedBy:{type:'sql.VarChar(30)',value:info.PostedBy},
-      PostingStatus:{type:'sql.Char(1)',value:info.PostingStatus},
-      Push2SAPStatus:{type:'sql.Char(1)',value:info.Push2SAPStatus},
-      SAPRefNo:{type:"sql.VarChar(20)",value:info.SAPRefNo}
-    }
-    return sqlSvc.callStoredProcedure("dbo.BX_UpdateResvStatus",params)
-  }
-  
 
 

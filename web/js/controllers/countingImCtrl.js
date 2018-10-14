@@ -78,69 +78,76 @@
                     })
             };
                 $scope.removeItem=function(item){
-                    apiSvc.removeScanItem({type:$scope.type},{RowKey:item.RowKey,orderNo:item.DONumber}).$promise.
-                        then(function(data){
-                            if (data&&data.length>0&&data[0].error)
-                                console.error(data[0].message.originalError.info.message);
-                            else 
-                                $scope.order.HUList = data;
-                        },function(error){
-                            console.error(error);
-                        }
+                    utilSvc.pageLoading("start");
+                    apiSvc.removeCountingScanItem({subtype:$scope.type},{itemId:item.id,docNo:$scope.docNo,fiscalYear:$scope.piDoc.fiscalYear}).$promise.
+                        then(
+                            function(data){
+                                $scope.piDoc.scannedItems = data.scannedItems;
+                                $scope.piDoc.extraItems = data.extraItems;
+                                rebuildData($scope.piDoc);
+                                utilSvc.pageLoading("stop");
+                            },
+                            function(err){
+                                utilSvc.addAlert(err||err.message, "danger", true);
+                                utilSvc.pageLoading("stop");
+                            }
                     )
                 }
                 $scope.refreshScannedItems=function(){
-                    apiSvc.refreshPacking({type:$scope.type,param1:order.DONumber}).$promise.
-                        then(function(data){
-                            if (data&&data.length>0&&data[0].error)
-                                console.error(data[0].message.originalError.info.message);
-                            else 
-                                $scope.order.HUList = data;
-                        },function(error){
-                            console.error(error);
-                        }
-                    )
-                }
-                $scope.confirmCountinging = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmOperation({type:"packing"},{order:{DONumber:order.DONumber},PackComplete:utilSvc.formatDateTime()}).$promise.
+                    apiSvc.refreshCountingScannedItems({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear}).$promise.
+                        then(
+                            function(data){
+                                $scope.piDoc.scannedItems = data.scannedItems;
+                                $scope.piDoc.extraItems = data.extraItems;
+                                rebuildData($scope.piDoc);
+                                utilSvc.pageLoading("stop");
+                            },
+                            function(err){
+                                utilSvc.addAlert(err||err.message, "danger", true);
+                                utilSvc.pageLoading("stop");
+                            }
+                        )
+                }
+                $scope.confirmCounting = function() {
+                    utilSvc.pageLoading("start");
+                    apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear}).$promise.
                     then(function(data){
-                        utilSvc.pageLoading("stop");
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
-                                modalHeader: 'Packing Confirmation Success',
-                                message:"The delivery order is confirmed successfully!",
-                                resetPath:"/fulfillment/packing"
+                                modalHeader: 'Counting IM Confirmation Success',
+                                message:"The Counting IM is done successfully!"
                             }
                         } else if(data&&data.error&&data.message){
                             $scope.confirm={
                                 type:"danger",
-                                modalHeader: 'Packing Confirmation Fail',
+                                modalHeader: 'Counting IM Confirmation Fail',
                                 message:data.message,
                             }
                         } else if(data&&data.confirm==='fail'){
                             $scope.confirm={
                                 type:"danger",
-                                modalHeader: 'Packing Confirmation Fail',
-                                message:"The delivery order is invalid, confirmation is failed!",
+                                modalHeader: 'Counting IM Confirmation Fail',
+                                message:"The Counting IM Confirmation is failed!",
                             }
                         } else {
                             $scope.confirm={
                                 type:"danger",
-                                modalHeader: 'Packing Confirmation Fail',
+                                modalHeader: 'Counting IM Confirmation Fail',
                                 message:"Unknown error, confirmation is failed!",
                             }
                         }
                         confirmSubmit.do($scope);
-                    },function(err){
                         utilSvc.pageLoading("stop");
+                    },function(err){
                         console.error(err);
                         $scope.confirm={
                             type:"danger",
                             message:err.data.message||"System error, confirmation is failed!",
                         }
                         confirmSubmit.do($scope);
+                        utilSvc.pageLoading("stop");
                     });
                 }
                 let calculateScannedQty=function(scannedItems,items){
@@ -149,13 +156,22 @@
                         for (let j = 0; j < scannedItems.length; j++) {
                             if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
                                 scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
-                                scannedItems[j].itemNo.toUpperCase()===items[i].item){
+                                ((scannedItems[j].itemNo&&scannedItems[j].itemNo.toUpperCase()===items[i].item)||
+                                (!scannedItems[j].itemNo&&!items[i].item))){
                                     items[i].ScanQty+=scannedItems[j].ScanQty;
                                 }
                         }
                     }
                 } //end of function
-                calculateScannedQty($scope.piDoc.scannedItems,$scope.piDoc.items);
+                
+                let rebuildData=function(piDoc){
+                    calculateScannedQty(piDoc.scannedItems,piDoc.items);
+                    calculateScannedQty(piDoc.scannedItems,piDoc.extraItems);
+                }
+                rebuildData(piDoc);
+
+
+
         } else {
             $scope.piDoc={};
             if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid

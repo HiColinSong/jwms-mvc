@@ -310,7 +310,7 @@
                   subtype:'@subtype',
                   param1:'remove-item'
                 },
-                isArray:true
+                isArray:false
               },
               confirmCounting:{
                 method: 'POST',
