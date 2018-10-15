@@ -210,6 +210,46 @@ var test_BAPI_MATPHYSINV_GETDETAIL=function(){
   return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param);
 };
 
+var test_BAPI_MATPHYSINV_COUNT=function(){
+  var param = {
+    PHYSINVENTORY:'0100005780',
+    FISCALYEAR:'2019',
+    COUNT_DATE:'20181020',
+    ITEMS:[
+      {
+        ITEM:'001',
+        MATERIAL:'11104-002',
+        BATCH:'W17110561',
+        ENTRY_QNT:0,
+        ENTRY_UOM:'ST',
+        ZERO_COUNT: 'X'
+      },
+      {
+        ITEM:'002',
+        MATERIAL:'11104-005',
+        BATCH:'W17020620',
+        ENTRY_QNT:20,
+        ENTRY_UOM:'ST'
+      },
+      {
+        ITEM:'003',
+        MATERIAL:'11104-005',
+        BATCH:'W17050506',
+        ENTRY_QNT:30,
+        ENTRY_UOM:'ST'
+      },
+      {
+        ITEM:'004',
+        MATERIAL:'11104-006',
+        BATCH:'W16120648',
+        ENTRY_QNT:40,
+        ENTRY_UOM:'ST'
+      }
+    ]
+  };
+  return invokeBAPI("BAPI_MATPHYSINV_COUNT",param);
+};
+
 var test_ZIM_L_INV_READ=function(){
   var param = {
     I01_LGNUM:'Z01',
@@ -217,6 +257,109 @@ var test_ZIM_L_INV_READ=function(){
   };
   return invokeBAPI("ZIM_L_INV_READ",param);
 };
+
+var test_L_INV_COUNT_EXT=function(){
+  var param = {
+    "I_COMMIT":"X",
+    "S_LINV":[
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-2208",
+        "WERKS":"2100",
+        "CHARG":"W17040456D",
+        "MENGA":"0",
+        "LGORT":"8027",
+        "NVERS":"02",
+        "KZNUL":"X"
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-2208",
+        "WERKS":"2100",
+        "CHARG":"W18020338",
+        "MENGA":"0",
+        "LGORT":"8027",
+        "NVERS":"02",
+        "KZNUL":"X"
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-2228",
+        "WERKS":"2100",
+        "CHARG":"W18040406",
+        "MENGA":"14",
+        "LGORT":"8027",
+        "NVERS":"02",
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-3008",
+        "WERKS":"2100",
+        "CHARG":"W17020470",
+        "MENGA":"15",
+        "LGORT":"0016",
+        "NVERS":"02",
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-3508",
+        "WERKS":"2100",
+        "CHARG":"W17040490",
+        "MENGA":"16",
+        "LGORT":"0016",
+        "NVERS":"02",
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-3508",
+        "WERKS":"2100",
+        "CHARG":"W17040490D",
+        "MENGA":"27",
+        "LGORT":"8027",
+        "NVERS":"02",
+      },
+      {
+        "LGNUM":"Z01",
+        "IVNUM":"9000007563",
+        "IVPOS":"0001",
+        "LGTYP":"310",
+        "LGPLA":"33C07-0200",
+        "MATNR":"BFR1-3508",
+        "WERKS":"2100",
+        "CHARG":"W17040490D",
+        "MENGA":"15",
+        "LGORT":"8019",
+        "NVERS":"02",
+      }
+    ]
+  };
+  return invokeBAPI("L_INV_COUNT_EXT",param);
+};
+
 
 var test_BAPI_TRANSACTION_COMMIT = function(){
   let param = {WAIT:'X'};
@@ -286,7 +429,9 @@ var invokeBAPI = function(BAPI,param){
   .then(function (response) {
     // Output response
         console.log(JSON.stringify(response,null,2));
-        r3connect.Pool.remove(configuration);
+        let param = {WAIT:'X'};
+         invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
+        // r3connect.Pool.remove(configuration);
   })
   .catch(function (error) {
     // Output error
@@ -294,7 +439,7 @@ var invokeBAPI = function(BAPI,param){
       r3connect.Pool.remove(configuration);
   });
 }  
-
+//MI11 Recount, MI04 enter count, LI14 recount, LI11 enter count, LI13 display, MI03: display
 // test_BAPI_DELIVERY_GETLIST();
 // test_BAPI_GOODSMVT_CREATE();
 // test_BAPI_GOODSMVT_CANCEL();
@@ -315,5 +460,7 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
-test_BAPI_MATPHYSINV_GETDETAIL()
+// test_BAPI_MATPHYSINV_GETDETAIL()
+test_BAPI_MATPHYSINV_COUNT()
 // test_ZIM_L_INV_READ()
+// test_L_INV_COUNT_EXT()

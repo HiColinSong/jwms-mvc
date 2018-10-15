@@ -74,7 +74,10 @@ exports.removeItem=function(req,res){
 			await dbCountingSvc.deleteWMItemById(req.body.itemId);
 			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
 			scannedItems=scannedItems.recordset;
-			return res.status(200).send(scannedItems);
+			let extraItems = await dbCountingSvc.getWMExtraItems(req.body.docNo,req.session.user.DefaultWH);
+			extraItems=extraItems.recordset;
+			let data={scannedItems:scannedItems,extraItems:extraItems}
+			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
 		}

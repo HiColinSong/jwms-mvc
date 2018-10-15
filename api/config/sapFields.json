@@ -88,7 +88,8 @@
         "MaterialCode":"MATERIAL",
         "BatchNo":"BATCH",
         "Quantity":"QUANTITY",
-        "Plant":"PLANT"
+        "Plant":"PLANT",
+        "Unit":"ENTRY_UOM"
     },
     "countWmDocHeaderFields":{
         "docNo":"IVNUM",
