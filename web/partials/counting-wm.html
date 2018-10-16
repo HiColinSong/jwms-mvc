@@ -5,12 +5,17 @@
 		<div class="margin-top-20 col-sm-8 col-sm-offset-2" >
 		 <form role="form" name="toNoForm">
 		  <div class="form-group">
+			<label for="docNo">Please enter Version Number (default:"00"):</label>
+			<input type="text" class="form-control" id="verNo" placeholder="scan/enter Version No" 
+				   ng-model="piDoc.verNo">
+		  </div>
+		  <div class="form-group">
 			<label for="docNo">Please scan/enter a Doc Number:</label>
 			<input type="text" class="form-control" id="docNo" placeholder="scan/enter Doc No" 
 				   ng-model="piDoc.docNo" focus-me="true">
 		  </div>
 		  		  
-		  <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!piDoc.docNo">Submit</button>
+		  <button type="submit" class="btn btn-default" ng-click="submitForm()">Submit</button>
 		</form>
 	  </div>
 	  </div>
@@ -47,6 +52,14 @@
 					  <tr> 
 						  <td >Warehouse No</td> 
 						  <td>{{piDoc.warehouseNo}}</td>
+					  </tr>
+					  <tr> 
+						  <td >Version No</td> 
+						  <td>{{piDoc.items[0].verNo}}</td>
+					  </tr>
+					  <tr> 
+						  <td >Counting Status</td> 
+						  <td>{{piDoc.countingStatus}}</td>
 					  </tr>
 					  <tr> 
 						  <td >Plant</td> 

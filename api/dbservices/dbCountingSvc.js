@@ -100,5 +100,18 @@ const dbSvc=require("./dbCommonSvc");
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
 
-
+  exports.getWMEntryCount=function(docNo,warehouse){
+    var params={
+      docNo:{type:"sql.VarChar(12)",value:docNo},
+      warehouse:{type:"sql.Char(3)",value:warehouse}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_GetWMEntryCount",params)
+  }
+  exports.getIMEntryCount=function(docNo,fiscalYear){
+    var params={
+      docNo:{type:"sql.VarChar(12)",value:docNo},
+      fiscalYear:{type:"sql.Char(4)",value:fiscalYear}
+    }
+    return sqlSvc.callStoredProcedure("dbo.BX_GetIMEntryCount",params)
+  }
 

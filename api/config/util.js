@@ -176,7 +176,8 @@ exports.formatDateTime=function(dateString){
 	}
 	return _imDoc;
 }
- exports.countingWmDocConverter = function (doc,isMergeStorLoc){
+ exports.countingWmDocConverter = function (doc,verNo,isMergeStorLoc){
+	 verNo=verNo||"00";
 	 var _wmDoc = {items:[]};
 	 var headerFields=sapFields.countWmDocHeaderFields;
 	 var itemFields=sapFields.countWmDocItemFields;
@@ -190,24 +191,33 @@ exports.formatDateTime=function(dateString){
 	 }
 	 if (doc.T_LINV&&doc.T_LINV.length>0){
 		 items = doc.T_LINV;
+		 let itemIdx=0;
 		topLoop: for (let i = 0; i < items.length; i++) {
-			item = items[i];
-			if (isMergeStorLoc){
-				for (let j = 0; j < _wmDoc.items.length; j++) {
-					const element = _wmDoc.items[j];
-					if (element.storageBin===item[itemFields["storageBin"]]&&
-					element.MaterialCode===item[itemFields["MaterialCode"]]&&
-					element.BatchNo===item[itemFields["BatchNo"]]){
-						continue topLoop;
+			if (verNo===items[i][itemFields["verNo"]]){
+				item = items[i];
+				if (isMergeStorLoc){
+					for (let j = 0; j < _wmDoc.items.length; j++) {
+						const element = _wmDoc.items[j];
+						if (element.storageBin===item[itemFields["storageBin"]]&&
+						element.MaterialCode===item[itemFields["MaterialCode"]]&&
+						element.BatchNo===item[itemFields["BatchNo"]]){
+							continue topLoop;
+						}
 					}
 				}
-			}
-			_wmDoc.items.push({});
-			for (let key in itemFields) {
-				_wmDoc.items[i][key]=item[itemFields[key]];
+				_wmDoc.items.push({});
+				for (let key in itemFields) {
+					_wmDoc.items[itemIdx][key]=item[itemFields[key]];
+				}
+				itemIdx++;
 			}
 		}
 	}
+	if (_wmDoc.items.length===0){
+		throw new Error("The Doc No "+_wmDoc.docNo+" with version No "+verNo+" doesn't exist!")
+	}
+	_wmDoc.countingStatus=_wmDoc.items[0].itemStatus;
+	_wmDoc.verNo=_wmDoc.items[0].verNo;
 	return _wmDoc;
 }
 

@@ -99,6 +99,7 @@
     "countWmDocItemFields":{
         "docNo":"IVNUM",
         "warehouseNo":"LGNUM",
+        "verNo":"NVERS",
         "item":"IVPOS",
         "quant":"LQNUM",
         "totalStock":"GESME",

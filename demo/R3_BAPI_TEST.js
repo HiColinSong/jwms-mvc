@@ -429,9 +429,9 @@ var invokeBAPI = function(BAPI,param){
   .then(function (response) {
     // Output response
         console.log(JSON.stringify(response,null,2));
-        let param = {WAIT:'X'};
-         invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
-        // r3connect.Pool.remove(configuration);
+        // let param = {WAIT:'X'};
+        //  invokeBAPI("BAPI_TRANSACTION_COMMIT",param);
+        r3connect.Pool.remove(configuration);
   })
   .catch(function (error) {
     // Output error
@@ -439,7 +439,7 @@ var invokeBAPI = function(BAPI,param){
       r3connect.Pool.remove(configuration);
   });
 }  
-//MI11 Recount, MI04 enter count, LI14 recount, LI11 enter count, LI13 display, MI03: display
+//MI11 Recount, MI04 enter count, LI14 recount, LI11 enter count, LI13 display, MI03: display, IM RECOUNT: MI11
 // test_BAPI_DELIVERY_GETLIST();
 // test_BAPI_GOODSMVT_CREATE();
 // test_BAPI_GOODSMVT_CANCEL();
@@ -461,6 +461,6 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
 // test_BAPI_MATPHYSINV_GETDETAIL()
-test_BAPI_MATPHYSINV_COUNT()
-// test_ZIM_L_INV_READ()
+// test_BAPI_MATPHYSINV_COUNT()
+test_ZIM_L_INV_READ()
 // test_L_INV_COUNT_EXT()

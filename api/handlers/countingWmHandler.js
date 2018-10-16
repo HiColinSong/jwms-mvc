@@ -7,7 +7,7 @@ exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
-			let piDoc = util.countingWmDocConverter(sapDoc,true);
+			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,true);
 				// insert data to dbo.BX_CountingWM
 				let params={
 					docNo:piDoc.docNo,
@@ -101,11 +101,37 @@ exports.confirm=function(req,res){
 	(async function () {
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
-			let piDoc = util.countingWmDocConverter(sapDoc);
-		
+			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
+			let entryCounts=await dbCountingSvc.getWMEntryCount(req.body.docNo,req.session.user.DefaultWH);
+			entryCounts=entryCounts.recordset;//entryCounts holds the total counts for each Bin/Mat/Batch (sum of storLoc)
+			//split entry counts into different storage location
+			//find the entries with same storage Bin, materialCode and batch number but different storage location
+			//assign counts to all the storLoc entries with maximum their total stock but the last one, 
+			//and the assign the remainning to the last one			
+			let entriesWithDiffStorLoc,lastEntry;
+			if (entryCounts.length>0&&piDoc.items&&piDoc.items.length>0){
+				for (let i = 0; i < entryCounts.length; i++) {
+					entriesWithDiffStorLoc=[];
+					const ec = entryCounts[i];
+					for (let j = 0; j < piDoc.items.length; j++) {
+						const item = piDoc.items[j];
+						if (ec.storageBin===item.storageBin&&
+						 	ec.MaterialCode===item.MaterialCode&&
+						 	ec.BatchNo===item.BatchNo){
+								if (entriesWithDiffStorLoc.length===0){
+									item.ScanQty=ec.entryCount;
+								} else {
+									lastEntry=entriesWithDiffStorLoc[entriesWithDiffStorLoc.length-1];
+									item.ScanQty=Math.max((lastEntry.ScanQty-lastEntry.totalStock),0);
+									lastEntry.ScanQty=Math.min(lastEntry.ScanQty,lastEntry.totalStock);
+								}
+								entriesWithDiffStorLoc.push(item);
+						}
+					}
+				}
+			}
 			
-			
-			let ret = await sapSvc.countingWM(piDoc);
+			let ret = await sapSvc.countingWM(piDoc.items);
 
 			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			// if (args.IT_BX_STOCK.length>0)

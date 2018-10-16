@@ -16,12 +16,8 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
         $scope.piDoc=piDoc;
         $scope.docNo=piDoc.docNo;
         $scope.type = "counting-wm";
+        $scope.temp.confirmReady = piDoc.countingStatus!=="N";
         $scope.barcode = itemSvc.getBarcodeObj();
-
-
-        
-
-
 
             //findItem
             $scope.findItem=function(){
@@ -107,7 +103,7 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
             }
             $scope.confirmCounting = function() {
                 utilSvc.pageLoading("start");
-                apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo}).$promise.
+                apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,verNo:piDoc.verNo}).$promise.
                 then(function(data){
                     if (data&&data.confirm==='success'){
                         $scope.confirm={
@@ -168,18 +164,25 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
             }
             rebuildData(piDoc);
         } else {
-        $scope.piDoc={};
-        if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid
-            utilSvc.addAlert(piDoc.data.message, "fail", false);
-        } else {
-            if ($routeParams.docNo)
-                utilSvc.addAlert("The PI Document "+$routeParams.docNo+" doesn't exist!", "fail", false);
-        }
-        $scope.submitForm = function() {
-            
-            //add leading 0 to the scanned order no
-            $location.path("/store-ops/counting-wm/"+utilSvc.formalizeOrderNo($scope.piDoc.docNo));
-        }
+            $scope.piDoc={verNo:"00"};
+            if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid
+                utilSvc.addAlert(piDoc.data.message, "fail", true);
+            } else {
+                if ($routeParams.docNo)
+                    utilSvc.addAlert("The PI Document "+$routeParams.docNo+" doesn't exist!", "fail", false);
+            }
+            $scope.submitForm = function() {
+                if (!$scope.piDoc.docNo){
+                    $rootScope.setFocus("docNo");
+                    return;
+                }
+                if (!$scope.piDoc.verNo){
+                    $rootScope.setFocus("verNo");
+                    return;
+                }
+                //add leading 0 to the scanned order no
+                $location.path("/store-ops/counting-wm/"+utilSvc.formalizeOrderNo($scope.piDoc.docNo)+"/"+utilSvc.formalizeNo($scope.piDoc.verNo,2));
+            }
         }
 
         }])

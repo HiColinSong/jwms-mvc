@@ -235,12 +235,33 @@ exports.getCountingWmDoc=function(docNo,whseNo){
     return invokeBAPI("ZIM_L_INV_READ",param,{});
 };
 
-exports.countingWM=function(piDoc){
-    var param = {
-      I01_LGNUM:whseNo,
-      I01_IVNUM:docNo
+exports.countingWM=function(items){
+    let param = {
+      I_COMMIT:'X',
+      S_LINV:[]
     };
-    return invokeBAPI("L_INV_COUNT_EXT",param,{});
+    let ele;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      ele={
+        LGNUM:item.warehouseNo,
+        IVNUM:item.docNo,
+        IVPOS:item.item,
+        LGTYP:item.storageType,
+        LGPLA:item.storageBin,
+        MATNR:item.MaterialCode,
+        WERKS:item.Plant,
+        CHARG:item.BatchNo,
+        MENGA:item.ScanQty.toString(),
+        LGORT:item.storageLocation,
+        NVERS:item.verNo
+      };
+      if (item.ScanQty===0){
+        ele.KZNUL='X';
+      }
+      param.S_LINV.push(ele)
+    }
+    return invokeBAPI("L_INV_COUNT_EXT",param,{commit:false,reconnect:true});
 };
 
 var invokeBAPI = function(bapiName,param,options){

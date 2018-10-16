@@ -39,7 +39,7 @@
 								<!-- <td width="65%">	 -->	
 							 <div class="form-group">
 									<input type="text" class="form-control full-width" id="barcode1" placeholder="Scan/Enter barcode1" 
-													ng-model="barcode.barcode1" autocomplete="off" autofocus ng-disabled="order.confirmReady">
+													ng-model="barcode.barcode1" autocomplete="off" autofocus ng-disabled="order.confirmReady||temp.confirmReady">
 							</div>
 					</tr>
 					<tr class="form-group" ng-class="{'has-error':barcode.valid===false}" 

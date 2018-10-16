@@ -49,7 +49,10 @@
                 }
             })
 
-            .when('/store-ops/counting-wm/:docNo?', {
+            .when('/store-ops/counting-wm/:docNo', {
+                redirectTo: '/store-ops/counting-wm/:docNo/00'
+            })
+            .when('/store-ops/counting-wm/:docNo?/:verNo?', {
                 templateUrl: 'partials/counting-wm.html',
                 controller: 'countingWmCtrl',
                 resolve:{
@@ -58,7 +61,9 @@
                         var deferred = $q.defer();
                         if ($route.current.params.docNo){
                             utilSvc.pageLoading("start");
-                            apiSvc.getCountingDoc( {subtype:"counting-wm"},{docNo:$route.current.params.docNo})
+                            apiSvc.getCountingDoc( {subtype:"counting-wm"},
+                                {docNo:$route.current.params.docNo,
+                                 verNo:utilSvc.formalizeNo($route.current.params.verNo,2)})
                             .$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);

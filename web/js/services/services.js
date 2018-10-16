@@ -489,6 +489,12 @@
               }
               return orderNo;
           },
+          formalizeNo:function(number,digit) {
+            if (number&&number.length>0){
+                return "0".repeat(Math.max((digit-number.length),0))+number;
+              }
+              return number;
+          },
           pageLoading:function(arg){
             if (arg==="start"&&$rootScope.pageLoading){ //prevent from submit twice before return
               throw new Error("Please don't submit twice!");
