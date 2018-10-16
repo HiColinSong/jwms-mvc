@@ -219,8 +219,10 @@
 				  </div>
 			
 		</div>
-		  <!--confirm button-->
-		  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
+		  <!--confirm button, only visible to whAdmin and superAdmin-->
+		  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top"
+		  		ng-if="authUser.UserRole.indexOf('whAdmin')>-1||authUser.UserRole.indexOf('superAdmin')>-1" 
+		  >
 			  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm counting" 
 			  ng-click="confirmCounting()" ng-disabled="piDoc.countingStatus!=='N'">
 			  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Counting
