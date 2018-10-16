@@ -103,11 +103,24 @@ exports.confirm=function(req,res){
 		try {
 			let sapDoc = await sapSvc.getCountingImDoc(req.body.docNo,req.body.fiscalYear);
 			let piDoc = util.countingImDocConverter(sapDoc);
-		
+			let entryCounts=await dbCountingSvc.getIMEntryCount(req.body.docNo,req.body.fiscalYear);
+			entryCounts=entryCounts.recordset;
+			util.trimValues(entryCounts)
+			if (entryCounts.length>0&&piDoc.items&&piDoc.items.length>0){
+				for (let i = 0; i < entryCounts.length; i++) {
+					const ec = entryCounts[i];
+					for (let j = 0; j < piDoc.items.length; j++) {
+						const item = piDoc.items[j];
+						if (ec.itemNo===item.item&&
+						 	ec.MaterialCode===item.MaterialCode&&
+						 	ec.BatchNo===item.BatchNo){
+								item.ScanQty=ec.entryCount;
+						}
+					}
+				}
+			}
 			
-			
-			let ret = await sapSvc.countingIM(piDoc);
-
+			let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
 			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			// if (args.IT_BX_STOCK.length>0)
 			// 	await sapSvc.serialNoUpdate(args);

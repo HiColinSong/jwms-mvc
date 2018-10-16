@@ -226,6 +226,30 @@ exports.getCountingImDoc=function(docNo,fiscalYear){
     };
     return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param,{});
 };
+exports.countingIM=function(piDoc,countDate){
+  var param = {
+    PHYSINVENTORY:piDoc.docNo,
+    FISCALYEAR:piDoc.fiscalYear,
+    COUNT_DATE:countDate,
+    ITEMS:[]
+  }
+  let ele;
+    for (let i = 0; i < piDoc.items.length; i++) {
+      const item = piDoc.items[i];
+      ele={
+        ITEM:item.item,
+        MATERIAL:item.MaterialCode,
+        BATCH:item.BatchNo,
+        ENTRY_QNT:item.ScanQty,
+        ENTRY_UOM:item.Unit,
+      };
+      if (item.ScanQty===0){
+        ele.ZERO_COUNT='X';
+      }
+      param.ITEMS.push(ele);
+    }
+  return invokeBAPI("BAPI_MATPHYSINV_COUNT",param,{commit:true,reconnect:true});
+};
 
 exports.getCountingWmDoc=function(docNo,whseNo){
     var param = {

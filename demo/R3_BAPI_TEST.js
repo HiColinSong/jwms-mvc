@@ -212,7 +212,7 @@ var test_BAPI_MATPHYSINV_GETDETAIL=function(){
 
 var test_BAPI_MATPHYSINV_COUNT=function(){
   var param = {
-    PHYSINVENTORY:'0100005780',
+    PHYSINVENTORY:'0100005787',
     FISCALYEAR:'2019',
     COUNT_DATE:'20181020',
     ITEMS:[
@@ -461,6 +461,6 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
 // test_BAPI_MATPHYSINV_GETDETAIL()
-// test_BAPI_MATPHYSINV_COUNT()
-test_ZIM_L_INV_READ()
+test_BAPI_MATPHYSINV_COUNT()
+// test_ZIM_L_INV_READ()
 // test_L_INV_COUNT_EXT()
