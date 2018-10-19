@@ -79,6 +79,7 @@
         "DocDate":"DOC_DATE",
         "PlanDate":"PLAN_DATE",
         "CountDate":"COUNT_DATE",
+        "CountStatus":"COUNT_STATUS",
         "PostingDate":"PSTNG_DATE",
         "userName":"USERNAME",
         "StageLoc":"STGE_LOC"
@@ -89,7 +90,8 @@
         "BatchNo":"BATCH",
         "Quantity":"QUANTITY",
         "Plant":"PLANT",
-        "Unit":"ENTRY_UOM"
+        "Unit":"ENTRY_UOM",
+        "isDeleted":"DELETE_IND"
     },
     "countWmDocHeaderFields":{
         "docNo":"IVNUM",

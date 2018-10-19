@@ -39,8 +39,6 @@
 			,"/bxapi/sporeceipts/get-lot-release-table.json"
 			,"/bxapi/qrsmt/get-subcon-work-order-for-planner.json"
 			,"/bxapi/qrsmt/save-plan.json"
-			,"/bxapi/store-ops/counting-wm/confirm.json"
-			,"/bxapi/store-ops/counting-im/confirm.json"
 		]
 	},
 	"planner":{

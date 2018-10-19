@@ -54,6 +54,10 @@
 		  			<td>{{piDoc.fiscalYear}}</td>
 		  		</tr>
 		  		<tr> 
+		  			<td >Count Status</td> 
+		  			<td>{{(piDoc.CountStatus)?'Counted':'Open'}}</td>
+		  		</tr>
+		  		<tr> 
 		  			<td >Created By</td> 
 		  			<td>{{piDoc.userName}}</td>
 		  		</tr> 
@@ -123,7 +127,7 @@
 										<table class="full-width">
 											<tr>
 												<td width="16%" class="text-center">{{pidx+piDoc.items.length+1}}</td>
-												<td width="21%" class="text-center">{{item.item||'N/A'}}</td>
+												<td width="21%" class="text-center">{{item.item||'-'}}</td>
 												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
 												<td width="21%" class="text-center">{{item.BatchNo}}</td>
 												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
@@ -192,7 +196,7 @@
 								<tr ng-if=" piDoc.items&& piDoc.items.length>0" 
 									ng-repeat="(idx,item) in piDoc.scannedItems | orderBy:sortType:sortReverse | filter:searchItem">
 			
-								<td>{{item.itemNo}}</td>
+								<td>{{item.itemNo||'-'}}</td>
 								<td>{{item.MaterialCode}}</td>
 								<td>{{item.BatchNo}}</td>
 								<td>{{item.SerialNo}}</td>
@@ -221,11 +225,9 @@
     	
     </div>
 	  <!--confirm button-->
-	  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top"
-	  	ng-if="authUser.UserRole.indexOf('whAdmin')>-1||authUser.UserRole.indexOf('superAdmin')>-1"  
-	  >
+	  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
 		  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm counting" 
-		  ng-click="confirmCounting()" ng-disabled="false">
+		  ng-click="confirmCounting()" ng-disabled="{{piDoc.CountStatus.length}}">
 		  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Counting
 		</button>
 	</div>
@@ -234,6 +236,6 @@
 
 </div>
 <div class="clearboth"></div>
-<pre ng-if="debug">piDoc111:{{piDoc|json}}</pre>	
 <pre ng-if="debug">barcode:{{barcode | json}}</pre>	
+<pre ng-if="debug">piDoc:{{piDoc|json}}</pre>	
 <!-- <pre ng-show="debug">categories:{{categories | json}}</pre>	 -->

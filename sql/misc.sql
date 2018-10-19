@@ -64,3 +64,30 @@ select
     materialList ='BFR1-2208' AND
     batchList ='W17040456D' AND
 	plantList ='2100'
+--
+WITH cte AS  
+(  
+    SELECT ItemCode, MtlType,  
+    ROW_NUMBER() OVER (Partition by MtlType order BY MtlType) AS RowNumber  
+    FROM SAP_Materials   
+)   
+SELECT ItemCode, MtlType    
+FROM cte   
+WHERE RowNumber =1; 
+-- 
+select * from SAP_Materials where ItemCode like '11104%'
+
+select * from SAP_Materials where MtlType='ROH' or MtlType='MLAB'
+
+select * from SAP_Materials where ItemCode NOT like '%[.-]%' and ( MtlType='ROH' or MtlType='HALB')
+
+
+0611104-002|1720202010W17110561
+0611104-005|1720202010W17020620
+0611104-005|1720202010W17050506
+0611104-006|1720202010W16120648
+
+0611104-001|1720202010X18030018
+0611104-004|1720202010W14010070
+0611104-001|1720202010X18030018
+0611104-004|1720202010W14010070

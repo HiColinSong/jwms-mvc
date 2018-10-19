@@ -59,7 +59,7 @@
 					  </tr>
 					  <tr> 
 						  <td >Counting Status</td> 
-						  <td>{{piDoc.countingStatus}}</td>
+						  <td>{{(piDoc.countingStatus!=='N')?'Counted':'Not Counted'}}</td>
 					  </tr>
 					  <tr> 
 						  <td >Plant</td> 
@@ -108,7 +108,7 @@
 										<table class="full-width">
 											<tr>
 												<td width="16%" class="text-center">{{pidx+1}}</td>
-												<td width="21%" class="text-center">{{item.storageBin||'unknown'}}</td>
+												<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
 												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
 												<td width="21%" class="text-center">{{item.BatchNo}}</td>
 												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
@@ -122,7 +122,7 @@
 										<table class="full-width">
 											<tr>
 												<td width="16%" class="text-center">{{pidx+piDoc.items.length+1}}</td>
-												<td width="21%" class="text-center">{{item.storageBin||'N/A'}}</td>
+												<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
 												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
 												<td width="21%" class="text-center">{{item.BatchNo}}</td>
 												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
@@ -191,7 +191,7 @@
 									<tr ng-if="piDoc.scannedItems&&piDoc.scannedItems.length>0" 
 										ng-repeat="(idx,item) in piDoc.scannedItems | orderBy:sortType:sortReverse | filter:searchItem">
 				
-									<td>{{item.storageBin||NA}}</td>
+									<td>{{item.storageBin||'-'}}</td>
 									<td>{{item.MaterialCode}}</td>
 									<td>{{item.BatchNo}}</td>
 									<td>{{item.serialNo}}</td>
@@ -220,9 +220,7 @@
 			
 		</div>
 		  <!--confirm button, only visible to whAdmin and superAdmin-->
-		  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top"
-		  		ng-if="authUser.UserRole.indexOf('whAdmin')>-1||authUser.UserRole.indexOf('superAdmin')>-1" 
-		  >
+		  <div class="col-sm-4 col-xs-12 no-padding-x text-right margin-top">
 			  <button type="button" class="col-xs-12 btn btn-primary btn-md" confirm-required action="confirm counting" 
 			  ng-click="confirmCounting()" ng-disabled="piDoc.countingStatus!=='N'">
 			  <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Confirm Counting

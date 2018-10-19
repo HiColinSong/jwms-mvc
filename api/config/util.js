@@ -154,7 +154,7 @@ exports.formatDateTime=function(dateString){
 	 var _imDoc = {items:[]};
 	 var headerFields=sapFields.countImDocHeaderFields;
 	 var itemFields=sapFields.countImDocItemFields;
-	 var header,items,item;
+	 var header,items,item,itemIdx=-1;
 
 	 if (doc.HEAD){
 		 header = doc.HEAD;
@@ -166,12 +166,13 @@ exports.formatDateTime=function(dateString){
 		 items = doc.ITEMS;
 		for (let i = 0; i < items.length; i++) {
 			item = items[i];
-			_imDoc.items.push({});
-			for (let key in itemFields) {
-				_imDoc.items[i][key]=item[itemFields[key]];
-				// if (_imDoc.items[i][key]&&(key ==="Quantity"))
-				// 	_imDoc.items[i][key]=parseInt(_imDoc.items[i][key]);
-			}
+			if (!item[itemFields['isDeleted']]){//filter out the deleted items
+				itemIdx++
+				_imDoc.items.push({});
+				for (let key in itemFields) {
+					_imDoc.items[itemIdx][key]=item[itemFields[key]];
+				}
+			} 
 		}
 	}
 	return _imDoc;

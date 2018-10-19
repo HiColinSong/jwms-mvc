@@ -8,7 +8,7 @@ Barcode.prototype.checkInfoComplete=function(){
     }
     self.errMsg = [];
     self.infoComplete = true;
-    if (!self.eanCode){
+    if (!self.eanCode&&!self.materialCode){
         self.infoComplete = false;
         self.errMsg.push("EAN Code is required")
     }
@@ -95,10 +95,13 @@ Barcode.prototype.parseBarcode=function(){
                 self.valid=true;
                 return;
             }
-        } else if (marker==="10"||marker==="21"||marker==="30"||marker==="37"){
+        } else if (marker==="0Z"||marker==="10"||marker==="21"||marker==="30"||marker==="37"){
             var prop;
 
             switch(marker){
+                case "0Z":
+                    prop="materialCode";
+                    break;
                 case "10":
                     prop="batchNo";
                     break;
