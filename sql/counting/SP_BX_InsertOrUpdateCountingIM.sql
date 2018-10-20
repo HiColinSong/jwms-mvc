@@ -47,31 +47,6 @@ SET @nth=1
 		SET @nth=@nth+1
         continue;
     END
-
-    SELECT id,
-           docNo,
-           fiscalYear,
-           MaterialCode,
-           BatchNo
-    FROM dbo.BX_CountingIM 
-    WHERE docNo = @docNo  AND
-          fiscalYear=@fiscalYear 
-          AND itemNo IS NULL --extra items, not in counting sheet
-
-    SELECT 
-        s.id,
-        c.id AS countingImId,
-        c.docNo,
-        c.fiscalYear,
-        c.itemNo,
-        c.MaterialCode,
-        c.BatchNo,
-        s.qty AS ScanQty,
-        s.fullScanCode,
-        s.serialNo,
-        s.countBy,
-        s.countOn 
-    FROM dbo.BX_CountingIM c, dbo.BX_CountingIM_Scan s 
-    WHERE c.docNo = @docNo AND c.fiscalYear = @fiscalYear
-    AND c.id=s.countingImId
+   --get refrenshed counts 
+   EXEC dbo.BX_CountingIMRefreshCounts @docNo=@docNo,@fiscalYear=@fiscalYear 
 	END

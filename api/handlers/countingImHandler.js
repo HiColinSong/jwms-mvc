@@ -30,7 +30,10 @@ exports.getPiDoc=function(req,res){
 					piDoc.extraItems=ret[0];
 				}
 				if (ret.length>1){
-					piDoc.scannedItems= ret[1];
+					piDoc.entryCounts= ret[1];
+				}
+				if (ret.length>2){
+					piDoc.scannedItems= ret[2];
 					util.trimValues(piDoc.scannedItems);
 				}
 				return res.status(200).send(piDoc);				
@@ -70,13 +73,14 @@ exports.addItem=function(req,res){
 exports.removeItem=function(req,res){
 	(async function () {
 		try {
-			await dbCountingSvc.deleteIMItemById(req.body.itemId);
-			let scannedItems = await dbCountingSvc.getIMScannedItems(req.body.docNo,req.body.fiscalYear);
-			scannedItems=scannedItems.recordset;
+			// await dbCountingSvc.deleteIMItemById(req.body.itemId);
+			let ret = await dbCountingSvc.deleteIMItemById(req.body.docNo,req.body.fiscalYear,req.body.itemId);
+			ret = ret.recordsets;
+			let extraItems = (ret.length>0)?ret[0]:[];
+			let entryCounts = (ret.length>1)?ret[1]:[];
+			let scannedItems =(ret.length>2)?ret[2]:[];
 			util.trimValues(scannedItems);
-			let extraItems = await dbCountingSvc.getIMExtraItems(req.body.docNo,req.body.fiscalYear);
-			extraItems=extraItems.recordset;
-			let data={scannedItems:scannedItems,extraItems:extraItems}
+			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
@@ -86,12 +90,13 @@ exports.removeItem=function(req,res){
 exports.refresh=function(req,res){
 	(async function () {
 		try {
-			let scannedItems = await dbCountingSvc.getIMScannedItems(req.body.docNo,req.body.fiscalYear);
-			scannedItems=scannedItems.recordset;
+			let ret = await dbCountingSvc.CountingIMRefreshCounts(req.body.docNo,req.body.fiscalYear);
+			ret = ret.recordsets;
+			let extraItems = (ret.length>0)?ret[0]:[];
+			let entryCounts = (ret.length>1)?ret[1]:[];
+			let scannedItems =(ret.length>2)?ret[2]:[];
 			util.trimValues(scannedItems);
-			let extraItems = await dbCountingSvc.getIMExtraItems(req.body.docNo,req.body.fiscalYear);
-			extraItems=extraItems.recordset;
-			let data={scannedItems:scannedItems,extraItems:extraItems}
+			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);
@@ -101,9 +106,21 @@ exports.refresh=function(req,res){
 exports.confirm=function(req,res){
 	(async function () {
 		try {
+			let entryCounts=await dbCountingSvc.getIMEntryCount(req.body.docNo,req.body.fiscalYear);
+			entryCounts=entryCounts.recordset;
+			let extraItems=[];
+			for (let i = 0; i < entryCounts.length; i++) {
+				const ec = entryCounts[i];
+				if (!ec.itemNo){
+					extraItems.push(ec)
+				}
+			}
+			if (extraItems.length>0){
+				await sapSvc.countingIMExtraItems(req.body.docNo,req.body.fiscalYear,extraItems)
+			}
 			let sapDoc = await sapSvc.getCountingImDoc(req.body.docNo,req.body.fiscalYear);
 			let piDoc = util.countingImDocConverter(sapDoc);
-			let entryCounts=await dbCountingSvc.getIMEntryCount(req.body.docNo,req.body.fiscalYear);
+			entryCounts=await dbCountingSvc.getIMEntryCount(req.body.docNo,req.body.fiscalYear);
 			entryCounts=entryCounts.recordset;
 			util.trimValues(entryCounts)
 			if (entryCounts.length>0&&piDoc.items&&piDoc.items.length>0){
@@ -120,7 +137,7 @@ exports.confirm=function(req,res){
 				}
 			}
 			
-			let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
+			// let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
 			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			// if (args.IT_BX_STOCK.length>0)
 			// 	await sapSvc.serialNoUpdate(args);

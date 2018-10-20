@@ -40,6 +40,7 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                 }
                 let params={};
                 params.orderNo=$scope.docNo;
+                params.verNo=$scope.piDoc.verNo;
                 params.EANCode=$scope.barcode.eanCode;
                 params.MaterialCode=$scope.barcode.materialCode;
                 params.BatchNo=$scope.barcode.batchNo;
@@ -71,12 +72,12 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
 
             $scope.removeItem=function(item){
                 utilSvc.pageLoading("start");
-                apiSvc.removeCountingScanItem({subtype:$scope.type},{itemId:item.id,docNo:$scope.docNo}).$promise.
+                apiSvc.removeCountingScanItem({subtype:$scope.type},{itemId:item.id,docNo:$scope.docNo,verNo:$scope.piDoc.verNo}).$promise.
                     then(
                         function(data){
                             $scope.piDoc.scannedItems = data.scannedItems;
                             $scope.piDoc.extraItems = data.extraItems;
-                            rebuildData($scope.piDoc);
+                            $scope.piDoc.entryCounts = data.entryCounts;
                             utilSvc.pageLoading("stop");
                         },
                         function(err){
@@ -87,12 +88,12 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
             }
             $scope.refreshScannedItems=function(){
                 utilSvc.pageLoading("start");
-                apiSvc.refreshCountingScannedItems({subtype:$scope.type},{docNo:piDoc.docNo}).$promise.
+                apiSvc.refreshCountingScannedItems({subtype:$scope.type},{docNo:piDoc.docNo,verNo:piDoc.verNo}).$promise.
                     then(
                         function(data){
                             $scope.piDoc.scannedItems = data.scannedItems;
+                            $scope.piDoc.entryCounts = data.entryCounts;
                             $scope.piDoc.extraItems = data.extraItems;
-                            rebuildData($scope.piDoc);
                             utilSvc.pageLoading("stop");
                         },
                         function(err){
@@ -143,26 +144,7 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                 });
             }
 
-            let calculateScannedQty=function(scannedItems,items){
-                for (let i = 0; i < items.length; i++) {
-                    items[i].ScanQty=0;
-                    for (let j = 0; j < scannedItems.length; j++) {
-                        if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
-                            scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
-                            ((scannedItems[j].storageBin&&scannedItems[j].storageBin.toUpperCase()===items[i].storageBin)||
-                                (!scannedItems[j].storageBin&&!items[i].storageBin)))
-                            {
-                                items[i].ScanQty+=scannedItems[j].ScanQty;
-                            }
-                    }
-                }
-            } //end of function
             
-            let rebuildData=function(piDoc){
-                calculateScannedQty(piDoc.scannedItems,piDoc.items);
-                calculateScannedQty(piDoc.scannedItems,piDoc.extraItems);
-            }
-            rebuildData(piDoc);
         } else {
             $scope.piDoc={verNo:"00"};
             if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid

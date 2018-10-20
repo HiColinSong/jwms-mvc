@@ -1,6 +1,6 @@
 USE [BIOTRACK]
 GO
-/****** Object:  StoredProcedure [dbo].[BX_CountingWM_Scan]    Script Date: 10-Oct-18 10:02:13 AM ******/
+/****** Object:  StoredProcedure [dbo].[BX_Scan_CountingWM]    Script Date: 20-Oct-18 8:32:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10,6 +10,7 @@ ALTER PROCEDURE [dbo].[BX_Scan_CountingWM]
 (
 	@docNo varchar(12),
 	@warehouse char(3),
+	@verNo char(2),
 	@EANCode varchar(16),
     @MaterialCode varchar(18)=NULL,
     @BatchNo varchar(20),
@@ -28,7 +29,8 @@ BEGIN
                 where serialNo=@SerialNo and  
                     s.countingWmId=c.id AND
                     c.docNo=@docNo AND 
-                    c.warehouse=@warehouse
+                    c.warehouse=@warehouse AND
+                    c.verNo=@verNo
                 )
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 		
@@ -44,15 +46,17 @@ BEGIN
         DECLARE @countingWmId int
         SELECT @countingWmId = id from dbo.BX_CountingWM 
            WHERE docNo=@docNo AND
+                 verNo=@verNo AND
                  warehouse=@warehouse AND
-                 material=@MaterialCode AND
-                 batch=@BatchNo 
+                 MaterialCode=@MaterialCode AND
+                 BatchNo=@BatchNo 
 
 
             IF @countingWmId IS NULL 
                 BEGIN
                     --insert extra item
-                    INSERT INTO [dbo].[BX_CountingWM] (docNo,warehouse,material,batch) VALUES (@docNo,@warehouse,@MaterialCode,@BatchNo)
+                    INSERT INTO [dbo].[BX_CountingWM] (docNo,verNo,warehouse,MaterialCode,BatchNo) 
+                    VALUES (@docNo,@verNo,@warehouse,@MaterialCode,@BatchNo)
                     SET @countingWmId=SCOPE_IDENTITY();  --assign the id of the new record
                 END
             INSERT INTO dbo.BX_CountingWM_Scan (countingWmId,qty,fullScanCode,serialNo,countBy,countOn)

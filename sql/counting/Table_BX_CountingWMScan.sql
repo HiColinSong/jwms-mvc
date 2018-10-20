@@ -1,7 +1,7 @@
 USE [BIOTRACK]
 GO
 
-/****** Object:  Table [dbo].[BX_CountingWM_Scan]    Script Date: 09-Oct-18 4:34:21 PM ******/
+/****** Object:  Table [dbo].[BX_CountingWM_Scan]    Script Date: 20-Oct-18 7:29:27 PM ******/
 SET ANSI_NULLS ON
 GO
 

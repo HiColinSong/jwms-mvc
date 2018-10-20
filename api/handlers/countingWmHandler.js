@@ -11,6 +11,7 @@ exports.getPiDoc=function(req,res){
 				// insert data to dbo.BX_CountingWM
 				let params={
 					docNo:piDoc.docNo,
+					verNo:piDoc.verNo,
 					warehouse:req.session.user.DefaultWH
 				}
 				let storageBinList=[];
@@ -31,7 +32,10 @@ exports.getPiDoc=function(req,res){
 					piDoc.extraItems=ret[0];
 				}
 				if (ret.length>1){
-					piDoc.scannedItems= ret[1];
+					piDoc.entryCounts= ret[1];
+				}
+				if (ret.length>2){
+					piDoc.scannedItems= ret[2];
 					util.trimValues(piDoc.scannedItems);
 				}
 				return res.status(200).send(piDoc);
@@ -46,6 +50,7 @@ exports.addItem=function(req,res){
 	(async function () {
 		var info=req.body,params={};
 		params.docNo=info.orderNo;
+		params.verNo=info.verNo;
 		params.warehouse=req.session.user.DefaultWH,
 		params.EANCode=info.EANCode;
 		params.MaterialCode=info.MaterialCode;
@@ -71,13 +76,16 @@ exports.addItem=function(req,res){
 exports.removeItem=function(req,res){
 	(async function () {
 		try {
-			await dbCountingSvc.deleteWMItemById(req.body.itemId);
-			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
-			scannedItems=scannedItems.recordset;
-			let extraItems = await dbCountingSvc.getWMExtraItems(req.body.docNo,req.session.user.DefaultWH);
-			extraItems=extraItems.recordset;
-			let data={scannedItems:scannedItems,extraItems:extraItems}
+			let ret = await dbCountingSvc.deleteWMItemById(req.body.docNo,req.body.verNo,req.session.user.DefaultWH,req.body.itemId);
+			ret = ret.recordsets;
+			let extraItems = (ret.length>0)?ret[0]:[];
+			let entryCounts = (ret.length>1)?ret[1]:[];
+			let scannedItems =(ret.length>2)?ret[2]:[];
+			util.trimValues(scannedItems);
+			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
 			return res.status(200).send(data);
+
+
 		} catch (error) {
 			return res.status(400).send([{error:true,message:error}]);
 		}
@@ -86,11 +94,13 @@ exports.removeItem=function(req,res){
 exports.refresh=function(req,res){
 	(async function () {
 		try {
-			let scannedItems = await dbCountingSvc.getWMScannedItems(req.body.docNo,req.session.user.DefaultWH);
-			scannedItems=scannedItems.recordset;
-			let extraItems = await dbCountingSvc.getWMExtraItems(req.body.docNo,req.session.user.DefaultWH);
-			extraItems=extraItems.recordset;
-			let data={scannedItems:scannedItems,extraItems:extraItems}
+			let ret = await dbCountingSvc.CountingWMRefreshCounts(req.body.docNo,req.body.verNo,req.session.user.DefaultWH);
+			ret = ret.recordsets;
+			let extraItems = (ret.length>0)?ret[0]:[];
+			let entryCounts = (ret.length>1)?ret[1]:[];
+			let scannedItems =(ret.length>2)?ret[2]:[];
+			util.trimValues(scannedItems);
+			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
 			return res.status(200).send(data);
 		} catch (error) {
 			return res.status(200).send([{error:true,message:error}]);

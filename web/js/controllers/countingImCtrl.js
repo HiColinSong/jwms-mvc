@@ -84,7 +84,7 @@
                             function(data){
                                 $scope.piDoc.scannedItems = data.scannedItems;
                                 $scope.piDoc.extraItems = data.extraItems;
-                                rebuildData($scope.piDoc);
+                                $scope.piDoc.entryCounts = data.entryCounts;
                                 utilSvc.pageLoading("stop");
                             },
                             function(err){
@@ -100,7 +100,7 @@
                             function(data){
                                 $scope.piDoc.scannedItems = data.scannedItems;
                                 $scope.piDoc.extraItems = data.extraItems;
-                                rebuildData($scope.piDoc);
+                                $scope.piDoc.entryCounts = data.entryCounts;
                                 utilSvc.pageLoading("stop");
                             },
                             function(err){
@@ -150,28 +150,6 @@
                         utilSvc.pageLoading("stop");
                     });
                 }
-                let calculateScannedQty=function(scannedItems,items){
-                    for (let i = 0; i < items.length; i++) {
-                        items[i].ScanQty=0;
-                        for (let j = 0; j < scannedItems.length; j++) {
-                            if (scannedItems[j].MaterialCode.toUpperCase()===items[i].MaterialCode&&
-                                scannedItems[j].BatchNo.toUpperCase()===items[i].BatchNo&&
-                                ((scannedItems[j].itemNo&&scannedItems[j].itemNo.toUpperCase()===items[i].item)||
-                                (!scannedItems[j].itemNo&&!items[i].item))){
-                                    items[i].ScanQty+=scannedItems[j].ScanQty;
-                                }
-                        }
-                    }
-                } //end of function
-                
-                let rebuildData=function(piDoc){
-                    calculateScannedQty(piDoc.scannedItems,piDoc.items);
-                    calculateScannedQty(piDoc.scannedItems,piDoc.extraItems);
-                }
-                rebuildData(piDoc);
-
-
-
         } else {
             $scope.piDoc={};
             if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid

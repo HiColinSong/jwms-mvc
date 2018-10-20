@@ -103,33 +103,21 @@
 							<div class="clearboth"></div>
 							<accordion close-others="true" >
 								<div accordion-group class="panel-default scan-item"  
-											ng-repeat="(pidx,item) in piDoc.items track by pidx" >
-									<accordion-heading>
-										<table class="full-width">
-											<tr>
-												<td width="16%" class="text-center">{{pidx+1}}</td>
-												<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
-												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
-												<td width="21%" class="text-center">{{item.BatchNo}}</td>
-												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
-											</tr>
-										</table>
-									</accordion-heading>
-								</div>
-								<div accordion-group class="panel-default scan-item warn"  
-											ng-repeat="(pidx,item) in piDoc.extraItems track by pidx" >
-									<accordion-heading>
-										<table class="full-width">
-											<tr>
-												<td width="16%" class="text-center">{{pidx+piDoc.items.length+1}}</td>
-												<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
-												<td width="21%" class="text-center">{{item.MaterialCode}}</td>
-												<td width="21%" class="text-center">{{item.BatchNo}}</td>
-												<td width="21%" class="text-center">{{item.ScanQty||0}}</td>
-											</tr>
-										</table>
-									</accordion-heading>
-								</div>
+												ng-repeat="(pidx,item) in piDoc.entryCounts track by pidx" 
+												ng-class="{'warn':!item.storageBin}"
+									>
+										<accordion-heading>
+											<table class="full-width">
+												<tr>
+													<td width="16%" class="text-center">{{pidx+1}}</td>
+													<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
+													<td width="21%" class="text-center">{{item.MaterialCode}}</td>
+													<td width="21%" class="text-center">{{item.BatchNo}}</td>
+													<td width="21%" class="text-center">{{item.entryCount||0}}</td>
+												</tr>
+											</table>
+										</accordion-heading>
+									</div>
 								<dir class="clearboth"></dir>
 							</accordion>
 					  </div>
