@@ -2,7 +2,14 @@
 html,body {
   height:100%; /* needed for container min-height */
 }
-
+.page-mask{
+	background-color: white;
+    height: 100%;
+    width: 100%;
+    opacity: 0.7;
+    position: fixed;
+    z-index: 10000;
+}
 .nav .dropdown{
 	margin-right:15px;
 }

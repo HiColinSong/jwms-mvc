@@ -112,8 +112,30 @@ exports.confirm=function(req,res){
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
-			let entryCounts=await dbCountingSvc.getWMEntryCount(req.body.docNo,req.session.user.DefaultWH);
-			entryCounts=entryCounts.recordset;//entryCounts holds the total counts for each Bin/Mat/Batch (sum of storLoc)
+			let entryCounts=await dbCountingSvc.getWMEntryCount(req.body.docNo,req.body.verNo,req.session.user.DefaultWH);
+			entryCounts=entryCounts.recordset;
+			//counting extra items
+			let extraDoc={docNo:req.body.docNo,verNo:req.body.verNo,warehouse:req.session.user.DefaultWH,items:[]};
+			let storageBin=piDoc.items[0].storageBin;
+			let storageLoc="000Z";//hard coded sloc for extra items
+			let Plant=piDoc.items[0].Plant;
+			for (let i = 0; i < entryCounts.length; i++) {
+				const ec = entryCounts[i];
+				if (!ec.storageBin)
+					extraDoc.items.push({
+						MaterialCode:ec.MaterialCode,
+						BatchNo:ec.BatchNo,
+						entryCount:ec.entryCount,
+						plant:Plant,
+						storageBin:storageBin,
+						storageLoc:storageLoc
+					});
+			}
+			if (extraDoc.items.length>0){
+				await sapSvc.countingWMExtraItems(extraDoc);
+			}
+			//counting planned items
+			//entryCounts holds the total counts for each Bin/Mat/Batch (sum of storLoc)
 			//split entry counts into different storage location
 			//find the entries with same storage Bin, materialCode and batch number but different storage location
 			//assign counts to all the storLoc entries with maximum their total stock but the last one, 

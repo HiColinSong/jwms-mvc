@@ -4,6 +4,7 @@ var ActiveDirectory = require('activedirectory');
 const constants=require('./../config/const.json');
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
 const util=require('./../config/util');
+const logger = require("./../config/logger"); 
 exports.checkLoginStatus=function(req,res){
 	if (req.session&&req.session.user){
 			var data={loginUser:req.session.user};
@@ -40,13 +41,14 @@ exports.login=function(req, res) {
 
 	ad.authenticate(fullUsername, req.body.password, function(err, auth) {
 	  if (err) {
-	    console.log('ERROR: '+JSON.stringify(err));
+		// console.log('ERROR: '+JSON.stringify(err));
+		logger.error({loginUser:req.body.username,browser:req.headers['user-agent'],ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress,error:err});
 	    return res.status(402).send({message:"incorrect domain, username or password!"});
 	  }
 		
 		(async function () {
 			if (auth) {
-				console.log('Authenticated!:'+ req.body.username);
+				logger.info({loginUser:req.body.username,browser:req.headers['user-agent'],ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress});
 				try {
 					//get user profile from db
 				var userProfile = await dbCommonSvc.getUserProfile(req.body.username);

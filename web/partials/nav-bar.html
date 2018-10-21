@@ -101,7 +101,13 @@
                   <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
                     <a href="#/view-error-log" active-link="active">
                       <span class="fa fa-file-text-o fa-lg"></span>
-                      View Log
+                      View Error Log
+                    </a>
+                  </li>                
+                  <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
+                    <a href="#/view-info-log" active-link="active">
+                      <span class="fa fa-file-text-o fa-lg"></span>
+                      View Info Log
                     </a>
                   </li>                
                   <li ng-show="authUser">

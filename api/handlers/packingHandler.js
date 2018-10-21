@@ -1,11 +1,7 @@
 'use strict';
 
 const util = require('../config/util');
-// var logger = require("winston");
-var logger = require("../config/logger");
-
 const sapSvc =require('../dbservices/sapService');
-const sqlSvc =require('../dbservices/sqlService');
 const dbPackingSvc =require('../dbservices/dbPackingSvc');
 const dbCommonSvc=require('../dbservices/dbCommonSvc');
 var Promise = require('Promise').default;
@@ -262,9 +258,6 @@ exports.confirmPacking=function(req,res){
 			await dbCommonSvc.UpdateDOStatus(info);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
-			// logger.add(winston.transports.File, { filename: 'error-logs.log' });
-			logger.error({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
-			// logger.debug({handler:"PackingHandler",function:"confirmPacking",params:args,ret:ret,error:error});
 			return res.status(400).send({error:true,message:error.message||error});
 		}
 	})()

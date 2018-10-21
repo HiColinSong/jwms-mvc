@@ -112,14 +112,16 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
   <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
 </head>
 <body ng-cloak class="bx">
-  <div ng-include src="'partials/nav-bar.html'"></div>
-  
-  <div ng-view class="main-view"></div>
-  <img src="media/loading_rwd.gif" alt="" class="page-loading" ng-show="pageLoading">
+  <div class="page-mask" ng-show="pageLoading"></div>
+    <div ng-include src="'partials/nav-bar.html'"></div>
+    
+      <div ng-view class="main-view"></div>
+      <img src="media/loading_rwd.gif" alt="" class="page-loading" ng-show="pageLoading">
+      
+      <div class="footer ubuntu text-muted" ng-controller="footerCtrl">
+        <span>&copy; {{currentDate| date:'yyyy'}} Biosensors Interventional Technologies Pte Ltd</span>
+      </div>
 
-  <div class="footer ubuntu text-muted" ng-controller="footerCtrl">
-    <span>&copy; {{currentDate| date:'yyyy'}} Biosensors Interventional Technologies Pte Ltd</span>
-  </div>
 
 </body>
 </html>

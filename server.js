@@ -120,7 +120,8 @@ app.post('/bxapi/find-customer-name.json',auth.authCheck,commonHandler.getCustom
 app.get('/bxapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
 app.post('/bxapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/bxapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
-app.post('/bxapi/view-log.json',auth.authCheck,commonHandler.viewLog);
+app.post('/bxapi/view-info-log.json',auth.authCheck,commonHandler.viewLog);
+app.post('/bxapi/view-error-log.json',auth.authCheck,commonHandler.viewLog);
 
 var qrsmtHandler = require('./api/handlers/qrsmtHandler');
 app.post('/bxapi/qrsmt/get-subcon-work-order-for-planner.json',auth.authCheck,qrsmtHandler.getSubconWorkOrderForPlanner);

@@ -355,10 +355,17 @@
                 },
                 isArray:true
               },
-              viewLog:{
+              viewErrorLog:{
                 method: 'POST',
                 params:{
-                  type: 'view-log'
+                  type: 'view-error-log'
+                },
+                isArray:true
+              },
+              viewInfoLog:{
+                method: 'POST',
+                params:{
+                  type: 'view-info-log'
                 },
                 isArray:true
               },

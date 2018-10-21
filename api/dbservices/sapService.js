@@ -272,7 +272,26 @@ exports.getCountingWmDoc=function(docNo,whseNo){
     };
     return invokeBAPI("ZIM_L_INV_READ",param,{});
 };
-
+exports.countingWMExtraItems=function(doc){
+  var param = {
+    IM_PHYINV_DOC:doc.docNo,
+    IM_RECOUNT_VER:doc.verNo,
+    IM_WHSE_NO:doc.warehouse,
+    T_PI_ITEMS:[]
+  }
+  for (let i = 0; i < doc.items.length; i++) {
+    const item = doc.items[i];
+    param.T_PI_ITEMS.push({
+        MATNR:item.MaterialCode,
+        CHARG:item.BatchNo,
+        QUANTITY:item.entryCount,
+        PLANT:item.plant,
+        STORAGE_BIN:item.storageBin,
+        STORAGE_LOC:item.storageLoc
+    });
+  }
+  return invokeBAPI("ZWM_MATPHYSINV_COUNT_NEW",param,{});
+};
 exports.countingWM=function(items){
     let param = {
       I_COMMIT:'X',
@@ -315,11 +334,8 @@ var invokeBAPI = function(bapiName,param,options){
           if (res&&res.RETURN&&res.RETURN.length>0&&res.RETURN[0].TYPE==='E'){ 
             console.log("Invoking "+bapiName+" failed:"+res.RETURN[0].MESSAGE);
             throw new Error(res.RETURN[0].MESSAGE);
-            // options.transactionCommit=false;
           } else if (res&&res.PROT&&res.PROT.length>0&&res.PROT[0].MSGTY==='E'){ 
             // console.log("Invoking "+bapiName+" failed:"+res.PROT[0]);
-            // throw new Error(JSON.stringify(res.PROT[0],null,2));
-            // transactionCommit=false;
             let errorMsgParm={
               "MSGNO": res.PROT[0].MSGNO,
               "MSGID": res.PROT[0].MSGID,
@@ -348,6 +364,7 @@ var invokeBAPI = function(bapiName,param,options){
           }
     })
     .then(function(response){
+          logger.info({bapiName:options.originalBapiName||bapiName,param:options.originalParam||param,response:response[0]});
            resolve(response[0]);
            if (options.reconnect)
               reconnect();

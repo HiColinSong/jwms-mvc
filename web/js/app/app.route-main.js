@@ -37,7 +37,27 @@
                     logs:['$q','bxService',
                         function($q,apiSvc){
                             var deferred = $q.defer();
-                            apiSvc.viewLog().$promise.then(function(data){
+                            apiSvc.viewErrorLog({type:"error-log"}).$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                            },function(err){
+                                deferred.reject(err);
+                            })
+                            return deferred.promise;
+                        }]
+                }
+            })
+            .when('/view-info-log', {
+                templateUrl: 'partials/view-log.html',
+                controller: 'viewLogCtrl',
+                resolve:{
+                    logs:['$q','bxService',
+                        function($q,apiSvc){
+                            var deferred = $q.defer();
+                            apiSvc.viewInfoLog({type:"info-log"}).$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
                                 } else {

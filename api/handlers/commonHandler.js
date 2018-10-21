@@ -7,7 +7,7 @@
 const dbCommonSvc=require('../dbservices/dbCommonSvc')
 const sapSvc =require('../dbservices/sapService');
 var Promise = require('Promise').default
-var material, eanCode;
+var material;
 
 exports.getMaterial=function(req,res){
 	(async function () {
@@ -69,11 +69,15 @@ exports.deleteUser=function(req,res){
 };
 exports.viewLog=function(req,res){
 	var lineReader = require('reverse-line-reader');
-	var maxLine = 50;
+	var maxLine = 300;
 	var i=0,logs=[];
+	let file='logs/filelog-error.log';
+	if (req.body.type==='info-log'){
+		file='logs/filelog-info.log'
+	}
 	var promise = new Promise(function(resolve,reject){
 		try {
-			lineReader.eachLine('logs/filelog-error.log', function(line, last) {
+			lineReader.eachLine(file, function(line, last) {
 				// console.log(line);
 				// console.log(last);
 				try {
