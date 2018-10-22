@@ -263,14 +263,21 @@ var test_ZWM_MATPHYSINV_COUNT_NEW=function(){
   return invokeBAPI("ZWM_MATPHYSINV_COUNT_NEW",param);
 };
 var test_ZIM_MATPHYSINV_COUNT_NEW=function(){
-  var param = {
-    IM_PHYINV_DOC:'0100005789',
-    IM_PHYINV_YEAR:'2019',
-    T_PI_ITEMS:
-      [ { MATNR:'BMX6-2509',CHARG:'W18040315',QUANTITY: 0 }, 
-        { MATNR:'BMXP-3518',CHARG:'W18070119',QUANTITY: 0 },
-        { MATNR:'BMXP-3536',CHARG:'W18070130',QUANTITY: 0}
-      ]
+  var param ={
+    "IM_PHYINV_DOC": "0100005788",
+    "IM_PHYINV_YEAR": "2019",
+    "T_PI_ITEMS": [
+      {
+        "MATNR": "BFR1-3014",
+       "CHARG": "W16100311",
+        "QUANTITY": 0
+      },
+      {
+        "MATNR": "LUFR3028",
+        "CHARG": "W18090005",
+        "QUANTITY": 0
+      }
+    ]
   };
   return invokeBAPI("ZIM_MATPHYSINV_COUNT_NEW",param);
 };
@@ -485,9 +492,9 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
-test_BAPI_MATPHYSINV_GETDETAIL()
+// test_BAPI_MATPHYSINV_GETDETAIL()
 // test_BAPI_MATPHYSINV_COUNT()
 // test_ZIM_L_INV_READ()
 // test_L_INV_COUNT_EXT()
-// test_ZIM_MATPHYSINV_COUNT_NEW()
+test_ZIM_MATPHYSINV_COUNT_NEW()
 // test_ZWM_MATPHYSINV_COUNT_NEW();

@@ -6,7 +6,7 @@ html,body {
 	background-color: white;
     height: 100%;
     width: 100%;
-    opacity: 0.7;
+    opacity: 0.5;
     position: fixed;
     z-index: 10000;
 }

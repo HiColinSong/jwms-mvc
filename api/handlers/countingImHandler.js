@@ -137,19 +137,7 @@ exports.confirm=function(req,res){
 				}
 			}
 			
-			// let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
-			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
-			// if (args.IT_BX_STOCK.length>0)
-			// 	await sapSvc.serialNoUpdate(args);
-			// let info={
-			// 	Warehouse:req.session.user.DefaultWH,
-			// 	ResvNumber:req.body.order.ResvNo,
-			// 	PostedOn:req.body.postedOn,
-			// 	PostedBy:req.session.user.UserID,
-			// 	PostingStatus:'C',
-			// 	Push2SAPStatus:'C',
-			// }
-			// let status=await dbResvSvc.setStatus(info);
+			let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
