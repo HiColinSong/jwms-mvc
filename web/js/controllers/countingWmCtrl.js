@@ -16,7 +16,7 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
         $scope.piDoc=piDoc;
         $scope.docNo=piDoc.docNo;
         $scope.type = "counting-wm";
-        $scope.temp.confirmReady = piDoc.countingStatus!=="N";
+        $scope.temp.confirmed = piDoc.countingStatus!=="N";
         $scope.barcode = itemSvc.getBarcodeObj();
 
             //findItem

@@ -17,6 +17,7 @@
             $scope.docNo=piDoc.docNo;
             $scope.type = "counting-im";
             $scope.barcode = itemSvc.getBarcodeObj();
+            $scope.temp.confirmed = piDoc.CountStatus==="X";
 
 
             // $scope.$watchCollection( "piDoc.scannedItems", function( item ) {
