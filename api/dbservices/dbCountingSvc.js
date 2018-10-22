@@ -18,7 +18,8 @@ const sqlSvc=require("./sqlService");
       fiscalYear:{type:"sql.Char(4)",value:info.fiscalYear},
       itemNoList:{type:'sql.VarChar(8000)',value:info.itemNoList},
       materialList:{type:'sql.VarChar(8000)',value:info.materialList},
-      batchList:{type:'sql.VarChar(8000)',value:info.batchList}
+      batchList:{type:'sql.VarChar(8000)',value:info.batchList},
+      isDeletedList:{type:'sql.VarChar(400)',value:info.isDeletedList}
     }
     return sqlSvc.callStoredProcedure("dbo.BX_InsertOrUpdateCountingIM",params)
   }

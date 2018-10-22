@@ -166,15 +166,25 @@ exports.formatDateTime=function(dateString){
 		 items = doc.ITEMS;
 		for (let i = 0; i < items.length; i++) {
 			item = items[i];
-			if (!item[itemFields['isDeleted']]){//filter out the deleted items
-				itemIdx++
-				_imDoc.items.push({});
-				for (let key in itemFields) {
-					_imDoc.items[itemIdx][key]=item[itemFields[key]];
-				}
-			} 
+			_imDoc.items.push({});
+			for (let key in itemFields) {
+				_imDoc.items[i][key]=item[itemFields[key]];
+			}
 		}
 	}
+	//  if (doc.ITEMS&&doc.ITEMS.length>0){
+	// 	 items = doc.ITEMS;
+	// 	for (let i = 0; i < items.length; i++) {
+	// 		item = items[i];
+	// 		if (!item[itemFields['isDeleted']]){//filter out the deleted items
+	// 			itemIdx++
+	// 			_imDoc.items.push({});
+	// 			for (let key in itemFields) {
+	// 				_imDoc.items[itemIdx][key]=item[itemFields[key]];
+	// 			}
+	// 		} 
+	// 	}
+	// }
 	return _imDoc;
 }
  exports.countingWmDocConverter = function (doc,verNo,isMergeStorLoc){

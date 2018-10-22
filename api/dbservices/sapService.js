@@ -248,16 +248,16 @@ exports.countingIM=function(piDoc,countDate){
     ITEMS:[]
   }
   let ele;
-    for (let i = 0; i < piDoc.items.length; i++) {
-      const item = piDoc.items[i];
+    for (let i = 0; i < piDoc.entryCounts.length; i++) {
+      const item = piDoc.entryCounts[i];
       ele={
-        ITEM:item.item,
+        ITEM:item.itemNo,
         MATERIAL:item.MaterialCode,
         BATCH:item.BatchNo,
-        ENTRY_QNT:item.ScanQty,
+        ENTRY_QNT:item.entryCount,
         ENTRY_UOM:item.Unit,
       };
-      if (item.ScanQty===0){
+      if (item.entryCount===0){
         ele.ZERO_COUNT='X';
       }
       param.ITEMS.push(ele);
@@ -356,10 +356,10 @@ var invokeBAPI = function(bapiName,param,options){
               return client.invoke('BAPI_TRANSACTION_COMMIT',{WAIT:'X'});
 
           }else if (bapiName==='Z_MESSAGE_TEXT_BUILD'){
-            console.log("Invoking "+bapiName+" successfully");
+            // console.log("Invoking "+bapiName+" successfully");
             throw new Error(res.MESSAGE_TEXT_OUTPUT);            
           } else {
-            console.log("Invoking "+bapiName+" successfully");
+            // console.log("Invoking "+bapiName+" successfully");
             return response;
           }
     })
@@ -371,7 +371,7 @@ var invokeBAPI = function(bapiName,param,options){
     })
     .catch(function (error) {
       // Output error
-        console.error('Error invoking'+bapiName+' :', error);
+        // console.error('Error invoking'+bapiName+' :', error);
 
         logger.error({bapiName:options.originalBapiName||bapiName,param:options.originalParam||param,error:(error.message||error)});
         if (options.reconnect)

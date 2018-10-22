@@ -11,7 +11,8 @@ ALTER PROCEDURE [dbo].[BX_InsertOrUpdateCountingIM]
 	@fiscalYear char(4),
     @itemNoList varchar (8000),
     @materialList varchar(8000),
-    @batchList varchar(8000)
+    @batchList varchar(8000),
+    @isDeletedList varchar(400)
 )
 AS
 --insert or update for table SAP_DOHeader
@@ -21,7 +22,8 @@ DECLARE
     @nth int,
     @itemNo varchar (20),
     @MaterialCode varchar(18),
-    @BatchNo varchar(20)
+    @BatchNo varchar(20),
+    @isDeleted char(1)
 
 SET @nth=1
     while 1=1
@@ -30,9 +32,10 @@ SET @nth=1
         IF LEN(ISNULL(@itemNo, '')) = 0 break;
         SET @MaterialCode = (select dbo.nth_occur(@materialList,',',@nth));
         SET @BatchNo = (select dbo.nth_occur(@batchList,',',@nth));
+        SET @isDeleted = (select dbo.nth_occur(@isDeletedList,',',@nth));
 
         UPDATE dbo.BX_CountingIM 
-        SET itemNo=@itemNo
+        SET itemNo=@itemNo,isDeleted=@isDeleted
         WHERE docNo = @docNo  AND
               fiscalYear=@fiscalYear AND
               (itemNo=@itemNo OR itemNo IS NULL) AND -- for those not in the counting sheet previously
@@ -41,8 +44,8 @@ SET @nth=1
 
 		IF @@ROWCOUNT=0
 
-        INSERT INTO dbo.BX_CountingIM (docNo,fiscalYear,itemNo,MaterialCode,BatchNo)
-         VALUES (@docNo,@fiscalYear,@itemNo,@MaterialCode,@BatchNo)
+        INSERT INTO dbo.BX_CountingIM (docNo,fiscalYear,itemNo,MaterialCode,BatchNo,isDeleted)
+         VALUES (@docNo,@fiscalYear,@itemNo,@MaterialCode,@BatchNo,@isDeleted)
 
 		SET @nth=@nth+1
         continue;

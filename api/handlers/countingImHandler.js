@@ -2,41 +2,49 @@
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbCountingSvc =require('../dbservices/dbCountingSvc');
+var getInsertParam=function(piDoc){
+				let params={
+					docNo:piDoc.docNo,
+					fiscalYear:piDoc.fiscalYear,
+				}
+				let itemNoList=[];
+				let materialList=[];
+				let batchList=[];
+				let isDeletedList=[];
+				for (let i=0;i<piDoc.items.length;i++){
+					itemNoList[i]=piDoc.items[i].item;
+					materialList[i]=piDoc.items[i].MaterialCode;
+					batchList[i]=piDoc.items[i].BatchNo;
+					isDeletedList[i]=piDoc.items[i].isDeleted;
+				}
+				params.itemNoList = itemNoList.join(',');
+				params.materialList = materialList.join(',');
+				params.batchList = batchList.join(',');
+				params.isDeletedList = isDeletedList.join(',');
+	return params;
+}
+
 exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
 			let sapDoc = await sapSvc.getCountingImDoc(req.body.docNo,req.body.fiscalYear);
 			let piDoc = util.countingImDocConverter(sapDoc);
 				// insert data to dbo.BX_CountingIM
-				var params={
-					docNo:piDoc.docNo,
-					fiscalYear:piDoc.fiscalYear,
-				}
-				var itemNoList=[];
-				var materialList=[];
-				var batchList=[];
-				for (let i=0;i<piDoc.items.length;i++){
-					itemNoList[i]=piDoc.items[i].item;
-					materialList[i]=piDoc.items[i].MaterialCode;
-					batchList[i]=piDoc.items[i].BatchNo;
-				}
-				params.itemNoList = itemNoList.join(',');
-				params.materialList = materialList.join(',');
-				params.batchList = batchList.join(',');
-				let ret=await dbCountingSvc.InsertOrUpdateCountingIM(params);
-				ret = ret.recordsets;
+			let ret=await dbCountingSvc.InsertOrUpdateCountingIM(getInsertParam(piDoc));
+			ret = ret.recordsets;
 
-				if (ret.length>0){
-					piDoc.extraItems=ret[0];
-				}
-				if (ret.length>1){
-					piDoc.entryCounts= ret[1];
-				}
-				if (ret.length>2){
-					piDoc.scannedItems= ret[2];
-					util.trimValues(piDoc.scannedItems);
-				}
-				return res.status(200).send(piDoc);				
+			if (ret.length>0){
+				piDoc.extraItems=ret[0];
+			}
+			if (ret.length>1){
+				piDoc.entryCounts= ret[1];
+				util.trimValues(piDoc.entryCounts);
+			}
+			if (ret.length>2){
+				piDoc.scannedItems= ret[2];
+				util.trimValues(piDoc.scannedItems);
+			}
+			return res.status(200).send(piDoc);				
 
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});
@@ -46,7 +54,7 @@ exports.getPiDoc=function(req,res){
 
 exports.addItem=function(req,res){
 	(async function () {
-		var info=req.body,params={};
+		let info=req.body,params={};
 		params.docNo=info.orderNo;
 		params.fiscalYear=info.fiscalYear;
 		params.EANCode=info.EANCode;
@@ -78,6 +86,7 @@ exports.removeItem=function(req,res){
 			ret = ret.recordsets;
 			let extraItems = (ret.length>0)?ret[0]:[];
 			let entryCounts = (ret.length>1)?ret[1]:[];
+			util.trimValues(entryCounts);
 			let scannedItems =(ret.length>2)?ret[2]:[];
 			util.trimValues(scannedItems);
 			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
@@ -94,6 +103,7 @@ exports.refresh=function(req,res){
 			ret = ret.recordsets;
 			let extraItems = (ret.length>0)?ret[0]:[];
 			let entryCounts = (ret.length>1)?ret[1]:[];
+			util.trimValues(entryCounts);
 			let scannedItems =(ret.length>2)?ret[2]:[];
 			util.trimValues(scannedItems);
 			let data={scannedItems:scannedItems,extraItems:extraItems,entryCounts:entryCounts}
@@ -120,9 +130,21 @@ exports.confirm=function(req,res){
 			}
 			let sapDoc = await sapSvc.getCountingImDoc(req.body.docNo,req.body.fiscalYear);
 			let piDoc = util.countingImDocConverter(sapDoc);
-			entryCounts=await dbCountingSvc.getIMEntryCount(req.body.docNo,req.body.fiscalYear);
-			entryCounts=entryCounts.recordset;
-			util.trimValues(entryCounts)
+			let ret=await dbCountingSvc.InsertOrUpdateCountingIM(getInsertParam(piDoc));
+			ret = ret.recordsets;
+
+			if (ret.length>0){
+				piDoc.extraItems=ret[0];
+			}
+			if (ret.length>1){
+				piDoc.entryCounts= ret[1];
+				util.trimValues(piDoc.entryCounts);
+			}
+			if (ret.length>2){
+				piDoc.scannedItems= ret[2];
+				util.trimValues(piDoc.scannedItems);
+			}
+			entryCounts=piDoc.entryCounts;
 			if (entryCounts.length>0&&piDoc.items&&piDoc.items.length>0){
 				for (let i = 0; i < entryCounts.length; i++) {
 					const ec = entryCounts[i];
@@ -131,13 +153,14 @@ exports.confirm=function(req,res){
 						if (ec.itemNo===item.item&&
 						 	ec.MaterialCode===item.MaterialCode&&
 						 	ec.BatchNo===item.BatchNo){
-								item.ScanQty=ec.entryCount;
+								// item.ScanQty=ec.entryCount;
+								ec.Unit=item.Unit;
 						}
 					}
 				}
 			}
 			
-			let ret = await sapSvc.countingIM(piDoc,req.body.countDate);
+			await sapSvc.countingIM(piDoc,req.body.countDate);
 			return res.status(200).send({confirm:"success"});
 		} catch (error) {
 			return res.status(400).send({error:true,message:error.message||error});

@@ -18,8 +18,8 @@ BEGIN
           c.MaterialCode,
           c.BatchNo,
           ISNULL(sum(s.qty),0) AS entryCount 
-    FROM BX_CountingIM c LEFT OUTER JOIN BX_CountingIM_Scan s ON s.countingImId=c.id
-    WHERE docNo=@docNo AND fiscalYear=@fiscalYear
+    FROM BX_CountingIM c LEFT OUTER JOIN BX_CountingIM_Scan s ON s.countingImId=c.id 
+    WHERE docNo=@docNo AND fiscalYear=@fiscalYear AND (c.isDeleted is NULL OR c.isDeleted='')
     GROUP BY c.id,c.itemNo,c.MaterialCode,c.BatchNo
 END
 

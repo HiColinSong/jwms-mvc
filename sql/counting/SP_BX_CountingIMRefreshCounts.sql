@@ -16,7 +16,7 @@ BEGIN
     --get Extra Items
     SELECT id,docNo,fiscalYear,MaterialCode,BatchNo 
     FROM dbo.BX_CountingIM 
-    WHERE  docNo = @docNo AND fiscalYear=@fiscalYear AND itemNo IS NULL
+    WHERE  docNo = @docNo AND fiscalYear=@fiscalYear AND itemNo IS NULL AND (isDeleted IS NULL OR isDeleted='')
 
    --get IM Entry count (sum of each entry)
    EXEC dbo.BX_GetIMEntryCount @docNo=@docNo,@fiscalYear=@fiscalYear 
@@ -35,6 +35,6 @@ BEGIN
           s.countOn 
     FROM  dbo.BX_CountingIM_Scan s 
             LEFT OUTER JOIN dbo.BX_CountingIM c ON c.id=s.countingImId
-    WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear
+    WHERE c.docNo = @docNo and c.fiscalYear = @fiscalYear and (c.isDeleted is NULL OR c.isDeleted='')
 END
 

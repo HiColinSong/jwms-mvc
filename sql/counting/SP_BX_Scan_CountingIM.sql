@@ -27,7 +27,8 @@ BEGIN
                 where serialNo=@SerialNo and  
                     s.countingImId=c.id AND
                     c.docNo=@docNo AND 
-                    c.fiscalYear=@fiscalYear
+                    c.fiscalYear=@fiscalYear AND 
+                    (isDeleted IS NULL OR isDeleted='')
                )
             RAISERROR ('Error:Serial Number exists!',16,1 ); 
 
@@ -46,7 +47,8 @@ BEGIN
            WHERE docNo=@docNo AND
                  fiscalYear=@fiscalYear AND
                  MaterialCode=@MaterialCode AND
-                 BatchNo=@BatchNo 
+                 BatchNo=@BatchNo AND 
+                 (isDeleted IS NULL OR isDeleted='')
 
 
             IF @countingImId IS NULL
