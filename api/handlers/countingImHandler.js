@@ -24,6 +24,23 @@ var getInsertParam=function(piDoc){
 	return params;
 }
 
+let copyUnits=function(entryCounts,items){
+	if (entryCounts.length>0&&items&&items.length>0){
+		for (let i = 0; i < entryCounts.length; i++) {
+			const ec = entryCounts[i];
+			for (let j = 0; j < items.length; j++) {
+				const item = items[j];
+				if (ec.itemNo===item.item&&
+					 ec.MaterialCode===item.MaterialCode&&
+					 ec.BatchNo===item.BatchNo){
+						// item.ScanQty=ec.entryCount;
+						ec.Unit=item.Unit;
+				}
+			}
+		}
+	}
+}
+
 exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
@@ -39,6 +56,7 @@ exports.getPiDoc=function(req,res){
 			if (ret.length>1){
 				piDoc.entryCounts= ret[1];
 				util.trimValues(piDoc.entryCounts);
+				copyUnits(piDoc.entryCounts,piDoc.items);
 			}
 			if (ret.length>2){
 				piDoc.scannedItems= ret[2];
@@ -144,21 +162,7 @@ exports.confirm=function(req,res){
 				piDoc.scannedItems= ret[2];
 				util.trimValues(piDoc.scannedItems);
 			}
-			entryCounts=piDoc.entryCounts;
-			if (entryCounts.length>0&&piDoc.items&&piDoc.items.length>0){
-				for (let i = 0; i < entryCounts.length; i++) {
-					const ec = entryCounts[i];
-					for (let j = 0; j < piDoc.items.length; j++) {
-						const item = piDoc.items[j];
-						if (ec.itemNo===item.item&&
-						 	ec.MaterialCode===item.MaterialCode&&
-						 	ec.BatchNo===item.BatchNo){
-								// item.ScanQty=ec.entryCount;
-								ec.Unit=item.Unit;
-						}
-					}
-				}
-			}
+			copyUnits(piDoc.entryCounts,piDoc.items);
 			
 			await sapSvc.countingIM(piDoc,req.body.countDate);
 			return res.status(200).send({confirm:"success"});

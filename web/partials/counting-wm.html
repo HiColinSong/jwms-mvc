@@ -95,10 +95,11 @@
 					  <div role="tabpanel" class="tab-pane"  ng-class="{'active':showScanItemTab==='totalSummary'}" id="totalSummary">
 							<div class="margin-top-20 panel-head">
 										<div class="col-sm-2 col-xs-2">Line No</div>
-										<div class="col-sm-3 col-xs-3">Stor. Bin</div>
+										<div class="col-sm-2 col-xs-2">Stor. Bin</div>
 										<div class="col-sm-2 col-xs-2">Material</div>
 										<div class="col-sm-2 col-xs-2">Batch No</div>
-										<div class="col-sm-3 col-xs-3">Scan Qty</div>
+										<div class="col-sm-2 col-xs-2">Scan Qty</div>									
+										<div class="col-sm-2 col-xs-2">Unit</div>	
 							</div>
 							<div class="clearboth"></div>
 							<accordion close-others="true" >
@@ -109,11 +110,12 @@
 										<accordion-heading>
 											<table class="full-width">
 												<tr>
-													<td width="16%" class="text-center">{{pidx+1}}</td>
-													<td width="21%" class="text-center">{{item.storageBin||'-'}}</td>
-													<td width="21%" class="text-center">{{item.MaterialCode}}</td>
-													<td width="21%" class="text-center">{{item.BatchNo}}</td>
-													<td width="21%" class="text-center">{{item.entryCount||0}}</td>
+													<td width="15%" class="text-center">{{pidx+1}}</td>
+													<td width="17%" class="text-center">{{item.storageBin||'-'}}</td>
+													<td width="17%" class="text-center">{{item.MaterialCode}}</td>
+													<td width="17%" class="text-center">{{item.BatchNo}}</td>
+													<td width="17%" class="text-center">{{item.entryCount||0}}</td>
+													<td width="17%" class="text-center">{{item.Unit|dispUnit}}</td>
 												</tr>
 											</table>
 										</accordion-heading>

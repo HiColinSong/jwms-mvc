@@ -529,7 +529,16 @@
           display:"QA Sample"
         }
       ],
-      userRoles:["superAdmin","qaAdmin","whAdmin","qaLab","wh","DocControlQA","tech","planner"]
+      userRoles:["superAdmin","qaAdmin","whAdmin","qaLab","wh","DocControlQA","tech","planner"],
+      units:[
+        {id:"IN",display:"inch"},
+        {id:"BOT",display:"BT"},
+        {id:"KAR",display:"CAR"},
+        {id:"GLL",display:"GAL"},
+        {id:"STD",display:"HR"},
+        {id:"PAK",display:"PAC"},
+        {id:"ST",display:"PC"}
+      ]
     })
     .service('dynamicLocale',function(){
             var locale = {

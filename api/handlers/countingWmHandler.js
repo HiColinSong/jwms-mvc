@@ -21,6 +21,22 @@ var getInsertParam=function(piDoc){
 	params.batchList = batchList.join(',');
 return params;
 }
+
+let copyUnits=function(entryCounts,items){
+	if (entryCounts.length>0&&items&&items.length>0){
+		for (let i = 0; i < entryCounts.length; i++) {
+			const ec = entryCounts[i];
+			for (let j = 0; j < items.length; j++) {
+				const item = items[j];
+				if (ec.storageBin===item.storageBin&&
+					 ec.MaterialCode===item.MaterialCode&&
+					 ec.BatchNo===item.BatchNo){
+						ec.Unit=item.Unit;
+				}
+			}
+		}
+	}
+}
 exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
@@ -35,6 +51,7 @@ exports.getPiDoc=function(req,res){
 				if (ret.length>1){
 					piDoc.entryCounts= ret[1];
 					util.trimValues(piDoc.entryCounts);
+					copyUnits(piDoc.entryCounts,piDoc.items);
 				}
 				if (ret.length>2){
 					piDoc.scannedItems= ret[2];

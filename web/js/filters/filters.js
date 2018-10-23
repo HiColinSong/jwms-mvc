@@ -17,6 +17,18 @@
 	      		return utilSvc.findItemById(id,constants.categories,"id")["display"];
 	    };
 		}])
+    .filter('dispUnit', ['utilSvc','constants', function(utilSvc,constants,id) {
+	    return function(id) {
+	    	if (id){
+					let unitObj=utilSvc.findItemById(id,constants.units,"id");
+					if (unitObj){
+						return utilSvc.findItemById(id,constants.units,"id")["display"]
+					} else {
+						return id
+					}
+				}
+	    };
+		}])
 		//take the date format "yyyyMMdd"
     .filter('ymdDate', ['$filter', function($filter) {
 	    return function(dateString,format) {

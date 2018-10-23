@@ -111,6 +111,7 @@
         "storageLocation":"LGORT",
         "MaterialCode":"MATNR",
         "BatchNo":"CHARG",
+        "Unit":"MEINS",
         "Plant":"WERKS"
     }
 }
