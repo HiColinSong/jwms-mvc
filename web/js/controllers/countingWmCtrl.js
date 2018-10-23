@@ -104,7 +104,12 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
             }
             $scope.confirmCounting = function() {
                 utilSvc.pageLoading("start");
-                apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,verNo:piDoc.verNo}).$promise.
+                apiSvc.confirmCounting({subtype:$scope.type},
+                    {docNo:piDoc.docNo,
+                     verNo:piDoc.verNo,
+                     storageBin:piDoc.items[0].storageBin,
+                     Plant:piDoc.items[0].Plant
+                    }).$promise.
                 then(function(data){
                     if (data&&data.confirm==='success'){
                         $scope.confirm={

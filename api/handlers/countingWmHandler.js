@@ -2,37 +2,38 @@
 const util = require('../config/util');
 const sapSvc =require('../dbservices/sapService');
 const dbCountingSvc =require('../dbservices/dbCountingSvc');
-var resvDoc,promise;
+var getInsertParam=function(piDoc){
+	let params={
+		docNo:piDoc.docNo,
+		verNo:piDoc.verNo,
+		warehouse:piDoc.warehouseNo
+	}
+	let storageBinList=[];
+	let materialList=[];
+	let batchList=[];
+	for (let i=0;i<piDoc.items.length;i++){
+		storageBinList[i]=piDoc.items[i].storageBin;
+		materialList[i]=piDoc.items[i].MaterialCode;
+		batchList[i]=piDoc.items[i].BatchNo;
+	}
+	params.storageBinList = storageBinList.join(',');
+	params.materialList = materialList.join(',');
+	params.batchList = batchList.join(',');
+return params;
+}
 exports.getPiDoc=function(req,res){
 	(async function () {
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,true);
-				// insert data to dbo.BX_CountingWM
-				let params={
-					docNo:piDoc.docNo,
-					verNo:piDoc.verNo,
-					warehouse:req.session.user.DefaultWH
-				}
-				let storageBinList=[];
-				let materialList=[];
-				let batchList=[];
-				for (let i=0;i<piDoc.items.length;i++){
-					storageBinList[i]=piDoc.items[i].storageBin;
-					materialList[i]=piDoc.items[i].MaterialCode;
-					batchList[i]=piDoc.items[i].BatchNo;
-				}
-				params.storageBinList = storageBinList.join(',');
-				params.materialList = materialList.join(',');
-				params.batchList = batchList.join(',');
-				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(params);
+				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(getInsertParam(piDoc));
 				ret = ret.recordsets;
-
 				if (ret.length>0){
 					piDoc.extraItems=ret[0];
 				}
 				if (ret.length>1){
 					piDoc.entryCounts= ret[1];
+					util.trimValues(piDoc.entryCounts);
 				}
 				if (ret.length>2){
 					piDoc.scannedItems= ret[2];
@@ -110,18 +111,18 @@ exports.refresh=function(req,res){
 exports.confirm=function(req,res){
 	(async function () {
 		try {
-			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
-			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
+			// let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
+			// let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
 			let entryCounts=await dbCountingSvc.getWMEntryCount(req.body.docNo,req.body.verNo,req.session.user.DefaultWH);
 			entryCounts=entryCounts.recordset;
 			//counting extra items
 			let extraDoc={docNo:req.body.docNo,verNo:req.body.verNo,warehouse:req.session.user.DefaultWH,items:[]};
-			let storageBin=piDoc.items[0].storageBin;
+			let storageBin=req.body.storageBin;
 			let storageLoc="000Z";//hard coded sloc for extra items
-			let Plant=piDoc.items[0].Plant;
+			let Plant=req.body.Plant;
 			for (let i = 0; i < entryCounts.length; i++) {
 				const ec = entryCounts[i];
-				if (!ec.storageBin)
+				if (!ec.storageBin) //only extra items
 					extraDoc.items.push({
 						MaterialCode:ec.MaterialCode,
 						BatchNo:ec.BatchNo,
@@ -134,6 +135,24 @@ exports.confirm=function(req,res){
 			if (extraDoc.items.length>0){
 				await sapSvc.countingWMExtraItems(extraDoc);
 			}
+
+			//load SAP DOC
+			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
+			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
+				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(getInsertParam(piDoc));
+				ret = ret.recordsets;
+				if (ret.length>0){
+					piDoc.extraItems=ret[0];
+				}
+				if (ret.length>1){
+					piDoc.entryCounts= ret[1];
+					util.trimValues(piDoc.entryCounts);
+				}
+				if (ret.length>2){
+					piDoc.scannedItems= ret[2];
+					util.trimValues(piDoc.scannedItems);
+				}
+				entryCounts=piDoc.entryCounts;
 			//counting planned items
 			//entryCounts holds the total counts for each Bin/Mat/Batch (sum of storLoc)
 			//split entry counts into different storage location
@@ -163,7 +182,7 @@ exports.confirm=function(req,res){
 				}
 			}
 			
-			let ret = await sapSvc.countingWM(piDoc.items);
+			await sapSvc.countingWM(piDoc.items);
 
 			// let args = util.getTransParams(req.body.order,"RSV",req.session.user.UserID);
 			// if (args.IT_BX_STOCK.length>0)

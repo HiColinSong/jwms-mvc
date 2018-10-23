@@ -292,100 +292,130 @@ var test_ZIM_L_INV_READ=function(){
 
 var test_L_INV_COUNT_EXT=function(){
   var param = {
-    "I_COMMIT":"X",
-    "S_LINV":[
+    "I_COMMIT": "X",
+    "S_LINV": [
+     
+      
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-2208",
-        "WERKS":"2100",
-        "CHARG":"W17040456D",
-        "MENGA":"0",
-        "LGORT":"8027",
-        "NVERS":"02",
-        "KZNUL":"X"
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451506V0",
+        "WERKS": "2100",
+        "CHARG": "17735324",
+        "MENGA": "6",
+        "LGORT": "0001",
+        "NVERS": "00"
       },
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-2208",
-        "WERKS":"2100",
-        "CHARG":"W18020338",
-        "MENGA":"0",
-        "LGORT":"8027",
-        "NVERS":"02",
-        "KZNUL":"X"
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451413V0",
+        "WERKS": "2100",
+        "CHARG": "17744708",
+        "MENGA": "18",
+        "LGORT": "70SG",
+        "NVERS": "00"
       },
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-2228",
-        "WERKS":"2100",
-        "CHARG":"W18040406",
-        "MENGA":"14",
-        "LGORT":"8027",
-        "NVERS":"02",
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451442V0",
+        "WERKS": "2100",
+        "CHARG": "17760819",
+        "MENGA": "34",
+        "LGORT": "70MY",
+        "NVERS": "00"
+      },
+      
+      {
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451401V5",
+        "WERKS": "2100",
+        "CHARG": "17722728",
+        "MENGA": "17",
+        "LGORT": "70SG",
+        "NVERS": "00"
       },
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-3008",
-        "WERKS":"2100",
-        "CHARG":"W17020470",
-        "MENGA":"15",
-        "LGORT":"0016",
-        "NVERS":"02",
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451413V0",
+        "WERKS": "2100",
+        "CHARG": "17770449",
+        "MENGA": "25",
+        "LGORT": "70SG",
+        "NVERS": "00"
       },
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-3508",
-        "WERKS":"2100",
-        "CHARG":"W17040490",
-        "MENGA":"16",
-        "LGORT":"0016",
-        "NVERS":"02",
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451515T0",
+        "WERKS": "2100",
+        "CHARG": "17766081",
+        "MENGA": "9",
+        "LGORT": "70SG",
+        "NVERS": "00"
+      },
+      
+      {
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451515T0",
+        "WERKS": "2100",
+        "CHARG": "17735330",
+        "MENGA": "8",
+        "LGORT": "70SG",
+        "NVERS": "00"
+      },
+     
+      {
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451415V0",
+        "WERKS": "2100",
+        "CHARG": "17760816",
+        "MENGA": "26",
+        "LGORT": "70SG",
+        "NVERS": "00"
       },
       {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-3508",
-        "WERKS":"2100",
-        "CHARG":"W17040490D",
-        "MENGA":"27",
-        "LGORT":"8027",
-        "NVERS":"02",
-      },
-      {
-        "LGNUM":"Z01",
-        "IVNUM":"9000007563",
-        "IVPOS":"0001",
-        "LGTYP":"310",
-        "LGPLA":"33C07-0200",
-        "MATNR":"BFR1-3508",
-        "WERKS":"2100",
-        "CHARG":"W17040490D",
-        "MENGA":"15",
-        "LGORT":"8019",
-        "NVERS":"02",
+        "LGNUM": "Z01",
+        "IVNUM": "9000007562",
+        "IVPOS": "0001",
+        "LGTYP": "310",
+        "LGPLA": "35A02-0100",
+        "MATNR": "451442V0",
+        "WERKS": "2100",
+        "CHARG": "17760819",
+        "MENGA": "0",
+        "LGORT": "70SG",
+        "NVERS": "00",
+        "KZNUL": "X"
       }
     ]
   };
@@ -495,6 +525,6 @@ var invokeBAPI = function(BAPI,param){
 // test_BAPI_MATPHYSINV_GETDETAIL()
 // test_BAPI_MATPHYSINV_COUNT()
 // test_ZIM_L_INV_READ()
-// test_L_INV_COUNT_EXT()
-test_ZIM_MATPHYSINV_COUNT_NEW()
+test_L_INV_COUNT_EXT()
+// test_ZIM_MATPHYSINV_COUNT_NEW()
 // test_ZWM_MATPHYSINV_COUNT_NEW();
