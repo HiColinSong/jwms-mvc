@@ -285,7 +285,7 @@ var test_ZIM_MATPHYSINV_COUNT_NEW=function(){
 var test_ZIM_L_INV_READ=function(){
   var param = {
     I01_LGNUM:'Z01',
-    I01_IVNUM:'9000007563'
+    I01_IVNUM:'9000007568'
   };
   return invokeBAPI("ZIM_L_INV_READ",param);
 };
@@ -524,7 +524,7 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_MESSAGE_TEXT_BUILD()
 // test_BAPI_MATPHYSINV_GETDETAIL()
 // test_BAPI_MATPHYSINV_COUNT()
-// test_ZIM_L_INV_READ()
-test_L_INV_COUNT_EXT()
+test_ZIM_L_INV_READ()
+// test_L_INV_COUNT_EXT()
 // test_ZIM_MATPHYSINV_COUNT_NEW()
 // test_ZWM_MATPHYSINV_COUNT_NEW();

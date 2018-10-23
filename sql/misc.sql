@@ -91,3 +91,23 @@ select * from SAP_Materials where ItemCode NOT like '%[.-]%' and ( MtlType='ROH'
 0611104-004|1720202010W14010070
 0611104-001|1720202010X18030018
 0611104-004|1720202010W14010070
+
+
+select '01'+EANCode+'1720202010MG70206A' from SAP_EANCodes where MaterialCode='LAX27520'
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+select '01'+EANCode+'1720202010' from SAP_EANCodes where MaterialCode=''
+
+
+select '01'+EANCode+'1720202010'+c.MaterialCode from BX_CountingWM c
+left outer join SAP_EANCodes e on c.MaterialCode=e.MaterialCode
+where docNo='9000007565'

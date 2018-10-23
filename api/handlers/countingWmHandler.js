@@ -26,6 +26,7 @@ exports.getPiDoc=function(req,res){
 		try {
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,true);
+			util.arraySort(piDoc.items,"storageLocation");
 				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(getInsertParam(piDoc));
 				ret = ret.recordsets;
 				if (ret.length>0){
@@ -139,6 +140,7 @@ exports.confirm=function(req,res){
 			//load SAP DOC
 			let sapDoc = await sapSvc.getCountingWmDoc(req.body.docNo,req.session.user.DefaultWH);
 			let piDoc = util.countingWmDocConverter(sapDoc,req.body.verNo,false);
+			util.arraySort(piDoc.items,"storageLocation");
 				let ret=await dbCountingSvc.InsertOrUpdateCountingWM(getInsertParam(piDoc));
 				ret = ret.recordsets;
 				if (ret.length>0){
