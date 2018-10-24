@@ -115,7 +115,8 @@ function($scope,$rootScope,$location,$routeParams,$modal,$timeout,piDoc,
                         $scope.confirm={
                             type:"success",
                             modalHeader: 'Counting WM Confirmation Success',
-                            message:"The Counting WM is done successfully!"
+                            message:"The Counting WM is done successfully!",
+                            resetPath:"/store-ops/counting-wm"
                         }
                     } else if(data&&data.error&&data.message){
                         $scope.confirm={

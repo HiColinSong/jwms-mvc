@@ -96,6 +96,7 @@
     "countWmDocHeaderFields":{
         "docNo":"IVNUM",
         "warehouseNo":"LGNUM",
+        "CountDate":"PDATU",
         "countingStatus":"ISTAT"
     },
     "countWmDocItemFields":{

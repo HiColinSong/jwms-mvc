@@ -112,13 +112,14 @@
                 }
                 $scope.confirmCounting = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear,countDate:utilSvc.formatDate()}).$promise.
+                    apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear,countDate:piDoc.CountDate}).$promise.
                     then(function(data){
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
                                 type:"success",
                                 modalHeader: 'Counting IM Confirmation Success',
-                                message:"The Counting IM is done successfully!"
+                                message:"The Counting IM is done successfully!",
+                                resetPath:"/store-ops/counting-im"
                             }
                         } else if(data&&data.error&&data.message){
                             $scope.confirm={

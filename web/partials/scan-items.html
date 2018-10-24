@@ -5,9 +5,9 @@
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs " role="tablist">
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='groupView'||order.HUList.length===0}"><a class="cursor-pointer" 
-								  ng-click="showScanItemTab='groupView'">Total Summary</a></li>
+								  ng-click="showScanItemTab='groupView'">Scan Summary</a></li>
 						  <li role="presentation" ng-class="{'active':showScanItemTab==='itemView'}" ng-show="order.HUList.length>0||order.scannedItems">
-									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Box Summary</a>
+									  <a class="cursor-pointer" ng-click="showScanItemTab='itemView'">Scan Detail</a>
 						  </li>
 						  <button type="button" class="btn btn-default pull-right" ng-click="refreshScannedItems();setFocus('barcode1')">Refresh</button>
 					</ul>
