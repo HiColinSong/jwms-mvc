@@ -204,8 +204,8 @@ var test_L_TO_CONFIRM = function(){
 
 var test_BAPI_MATPHYSINV_GETDETAIL=function(){
   var param = {
-    PHYSINVENTORY:'0100005789',
-    FISCALYEAR:'2019'
+    PHYSINVENTORY:'0100005789'
+    ,FISCALYEAR:'2019'
   };
   return invokeBAPI("BAPI_MATPHYSINV_GETDETAIL",param);
 };
@@ -522,9 +522,9 @@ var invokeBAPI = function(BAPI,param){
 // test_Z_SD_UPDATE_DN_STATUS
 // test_Z_WS_DELIVERY_UPDATE_WELLGO()
 // test_Z_MESSAGE_TEXT_BUILD()
-// test_BAPI_MATPHYSINV_GETDETAIL()
+test_BAPI_MATPHYSINV_GETDETAIL()
 // test_BAPI_MATPHYSINV_COUNT()
-test_ZIM_L_INV_READ()
+// test_ZIM_L_INV_READ()
 // test_L_INV_COUNT_EXT()
 // test_ZIM_MATPHYSINV_COUNT_NEW()
 // test_ZWM_MATPHYSINV_COUNT_NEW();

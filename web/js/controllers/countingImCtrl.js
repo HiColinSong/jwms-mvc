@@ -153,7 +153,8 @@
                     });
                 }
         } else {
-            $scope.piDoc={};
+            let d=new Date()
+            $scope.piDoc={fiscalYear:(d.getFullYear()+1)};
             if (piDoc&&piDoc.status===400&&piDoc.data.message){ //in case $scope.piDoc is NOT valid
                 utilSvc.addAlert(piDoc.data.message, "fail", false);
             } else {
