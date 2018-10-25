@@ -112,7 +112,7 @@
                 }
                 $scope.confirmCounting = function() {
                     utilSvc.pageLoading("start");
-                    apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear,countDate:piDoc.CountDate}).$promise.
+                    apiSvc.confirmCounting({subtype:$scope.type},{docNo:piDoc.docNo,fiscalYear:piDoc.fiscalYear,countDate:piDoc.PlanDate}).$promise.
                     then(function(data){
                         if (data&&data.confirm==='success'){
                             $scope.confirm={
