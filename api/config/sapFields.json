@@ -78,7 +78,6 @@
         "Plant":"PLANT",
         "DocDate":"DOC_DATE",
         "PlanDate":"PLAN_DATE",
-        "CountDate":"COUNT_DATE",
         "CountStatus":"COUNT_STATUS",
         "PostingDate":"PSTNG_DATE",
         "userName":"USERNAME",
