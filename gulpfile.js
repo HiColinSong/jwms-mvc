@@ -11,7 +11,6 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     concat = require('gulp-concat'),
     ngAnnotate = require('gulp-ng-annotate'),
-    // uglify = require('uglify-js'),
     uglify = require('gulp-uglify-es').default,
     cleanCss = require('gulp-clean-css'),
     minifyHtml = require('gulp-minify-html'),
@@ -21,7 +20,7 @@ var gulp = require('gulp'),
     stripLine = require('gulp-strip-line'),
     removeLines = require('gulp-remove-empty-lines'),
     templateCache = require('gulp-angular-templatecache'),
-    jeditor = require("gulp-json-editor"),
+    wait = require("gulp-wait2"),
     destFolder="../bxDest/",
     deployFolder=destFolder+"deploy/",
 
@@ -33,10 +32,7 @@ var gulp = require('gulp'),
         logs: ['logs/**/*.*'],
         localScripts: [
             'web/js/app.js',
-            'web/js/app.http-provider.js',
-            'web/js/app.local-storage-service-provider.js',
-            'web/js/app.route-provider.js',
-            'web/js/app.run.js',
+            'web/js/app/*.*',
             'web/js/controllers/*.*',
             'web/js/directives/*.*',
             'web/js/filters/*.*',
@@ -70,32 +66,14 @@ gulp.task('backupLog', function() {
 
 gulp.task('clean', ['backupLog'],function() {
     return gulp.src([deployFolder])
-        .pipe(clean({force:true}));
+        .pipe(clean({force:true}))
+        .pipe(wait(1500));
 });
 
 gulp.task('bower_components', ['clean'], function() {
     gulp.src(paths.jsCssLibrary)
         .pipe(gulp.dest(deployFolder+'bower_components/'));
 });
-gulp.task('copy-serverjs', ['clean'], function() {
-    gulp.src('./server.js')
-    .pipe(uglify())
-    .pipe(gulp.dest(deployFolder));
-});
-
-gulp.task('copy-mediaFolders', ['clean'], function() {
-    gulp.src('web/media/**/*.*').pipe(gulp.dest(deployFolder+'web/media/'));
-});
-
-gulp.task('localScripts', ['clean'], function() {
-    return gulp.src(paths.localScripts)
-        .pipe(ngAnnotate())
-        .pipe(replace(/\.html\'/g, '\.html?ts='+timestamp+'\''))
-        .pipe(uglify())
-        .pipe(concat('bx.min.js'))
-        .pipe(gulp.dest(deployFolder+'web/js'));
-});
-
 gulp.task('apiScripts', ['clean'], function() {
     return gulp.src(paths.apiScripts)
         .pipe(uglify())
@@ -116,18 +94,36 @@ gulp.task('logs', ['clean'], function() {
         .pipe(gulp.dest(deployFolder+'logs/'));
 });
 
+gulp.task('localScripts', ['clean'], function() {
+    return gulp.src(paths.localScripts)
+        .pipe(ngAnnotate())
+        .pipe(replace(/\.html\'/g, '\.html?ts='+timestamp+'\''))
+        .pipe(uglify())
+        .pipe(concat('bx.min.js'))
+        .pipe(gulp.dest(deployFolder+'web/js'));
+});
+
+gulp.task('copy-mediaFolders', ['clean'], function() {
+    gulp.src('web/media/**/*.*').pipe(gulp.dest(deployFolder+'web/media/'));
+});
+
 gulp.task('css', ['clean'], function() {
     return gulp.src(paths.css)
         .pipe(cleanCss())
         .pipe(concat('bx.min.css'))
         .pipe(gulp.dest(deployFolder+'web/css'));
 });
+gulp.task('copy-serverjs', ['clean'], function() {
+    gulp.src('./server.js')
+    .pipe(uglify())
+    .pipe(gulp.dest(deployFolder));
+});
+
 
 
 gulp.task('template',['clean'], function() {
  return gulp.src(paths.htmlPartials)
      .pipe(removeCode({ production: isProduction }))
-     .pipe(removeCode({ qa: isQA }))
             .pipe(minifyHtml({
                 empty: true,
                 spare: true,
@@ -191,9 +187,23 @@ gulp.task('watch', function() {
     gulp.watch(paths.css, ['css']);
     gulp.watch(paths.htmlPartials, ['htmlPartials']);
 });
-gulp.task('default', ['bower_components','localScripts','apiScripts','apiJson','css','template',
-                        'dbConfig','copy-serverjs','logs',
-                        'mergeJsWithPartials','copy-mediaFolders','remove-partials','dependencies','index']);
+gulp.task('default', [
+    'backupLog'
+    ,'bower_components'
+    ,'apiScripts'
+    ,'localScripts'
+    ,'apiJson'
+    ,'css'
+    ,'template'
+    ,'dbConfig'
+    ,'copy-serverjs'
+    ,'logs'
+    ,'mergeJsWithPartials'
+    ,'copy-mediaFolders'
+    ,'remove-partials'
+    ,'dependencies'
+    ,'index'
+]);
 //gulp.task('default', ['bower_components','copy-mediaFolders','scripts','aceCss','css','template','index']);
 
 
