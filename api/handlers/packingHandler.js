@@ -17,7 +17,7 @@ var addScannedItemsToHUList=function(huList,scannedItems){
 	}	
 	return huList;
 }
-var getUpdatedHuAndScanItemList=function(orderNo){
+var getUpdatedHuAndScanItemList=function(orderNo,order){
 	return new Promise(function(resolve,reject){
 		dbPackingSvc.getHuAndPackDetails(orderNo)
 		.then(function(result){
@@ -28,6 +28,9 @@ var getUpdatedHuAndScanItemList=function(orderNo){
 					scannedItems=result.recordsets[1];
 					util.trimValues(scannedItems);
 					huList=addScannedItemsToHUList(huList,scannedItems)
+				}
+				if (order&&result.recordsets.length>2){
+					order.packStart=result.recordsets[2].packStart;
 				}
 			}
 			resolve(huList||[]);
@@ -79,8 +82,10 @@ exports.getOrder=function(req,res){
 				params.BatchNumberList = BatchNumberList.join(',');
 				params.VendorBatchList = VendorBatchList.join(',');
 				params.DOQuantityList = DOQuantityList.join(',');
-				await dbPackingSvc.InsertOrUpdateDO(params);
-	
+				let ret=await dbPackingSvc.InsertOrUpdateDO(params);
+				ret=ret.recordset;
+				order.packStart=ret[0].PackStart;
+				order.packComplete=ret[0].PackComplete;
 				order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);
 				return res.status(200).send(order);
 			} else {
@@ -233,13 +238,14 @@ exports.confirmPacking=function(req,res){
 	(async function () {
 		var args,info,ret;
 		try {
-			var sapOrder = await sapSvc.getDeliveryOrder(req.body.order.DONumber,true);
+			var sapOrder = await sapSvc.getDeliveryOrder(req.body.DONumber,true);
 			var order = util.deliveryOrderConverter(sapOrder);
 			// check picking is confirmed:
 			if (order.pickingStatus!=='C'){
 					throw new Error("Please confirm the picking!");
 				}
-			order.HUList = await getUpdatedHuAndScanItemList(order.DONumber);	
+			order.HUList = await getUpdatedHuAndScanItemList(order.DONumber,order);	
+			let packComplete=util.formatDateTime();
 			ret = await sapSvc.confirmPacking(order);
 			//update packing status:
 			ret = await sapSvc.packingStatusUpdate(order.DONumber);
@@ -250,7 +256,7 @@ exports.confirmPacking=function(req,res){
 			//update DO status
 			var info={
 				DONumber:order.DONumber,
-				PackComplete:req.body.PackComplete,
+				PackComplete:packComplete.utcDateTime,
 				Push2SAPStatus:'C',
 				PackStatus:2,
 				DOStatus:'C',

@@ -130,13 +130,23 @@ exports.setStatus=function(req,res){
 			var params={
 				TONumber:req.body.TONumber,
 				PickStart:req.body.PickStart||undefined,
-				PickComplete:req.body.PickComplete||undefined,
+				// PickComplete:req.body.PickComplete||undefined,
 				PickStatus:req.body.PickStatus||undefined,
 				Push2SAPStatus:req.body.Push2SAPStatus||undefined,
 				SAPRefNo:req.body.SAPRefNo||undefined,
 			} 
 			if (params.Push2SAPStatus==='C'){
-				await sapSvc.confirmPicking(req.body.TONumber,req.session.user.DefaultWH,req.body.items);
+				let PickStart=util.formatDateTime(params.PickStart);
+				params.PickStar=undefined;
+				let PickComplete=util.formatDateTime();
+				params.PickComplete=PickComplete.utcDateTime;
+				await sapSvc.confirmPicking(req.body.TONumber,
+											req.session.user.DefaultWH,
+											PickStart.date,
+											PickStart.time,
+											PickComplete.date,
+											PickComplete.time,
+											req.body.items);
 			}
 			var ret = await dbPickingSvc.setStatus(params);
 			ret = ret.recordset[0];

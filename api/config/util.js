@@ -1,9 +1,22 @@
 'use strict';
+Number.prototype.padLeft = function(base,chr){
+	var  len = (String(base || 10).length - String(this).length)+1;
+	return len > 0? new Array(len).join(chr || '0')+this : this;
+}
+
 exports.formatDateTime=function(dateString){
 	let d=(dateString)?new Date(dateString):new Date();
 	let formatDate =  d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2);
 	let formatTime = ("0"+d.getHours()).slice(-2)+("0"+d.getMinutes()).slice(-2)+("0"+d.getSeconds()).slice(-2);
-	return {date:formatDate,time:formatTime}
+	let utcFormat = [d.getUTCFullYear(),
+	  (d.getUTCMonth()+1).padLeft(),
+	  d.getUTCDate().padLeft(),
+	  ].join('') +' ' +
+	 [d.getUTCHours().padLeft(),
+	  d.getUTCMinutes().padLeft(),
+	  d.getUTCSeconds().padLeft()].join(':');
+
+	return {date:formatDate,time:formatTime,utcDateTime:utcFormat}
 }
 
  exports.cleanObject = function (object){
@@ -421,8 +434,8 @@ exports.getTransParams = function(order,TRANS,bxUser){
 						DOCNO: (TRANS==='PGI'||TRANS==='PGIX')?order.DONumber:item.HUNumber,
 						ITEMNO:item.DOItemNumber,
 						ENDCUST:order.ShipToCustomer,
-						BXDATE:this.formatDateTime().date,//real time 
-						BXTIME:this.formatDateTime().time,//real time
+						BXDATE:this.formatDateTime(item.PackedOn).date,//real time 
+						BXTIME:this.formatDateTime(item.PackedOn).time,//real time
 						BXUSER:bxUser//should be BX login User
 					});
 				}

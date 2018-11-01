@@ -29,10 +29,10 @@
 
                 $scope.changePickingStatus=function(status){
                     var params={TONumber:$scope.TONumber}
-                    // params[status]=utilSvc.formatDate();
-                    params[status]=utilSvc.formatDateTime();
+                    params[status]=utilSvc.formatDateTime(); //UTC datetime, not local datetime
                     if ('Push2SAPStatus'===status){
-                        params.PickComplete = params[status];
+                        params.PickStart=order.PickStart
+                        params.PickComplete = undefined;//will retrieve date in server side
                         params.Push2SAPStatus='C';
                         params.items=order.plannedItems;
                     }

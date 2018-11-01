@@ -1,5 +1,6 @@
 'use strict';
   const logger = require("../config/logger"); 
+  const util = require('../config/util');
  const r3connect = require('r3connect');
  r3connect.Client.options.invokeTimeout=30*1000*60; //timeout 30 miniutes
  var client;
@@ -34,8 +35,12 @@ exports.confirmPacking=function(order){
     HANDLING_UNIT_HEADER:[],
       HANDLING_UNIT_ITEM:[]
   };
+  let packStart,packComplete,dateRange;
   for (let i = 0; i < order.HUList.length; i++) {
       const hu = order.HUList[i];
+      packStart=util.formatDateTime(hu.scannedItems[0].PackedOn);
+      packComplete=util.formatDateTime(hu.scannedItems[hu.scannedItems.length-1].PackedOn);
+      dateRange=packStart.date+"_"+packStart.time+"-"+packComplete.date+"_"+packComplete.time;
       if (hu.scannedItems&&hu.scannedItems.length>0){ //confirm not an empty HU
         params.HANDLING_UNIT_HEADER.push(
             { 
@@ -43,6 +48,7 @@ exports.confirmPacking=function(order){
               HDL_UNIT_EXID:hu.HUNumber, 
               HDL_UNIT_EXID_TY:"F",
               SHIP_MAT:hu.PackMaterial, 
+              CONTENT:dateRange,
               PLANT:order.plannedItems[0].Plant
             }
         );
@@ -172,11 +178,15 @@ exports.getCustomerDetail=function(customerNo){
     return invokeBAPI("BAPI_CUSTOMER_GETDETAIL2",{CUSTOMERNO:customerNo},{});
 };
 
-exports.confirmPicking=function(orderNo,warehouseNo,items){
+exports.confirmPicking=function(orderNo,warehouseNo,startDate,startTime,endDate,endTime,items){
 	var param={
         I_LGNUM : warehouseNo,
         I_TANUM:orderNo,
         // T_LTAP_CONF : [{ TANUM:orderNo, TAPOS:"0001", SQUIT:"X"}],
+        I_STDAT:startDate, 
+        I_STUZT:startTime,
+        I_ENDAT:endDate, 
+        I_ENUZT:endTime, 
         I_UPDATE_TASK:"X",
         I_COMMIT_WORK:"X"
       };
