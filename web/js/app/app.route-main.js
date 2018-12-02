@@ -10,14 +10,14 @@
                 templateUrl: 'partials/home.html',
                 controller: 'homeCtrl'
             })
-            .when('/admin', {
-                templateUrl: 'partials/admin.html',
-                controller: 'adminCtrl',
+            .when('/report', {
+                templateUrl: 'partials/performance-report.html',
+                controller: 'performanceReportCtrl',
                 resolve:{
-                    userList:['$q','bxService',
+                    report:['$q','bxService',
                         function($q,apiSvc){
                             var deferred = $q.defer();
-                            apiSvc.getUserList().$promise.then(function(data){
+                            apiSvc.getPerformanceReport().$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
                                 } else {
@@ -30,46 +30,7 @@
                         }]
                 }
             })
-            .when('/view-error-log', {
-                templateUrl: 'partials/view-log.html',
-                controller: 'viewLogCtrl',
-                resolve:{
-                    logs:['$q','bxService',
-                        function($q,apiSvc){
-                            var deferred = $q.defer();
-                            apiSvc.viewErrorLog({type:"error-log"}).$promise.then(function(data){
-                                if (data){
-                                    deferred.resolve(data);
-                                } else {
-                                    deferred.resolve(undefined);
-                                }
-                            },function(err){
-                                deferred.reject(err);
-                            })
-                            return deferred.promise;
-                        }]
-                }
-            })
-            .when('/view-info-log', {
-                templateUrl: 'partials/view-log.html',
-                controller: 'viewLogCtrl',
-                resolve:{
-                    logs:['$q','bxService',
-                        function($q,apiSvc){
-                            var deferred = $q.defer();
-                            apiSvc.viewInfoLog({type:"info-log"}).$promise.then(function(data){
-                                if (data){
-                                    deferred.resolve(data);
-                                } else {
-                                    deferred.resolve(undefined);
-                                }
-                            },function(err){
-                                deferred.reject(err);
-                            })
-                            return deferred.promise;
-                        }]
-                }
-            })
+            
             .otherwise({
                 redirectTo: '/home'
             })

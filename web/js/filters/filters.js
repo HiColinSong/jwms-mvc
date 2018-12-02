@@ -3,32 +3,6 @@
     'use strict';
     /* Filters */
     angular.module('bx.filters')
-    .filter('displayBatch', [function(fullBarcode) {
-			return function(fullBarcode){
-				let barcode = new Barcode();
-				barcode.barcode1=fullBarcode;
-				barcode.parseBarcode()
-				return barcode.batchNo;
-			}
-		}])
-    .filter('dispCategoryName', ['utilSvc','constants', function(utilSvc,constants,id) {
-	    return function(id) {
-	    	if (id)
-	      		return utilSvc.findItemById(id,constants.categories,"id")["display"];
-	    };
-		}])
-    .filter('dispUnit', ['utilSvc','constants', function(utilSvc,constants,id) {
-	    return function(id) {
-	    	if (id){
-					let unitObj=utilSvc.findItemById(id,constants.units,"id");
-					if (unitObj){
-						return utilSvc.findItemById(id,constants.units,"id")["display"]
-					} else {
-						return id
-					}
-				}
-	    };
-		}])
 		//take the date format "yyyyMMdd"
     .filter('ymdDate', ['$filter', function($filter) {
 	    return function(dateString,format) {
@@ -57,43 +31,9 @@
 	      		return dateString;
 	    };
 		}])
-		
-		.filter('unique', function () {
-
-		return function (items, filterOn) {
-	  
-		  if (filterOn === false) {
-			return items;
-		  }
-	  
-		  if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
-			var hashCheck = {}, newItems = [];
-	  
-			var extractValueToCompare = function (item) {
-			  if (angular.isObject(item) && angular.isString(filterOn)) {
-				return item[filterOn];
-			  } else {
-				return item;
-			  }
+		.filter('percentage', ['$filter', function ($filter) {
+			return function (input, decimals) {
+			  return $filter('number')(input * 100, decimals) + '%';
 			};
-	  
-			angular.forEach(items, function (item) {
-			  var valueToCheck, isDuplicate = false;
-	  
-			  for (var i = 0; i < newItems.length; i++) {
-				if (angular.equals(extractValueToCompare(newItems[i]), extractValueToCompare(item))) {
-				  isDuplicate = true;
-				  break;
-				}
-			  }
-			  if (!isDuplicate) {
-				newItems.push(item);
-			  }
-	  
-			});
-			items = newItems;
-		  }
-		  return items;
-		};
-	  });
+		  }]);
  }());

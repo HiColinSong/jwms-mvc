@@ -12,7 +12,7 @@ var appConfig=(function(){
 	}
 	AppConfig.prototype.getSqlConnParam=function(){
 		var param = {};
-		Object.assign(param,this.config.bxSqlConnParams);
+		Object.assign(param,this.config.jmSqlConnParams);
 		return param;
 	}
 	return {

@@ -2,12 +2,12 @@
 (function() {
     'use strict';
     angular.module('bx.controllers')
-    .controller("loginCtrl",[ "$scope",'$route','$location', "bxService","localStorageService",
-					function($scope, $route,$location, apiSvc,cacheSvc) {
+    .controller("loginCtrl",[ "$scope",'$route','$location', "bxService",
+					function($scope, $route,$location, apiSvc) {
 						$scope.login = {
 							username : "",
 							password : "",
-							domain: "BITSG"
+							domain: "JWMS"
 						};
 
 						$scope.submitForm = function() {
@@ -23,17 +23,15 @@
                                 }
 							}, function(err) {
 								console.error("login fail:" + (err.data.message||err.status));
-								// console.error("login error
-								// message:"+err.data.errorMessage);
 								$scope.login.errMsg = err.data.message||err.statusText||"Username or password incorrect!";
 
 							})
 						};
-						if (cacheSvc.get("login")){
-							$scope.login=cacheSvc.get("login")
-							$scope.login.domain="BITSG";
-							$scope.submitForm();
-						}
+						// if (cacheSvc.get("login")){
+						// 	$scope.login=cacheSvc.get("login")
+						// 	$scope.login.domain="BITSG";
+						// 	$scope.submitForm();
+						// }
 					} 
 		]);
 }());

@@ -3,7 +3,9 @@
     'use strict';
     /* Controllers */
     angular.module('bx.controllers')
-    .controller('homeCtrl',['$scope','$http','$location', function($scope,$http,$location){
+    .controller('performanceReportCtrl',['$scope', 'report',
+        function($scope,report){
+            $scope.report=report
 
     }])
  }());

@@ -1,22 +1,4 @@
 var assert = require('assert');
-describe('delivery order converter', function() {
-    it('convert original DO to the one with only required fields for packing', function() {
-        var util = require('./../api/config/util');
-        var sapDo = require('./do.json');
-        var bxDo = util.deliveryOrderConverter(sapDo);
-        console.log(bxDo);
-      assert.equal([1,2,3].indexOf(4), -1);
-    });
-});
-describe('transfer order converter', function() {
-    it('convert original TO to the one with only required fields for picking', function() {
-        var util = require('./../api/config/util');
-        var sapTo = require('./to.json');
-        var bxTo = util.transferOrderConverter(sapTo);
-        console.log(bxTo);
-      assert.equal([1,2,3].indexOf(4), -1);
-    });
-});
 describe('return formatted date and time', function() {
     it('convert original TO to the one with only required fields for picking', function() {
         var util = require('./../api/config/util');
@@ -25,12 +7,4 @@ describe('return formatted date and time', function() {
       assert.equal([1,2,3].indexOf(4), -1);
     });
 });
-describe('rebuild quarShpt plan', function() {
-    it('convert original array to the one used in FE', function() {
-        var util = require('./../api/config/util');
-        var list = require('./quarShptPlan.json')
-        var d= util.rebuildQuarShptPlan(list);
-        console.log(d);
-      assert.equal([1,2,3].indexOf(4), -1);
-    });
-});
+

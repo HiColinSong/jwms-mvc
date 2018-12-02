@@ -2,8 +2,6 @@
 
 var sql = require("mssql");
 var Promise = require('Promise').default;
-// config for your database
-// var config = require("../../db-config/.db-config.json").bxSqlConnParams;
 var config = require('../config/appConfig').getInstance().getSqlConnParam();
 
 exports.callStoredProcedure=function(spName,inputParams,outParams){

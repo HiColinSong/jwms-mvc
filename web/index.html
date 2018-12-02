@@ -44,74 +44,39 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
 	      'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
 	      'bower_components/angular-resource/angular-resource.min.js',
         'bower_components/angular-sanitize/angular-sanitize.min.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-        'bower_components/angular-hotkeys/build/hotkeys.min.js',
         'bower_components/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js',
-        // 'bower_components/angular-audio/app/angular.audio.js',
         //minify js place holder
         'js/app.js'
         ],function(){
           $script([//remove place holder
             'js/app/app.http-provider.js',
-            'js/app/app.local-storage-service-provider.js',
             'js/app/app.route-main.js',
-            'js/app/app.route-receiving.js',
-            'js/app/app.route-fullfillment.js',
-            'js/app/app.route-quarantine-shipment.js',
-            'js/app/app.route-store-operations.js',
             'js/app/app.run.js',
-            'js/controllers/addNewHuCtrl.js',
             'js/controllers/loginCtrl.js',
             'js/controllers/footerCtrl.js',
             'js/controllers/homeCtrl.js',
-            'js/controllers/toolsCtrl.js',
-            'js/controllers/adminCtrl.js',
-            'js/controllers/viewLogCtrl.js',
-            'js/controllers/addEditUserCtrl.js',
             'js/controllers/navCtrl.js',
-            'js/controllers/packingCtrl.js',
-            'js/controllers/pickingCtrl.js',
-            'js/controllers/pickingReversalsCtrl.js',
-            'js/controllers/reservationCtrl.js',
-            'js/controllers/rtgReceiptsCtrl.js',
-            'js/controllers/rtgReceiptsReversalsCtrl.js',
-            'js/controllers/subconOrdersCtrl.js',
-            'js/controllers/subconOrdersForPlannerCtrl.js',
-            'js/controllers/subconOrdersForPrepackCtrl.js',
-            'js/controllers/spoReceiptsCtrl.js',
-            'js/controllers/spoLotReleaseCtrl.js',
-            'js/controllers/qrsmtPlanningCtrl.js',
-            'js/controllers/qrsmtPrepackCtrl.js',
-            'js/controllers/countingImCtrl.js',
-            'js/controllers/countingWmCtrl.js',
-            'js/controllers/consolidatedUdiCtrl.js',
+            'js/controllers/performanceReportCtrl.js',
             'js/services/services.js',
             'js/services/authService.js',
     	      'js/services/modalLogin.js',
-            'js/services/modalConfirmSubmit.js',
-            'js/services/scanItemService.js',
-            'js/services/barcode.js',
-            'js/services/soundService.js',
     	      'js/filters/filters.js',
             'js/directives/directives.js',
-            'js/directives/spoReceiveListDirective.js',
-            'js/directives/scanItemDirective.js',
-            'js/directives/selectAllDirective.js'
           ], function() { //remove place holder
             angular.bootstrap(document, ['bx']);
           }); //remove place holder
         });
       });
   </script>
-  <title>Biosensors BX</title>
+  <title>JWMS MVC</title>
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/bx.css">
+  <link rel="stylesheet" href="css/jm.css">
   <!-- compact css place holder -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.css">
   <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
 </head>
-<body ng-cloak class="bx">
+<body ng-cloak class="jm">
   <div class="page-mask" ng-show="pageLoading"></div>
     <div ng-include src="'partials/nav-bar.html'"></div>
     
@@ -119,7 +84,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
       <img src="media/loading_rwd.gif" alt="" class="page-loading" ng-show="pageLoading">
       
       <div class="footer ubuntu text-muted" ng-controller="footerCtrl">
-        <span>&copy; {{currentDate| date:'yyyy'}} Biosensors Interventional Technologies Pte Ltd</span>
+        <span>&copy; {{currentDate| date:'yyyy'}} 吉威医疗</span>
       </div>
 
 

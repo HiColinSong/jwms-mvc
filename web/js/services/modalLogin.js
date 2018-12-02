@@ -10,19 +10,14 @@
                         controller: 'loginCtrl'
                     });
                     $rootScope.$on("loginStautsChange",function(){
-                        console.log("receive event:loginStautsChange");
                         if (modalInstance)
                             modalInstance.close();
                     })
                     modalInstance.result.then(function() {
                         // isLoggingIn = true;
-                        console.log("login resolved");
                     }, function(path) {
-                        // isLoggingIn = false;
                         console.log("login rejected");
                          $location.path("/home");
-                        //redirect to signup page
-
                     })['finally'](function() {
                         modalInstance = undefined;
                     });
