@@ -10,13 +10,15 @@
                 templateUrl: 'partials/home.html',
                 controller: 'homeCtrl'
             })
-            .when('/report', {
+            .when('/report/:date?', {
                 templateUrl: 'partials/performance-report.html',
                 controller: 'performanceReportCtrl',
                 resolve:{
-                    report:['$q','bxService',
-                        function($q,apiSvc){
+                    report:['$q','$route','utilSvc','bxService',
+                        function($q,$route,util,apiSvc){
                             var deferred = $q.defer();
+                            if ($route.current.params.date){
+                                util.pageLoading("start");
                             apiSvc.getPerformanceReport().$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
@@ -26,6 +28,10 @@
                             },function(err){
                                 deferred.reject(err);
                             })
+                        } else {
+                            deferred.resolve(undefined)
+                            util.pageLoading("stop");
+                        }
                             return deferred.promise;
                         }]
                 }

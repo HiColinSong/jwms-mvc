@@ -5,7 +5,12 @@
     angular.module('bx.controllers')
     .controller('performanceReportCtrl',['$scope', 'report',
         function($scope,report){
-            $scope.report=report
-
+            $scope.report=report;
+            $scope.temp={};
+            
+            
+              $scope.clear = function () {
+                $scope.temp.dt = null;
+              };
     }])
  }());
