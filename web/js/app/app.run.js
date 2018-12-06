@@ -1,9 +1,9 @@
-/*bx - App.js - Yadong Zhu 2018*/
+/*jm - App.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
-    angular.module('bx')
+    angular.module('jm')
     //set global 
-    .run(["$rootScope","$window","$locale","$location","utilSvc","dynamicLocale","bxService","modalLogin",
+    .run(["$rootScope","$window","$locale","$location","utilSvc","dynamicLocale","jmService","modalLogin",
             function($rootScope,$window,$locale,$location,utilSvc,dynamicLocale,apiSvc,modalLogin) {
               $locale.id="zh-cn";
               dynamicLocale.setLocale($locale);
@@ -22,5 +22,13 @@
               })
     }])
 }());
-
+(function() {
+    'use strict';
+    angular.module('jm')
+   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+            localStorageServiceProvider.setPrefix('jm');
+            localStorageServiceProvider.setStorageType('sessionStorage');
+             localStorageServiceProvider.setNotify(true, true);
+        }]);
+}());
 

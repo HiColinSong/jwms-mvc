@@ -6,7 +6,7 @@
           <div class="form-group">
             <label for="woNo">请选择日期:</label>
             <input type="text" class="form-control" datepicker-popup="yyyy年M月d日" placeholder="请选择日期" 
-                ng-model="temp.dt" is-open="opened" 
+                ng-model="temp.dt" is-open="opened" ng-readonly="true"
                 ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" today-text='今天'/>
           </div>
           

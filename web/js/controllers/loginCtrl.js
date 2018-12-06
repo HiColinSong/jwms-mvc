@@ -1,9 +1,9 @@
-/*bx - controllers.js - Yadong Zhu 2018*/
+/*jm - controllers.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
-    angular.module('bx.controllers')
-    .controller("loginCtrl",[ "$scope",'$route','$location', "bxService",
-					function($scope, $route,$location, apiSvc) {
+    angular.module('jm.controllers')
+    .controller("loginCtrl",[ "$scope",'$route','$location', "jmService","localStorageService",
+					function($scope, $route,$location, apiSvc,cacheSvc) {
 						$scope.login = {
 							username : "",
 							password : "",
@@ -27,11 +27,10 @@
 
 							})
 						};
-						// if (cacheSvc.get("login")){
-						// 	$scope.login=cacheSvc.get("login")
-						// 	$scope.login.domain="BITSG";
-						// 	$scope.submitForm();
-						// }
+						if (cacheSvc.get("login")){
+							$scope.login=cacheSvc.get("login")
+							$scope.submitForm();
+						}
 					} 
 		]);
 }());

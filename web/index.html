@@ -45,6 +45,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
 	      'bower_components/angular-resource/angular-resource.min.js',
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js',
+        'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
         //minify js place holder
         'js/app.js'
         ],function(){
@@ -56,6 +57,9 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
             'js/controllers/footerCtrl.js',
             'js/controllers/homeCtrl.js',
             'js/controllers/navCtrl.js',
+            'js/controllers/adminCtrl.js',
+            'js/controllers/viewLogCtrl.js',
+            'js/controllers/addEditUserCtrl.js',
             'js/controllers/performanceReportCtrl.js',
             'js/services/services.js',
             'js/services/authService.js',
@@ -63,7 +67,7 @@ b=c(b,"angular",Object);b.$minErr=b.$minErr||d;return c(b,"module",function(){va
     	      'js/filters/filters.js',
             'js/directives/directives.js',
           ], function() { //remove place holder
-            angular.bootstrap(document, ['bx']);
+            angular.bootstrap(document, ['jm']);
           }); //remove place holder
         });
       });

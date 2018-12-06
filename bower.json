@@ -33,7 +33,8 @@
     "angular-sanitize": "1.5.7",
     "angular-resource": "1.5.7",
     "angular-loader": "1.5.7",
-    "angular-bootstrap-toggle": "^0.1.3"
+    "angular-bootstrap-toggle": "^0.1.3",
+    "angular-local-storage": "^0.7.1"
   },
   "resolutions": {
     "angular": "1.5.7"

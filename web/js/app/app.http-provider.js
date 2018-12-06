@@ -1,7 +1,7 @@
-/*bx - App.js - Yadong Zhu 2018*/
+/*jm - App.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
-    angular.module('bx')
+    angular.module('jm')
     .config(['$httpProvider',
             function($httpProvider) {
                 $httpProvider.interceptors.push(['$q', '$injector',

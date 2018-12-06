@@ -1,19 +1,20 @@
-/*bx - App.js - Yadong Zhu 2018*/
+/*jm - App.js - Yadong Zhu 2018*/
 (function(angular) {
     'use strict';
-    angular.module('bx.services', ['ngResource']);
-    angular.module('bx.filters', []);
-    angular.module('bx.directives', []);
-    angular.module('bx.controllers', []);      
-    angular.module('bx', [
+    angular.module('jm.services', ['ngResource']);
+    angular.module('jm.filters', []);
+    angular.module('jm.directives', []);
+    angular.module('jm.controllers', []);      
+    angular.module('jm', [
         'ngRoute',
         'ngResource',
         'ngAnimate',
         'ngSanitize',
-        'bx.controllers',
-        'bx.services',
-        'bx.filters',
-        'bx.directives',
+        'jm.controllers',
+        'jm.services',
+        'jm.filters',
+        'LocalStorageModule',
+        'jm.directives',
         'ui.bootstrap',
         'ui.toggle'
     ]);

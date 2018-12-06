@@ -29,7 +29,9 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "mssql": "^4.1.0"
+    "winston": "^2.4.2",
+    "mssql": "^4.1.0",
+    "reverse-line-reader": "^0.2.6"
   },
   "devDependencies": {
     "gulp": "^3.9.0",

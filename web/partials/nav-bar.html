@@ -43,8 +43,10 @@
                   {{authUser.userName}}
               </a>
               <ul class="dropdown-menu user-profile">
-                <!-- <li class="text-center">Domain: <strong>{{authUser.Domain}}</strong></li> -->
-                <li class="text-center">User ID: <strong>{{authUser.userName}}</strong></li>
+                <li class="text-center">所在域: <strong>{{authUser.Domain}}</strong></li>
+                <li class="text-center">用户 ID: <strong>{{authUser.UserID}}</strong></li>
+                <li class="text-center">用户角色: <strong>{{authUser.UserRole}}</strong></li>
+                <li class="text-center">用户姓名: <strong>{{authUser.userName}}</strong></li>
               </ul>
             </li>
             <li class="dropdown" dropdown>
@@ -58,6 +60,24 @@
                   </a>
                 </li>
                 <!--endRemoveIf(production)-->
+                <li ng-show="authUser&&(authUser.UserRole.indexOf('Admin')!==-1)"> 
+                  <a href="#/admin" active-link="active">
+                    <span class="fa fa-universal-access fa-lg"></span>
+                    用户管理
+                  </a>
+                </li>
+                <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
+                  <a href="#/view-error-log" active-link="active">
+                    <span class="fa fa-file-text-o fa-lg"></span>
+                    错误日志
+                  </a>
+                </li>                
+                <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='tech')"> 
+                  <a href="#/view-info-log" active-link="active">
+                    <span class="fa fa-file-text-o fa-lg"></span>
+                    操作日志
+                  </a>
+                </li>   
                 <li ng-show="authUser">
                     <a href="#/home" ng-click="logout()">
                       <span class="fa fa-sign-out fa-lg"></span>

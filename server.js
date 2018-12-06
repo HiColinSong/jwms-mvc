@@ -44,7 +44,12 @@ app.post('/jmapi/login.json',auth.login);
 app.get('/jmapi/logout.json',auth.logout);
 
 var commonHandler = require('./api/handlers/commonHandler');
-app.get('/jmapi/get-performance-report.json',auth.authCheck,commonHandler.getPerformanceReport);
+app.get('/jmapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
+app.post('/jmapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
+app.post('/jmapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
+app.post('/jmapi/view-info-log.json',auth.authCheck,commonHandler.viewLog);
+app.post('/jmapi/view-error-log.json',auth.authCheck,commonHandler.viewLog);
+app.post('/jmapi/get-performance-report.json',auth.authCheck,commonHandler.getPerformanceReport);
 
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, '+req.originalUrl+' is an invalid URL.'});

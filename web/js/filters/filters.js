@@ -1,8 +1,8 @@
-/*bx - filters.js - Yadong Zhu 2018*/
+/*jm - filters.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
     /* Filters */
-    angular.module('bx.filters')
+    angular.module('jm.filters')
 		//take the date format "yyyyMMdd"
     .filter('ymdDate', ['$filter', function($filter) {
 	    return function(dateString,format) {

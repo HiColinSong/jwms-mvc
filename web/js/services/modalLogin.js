@@ -1,6 +1,6 @@
-/*bx - services.js - Yadong Zhu 2017*/ (function() {
+/*jm - services.js - Yadong Zhu 2017*/ (function() {
     'use strict';
-    angular.module('bx.services')
+    angular.module('jm.services')
     .service('modalLogin',['$http', '$modal','$location','$rootScope',
         function($http, $modal,$location,$rootScope) {
             return {

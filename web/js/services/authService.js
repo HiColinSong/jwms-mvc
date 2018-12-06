@@ -1,7 +1,7 @@
-/*bx - services.js - Yadong Zhu 2017*/ (function() {
+/*jm - services.js - Yadong Zhu 2017*/ (function() {
     'use strict';
-    angular.module('bx.services')
-    .service('authSvc',['$rootScope','$timeout','bxService',function($rootScope,$timeout,apiSvc){
+    angular.module('jm.services')
+    .service('authSvc',['$rootScope','$timeout','jmService',function($rootScope,$timeout,apiSvc){
         var userObj,isLogin;
         $rootScope.$on("loginStautsChange",function(){
             console.log("receive event:loginStautsChange");

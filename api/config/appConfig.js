@@ -5,11 +5,7 @@ var appConfig=(function(){
 	AppConfig.prototype.setEnv=function(env){
 		this.config = require("./../../db-config/.db-config-"+env+".json");
 	}
-	AppConfig.prototype.getSapConnParam=function(){
-		var param = {};
-		Object.assign(param,this.config.sapConnParams);
-		return param;
-	}
+
 	AppConfig.prototype.getSqlConnParam=function(){
 		var param = {};
 		Object.assign(param,this.config.jmSqlConnParams);

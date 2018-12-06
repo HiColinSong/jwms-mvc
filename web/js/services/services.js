@@ -1,8 +1,8 @@
-/*bx - services.js - Yadong Zhu 2018*/
+/*jm - services.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
     /* Services */
-    angular.module('bx.services')
+    angular.module('jm.services')
     .factory('apiValues', function() {
       return {
         pattern:'/jmapi/:type/:subtype/:param1/:param2/:param3/:param4.json',
@@ -23,8 +23,43 @@
                method: 'GET',
                params: {type:"logout"}
              },
-             getPerformanceReport:{
+             getUserList:{
               method: 'GET',
+              params:{
+                type: 'get-user-list'
+              },
+              isArray:true
+            },
+            addEditUser:{
+              method: 'POST',
+              params:{
+                type: 'add-edit-user'
+              },
+              isArray:true
+            },
+            deleteUser:{
+              method: 'POST',
+              params:{
+                type: 'delete-user'
+              },
+              isArray:true
+            },
+            viewErrorLog:{
+              method: 'POST',
+              params:{
+                type: 'view-error-log'
+              },
+              isArray:true
+            },
+            viewInfoLog:{
+              method: 'POST',
+              params:{
+                type: 'view-info-log'
+              },
+              isArray:true
+            },
+             getPerformanceReport:{
+              method: 'POST',
               params: {
                 type: "get-performance-report"
               }
@@ -33,7 +68,7 @@
       }
        
     })
-    .factory('bxService', ['$resource','apiValues','constants',
+    .factory('jmService', ['$resource','apiValues','constants',
       function($resource,apiValues,constants) {
         return $resource
           (
@@ -45,7 +80,7 @@
     .service('utilSvc',['$timeout','$rootScope',function($timeout,$rootScope){
         return {
           isServerRequest:function(url){
-                var re = new RegExp('/jmapi');//start with '/bxapi'
+                var re = new RegExp('/jmapi');//start with '/jmapi'
                 var match=re.exec(url);
                 if (match===null) return false;
                 else return true;
@@ -116,7 +151,17 @@
               }
               return false;
             },
-         
+            formatDate:function(date,separator) {
+              var d = (date)?new Date(date):new Date(),
+                  month = '' + (d.getMonth() + 1),
+                  day = '' + d.getDate(),
+                  year = d.getFullYear();
+          
+              if (month.length < 2) month = '0' + month;
+              if (day.length < 2) day = '0' + day;
+          
+              return [year, month, day].join(separator||"");
+          },
           pageLoading:function(arg){
             if (arg==="start"&&$rootScope.pageLoading){ //prevent from submit twice before return
               throw new Error("Please don't submit twice!");

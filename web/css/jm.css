@@ -142,7 +142,7 @@ form.form select{
 .submitted input.ng-invalid{border-color:red;}
 
 
-.jm .bx-indent{
+.jm .jm-indent{
 	margin-top: 20px;
 	text-indent: 30px;
 }
@@ -276,6 +276,9 @@ form.form select{
 		line-height: 1;
 		color: #C76C6C;
 		letter-spacing: -1px;
+	}
+	.jm .form-control[readonly]{
+		background-color: #FFF;
 	}
 
 @media only screen and (max-width: 1180px) {

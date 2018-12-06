@@ -4,17 +4,17 @@
 (function() {
     "use strict";
 
-    var scanItemSvc, bxService, httpBackend;
+    var scanItemSvc, jmService, httpBackend;
 
     describe("Service ->", function() {
         beforeEach(module(
             'ngResource',
-            'bx.services'
+            'jm.services'
         ));
 
-        beforeEach(inject(function(_scanItemSvc_, _bxService_, $httpBackend) {
+        beforeEach(inject(function(_scanItemSvc_, _jmService_, $httpBackend) {
             scanItemSvc = _scanItemSvc_;
-            bxService = _bxService_;
+            jmService = _jmService_;
             httpBackend = $httpBackend;
         }));
 

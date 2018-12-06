@@ -1,8 +1,8 @@
-/*bx - directives.js - Yadong Zhu 2018*/
+/*jm - directives.js - Yadong Zhu 2018*/
 (function() {
     'use strict';
     /* Directives */
-    angular.module('bx.directives')
+    angular.module('jm.directives')
     .directive('activeLink', ['$location', function(location) {
         return {
           restrict: 'A',
