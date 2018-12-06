@@ -1,4 +1,4 @@
-Biosensors BXWEB/BXAPI
+JWMS-MVC
 ============
 use angular 1.5.7 specifically!
 Get started:
