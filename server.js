@@ -42,6 +42,7 @@ var auth=require('./api/handlers/authHandler');
 app.get('/jmapi/check-login-status.json',auth.checkLoginStatus);
 app.post('/jmapi/login.json',auth.login);
 app.get('/jmapi/logout.json',auth.logout);
+app.get('/db-info.json',auth.dbInfo);
 
 var commonHandler = require('./api/handlers/commonHandler');
 app.get('/jmapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);

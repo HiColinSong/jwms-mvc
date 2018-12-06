@@ -7,7 +7,15 @@
   </div>
   <!-- <h3>Guide for User Interface Experience Test</h3> -->
   <ol class="guide" style="font-size: 20px">
-  	
+  	<li>网址: <a href="{{url}}">{{url}}</a></li>
+	  
+  	<li>数据库连接信息
+	  <ul>
+	  	<li>服务器: {{dbInfo.sqlSvrInfo.server}}</li>
+	  	<li>数据库: {{dbInfo.sqlSvrInfo.database}}</li>
+	  	<li>数据库用户名: {{dbInfo.sqlSvrInfo.user}}</li>
+    </ul>
+  </li>
   </ol>
 </div>
 
