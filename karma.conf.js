@@ -16,7 +16,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        './bower_components/angular/angular.js',
+        'bower_components/angular/angular.js',
         'bower_components/angular-route/angular-route.js',
         'bower_components/angular-animate/angular-animate.min.js',
         'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -24,12 +24,11 @@ module.exports = function(config) {
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
         'bower_components/angular-mocks/angular-mocks.js',
-        'web/js/mock/app-mock.js',
+        // // 'web/js/mock/app-mock.js',
         'web/js/app.js',
-        'web/js/app.http-provider.js',
-        'web/js/app.local-storage-service-provider.js',
-        'web/js/app.route-provider.js',
-        'web/js/app.run.js',
+        'web/js/app/app.http-provider.js',
+        'web/js/app/app.route-main.js',
+        'web/js/app/app.run.js',
          'web/js/controllers/**/*.js',
          'web/js/directives/**/*.js',
          'web/js/filters/**/*.js',

@@ -1,7 +1,7 @@
 {
-  "name": "bxapi",
+  "name": "jwms-mvc",
   "version": "1.0.0",
-  "description": "build RESTFUL api app for bxweb",
+  "description": "build RESTFUL api app for JWMS",
   "main": "server.js",
   "scripts": {
     "test": "mocha",
@@ -10,19 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Biosensors/bxapi.git"
+    "url": "git+https://github.com/Biosensors/jwms-mvc.git"
   },
   "keywords": [
     "Biosensors",
-    "bx",
+    "jwms-mvc",
     "api"
   ],
   "author": "Yadong Zhu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Biosensors/bxapi/issues"
+    "url": "https://github.com/Biosensors/jwms-mvc/issues"
   },
-  "homepage": "https://github.com/Biosensors/bxapi#readme",
+  "homepage": "https://github.com/Biosensors/jwms-mvc#readme",
   "dependencies": {
     "Promise": "^1.0.5",
     "activedirectory": "^0.7.2",
@@ -52,8 +52,8 @@
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^3.0.3",
     "gulp-wait2": "0.0.5",
-    "jasmine-core": "^3.1.0",
-    "karma": "^2.0.3",
+    "jasmine-core": "^3.3.0",
+    "karma": "^2.0.5",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.2",
     "minimist": "^1.1.1",
