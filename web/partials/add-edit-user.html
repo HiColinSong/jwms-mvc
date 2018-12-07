@@ -54,7 +54,6 @@
                                class='full-width form-control'
                                ng-class="{'submitted':submitted}"
                                ng-model="user.userName"
-                               maxlength="3"
                                placeholder="用户姓名">
           </div>
           <!-- <div class="col-sm-3 margin-top-5">Max Char:3</div> -->
@@ -95,7 +94,7 @@
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!user.UserID||!user.DefaultWH||!user.isActive||duplicateUserID">
+      ng-disabled="!user.UserID||!user.userName||!user.isActive||duplicateUserID">
       提交
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

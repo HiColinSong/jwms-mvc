@@ -189,7 +189,7 @@
           display:"QA Sample"
         }
       ],
-      userRoles:["superAdmin","qaAdmin","whAdmin","qaLab","wh","DocControlQA","tech","planner"],
+      userRoles:["superAdmin","admin","normal"],
       units:[
         {id:"IN",display:"inch"},
         {id:"BOT",display:"BT"},

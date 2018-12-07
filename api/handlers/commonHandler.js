@@ -55,8 +55,8 @@ exports.viewLog=function(req,res){
 	var promise = new Promise(function(resolve,reject){
 		try {
 			lineReader.eachLine(file, function(line, last) {
-				// console.log(line);
-				// console.log(last);
+				console.log(line);
+				console.log(last);
 				try {
 					logs.push(JSON.parse(line));
 				} catch (error) {
