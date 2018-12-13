@@ -35,4 +35,35 @@
             }
         };
     })
+    //confirm when delete
+    .directive('confirmRequired', ['$modal',
+    function($modal) {
+        return {
+            restrict: 'A',
+            priority: -1,
+            link: function(scope, elem, attr) {
+                var clickAction = attr.ngClick;
+                var itemName = attr.confirmRequired;
+                var actionOperate = attr.action || "remove";
+                elem.bind('click', function(e) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    scope.itemName = itemName;
+                    scope.actionOperate = actionOperate;
+                    var modalInstance = $modal.open({
+                        templateUrl: 'partials/confirm-modal.html',
+                        scope: scope
+                    });
+                    scope.yes = function() {
+                        modalInstance.close("yes");
+                        scope.$eval(clickAction);
+                    }
+                });
+                scope.$on('$destroy', function() {
+                    elem.off(); // deregister all event handlers
+                })
+            }
+        };
+    }
+])
  }());

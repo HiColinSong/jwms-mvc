@@ -17,6 +17,16 @@ const sqlSvc=require("./sqlService");
     let paramValues={UserID:userId};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
+  exports.addUser=function(user){
+    //stmt will be something like: "exec JM_InsertOrUpdateUserProfile 'yd.zhu','朱亚东','BITSG','admin','1'"
+    let stmt=["exec JM_InsertOrUpdateUserProfile"];
+    stmt.push(`'${user.UserID}',`),
+    stmt.push(`'${user.userName}',`),
+    stmt.push(`'${user.Domain}',`),
+    stmt.push(`'${user.UserRole}',`),
+    stmt.push(`'${user.isActive}'`)
+    return sqlSvc.sqlQuery(stmt.join(" "))
+  }
   
   exports.insertOrUpdateUserProfile=function(user){
     var params={
@@ -29,7 +39,7 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.callStoredProcedure("dbo.JM_InsertOrUpdateUserProfile",params);
   }
   exports.deleteUserProfile=function(userId){
-    var stmt = "delete from dbo.UserProfile where UserIcD=@UserID";
+    var stmt = "delete from dbo.UserProfile where UserID=@UserID";
     let paramTypes={UserID:'sql.VarChar(20)'};
     let paramValues={UserID:userId};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)

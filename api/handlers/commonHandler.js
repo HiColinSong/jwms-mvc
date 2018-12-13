@@ -16,7 +16,8 @@ exports.getUserList=function(req,res){
 exports.addEditUser=function(req,res){
 	(async function () {
 		try {
-			var list = await dbCommonSvc.insertOrUpdateUserProfile(req.body.user);
+			var list = await dbCommonSvc.addUser(req.body.user);
+			// var list = await dbCommonSvc.insertOrUpdateUserProfile(req.body.user);
 			return res.status(200).send(list.recordset);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});
