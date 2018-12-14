@@ -44,12 +44,54 @@ const sqlSvc=require("./sqlService");
     let paramValues={UserID:userId};
     return sqlSvc.sqlQuery(stmt,paramTypes,paramValues)
   }
-  exports.getPerformanceReporterList=function(param){
+  /* exports.getPerformanceReporterList=function(param){
     //dummy code
     let SFE_ImplantData=require("./../config/SFE_ImplantData.json");
     let salesPromotionData=require("./../config/salesPromotionData.json");
     let businessPrice=require("./../config/businessPrice.json");
     return {SFE_ImplantData:SFE_ImplantData,salesPromotionData:salesPromotionData,businessPrice:businessPrice,}
+  } */
+  exports.getPerformanceReporterList=function(param){
+    //dummy code
+    let salesPromotionData=require("./../config/salesPromotionData.json");
+    let businessPrice=require("./../config/businessPrice.json");
+    return {salesPromotionData:salesPromotionData,businessPrice:businessPrice,}
+  }
+  exports.getSFE_ImplantData = function(date){
+    /* date = date.substring(0,4);
+    var params={
+      FYEAR:{type:'sql.Int',value:2018},
+      LB:{type:'sql.VarChar(20)',value:'支架系统'},
+      Role:{type:'sql.VarChar(30)',value:'客服部'},
+      UserType:{type:'sql.VarChar(50)',value:'不受限用户'},
+      EmpID:{type:'sql.Int',value:9214}
+    }
+    return sqlSvc.callK3StoredProcedure("dbo.PROC_JWsaleYearQuery",params); */
+    date = date.substring(0,4);
+    let stmt = ["exec dbo.PROC_JWsaleYearQuery"];
+    stmt.push(date+","),
+    stmt.push("'支架系统',"),
+    stmt.push("'客服部',"),
+    stmt.push("'不受限用户',"),
+    stmt.push("9214")
+    return sqlSvc.sqlK3Query(stmt.join(" "));
+    /* var params={
+      RoleId:{type:'sql.Int',value:1},
+      PortalId:{type:'sql.Int',value:0}
+    }
+    return sqlSvc.callK3StoredProcedure("dbo.GetRole",params); */
+  }
+  exports.getsalesPromotionData = function(){
+    var stmt = "select * from dbo.salesPromotion";
+    let paramTypes={};
+    let paramValues={};
+    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues)
+  }
+  exports.getbusinessPrice=function(){
+    var stmt = "select * from dbo.businessPrice";
+    let paramTypes={};
+    let paramValues={};
+    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues)
   }
   
 

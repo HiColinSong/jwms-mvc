@@ -35,11 +35,30 @@ exports.deleteUser=function(req,res){
 		}
 	})()
 };
-exports.getPerformanceReport=function(req,res){
+/* exports.getPerformanceReport=function(req,res){
 	(async function () {
 		try {
 			let report = await dbCommonSvc.getPerformanceReporterList(req.body.date);
 			return res.status(200).send(report);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+}; */
+exports.getPerformanceReport=function(req,res){
+	(async function () {
+		try {
+			let report = await dbCommonSvc.getPerformanceReporterList(req.body.date);
+			let SFE_ImplantData = await dbCommonSvc.getSFE_ImplantData(req.body.date);
+			//let bb = report.push("businessPrice",aa.recordset)
+			report.SFE_ImplantData = SFE_ImplantData.recordset;
+			return res.status(200).send(report);
+
+			/* let SFE_ImplantData = await dbCommonSvc.getSFE_ImplantData();
+			let salesPromotionData = await dbCommonSvc.getsalesPromotionData();
+			let businessPrice = await dbCommonSvc.getbusinessPrice();
+			let report = {"SFE_ImplantData":SFE_ImplantData.recordset,"salesPromotionData":salesPromotionData.recordset,"businessPrice":businessPrice.recordset};
+			return res.status(200).send(report); */
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});
 		}
