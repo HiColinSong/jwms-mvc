@@ -1,0 +1,123 @@
+<div class="modal-header dialog-header-confirm">
+  <button type="button" class="close" ng-click="$dismiss()">
+    <i class="fa fa-times fa-lg"></i>
+  </button>
+  <div class="modal-title">
+    <span class="fa fa-university"></span>
+    <span>{{(type==='Edit')?"编辑":"添加"}}促销折扣</span>
+  </div>
+</div>
+<form class="form-horizontal" role="form" name="myForm" novalidate class="jm" ng-class="{submitted:submitted}">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-7 col-sm-offset-3 error ng-binding" ng-if='error'>
+          <i class="fa fa-minus-circle"></i> {{error.text}}
+        </div>
+        
+        <div class="form-group" ng-show="false">
+          <label class="col-sm-3 control-label no-padding-right field-required" for="FID"> FID </label>
+          <div class="col-sm-6">
+               <input type='text' class='col-sm-12 form-control'
+                               name='FID'
+                               ng-required="true"               
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted,'error':(!promotionDiscount.FID)}"
+                               ng-model="promotionDiscount.FID"
+                               placeholder="FID"
+                               autocomplete="off" ng-if="type==='Add'">
+                <div ng-if="type==='Edit'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{promotionDiscount.FID}}</div>
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label no-padding-right field-required" for="FHospName"> 医院:</label>
+          <div class="col-sm-6">
+              <select class="chosen-select col-sm-12 form-control"
+                  ng-model="promotionDiscount.FHospName"
+                  name="FHospName"
+                  ng-options="item as item for item in hospitalList"
+                  >
+                  <option value="">选择医院</option>
+              </select>
+              <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
+          </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 产品类别:</label>
+            <div class="col-sm-6">
+                <select class="chosen-select col-sm-12 form-control"
+                    ng-model="promotionDiscount.ProductTypeName"
+                    name="ProductTypeName"
+                    ng-options="item as item for item in productTypeList"
+                    >
+                    <option value="">选择产品类别</option>
+                </select>
+                <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
+            </div>
+          </div>    
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
+            <div class="col-sm-6">
+              <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择日期" 
+                ng-model="promotionDiscount.Date" is-open="opened" ng-readonly="true"
+                ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
+            </div>
+          </div>         
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 销售样品</label>
+          <div class="col-sm-6">
+               <input type='number' step='0.01' class='col-sm-6 form-control'
+                               name='Ssample'
+                               ng-required="true"
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted}"
+                               ng-model="promotionDiscount.Ssample">
+          </div>
+        </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 手术日活动</label>
+            <div class="col-sm-6">
+                 <input type='number' step='0.01' class='col-sm-6 form-control'
+                                 name='ODActivity'
+                                 ng-required="true"
+                                 class='full-width form-control'
+                                 ng-class="{'submitted':submitted}"
+                                 ng-model="promotionDiscount.ODActivity">
+            </div>
+          <!-- <div class="col-sm-3 margin-top-5">Max Char:3</div> -->
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 备注</label>
+          <div class="col-sm-6">
+               <input type='text' class='col-sm-6 form-control'
+                               name='Fnote'
+                               ng-required="true"
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted}"
+                               ng-model="promotionDiscount.Fnote"
+                               placeholder="备注">
+          </div>
+          <!-- <div class="col-sm-3 margin-top-5">Max Char:3</div> -->
+        </div>
+
+        <div class="clearboth"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer text-center">
+    <button type="submit" class="btn btn-primary" ng-click="submit()" 
+      ng-disabled="!promotionDiscount.FHospName||!promotionDiscount.ProductTypeName||!promotionDiscount.Ssample||!promotionDiscount.ODActivity">
+      提交
+    </button>
+    <button type="button" class="btn btn-default" ng-click="reset()">
+      重置
+    </button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">
+      取消
+    </button>
+  </div>
+</form>
+<pre ng-show="debug">{{user|json}}</pre >
