@@ -29,12 +29,12 @@
               报表
             </a> 
           </li>
-          <li> 
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
             <a href="#/businessPriceMaintenance" active-link="active" > 
               商务价格维护
             </a> 
           </li>
-          <li> 
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
             <a href="#/promotionDiscountMaintenance" active-link="active" > 
               促销折扣维护
             </a> 

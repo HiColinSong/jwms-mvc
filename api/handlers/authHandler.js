@@ -31,6 +31,13 @@ exports.adminCheck=function(req, res, next) {
 	  else
 	    return res.sendStatus(401);
 };
+exports.dataMaintenanceCheck=function(req, res, next) {
+	if (req.session&&req.session.user&&
+		 (req.session.user.UserRole.indexOf("Admin")!==-1 ||req.session.user.UserRole.indexOf("dataMaintenance")!==-1 ))
+   next();
+  else
+	return res.sendStatus(401);
+};
 exports.login=function(req, res) {
 	session=req.session;
 	fullUsername=req.body.domain+"\\"+req.body.username;

@@ -252,7 +252,7 @@
           display:"QA Sample"
         }
       ],
-      userRoles:["superAdmin","admin","normal"],
+      userRoles:["superAdmin","admin","normal","dataMaintenance"],
       units:[
         {id:"IN",display:"inch"},
         {id:"BOT",display:"BT"},
