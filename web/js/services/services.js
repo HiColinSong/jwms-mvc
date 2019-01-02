@@ -30,6 +30,41 @@
               },
               isArray:true
             },
+            getBusinessPriceList:{
+              method: 'GET',
+              params:{
+                type: 'get-business-price-list'
+              },
+              isArray:true
+            },
+            getPromotionDiscountList:{
+              method: 'GET',
+              params:{
+                type: 'get-promotion-discount-list'
+              },
+              isArray:true
+            },
+            getProductType:{
+              method: 'GET',
+              params:{
+                type: 'get-product-type-list'
+              },
+              isArray:true
+            },
+            getAgent:{
+              method: 'GET',
+              params:{
+                type: 'get-agent-list'
+              },
+              isArray:true
+            },
+            getHospital:{
+              method: 'GET',
+              params:{
+                type: 'get-hospital-list'
+              },
+              isArray:true
+            },
             addEditUser:{
               method: 'POST',
               params:{
@@ -37,10 +72,38 @@
               },
               isArray:true
             },
+            addEditBusinessPrice:{
+              method: 'POST',
+              params:{
+                type: 'add-edit-business-price'
+              },
+              isArray:true
+            },
+            addEditPromotionDiscount:{
+              method: 'POST',
+              params:{
+                type: 'add-edit-promotion-discount'
+              },
+              isArray:true
+            },
             deleteUser:{
               method: 'POST',
               params:{
                 type: 'delete-user'
+              },
+              isArray:true
+            },
+            deleteBusinessPrice:{
+              method: 'POST',
+              params:{
+                type: 'delete-business-price'
+              },
+              isArray:true
+            },
+            deletePromotionDiscount:{
+              method: 'POST',
+              params:{
+                type: 'delete-promotion-discount'
               },
               isArray:true
             },

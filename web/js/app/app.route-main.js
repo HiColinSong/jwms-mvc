@@ -61,6 +61,52 @@
                         }]
                 }
             })
+            .when('/businessPriceMaintenance', {
+                templateUrl: 'partials/businessPrice-report.html',
+                controller: 'businessPriceCtrl',
+                resolve:{
+                    businessPriceList:['$q','jmService','utilSvc',
+                        function($q,apiSvc,util){
+                            var deferred = $q.defer();
+                            util.pageLoading("start");
+                            apiSvc.getBusinessPriceList().$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                util.pageLoading("stop");
+                            },function(err){
+                                deferred.reject(err);
+                                util.pageLoading("stop");
+                            })
+                            return deferred.promise;
+                        }]
+                }
+            })
+            .when('/promotionDiscountMaintenance', {
+                templateUrl: 'partials/promotionDiscount-report.html',
+                controller: 'promotionDiscountCtrl',
+                resolve:{
+                    promotionDiscountList:['$q','jmService','utilSvc',
+                        function($q,apiSvc,util){
+                            var deferred = $q.defer();
+                            util.pageLoading("start");
+                            apiSvc.getPromotionDiscountList().$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                util.pageLoading("stop");
+                            },function(err){
+                                deferred.reject(err);
+                                util.pageLoading("stop");
+                            })
+                            return deferred.promise;
+                        }]
+                }
+            })
             .when('/view-error-log', {
                 templateUrl: 'partials/view-log.html',
                 controller: 'viewLogCtrl',
