@@ -61,6 +61,29 @@
                         }]
                 }
             })
+            .when('/saleForecast', {
+                templateUrl: 'partials/saleForecast.html',
+                controller: 'saleForecastCtrl',
+                resolve:{
+                    saleForecastList:['$q','jmService','utilSvc',
+                        function($q,apiSvc,util){
+                            var deferred = $q.defer();
+                            util.pageLoading("start");
+                            apiSvc.getSaleForecastList().$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                util.pageLoading("stop");
+                            },function(err){
+                                deferred.reject(err);
+                                util.pageLoading("stop");
+                            })                           
+                            return deferred.promise;
+                        }]
+                }
+            })
             .when('/businessPriceMaintenance', {
                 templateUrl: 'partials/businessPrice-report.html',
                 controller: 'businessPriceCtrl',

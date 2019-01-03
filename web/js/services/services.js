@@ -30,6 +30,28 @@
               },
               isArray:true
             },
+            ///获得销售预测列表 colin 
+            getSaleForecastList:{
+              method: 'GET',
+              params:{                
+                type: 'get-sale-forecast-list'
+              },
+              isArray:true
+            },
+            addEditSaleForecast:{
+              method: 'POST',
+              params:{
+                type: 'add-edit-sale-forecast'
+              },
+              isArray:true
+            },
+            deleteSaleForecast:{
+              method: 'POST',
+              params:{
+                type: 'delete-sale-forecast'
+              },
+              isArray:true
+            },
             getBusinessPriceList:{
               method: 'GET',
               params:{
@@ -62,6 +84,13 @@
               method: 'GET',
               params:{
                 type: 'get-hospital-list'
+              },
+              isArray:true
+            },
+            getSaler:{
+              method: 'GET',
+              params:{
+                type: 'get-saler-list'
               },
               isArray:true
             },

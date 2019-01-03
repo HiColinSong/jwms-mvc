@@ -1,0 +1,106 @@
+<h2 class="text-center" style="padding-top:60px">销售预测管理</h2>
+	<div class="margin-top-20" style="padding:30px 0 10px 0">
+        <table class="table padding-top table-striped border">
+            <thead> 
+                <tr>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'HospName'; sortReverse = !sortReverse">
+                    医院名称
+                    <span ng-show="sortType == 'HospName' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'HospName' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'Saler'; sortReverse = !sortReverse">
+                    代表
+                    <span ng-show="sortType == 'Saler' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'Saler' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
+                    产品类别
+                    <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'Year'; sortReverse = !sortReverse">
+                    年月
+                    <span ng-show="sortType == 'Year' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'Year' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'ForecastPrice'; sortReverse = !sortReverse">
+                    预计价格
+                    <span ng-show="sortType == 'ForecastPrice' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'ForecastPrice' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'Aprice'; sortReverse = !sortReverse">
+                    预计数量
+                    <span ng-show="sortType == 'Aprice' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'Aprice' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a class="cursor-pointer" ng-click="sortType = 'Fnote'; sortReverse = !sortReverse">
+                    备注
+                    <span ng-show="sortType == 'Fnote' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'Fnote' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th class="text-center">
+                    操作
+                </th>
+                <!-- <td width="10%" class="text-center">Action</td> -->
+                    
+                </tr>
+            </thead> 
+            <tbody> 
+                <!--
+                <tr ng-if="saleForecastList&&saleForecastList.length>0" 
+                    ng-repeat="(idx,saleForecast) in saleForecastList | orderBy:sortType:sortReverse|filter:{UserRole:roleFilter}">
+                -->
+                <tr ng-if="saleForecastList&&saleForecastList.length>0" 
+                        ng-repeat="(idx,saleForecast) in saleForecastList | orderBy:sortType:sortReverse">
+                <td width="20%" class="text-center">{{saleForecast.FHospName}}</td>
+                <td width="10%" class="text-center">{{saleForecast.FEmpName}}</td>
+                <td width="10%" class="text-center">{{saleForecast.ProductTypeName}}</td>
+                <td width="10%" class="text-center">{{saleForecast.Year}}年{{saleForecast.Month}}月</td>
+                <td width="10%" class="text-center">{{saleForecast.Aprice}}</td>
+                <td width="10%" class="text-center">{{saleForecast.Aamout}}</td>
+                <td width="20%" class="text-center">{{saleForecast.Fnote}}</td>
+                <!--
+                    <td width="16%" class="text-center">{{(saleForecast.isActive==='1')?'Active':'Inactive'}}</td>
+                -->
+             
+                <td width="10%" class="text-center">
+                    <button type="button" class="btn btn-info btn-xs" ng-disabled="authUser.UserRole.indexOf('Admin')===-1" ng-click="addOrEditSaleForecast(saleForecast)">
+                        编辑 
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" ng-disabled="authUser.UserRole.indexOf('Admin')===-1" confirm-required="{{saleForecast.ID}}" 
+                            ng-click="deleteSaleForecast(saleForecast)">
+                        删除 
+                    </button>
+                </td>
+              
+            </tr>
+            <tr ng-if="!saleForecastList||saleForecastList.length==0">
+                <td colspan="4" class='empty-message'>没有销售预测数据.</td>
+            </tr>
+            </tbody> 
+        </table>
+        
+        <div class="margin-top text-center">
+            <button type="button" class="btn btn-success" ng-click="addOrEditSaleForecast()">
+                <span class="fa fa-plus-circle fa-lg"></span>
+                添加销售预测
+            </button>
+        </div>
+      
+    </div>
+
+    <pre ng-show="debug">saleForecastList:{{saleForecastList | json}}</pre>	
