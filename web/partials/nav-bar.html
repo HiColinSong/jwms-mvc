@@ -31,6 +31,11 @@
           </li>
           <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
             <a href="#/businessPriceMaintenance" active-link="active" > 
+              销量表
+            </a> 
+          </li>
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
+            <a href="#/businessPriceMaintenance" active-link="active" > 
               商务价格维护
             </a> 
           </li>
@@ -45,11 +50,15 @@
             </a> 
           </li>
           <li> 
-            <a href="#/saleForecast" active-link="active" > 
-              销售报表
+            <a href="#/budgetAndIncomeDetailReport" active-link="active" > 
+              预算植入收入(明细)报表
             </a> 
           </li>
-          
+          <li> 
+            <a href="#/budgetAndIncomeReport" active-link="active" > 
+              预算植入收入报表
+            </a> 
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right padding-right">
            <li ng-show="!authUser"> 

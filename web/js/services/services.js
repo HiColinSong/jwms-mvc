@@ -154,6 +154,19 @@
               method: 'POST',
               params: {
                 type: "get-performance-report"
+              }              
+            },
+            getBudgetAndIncomeReport:{
+              method: 'POST',
+              params: {
+                type: "get-budget-and-income-report"
+              }
+            },
+            getBudgetAndIncomeDetailReport:{
+              //Share same handler and services,can't after testing
+              method: 'POST',
+              params: {
+                type: "get-budget-and-income-detail-report"
               }
             }
         }

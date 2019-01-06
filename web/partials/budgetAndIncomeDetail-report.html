@@ -1,0 +1,112 @@
+<h2 class="text-center" style="padding-top:60px">预算植入收入(明细)报表</h2>
+<div class="margin-top-20" style="padding:30px 0 10px 0" ng-if="!report">
+    <div class="margin-top-20 col-sm-8 col-sm-offset-2" >
+     <form role="form" name="toNoForm">
+      <div class="form-group">
+        <label for="woNo">请选择日期:</label>
+        <input type="text" class="form-control" datepicker-popup="yyyy年M月d日" placeholder="请选择日期" 
+            ng-model="temp.dt" is-open="opened" ng-readonly="true"
+            ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
+      </div>
+      
+      <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!temp.dt">提交</button>
+    </form>
+  </div>
+  </div>     
+<div class="padding-x-20" ng-init="temp.showTab='BudgetAndIncomeData'" ng-if="report">
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs margin-bottom" role="tablist">
+<li role="presentation" ng-class="{'active':temp.showTab==='BudgetAndIncomeData'}">
+    <a class="cursor-pointer" ng-click="temp.showTab='BudgetAndIncomeData'">预算植入收入(明细)报表</a>
+</li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane"  ng-class="{'active':temp.showTab==='BudgetAndIncomeData'}" id="BudgetAndIncomeData">
+      <table class="table padding-top table-striped">
+          <thead> 
+              <tr>                  
+                  <th class="text-center">大区</th> 
+                  <th class="text-center">大区<br/>经理</th> 
+                  <th class="text-center">小区</th> 
+                  <th class="text-center">小区<br/>经理</th> 
+                  <th class="text-center">代表</th> 
+                  <th class="text-center">省</th> 
+                  <th class="text-center">市</th> 
+                  <th class="text-center">分销商<br/>编码</th> 
+                  <th class="text-center">分销商<br/>简称</th> 
+                  <th class="text-center">分销商<br/>名称</th> 
+                  <th class="text-center">医院<br/>辅助<br/>编码</th> 
+                  <th class="text-center">医院<br/>编码</th> 
+                  <th class="text-center">医院<br/>名称</th> 
+                  <th class="text-center">医院<br/>等级</th> 
+                  <th class="text-center">产品类别</th> 
+                  <th class="text-center">商务标准价</th> 
+                  <th class="text-center">商务达成返利</th> 
+                  <th class="text-center">招标价补</th> 
+                  <th class="text-center">商务价格1</th> 
+                  <th class="text-center">销售促销</th> 
+                  <th class="text-center">销售价格1</th> 
+                  <th class="text-center">商务买赠</th> 
+                  <th class="text-center">商务新医院开发奖</th> 
+                  <th class="text-center">销售样品</th> 
+                  <th class="text-center">手术日活动</th> 
+                  <th class="text-center">实际价格</th> 
+                  <th class="text-center">实际数量</th> 
+                  <th class="text-center">实际金额收入</th> 
+                  <th class="text-center">预算价格</th> 
+                  <th class="text-center">预算数量</th> 
+                  <th class="text-center">预算植入收入</th> 
+              </tr> 
+          </thead> 
+          <tbody> 
+              <tr ng-repeat="(idx,item) in report.BudgetAndIncomeData">                 
+                  <td class="text-center">{{::item.FBigAreaName}}</td> 
+                  <td class="text-center">{{::item.FBigAreaMgr}}</td> 
+                  <td class="text-center">{{::item.FAreaName}}</td> 
+                  <td class="text-center">{{::item.FMgrName}}</td> 
+                  <td class="text-center">{{::item.FSalerName}}</td> 
+                  <td class="text-center">{{::item.FProvince}}</td> 
+                  <td class="text-center">{{::item.FCity}}</td> 
+                  <td class="text-center">{{::item.FCustNum}}</td> 
+                  <td class="text-center">{{::item.FCustNameShort}}</td> 
+                  <td class="text-center">{{::item.FCustNameOk}}</td> 
+                  <td class="text-center">{{::item.FHospNum}}</td> 
+                  <td class="text-center">{{::item.FHospNumOk}}</td> 
+                  <td class="text-center">{{::item.FHospNameOk}}</td> 
+                  <td class="text-center">{{::item.FHospLevelName}}</td>                
+                  <td class="text-center">{{::item.ProductTypeName}}</td> 
+                  <td class="text-center">{{::item.CSPrice}}</td> 
+                  <td class="text-center">{{::item.BARebate}}</td> 
+                  <td class="text-center">{{::item.TTBoot}}</td> 
+                  <td class="text-center">{{::item.CSTotalPrice1}}</td> 
+                  <td class="text-center">{{::item.Spromotion}}</td> 
+                  <td class="text-center">{{::item.STotalPrice1}}</td> 
+                  <td class="text-center">{{::item.BTBGift}}</td> 
+                  <td class="text-center">{{::item.BNHDAward}}</td> 
+                  <td class="text-center">{{::item.Ssample}}</td> 
+                  <td class="text-center">{{::item.ODActivity}}</td> 
+                  <td class="text-center">{{::item.ActTotalPrice}}</td> 
+                  <td class="text-center">{{::item.ActSaleQty}}</td> 
+                  <td class="text-center">{{::item.ActTotalIncome}}</td> 
+                  <td class="text-center">{{::item.Aprice}}</td> 
+                  <td class="text-center">{{::item.Aamout}}</td> 
+                  <td class="text-center">{{::item.ATotalIncome}}</td> 
+              </tr>
+              
+          </tbody> 
+      </table>
+    </div>
+    
+    <!-- salesPromoteion tab -->
+    
+    <!-- businessPrice tab -->
+   
+</div>
+</div>
+
+<div class="clearboth"></div>
+<pre ng-show="debug">report:{{report | json}}</pre>	
+<pre ng-show="debug">temp:{{temp | json}}</pre>	

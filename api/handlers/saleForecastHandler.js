@@ -38,7 +38,7 @@ exports.addEditSaleForecast=function(req,res){
 	})()
 };
 
-
+//
 exports.getProductTypeList=function(req,res){
 	(async function () {
 		try {

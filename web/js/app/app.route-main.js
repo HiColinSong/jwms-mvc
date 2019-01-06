@@ -38,6 +38,64 @@
                         }]
                 }
             })
+            .when('/budgetAndIncomeReport/:date?', {
+                templateUrl: 'partials/budgetAndIncome-report.html',
+                controller: 'budgetAndIncomeReportCtrl',
+                resolve:{
+                    report:['$q','$route','utilSvc','jmService',
+                        function($q,$route,util,apiSvc){
+                            var deferred = $q.defer();
+                            if ($route.current.params.date){
+                                util.pageLoading("start");
+                               // debugger;
+                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date}).$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                util.pageLoading("stop");
+                            },function(err){
+                                deferred.reject(err);
+                                util.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            util.pageLoading("stop");
+                        }
+                            return deferred.promise;
+                        }]
+                }
+            })
+            .when('/budgetAndIncomeDetailReport/:date?', {
+                templateUrl: 'partials/budgetAndIncomeDetail-report.html',
+                controller: 'budgetAndIncomeDetailReportCtrl',
+                resolve:{
+                    report:['$q','$route','utilSvc','jmService',
+                        function($q,$route,util,apiSvc){
+                            var deferred = $q.defer();
+                            if ($route.current.params.date){
+                                util.pageLoading("start");
+                           //    debugger;
+                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date}).$promise.then(function(data){
+                                if (data){
+                                    deferred.resolve(data);
+                                } else {
+                                    deferred.resolve(undefined);
+                                }
+                                util.pageLoading("stop");
+                            },function(err){
+                                deferred.reject(err);
+                                util.pageLoading("stop");
+                            })
+                        } else {
+                            deferred.resolve(undefined)
+                            util.pageLoading("stop");
+                        }
+                            return deferred.promise;
+                        }]
+                }
+            })
             .when('/admin', {
                 templateUrl: 'partials/admin.html',
                 controller: 'adminCtrl',

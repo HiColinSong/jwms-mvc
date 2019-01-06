@@ -48,6 +48,7 @@ var commonHandler = require('./api/handlers/commonHandler');
 var businessPriceHandler = require('./api/handlers/businessPriceHandler');
 var promotionDiscountHandler = require('./api/handlers/promotionDiscountHandler');
 var saleForecastHandler = require('./api/handlers/saleForecastHandler');
+var budgetAndIncomeReportHandler = require('./api/handlers/budgetAndIncomeReportHandler');
 app.get('/jmapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
 app.get('/jmapi/get-business-price-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getBusinessPriceList);
 app.get('/jmapi/get-promotion-discount-list.json',auth.dataMaintenanceCheck,promotionDiscountHandler.getPromotionDiscountList);
@@ -68,7 +69,8 @@ app.post('/jmapi/delete-sale-forecast.json',auth.adminCheck,saleForecastHandler.
 app.post('/jmapi/view-info-log.json',auth.authCheck,commonHandler.viewLog);
 app.post('/jmapi/view-error-log.json',auth.authCheck,commonHandler.viewLog);
 app.post('/jmapi/get-performance-report.json',auth.authCheck,commonHandler.getPerformanceReport);
-
+app.post('/jmapi/get-budget-and-income-report.json',auth.adminCheck,budgetAndIncomeReportHandler.getBudgetAndIncomeReport);
+app.post('/jmapi/get-budget-and-income-detail-report.json',auth.adminCheck,budgetAndIncomeReportHandler.getBudgetAndIncomeReport);
 app.get('*', function(req, res){
    res.send({ERROR:'Sorry, '+req.originalUrl+' is an invalid URL.'});
 });
