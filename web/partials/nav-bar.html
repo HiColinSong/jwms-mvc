@@ -24,13 +24,21 @@
       
         <ul class="nav navbar-nav" ng-hide="boolChangeClass"> 
           <li>{{scroll}}</li>
+          <!--
           <li> 
             <a href="#/report" active-link="active" > 
               报表
             </a> 
           </li>
+          
           <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
             <a href="#/businessPriceMaintenance" active-link="active" > 
+              销量表
+            </a> 
+          </li>
+          -->
+          <li ng-show="authUser&&(authUser.UserRole==='superAdmin'||authUser.UserRole==='dataMaintenance')"> 
+            <a href="#/report" active-link="active" > 
               销量表
             </a> 
           </li>
