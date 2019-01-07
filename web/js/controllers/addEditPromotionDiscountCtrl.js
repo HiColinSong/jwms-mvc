@@ -4,19 +4,13 @@
     /* Controllers */
     angular.module('jm.controllers')
     .controller('addEditPromotionDiscountCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','jmService','promotionDiscount','promotionDiscountList','productTypeList','hospitalList','constants',
-    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,promotionDiscount,promotionDiscountList,productTypeList,hospitalList,constants){
-             $scope.type=promotionDiscount?"Edit":"Add";
-             if(promotionDiscount){
-                 $scope.promotionDiscount = promotionDiscount;
-                 $scope.promotionDiscount.Date = promotionDiscount.Year + '年' + promotionDiscount.Month + '月';
-             }
-             //$scope.userRoles = constants.userRoles;
+    	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,promotionDiscount,promotionDiscountList,productTypeList,hospitalList,constants){ 
+            $scope.type=promotionDiscount?"Edit":"Add";
              var productTypeArray = new Array();
              for(var i=0;i<productTypeList.length;i++){
                 productTypeArray.push(productTypeList[i].FName);
              }
              $scope.productTypeList=productTypeArray;
-
 
              var hospitalArray = new Array();
              for(var i=0;i<hospitalList.length;i++){
@@ -40,13 +34,24 @@
     	 	$scope.reset=function(){
                 $scope.promotionDiscount={};
                 angular.copy(promotionDiscount,$scope.promotionDiscount);
-                $scope.promotionDiscount.FHospName='';
-                $scope.promotionDiscount.ProductTypeName='';
-                $scope.promotionDiscount.Date='';
-                $scope.promotionDiscount.Ssample='';
-                $scope.promotionDiscount.ODActivity='';
-                $scope.promotionDiscount.Fnote='';
+
+                if(promotionDiscount){
+                    $scope.promotionDiscount.FHospName=promotionDiscount.FHospName;
+                    $scope.promotionDiscount.ProductTypeName=promotionDiscount.ProductTypeName;
+                    $scope.promotionDiscount.Date=promotionDiscount.Date;
+                    $scope.promotionDiscount.Ssample=promotionDiscount.Ssample;
+                    $scope.promotionDiscount.ODActivity=promotionDiscount.ODActivity;
+                    $scope.promotionDiscount.Fnote=promotionDiscount.Fnote;
+                    $scope.promotionDiscount.Date = promotionDiscount.Year + '年' + promotionDiscount.Month + '月';
+                } else {
+                    $scope.promotionDiscount.FHospName='';
+                    $scope.promotionDiscount.ProductTypeName='';
+                    $scope.promotionDiscount.Date='';
+                    $scope.promotionDiscount.Ssample='';
+                    $scope.promotionDiscount.ODActivity='';
+                    $scope.promotionDiscount.Fnote='';
+                }
              }
-             //$scope.reset();  
+             $scope.reset();  
     }])
  }());

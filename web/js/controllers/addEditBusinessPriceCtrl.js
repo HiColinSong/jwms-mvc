@@ -6,11 +6,6 @@
     .controller('addEditBusinessPriceCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','jmService','businessPrice','businessPriceList','productTypeList','agentList','hospitalList','constants',
     	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,businessPrice,businessPriceList,productTypeList,agentList,hospitalList,constants){
              $scope.type=businessPrice?"Edit":"Add";
-             if(businessPrice){
-                 $scope.businessPrice = businessPrice;
-                 $scope.businessPrice.Date = businessPrice.Year + '年' + businessPrice.Month + '月';
-             }
-             //$scope.userRoles = constants.userRoles;
              var productTypeArray = new Array();
              for(var i=0;i<productTypeList.length;i++){
                 productTypeArray.push(productTypeList[i].FName);
@@ -45,18 +40,34 @@
     	 	$scope.reset=function(){
                 $scope.businessPrice={};
                 angular.copy(businessPrice,$scope.businessPrice);
-                $scope.businessPrice.FHospName='';
-                $scope.businessPrice.DistributorName='';
-                $scope.businessPrice.ProductTypeName='';
-                $scope.businessPrice.Date='';
-                $scope.businessPrice.CSPrice='';
-                $scope.businessPrice.BARebate='';
-                $scope.businessPrice.TTBoot='';
-                $scope.businessPrice.Spromotion='';
-                $scope.businessPrice.BTBGift='';
-                $scope.businessPrice.BNHDAward='';
-                $scope.businessPrice.Fnote='';
+
+                if(businessPrice){
+                    $scope.businessPrice.FHospName=businessPrice.FHospName;
+                    $scope.businessPrice.DistributorName=businessPrice.DistributorName;
+                    $scope.businessPrice.ProductTypeName=businessPrice.ProductTypeName;
+                    $scope.businessPrice.Date=businessPrice.Date;
+                    $scope.businessPrice.CSPrice=businessPrice.CSPrice;
+                    $scope.businessPrice.BARebate=businessPrice.BARebate;
+                    $scope.businessPrice.TTBoot=businessPrice.TTBoot;
+                    $scope.businessPrice.Spromotion=businessPrice.Spromotion;
+                    $scope.businessPrice.BTBGift=businessPrice.BTBGift;
+                    $scope.businessPrice.BNHDAward=businessPrice.BNHDAward;
+                    $scope.businessPrice.Fnote=businessPrice.Fnote;
+                    $scope.businessPrice.Date = businessPrice.Year + '年' + businessPrice.Month + '月';
+                } else {
+                    $scope.businessPrice.FHospName='';
+                    $scope.businessPrice.DistributorName='';
+                    $scope.businessPrice.ProductTypeName='';
+                    $scope.businessPrice.Date='';
+                    $scope.businessPrice.CSPrice='';
+                    $scope.businessPrice.BARebate='';
+                    $scope.businessPrice.TTBoot='';
+                    $scope.businessPrice.Spromotion='';
+                    $scope.businessPrice.BTBGift='';
+                    $scope.businessPrice.BNHDAward='';
+                    $scope.businessPrice.Fnote='';
+                }
              }
-             //$scope.reset();
+             $scope.reset();
     }])
  }());
