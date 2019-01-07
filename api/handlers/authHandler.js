@@ -47,14 +47,12 @@ exports.login=function(req, res) {
 	console.log('call Active Directory Authentication!');
 
 	ad.authenticate(fullUsername, req.body.password, function(err, auth) {
-	//   if (err) {
-	// 	// console.log('ERROR: '+JSON.stringify(err));
-	// 	logger.error({loginUser:req.body.username,browser:req.headers['user-agent'],ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress,error:err});
-	//     return res.status(402).send({message:"incorrect domain, username or password!"});
-	//   }
-		
-		(async function () {
-			auth=true;
+	  if (err) {
+		// console.log('ERROR: '+JSON.stringify(err));
+		logger.error({loginUser:req.body.username,browser:req.headers['user-agent'],ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress,error:err});
+	    return res.status(402).send({message:"incorrect domain, username or password!"});
+	  }		
+		(async function () {			
 			if (auth) {
 				logger.info({loginUser:req.body.username,browser:req.headers['user-agent'],ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress});
 				try {
