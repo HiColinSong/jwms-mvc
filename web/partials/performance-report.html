@@ -5,11 +5,14 @@
        <form role="form" name="toNoForm">
         <div class="form-group">
           <label for="woNo">请选择日期:</label>
-          <input type="text" class="form-control" datepicker-popup="yyyy年M月d日" placeholder="请选择日期" 
+
+          
+          <input type="text" class="form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                datepicker-options="{minMode: 'month'}" 
+                datepicker-mode="'month'"
               ng-model="temp.dt" is-open="opened" ng-readonly="true"
               ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
         </div>
-        
         <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!temp.dt">提交</button>
       </form>
     </div>

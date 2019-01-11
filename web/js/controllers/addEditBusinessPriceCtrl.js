@@ -12,11 +12,12 @@
              }
              $scope.productTypeList=productTypeArray;
 
-             var agentArray = new Array();
-             for(var i=0;i<agentList.length;i++){
-                agentArray.push(agentList[i].FName);
-             }
-             $scope.agentList=agentArray;
+            //  var agentArray = new Array();
+            //  for(var i=0;i<agentList.length;i++){
+            //     agentArray.push(agentList[i].FName);
+            //  }
+            //  $scope.agentList=agentArray;
+             $scope.agentList=agentList;
 
              var hospitalArray = new Array();
              for(var i=0;i<hospitalList.length;i++){

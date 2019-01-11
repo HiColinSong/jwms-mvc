@@ -44,14 +44,30 @@
         </div>
         <div class="form-group" >
           <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 代理商:</label>
-          <div class="col-sm-6">
+                    <div class="col-sm-6" ng-class="{'has-error':!businessPrice.DistributorName}">
+               <input type='text' class='col-sm-12 form-control'
+                               name='DistributorName'
+                               ng-required="true"
+                               class='full-width form-control'
+                               ng-class="{'submitted':submitted,'error':(!businessPrice.DistributorName)}"
+                               ng-model="businessPrice.DistributorName"
+                               typeahead="item.FName as item.FName for item in agentList|filter:$viewValue|limitTo:12"
+                               placeholder="选择代理商"
+                               typeahead-editable="false"
+                               autocomplete="off">
+                    </div>
+          <!-- <div class="col-sm-6">
               <select class="chosen-select col-sm-12 form-control"
                   ng-model="businessPrice.DistributorName"
                   name="DistributorName"
                   ng-options="item as item for item in agentList"
                   >
                   <option value="">选择代理商</option>
-              </select>
+              </select> -->
+
+
+
+              
               <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
           </div>
         </div>
@@ -181,4 +197,5 @@
     </button>
   </div>
 </form>
-<pre ng-show="debug">{{user|json}}</pre >
+<pre ng-show="debug">businessPrice：{{businessPrice|json}}</pre >
+<pre ng-show="debug">agentList：{{agentList|json}}</pre >
