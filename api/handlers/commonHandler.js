@@ -98,3 +98,37 @@ exports.viewLog=function(req,res){
 		return res.status(400).send({error:true,message:err});
 	})
 };
+
+
+exports.getProductTypeList=function(req,res){
+	(async function () {
+		try {
+			var list = await dbCommonSvc.getProductTypeList();
+			return res.status(200).send(list.recordset);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+};
+
+exports.getAgentList=function(req,res){
+	(async function () {
+		try {
+			var list = await dbCommonSvc.getAgentList();
+			return res.status(200).send(list.recordset);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+};
+
+exports.getHospitalList=function(req,res){
+	(async function () {
+		try {
+			var list = await dbCommonSvc.getHospitalList();
+			return res.status(200).send(list.recordset);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+};

@@ -95,4 +95,25 @@ const sqlSvc=require("./sqlService");
   }
   
 
+  exports.getProductTypeList=function(domain){
+    var stmt = "select FName from t_SubMessage where FTypeID = 10008";
+    let paramTypes={};
+    let paramValues={};
+    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
+  }
+
+  exports.getAgentList=function(domain){
+    var stmt = "select FName from V_Agents";
+    let paramTypes={};
+    let paramValues={};
+    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
+  }
+
+  exports.getHospitalList=function(domain){
+    var stmt = "select FName from V_Hospitals";
+    let paramTypes={};
+    let paramValues={};
+    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
+  }
+
 

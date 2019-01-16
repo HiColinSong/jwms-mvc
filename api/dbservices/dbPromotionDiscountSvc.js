@@ -59,25 +59,3 @@ exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
 
-
-
-  exports.getProductTypeList=function(domain){
-    var stmt = "select FName from t_SubMessage where FTypeID = 10008";
-    let paramTypes={};
-    let paramValues={};
-    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
-  }
-
-  exports.getAgentList=function(domain){
-    var stmt = "select FName from t_Organization where FNumber not LIKE '%[ABCDEFGHIJKLMNOPQRSTUVWXYZ]%'";
-    let paramTypes={};
-    let paramValues={};
-    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
-  }
-
-  exports.getHospitalList=function(domain){
-    var stmt = "select FName from t_Organization where FNumber LIKE '%[ABCDEFGHIJKLMNOPQRSTUVWXYZ]%'";
-    let paramTypes={};
-    let paramValues={};
-    return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
-  }

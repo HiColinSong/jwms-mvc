@@ -38,39 +38,6 @@ exports.addEditSaleForecast=function(req,res){
 	})()
 };
 
-//
-exports.getProductTypeList=function(req,res){
-	(async function () {
-		try {
-			var list = await dbSaleForecastSvc.getProductTypeList();
-			return res.status(200).send(list.recordset);
-		} catch (error) {
-			return res.status(200).send({error:true,message:error.message});
-		}
-	})()
-};
-
-// exports.getAgentList=function(req,res){
-// 	(async function () {
-// 		try {
-// 			var list = await dbSaleForecastSvc.getAgentList();
-// 			return res.status(200).send(list.recordset);
-// 		} catch (error) {
-// 			return res.status(200).send({error:true,message:error.message});
-// 		}
-// 	})()
-// };
-
-exports.getHospitalList=function(req,res){
-	(async function () {
-		try {
-			var list = await dbSaleForecastSvc.getHospitalList();
-			return res.status(200).send(list.recordset);
-		} catch (error) {
-			return res.status(200).send({error:true,message:error.message});
-		}
-	})()
-};
 
 exports.getSalerList=function(req,res){
 	(async function () {

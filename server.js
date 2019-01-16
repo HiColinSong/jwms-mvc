@@ -52,9 +52,9 @@ var budgetAndIncomeReportHandler = require('./api/handlers/budgetAndIncomeReport
 app.get('/jmapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
 app.post('/jmapi/get-business-price-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getBusinessPriceList);
 app.post('/jmapi/get-promotion-discount-list.json',auth.dataMaintenanceCheck,promotionDiscountHandler.getPromotionDiscountList);
-app.get('/jmapi/get-product-type-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getProductTypeList);
-app.get('/jmapi/get-agent-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getAgentList);
-app.get('/jmapi/get-hospital-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getHospitalList);
+app.get('/jmapi/get-product-type-list.json',auth.dataMaintenanceCheck,commonHandler.getProductTypeList);
+app.get('/jmapi/get-agent-list.json',auth.dataMaintenanceCheck,commonHandler.getAgentList);
+app.get('/jmapi/get-hospital-list.json',auth.dataMaintenanceCheck,commonHandler.getHospitalList);
 app.get('/jmapi/get-saler-list.json',auth.dataMaintenanceCheck,saleForecastHandler.getSalerList);
 app.post('/jmapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/jmapi/add-edit-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.addEditBusinessPrice);
