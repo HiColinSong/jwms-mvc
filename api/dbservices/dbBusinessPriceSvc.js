@@ -59,7 +59,8 @@ exports.getBusinessPriceList=function(dateStr,FHospName,ProductTypeName){
     stmt.push(`${businessPrice.Spromotion},`),
     stmt.push(`${businessPrice.BTBGift},`),
     stmt.push(`${businessPrice.BNHDAward},`),
-    stmt.push(`'${businessPrice.Fnote}'`)
+    stmt.push(`'${businessPrice.Fnote}',`),
+    stmt.push(`'${businessPrice.maintainerName}'`)
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
 

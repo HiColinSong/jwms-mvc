@@ -71,7 +71,8 @@ const sqlSvc=require("./sqlService");
     stmt.push(`'${saleForecast.FEmpName}',`),
     stmt.push(`${saleForecast.Aprice},`),
     stmt.push(`${saleForecast.Aamout},`),
-    stmt.push(`'${saleForecast.Fnote}'`)
+    stmt.push(`'${saleForecast.Fnote}',`),
+    stmt.push(`'${saleForecast.maintainerName}'`)
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
 

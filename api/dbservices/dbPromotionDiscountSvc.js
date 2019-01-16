@@ -54,7 +54,8 @@ exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
     stmt.push(`'${promotionDiscount.ProductTypeName}',`),
     stmt.push(`${promotionDiscount.Ssample},`),
     stmt.push(`${promotionDiscount.ODActivity},`),
-    stmt.push(`'${promotionDiscount.Fnote}'`)
+    stmt.push(`'${promotionDiscount.Fnote}',`),
+    stmt.push(`'${promotionDiscount.maintainerName}'`)
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
 

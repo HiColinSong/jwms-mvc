@@ -25,7 +25,8 @@ CREATE PROCEDURE [dbo].[JM_InsertOrUpdateBusinessPriceProfile]
 	@Spromotion decimal(23, 10),
 	@BTBGift decimal(23, 10),
 	@BNHDAward decimal(23, 10),
-	@Fnote nvarchar(100)
+	@Fnote nvarchar(100),
+	@maintainerName nvarchar(50)
 )
 AS
 BEGIN
@@ -58,14 +59,16 @@ BEGIN
 					Spromotion = @Spromotion,
 					BTBGift = @BTBGift,
 					Fnote = @Fnote,
-					BNHDAward  = @BNHDAward
+					BNHDAward  = @BNHDAward,
+					maintainerName = @maintainerName,
+					FDate = GETDATE()
 			WHERE	FID = @FID
 		END
 	ELSE
 		BEGIN
 		declare @P1 int  exec GetICMaxNum 't_BOSDocument', @P1 output select @FID = @P1 
-		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,FCustID,DistributorCode,DistributorName,ProductTypeID,ProductTypeName,Year,Month,CSPrice,BARebate,TTBoot,Spromotion,BTBGift,Fnote,BNHDAward,ItemType)
-			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@FCustID,@DistributorCode,@DistributorName,@ProductTypeID,@ProductTypeName,@Year,@Month,@CSPrice,@BARebate,@TTBoot,@Spromotion,@BTBGift,@Fnote,@BNHDAward,1)
+		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,FCustID,DistributorCode,DistributorName,ProductTypeID,ProductTypeName,Year,Month,CSPrice,BARebate,TTBoot,Spromotion,BTBGift,Fnote,BNHDAward,ItemType,maintainerName,FDate)
+			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@FCustID,@DistributorCode,@DistributorName,@ProductTypeID,@ProductTypeName,@Year,@Month,@CSPrice,@BARebate,@TTBoot,@Spromotion,@BTBGift,@Fnote,@BNHDAward,1,@maintainerName,GETDATE())
 		END
 	SELECT * FROM dbo.t_BOSDocument where ItemType =1 and year = @Year and month = @Month
 END

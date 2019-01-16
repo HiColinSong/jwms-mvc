@@ -20,7 +20,8 @@ CREATE PROCEDURE [dbo].[JM_InsertOrUpdatePromotionDiscountProfile]
 	@ProductTypeName nvarchar(50),
 	@Ssample decimal(23, 10),
 	@ODActivity decimal(23, 10),
-	@Fnote nvarchar(100)
+	@Fnote nvarchar(100),
+	@maintainerName nvarchar(50)
 )
 AS
 BEGIN
@@ -43,14 +44,16 @@ BEGIN
 					Month  = @Month,
 					Ssample = @Ssample,
 					Fnote = @Fnote,
-					ODActivity  = @ODActivity
+					ODActivity  = @ODActivity,
+					maintainerName = @maintainerName,
+					FDate = GETDATE()
 			WHERE	FID = @FID
 		END
 	ELSE
 		BEGIN
 		declare @P1 int  exec GetICMaxNum 't_BOSDocument', @P1 output select @FID = @P1 
-		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,Year,Month,Ssample,ODActivity,Fnote,ItemType)
-			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@Year,@Month,@Ssample,@ODActivity,@Fnote,2)
+		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,Year,Month,Ssample,ODActivity,Fnote,ItemType,maintainerName,FDate)
+			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@Year,@Month,@Ssample,@ODActivity,@Fnote,2,@maintainerName,GETDATE())
 		END
 		
 	SELECT * FROM dbo.t_BOSDocument where ItemType =2 and year = @Year and month = @Month

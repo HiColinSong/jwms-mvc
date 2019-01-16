@@ -32,6 +32,7 @@
                 }
             }
     	 	$scope.submit=function(){
+                $scope.businessPrice.maintainerName = $rootScope.authUser.userName;
                 apiSvc.addEditBusinessPrice({businessPrice:$scope.businessPrice})
                 .$promise.then(function(businessPriceList){
                     if (businessPriceList){

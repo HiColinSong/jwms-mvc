@@ -31,6 +31,7 @@
                 }
             }
     	 	$scope.submit=function(){
+                $scope.promotionDiscount.maintainerName = $rootScope.authUser.userName;
                 apiSvc.addEditPromotionDiscount({promotionDiscount:$scope.promotionDiscount})
                 .$promise.then(function(promotionDiscountList){
                     if (promotionDiscountList){

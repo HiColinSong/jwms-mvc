@@ -44,6 +44,7 @@
             }
 
     	 	$scope.submit=function(){
+                $scope.saleForecast.maintainerName = $rootScope.authUser.userName;
                 apiSvc.addEditSaleForecast({saleForecast:$scope.saleForecast})
                 .$promise.then(function(saleForecastList){
                     if (saleForecastList){

@@ -12,18 +12,22 @@ ALTER PROCEDURE [dbo].[JM_InsertOrUpdateSaleForecastProfile]
 	@Month int,
 	@FHospName nvarchar(50),
 	@ProductTypeName nvarchar(50),
+	@EmpName nvarchar(30),
 	@Aprice decimal(23, 10),
 	@Aamout decimal(23, 10),
-	@Fnote nvarchar(100)
+	@Fnote nvarchar(100),
+	@maintainerName nvarchar(50)
 )
 AS
 BEGIN
 	declare @FHospID int
 	declare @FHospNum nvarchar(255)
 	declare @ProductTypeID int
+	declare @EmpID int
 	
-	select @FHospID = FItemID,@FHospNum = FNumber from t_Organization where   FName = @FHospName
+	select @FHospID = FItemID,@FHospNum = FNumber from t_Organization where (FNumber LIKE 'N%' OR FNumber LIKE 'S%') AND FName = @FHospName
 	select @ProductTypeID = FInterID from t_SubMessage where FTypeID = 10008 and FName = @ProductTypeName
+	select @EmpID = FItemID from t_Emp where FName = @EmpName
 
 	IF (@FID != -1)
 		BEGIN
@@ -33,18 +37,21 @@ BEGIN
 					FHospName = @FHospName,
 					ProductTypeID  = @ProductTypeID,
 					ProductTypeName = @ProductTypeName,
+					FEmpID=@EmpID,
 					Year = @Year,
 					Month  = @Month,
 					Aprice = @Aprice,
 					Fnote = @Fnote,
-					Aamout  = @Aamout
+					Aamout  = @Aamout,
+					maintainerName = @maintainerName,
+					FDate = GETDATE()
 			WHERE	FID = @FID
 		END
 	ELSE
 		BEGIN
 		declare @P1 int  exec GetICMaxNum 't_BOSDocument', @P1 output select @FID = @P1 
-		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,FEmpID,Year,Month,Aprice,Aamout,Fnote,ItemType)
-			VALUES (@P1,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@EmpID,@Year,@Month,@Aprice,@Aamout,@Fnote,3)
+		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,FEmpID,Year,Month,Aprice,Aamout,Fnote,ItemType,maintainerName,FDate)
+			VALUES (@P1,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@EmpID,@Year,@Month,@Aprice,@Aamout,@Fnote,3,@maintainerName,GETDATE())
 		--INSERT INTO dbo.t_BOSDocument(FID,
 		--			FClassTypeID,FCustID,DistributorCode,DistributorName,CSPrice,BARebate,TTBoot
 		--			,[Spromotion]
