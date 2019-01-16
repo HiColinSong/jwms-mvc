@@ -77,9 +77,11 @@
           <div class="form-group" ng-class="{'has-error':duplicateUserID}">
             <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
             <div class="col-sm-6">
-              <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择日期" 
+              <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                datepicker-options="{minMode: 'month'}"
+                datepicker-mode="'month'"
                 ng-model="businessPrice.Date" ng-blur="uniqueValidation()" is-open="opened" ng-readonly="true"
-                ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
+                ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
             </div>
           </div>         
         <div class="form-group">

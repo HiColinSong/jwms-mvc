@@ -14,17 +14,21 @@
                 $scope.duplicateUserID=false;
                 if ($scope.promotionDiscount.Date != ''){
                     var date;
-                    if($scope.promotionDiscount.Date.indexOf("年")>-1){
-                        let date_str = $scope.promotionDiscount.Date.replace(/年/g,"/");
-                        date_str = date_str.replace(/月/g,"");
-                        date = new Date(date_str);
-                    } else {
-                        date = new Date($scope.promotionDiscount.Date);
+                    if(!($scope.promotionDiscount.Date instanceof Date)){
+                        if($scope.promotionDiscount.Date.indexOf("年")>-1){
+                            let date_str = $scope.promotionDiscount.Date.replace(/年/g,"/");
+                            date_str = date_str.replace(/月/g,"");
+                            date = new Date(date_str);
+                        } else {
+                            date = new Date($scope.promotionDiscount.Date);
+                        }
+                    }else {
+                        date = $scope.promotionDiscount.Date;
                     }
                     var year = date.getFullYear();
                     var month = date.getMonth()+1;
                     promotionDiscountList.forEach(_promotionDiscount => {
-                        if (_promotionDiscount.FHospName===$scope.promotionDiscount.FHospName && _promotionDiscount.ProductTypeName===$scope.promotionDiscount.ProductTypeName &&  _promotionDiscount.Year ===year && _promotionDiscount.Month ===month){
+                        if (_promotionDiscount.FID!=$scope.promotionDiscount.FID &&_promotionDiscount.FHospName===$scope.promotionDiscount.FHospName && _promotionDiscount.ProductTypeName===$scope.promotionDiscount.ProductTypeName &&  _promotionDiscount.Year ===year && _promotionDiscount.Month ===month){
                             $scope.duplicateUserID=true;
                         }
                     });

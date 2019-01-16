@@ -6,7 +6,6 @@
     .controller('budgetAndIncomeDetailReportCtrl',['$scope','$routeParams','$location', 'report','utilSvc',
         function($scope,$routeParams,$location,report,utilSvc){
           $scope.temp={};
-         // debugger;
           if (report){
             $scope.report=report;
 

@@ -11,21 +11,24 @@
              $scope.hospitalList=hospitalList;
 
              $scope.uniqueValidation=function(){
-                 debugger;
                 $scope.duplicateUserID=false;
                 if ($scope.businessPrice.Date != ''){
                     var date;
-                    if($scope.businessPrice.Date.indexOf("年")>-1){
-                        let date_str = $scope.businessPrice.Date.replace(/年/g,"/");
-                        date_str = date_str.replace(/月/g,"");
-                        date = new Date(date_str);
+                    if(!($scope.businessPrice.Date instanceof Date)){
+                        if($scope.businessPrice.Date.indexOf("年")>-1){
+                            let date_str = $scope.businessPrice.Date.replace(/年/g,"/");
+                            date_str = date_str.replace(/月/g,"");
+                            date = new Date(date_str);
+                        } else {
+                            date = new Date($scope.businessPrice.Date);
+                        }
                     } else {
-                        date = new Date($scope.businessPrice.Date);
+                        date = $scope.businessPrice.Date;
                     }
                     var year = date.getFullYear();
                     var month = date.getMonth()+1;
                     businessPriceList.forEach(_businessPrice => {
-                        if (_businessPrice.FHospName===$scope.businessPrice.FHospName && _businessPrice.ProductTypeName===$scope.businessPrice.ProductTypeName &&  _businessPrice.Year ===year && _businessPrice.Month ===month){
+                        if (_businessPrice.FID!=$scope.businessPrice.FID && _businessPrice.FHospName===$scope.businessPrice.FHospName && _businessPrice.ProductTypeName===$scope.businessPrice.ProductTypeName &&  _businessPrice.Year ===year && _businessPrice.Month ===month){
                             $scope.duplicateUserID=true;
                         }
                     });

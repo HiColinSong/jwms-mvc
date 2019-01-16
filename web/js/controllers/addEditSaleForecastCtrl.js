@@ -26,17 +26,21 @@
                 $scope.duplicateUserID=false;
                 if ($scope.saleForecast.Date != ''){
                     var date;
-                    if($scope.saleForecast.Date.indexOf("年")>-1){
-                        let date_str = $scope.saleForecast.Date.replace(/年/g,"/");
-                        date_str = date_str.replace(/月/g,"");
-                        date = new Date(date_str);
+                    if(!($scope.saleForecast.Date instanceof Date)){
+                        if($scope.saleForecast.Date.indexOf("年")>-1){
+                            let date_str = $scope.saleForecast.Date.replace(/年/g,"/");
+                            date_str = date_str.replace(/月/g,"");
+                            date = new Date(date_str);
+                        } else {
+                            date = new Date($scope.saleForecast.Date);
+                        }
                     } else {
-                        date = new Date($scope.saleForecast.Date);
+                        date = $scope.saleForecast.Date;
                     }
                     var year = date.getFullYear();
                     var month = date.getMonth()+1;
                     saleForecastList.forEach(_saleForecast => {
-                        if (_saleForecast.FHospName===$scope.saleForecast.FHospName && _saleForecast.FEmpName===$scope.saleForecast.FEmpName && _saleForecast.ProductTypeName===$scope.saleForecast.ProductTypeName &&  _saleForecast.Year ===year && _saleForecast.Month ===month){
+                        if (_saleForecast.FID!=$scope.saleForecast.FID && _saleForecast.FHospName===$scope.saleForecast.FHospName && _saleForecast.FEmpName===$scope.saleForecast.FEmpName && _saleForecast.ProductTypeName===$scope.saleForecast.ProductTypeName &&  _saleForecast.Year ===year && _saleForecast.Month ===month){
                             $scope.duplicateUserID=true;
                         }
                     });
