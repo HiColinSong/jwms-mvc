@@ -1,112 +1,151 @@
 <h2 class="text-center" style="padding-top:60px">促销折扣维护</h2>
-	<div class="margin-top-20" style="padding:30px 0 10px 0">
-        <table class="table padding-top table-striped border">
-            <thead> 
-                <tr>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'FHospName'; sortReverse = !sortReverse">
-                    医院
-                    <span ng-show="sortType == 'FHospName' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'FHospName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
-                    产品类别
-                    <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Year'; sortReverse = !sortReverse">
-                    年
-                    <span ng-show="sortType == 'Year' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Year' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Month'; sortReverse = !sortReverse">
-                    月
-                    <span ng-show="sortType == 'Month' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Month' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Ssample'; sortReverse = !sortReverse">
-                    销售样品
-                    <span ng-show="sortType == 'Ssample' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Ssample' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'ODActivity'; sortReverse = !sortReverse">
-                    手术日活动
-                    <span ng-show="sortType == 'ODActivity' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'ODActivity' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Fnote'; sortReverse = !sortReverse">
-                    备注
-                    <span ng-show="sortType == 'Fnote' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Fnote' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'FEmpID'; sortReverse = !sortReverse">
-                    维护人
-                    <span ng-show="sortType == 'FEmpID' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'FEmpID' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Fdate'; sortReverse = !sortReverse">
-                    维护时间
-                    <span ng-show="sortType == 'Fdate' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Fdate' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    操作
-                </th>
-                <!-- <td width="10%" class="text-center">Action</td> -->
-                    
-                </tr>
-            </thead> 
-            <tbody> 
-                <tr ng-if="promotionDiscountList&&promotionDiscountList.length>0" 
-                    ng-repeat="(idx,promotionDiscount) in promotionDiscountList | orderBy:sortType:sortReverse">
 
-                <td width="8%" class="text-center">{{promotionDiscount.FHospName}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.ProductTypeName}}</td>
-                <td width="2%" class="text-center">{{promotionDiscount.Year}}</td>
-                <td width="2%" class="text-center">{{promotionDiscount.Month}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.Ssample}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.ODActivity}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.Fnote}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.FEmpID}}</td>
-                <td width="8%" class="text-center">{{promotionDiscount.Fdate}}</td>
-                <td width="8%" class="text-center">
-                    <button type="button" class="btn btn-info btn-xs"  ng-click="addOrEditPromotionDiscount(promotionDiscount)">
-                        编辑 
-                    </button>
-                    <button type="button" class="btn btn-danger btn-xs"  confirm-required="{{promotionDiscount.fid}}" 
-                            ng-click="deletePromotionDiscount(promotionDiscount)">
-                        删除 
-                    </button>
-                </td>
-            </tr>
-            <tr ng-if="!promotionDiscountList||promotionDiscountList.length==0">
-                <td colspan="4" class='empty-message'>没有数据.</td>
-            </tr>
-            </tbody> 
-        </table>
-        <div class="margin-top text-center">
-            <button type="button" class="btn btn-success" ng-click="addOrEditPromotionDiscount()">
-                <span class="fa fa-plus-circle fa-lg"></span>
-                添加促销折扣
-            </button>
+<div class="margin-top-5" style="padding:10px 0 5px 0" ng-if="!promotionDiscountList">
+    <div class="margin-top-5 col-sm-8 col-sm-offset-2" >
+     <form role="form" name="toNoForm">
+        <div class="form-group" >
+                <label class="col-sm-3 control-label no-padding-right field-required" for="FHospName"> 医院:</label>
+                    <input type='text' class='col-sm-12 form-control'
+                                    name='FHospName'
+                                    class='full-width form-control'
+                                    ng-class="{'submitted':submitted,'error':(!promotionDiscountSearch.FHospName)}"
+                                    ng-model="promotionDiscountSearch.FHospName"
+                                    typeahead="item.FName as item.FName for item in hospitalList|filter:$viewValue|limitTo:12"
+                                    placeholder="选择医院"
+                                    typeahead-editable="false"
+                                    autocomplete="off">
         </div>
-    </div>
+        <div class="form-group" >
+            <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 产品类别:</label>
+                <select class="chosen-select col-sm-12 form-control"
+                    ng-model="promotionDiscountSearch.ProductTypeName"
+                    name="ProductTypeName"
+                    ng-options="item.FName as item.FName for item in productTypeList"
+                    >
+                    <option value="">选择产品类别</option>
+                </select>
+        </div> 
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 请选择日期:</label>      
+        <input type="text" class="form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+              datepicker-options="{minMode: 'month'}" 
+              datepicker-mode="'month'"
+            ng-model="temp.dt" is-open="opened" ng-readonly="true"
+            ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!temp.dt">提交</button>
+    </form>
+  </div>
+  </div>  
 
-    <pre ng-show="debug">promotionDiscountList:{{promotionDiscountList | json}}</pre>	
+<div class="margin-top-20" style="padding:30px 0 10px 0" ng-if="promotionDiscountList">
+    <table class="table padding-top table-striped border">
+        <thead> 
+            <tr>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'FHospName'; sortReverse = !sortReverse">
+                医院
+                <span ng-show="sortType == 'FHospName' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'FHospName' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
+                产品类别
+                <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Year'; sortReverse = !sortReverse">
+                年
+                <span ng-show="sortType == 'Year' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Year' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Month'; sortReverse = !sortReverse">
+                月
+                <span ng-show="sortType == 'Month' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Month' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Ssample'; sortReverse = !sortReverse">
+                销售样品
+                <span ng-show="sortType == 'Ssample' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Ssample' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'ODActivity'; sortReverse = !sortReverse">
+                手术日活动
+                <span ng-show="sortType == 'ODActivity' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'ODActivity' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Fnote'; sortReverse = !sortReverse">
+                备注
+                <span ng-show="sortType == 'Fnote' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Fnote' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'FEmpID'; sortReverse = !sortReverse">
+                维护人
+                <span ng-show="sortType == 'FEmpID' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'FEmpID' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Fdate'; sortReverse = !sortReverse">
+                维护时间
+                <span ng-show="sortType == 'Fdate' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Fdate' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                操作
+            </th>
+            <!-- <td width="10%" class="text-center">Action</td> -->
+                
+            </tr>
+        </thead> 
+        <tbody> 
+            <tr ng-if="promotionDiscountList&&promotionDiscountList.length>0" 
+                ng-repeat="(idx,promotionDiscount) in promotionDiscountList | orderBy:sortType:sortReverse">
+
+            <td width="8%" class="text-center">{{promotionDiscount.FHospName}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.ProductTypeName}}</td>
+            <td width="2%" class="text-center">{{promotionDiscount.Year}}</td>
+            <td width="2%" class="text-center">{{promotionDiscount.Month}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.Ssample}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.ODActivity}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.Fnote}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.FEmpID}}</td>
+            <td width="8%" class="text-center">{{promotionDiscount.Fdate}}</td>
+            <td width="8%" class="text-center">
+                <button type="button" class="btn btn-info btn-xs"  ng-click="addOrEditPromotionDiscount(promotionDiscount)">
+                    编辑 
+                </button>
+                <button type="button" class="btn btn-danger btn-xs"  confirm-required="{{promotionDiscount.fid}}" 
+                        ng-click="deletePromotionDiscount(promotionDiscount)">
+                    删除 
+                </button>
+            </td>
+        </tr>
+        <tr ng-if="!promotionDiscountList||promotionDiscountList.length==0">
+            <td colspan="4" class='empty-message'>没有数据.</td>
+        </tr>
+        </tbody> 
+    </table>
+    <div class="margin-top text-center">
+        <button type="button" class="btn btn-success" ng-click="addOrEditPromotionDiscount()">
+            <span class="fa fa-plus-circle fa-lg"></span>
+            添加促销折扣
+        </button>
+    </div>
+</div>
+<pre ng-show="debug">{{promotionDiscountSearch.FHospName | json}}</pre>
+    <!-- <pre ng-show="debug">promotionDiscountList:{{promotionDiscountList | json}}</pre> -->	

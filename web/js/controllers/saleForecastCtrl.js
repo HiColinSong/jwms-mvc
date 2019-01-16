@@ -3,11 +3,24 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('saleForecastCtrl',['$scope','$rootScope','$interval','$modal','saleForecastList','utilSvc','jmService',
-	function($scope,$rootScope,$interval,$modal,saleForecastList,utilSvc,apiSvc){
-
-        //debugger;
+    .controller('saleForecastCtrl',['$scope','$rootScope','$location','$interval','$modal','saleForecastList','productTypeList','hospitalList','utilSvc','jmService',
+	function($scope,$rootScope,$location,$interval,$modal,saleForecastList,productTypeList,hospitalList,utilSvc,apiSvc){
         $scope.saleForecastList = saleForecastList;
+        $scope.temp={};
+        $scope.saleForecastSearch={};
+        if (saleForecastList){
+            $scope.saleForecastList = saleForecastList;
+        } else {
+            $scope.productTypeList = productTypeList;
+            $scope.hospitalList = hospitalList;
+              $scope.clear = function () {
+                $scope.temp.dt = null;
+              };
+              $scope.submitForm = function() {
+                //add leading 0 to the scanned order no
+                $location.path("/saleForecast/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
+            }
+        }
         /*
                 $rootScope.$on("loginStautsChange",function(){
             if (!$rootScope.authUser) return;
@@ -46,40 +59,8 @@
                 resolve:{
                     saleForecast:function(){return saleForecast;},
                     saleForecastList:function(){return $scope.saleForecastList},
-                    productTypeList:['$q','jmService','utilSvc',
-                        function($q,apiSvc,util){
-                            var deferred = $q.defer();
-                            //util.pageLoading("start");
-                            apiSvc.getProductType().$promise.then(function(data){
-                                if (data){
-                                    deferred.resolve(data);
-                                } else {
-                                    deferred.resolve(undefined);
-                                }
-                                //util.pageLoading("stop");
-                            },function(err){
-                                deferred.reject(err);
-                                //util.pageLoading("stop");
-                            })
-                            return deferred.promise;
-                        }],
-                    hospitalList:['$q','jmService','utilSvc',
-                    function($q,apiSvc,util){
-                        var deferred = $q.defer();
-                        // util.pageLoading("start");
-                        apiSvc.getHospital().$promise.then(function(data){
-                            if (data){
-                                deferred.resolve(data);
-                            } else {
-                                deferred.resolve(undefined);
-                            }
-                            // util.pageLoading("stop");
-                        },function(err){
-                            deferred.reject(err);
-                            // util.pageLoading("stop");
-                        })
-                        return deferred.promise;
-                    }],
+                    productTypeList:function(){return productTypeList},
+                    hospitalList:function(){return hospitalList},
                     salerList:['$q','jmService','utilSvc',
                     function($q,apiSvc,util){
                         var deferred = $q.defer();
@@ -104,7 +85,7 @@
             });
         };
         $scope.deleteSaleForecast=function(saleForecast){                    
-            apiSvc.deleteSaleForecast({saleForecast:saleForecast}).$promise.then(
+            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.saleForecastSearch.ProductTypeName,FHospName:$scope.saleForecastSearch.FHospName}).$promise.then(
                 function(data){
                     $scope.saleForecastList = data
                 },

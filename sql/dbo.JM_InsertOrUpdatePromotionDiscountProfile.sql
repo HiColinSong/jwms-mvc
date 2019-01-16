@@ -53,5 +53,5 @@ BEGIN
 			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@Year,@Month,@Ssample,@ODActivity,@Fnote,2)
 		END
 		
-	SELECT * FROM dbo.t_BOSDocument where ItemType =2
+	SELECT * FROM dbo.t_BOSDocument where ItemType =2 and year = @Year and month = @Month
 END

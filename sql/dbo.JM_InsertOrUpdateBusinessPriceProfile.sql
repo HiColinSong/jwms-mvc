@@ -67,5 +67,5 @@ BEGIN
 		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,FCustID,DistributorCode,DistributorName,ProductTypeID,ProductTypeName,Year,Month,CSPrice,BARebate,TTBoot,Spromotion,BTBGift,Fnote,BNHDAward,ItemType)
 			VALUES (@FID,@FHospID,@FHospNum,@FHospName,@FCustID,@DistributorCode,@DistributorName,@ProductTypeID,@ProductTypeName,@Year,@Month,@CSPrice,@BARebate,@TTBoot,@Spromotion,@BTBGift,@Fnote,@BNHDAward,1)
 		END
-	SELECT * FROM dbo.t_BOSDocument where ItemType =1
+	SELECT * FROM dbo.t_BOSDocument where ItemType =1 and year = @Year and month = @Month
 END

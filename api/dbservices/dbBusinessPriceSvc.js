@@ -2,10 +2,21 @@
 
 const sqlSvc=require("./sqlService");
 //get user List
-exports.getBusinessPriceList=function(domain){
-    var stmt = "select * from dbo.t_BOSDocument where ItemType =1";
-    let paramTypes={};
-    let paramValues={};
+exports.getBusinessPriceList=function(dateStr,FHospName,ProductTypeName){
+    var stmt = "select * from dbo.t_BOSDocument where ItemType =1 and year = @year and month = @month";
+    var date = new Date(dateStr);
+    let paramTypes={year:'sql.Int',month:'sql.Int'};
+    let paramValues={year:date.getFullYear(),month:date.getMonth()+1};
+    if(FHospName != undefined && FHospName != "undefined"){
+      stmt += " and FHospName = @FHospName";
+      paramTypes["FHospName"] = 'sql.NVarChar(50)';
+      paramValues["FHospName"] = FHospName;
+    }
+    if(ProductTypeName != undefined && ProductTypeName != "undefined"){
+      stmt += " and ProductTypeName = @ProductTypeName";
+      paramTypes["ProductTypeName"] = 'sql.NVarChar(50)';
+      paramValues["ProductTypeName"] = ProductTypeName;
+    }
     return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
   }
 
@@ -22,21 +33,17 @@ exports.getBusinessPriceList=function(domain){
     //stmt will be something 4like: "exec JM_InsertOrUpdateUserProfile 'yd.zhu','朱亚东','BITSG','admin','1'"
     let stmt=["exec JM_InsertOrUpdateBusinessPriceProfile"];
     var Year;
-    Year = businessPrice.Date.substring(0,4);
     var Month;
+    var date;
     if(businessPrice.Date.indexOf("年")>-1){
-      if(businessPrice.Date.length==8){
-        Month = businessPrice.Date.substring(5,7);
-      } else {
-        Month = businessPrice.Date.substring(5,6);
-      }
+      let date_str = businessPrice.Date.replace(/年/g,"/");
+      date_str = date_str.replace(/月/g,"");
+      date = new Date(date_str);
     } else {
-      if(businessPrice.Date.substring(5,6) == 0){
-        Month = businessPrice.Date.substring(6,7);
-      } else {
-        Month = businessPrice.Date.substring(5,7);
-      }
+      date = new Date(businessPrice.Date);
     }
+    Year = date.getFullYear();
+    Month = date.getMonth()+1;
     if(businessPrice.FID == undefined){
       businessPrice.FID = -1;
     }

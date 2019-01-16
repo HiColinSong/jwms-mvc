@@ -50,8 +50,8 @@ var promotionDiscountHandler = require('./api/handlers/promotionDiscountHandler'
 var saleForecastHandler = require('./api/handlers/saleForecastHandler');
 var budgetAndIncomeReportHandler = require('./api/handlers/budgetAndIncomeReportHandler');
 app.get('/jmapi/get-user-list.json',auth.adminCheck,commonHandler.getUserList);
-app.get('/jmapi/get-business-price-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getBusinessPriceList);
-app.get('/jmapi/get-promotion-discount-list.json',auth.dataMaintenanceCheck,promotionDiscountHandler.getPromotionDiscountList);
+app.post('/jmapi/get-business-price-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getBusinessPriceList);
+app.post('/jmapi/get-promotion-discount-list.json',auth.dataMaintenanceCheck,promotionDiscountHandler.getPromotionDiscountList);
 app.get('/jmapi/get-product-type-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getProductTypeList);
 app.get('/jmapi/get-agent-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getAgentList);
 app.get('/jmapi/get-hospital-list.json',auth.dataMaintenanceCheck,businessPriceHandler.getHospitalList);
@@ -63,7 +63,7 @@ app.post('/jmapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 app.post('/jmapi/delete-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.deleteBusinessPrice);
 app.post('/jmapi/delete-promotion-discount.json',auth.dataMaintenanceCheck,promotionDiscountHandler.deletePromotionDiscount);
 
-app.get('/jmapi/get-sale-forecast-list.json',auth.adminCheck,saleForecastHandler.getSaleForecastList);
+app.post('/jmapi/get-sale-forecast-list.json',auth.adminCheck,saleForecastHandler.getSaleForecastList);
 app.post('/jmapi/add-edit-sale-forecast.json',auth.adminCheck,saleForecastHandler.addEditSaleForecast);
 app.post('/jmapi/delete-sale-forecast.json',auth.adminCheck,saleForecastHandler.deleteSaleForecast);
 app.post('/jmapi/view-info-log.json',auth.authCheck,commonHandler.viewLog);

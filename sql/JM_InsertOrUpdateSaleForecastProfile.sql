@@ -42,21 +42,23 @@ BEGIN
 		END
 	ELSE
 		BEGIN
-		--declare @P1 int  exec GetICMaxNum 't_BOSDocument', @P1 output select @FID = @P1 
-		declare @P1 int=100
-		INSERT INTO dbo.t_BOSDocument(FID,
-					FClassTypeID,FCustID,DistributorCode,DistributorName,CSPrice,BARebate,TTBoot
-					,[Spromotion]
-				  ,[FDecimal4]
-				  ,[BTBGift]
-				  ,[BNHDAward]
-				  ,[Ssample]
-				  ,[ODActivity],FEmpID,ApproverID,
-			FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,Year,Month,Aprice,Aamout,Fnote,ItemType)
-			VALUES (@FID,
-					1,1,1,'',1,1,1,1,1,1,1,1,1,1,1,
-			@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@Year,@Month,@Aprice,@Aamout,@Fnote,3)
+		declare @P1 int  exec GetICMaxNum 't_BOSDocument', @P1 output select @FID = @P1 
+		INSERT INTO dbo.t_BOSDocument(FID,FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,FEmpID,Year,Month,Aprice,Aamout,Fnote,ItemType)
+			VALUES (@P1,@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@EmpID,@Year,@Month,@Aprice,@Aamout,@Fnote,3)
+		--INSERT INTO dbo.t_BOSDocument(FID,
+		--			FClassTypeID,FCustID,DistributorCode,DistributorName,CSPrice,BARebate,TTBoot
+		--			,[Spromotion]
+		--		  ,[FDecimal4]
+		--		  ,[BTBGift]
+		--		  ,[BNHDAward]
+		--		  ,[Ssample]
+		--		  ,[ODActivity],FEmpID,ApproverID,
+		--	FHospID,FHospNum,FHospName,ProductTypeID,ProductTypeName,Year,Month,Aprice,Aamout,Fnote,ItemType)
+		--	VALUES (@P1,
+		--			1,1,1,'',1,1,1,1,1,1,1,1,1,1,1,
+		--	@FHospID,@FHospNum,@FHospName,@ProductTypeID,@ProductTypeName,@Year,@Month,@Aprice,@Aamout,@Fnote,3)
 		END
 		
-	SELECT * FROM dbo.t_BOSDocument where ItemType =3
+	--SELECT * FROM dbo.t_BOSDocument where ItemType =3
+	select * from V_BOSDocument_SaleForecast where year = @Year and month = @Month
 END

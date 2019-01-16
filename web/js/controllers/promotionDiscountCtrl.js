@@ -3,10 +3,24 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('promotionDiscountCtrl',['$scope','$rootScope','$interval','$modal','promotionDiscountList','utilSvc','jmService',
-	function($scope,$rootScope,$interval,$modal,promotionDiscountList,utilSvc,apiSvc){
+    .controller('promotionDiscountCtrl',['$scope','$rootScope','$location','$interval','$modal','promotionDiscountList','productTypeList','hospitalList','utilSvc','jmService',
+	function($scope,$rootScope,$location,$interval,$modal,promotionDiscountList,productTypeList,hospitalList,utilSvc,apiSvc){
 
-        $scope.promotionDiscountList = promotionDiscountList;
+        $scope.temp={};
+        $scope.promotionDiscountSearch={};
+        if (promotionDiscountList){
+            $scope.promotionDiscountList = promotionDiscountList;
+        } else {
+            $scope.productTypeList = productTypeList;
+            $scope.hospitalList = hospitalList;
+              $scope.clear = function () {
+                $scope.temp.dt = null;
+              };
+              $scope.submitForm = function() {
+                //add leading 0 to the scanned order no
+                $location.path("/promotionDiscountMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.promotionDiscountSearch.ProductTypeName+"/"+$scope.promotionDiscountSearch.FHospName);
+            }
+        }
         /* $rootScope.$on("loginStautsChange",function(){
             if (!$rootScope.authUser) return;
             if ($rootScope.authUser.UserRole==="qaAdmin"){
@@ -39,40 +53,8 @@
                 resolve:{
                     promotionDiscount:function(){return promotionDiscount;},
                     promotionDiscountList:function(){return $scope.promotionDiscountList},
-                    productTypeList:['$q','jmService','utilSvc',
-                        function($q,apiSvc,util){
-                            var deferred = $q.defer();
-                            //util.pageLoading("start");
-                            apiSvc.getProductType().$promise.then(function(data){
-                                if (data){
-                                    deferred.resolve(data);
-                                } else {
-                                    deferred.resolve(undefined);
-                                }
-                                //util.pageLoading("stop");
-                            },function(err){
-                                deferred.reject(err);
-                                //util.pageLoading("stop");
-                            })
-                            return deferred.promise;
-                        }],
-                    hospitalList:['$q','jmService','utilSvc',
-                    function($q,apiSvc,util){
-                        var deferred = $q.defer();
-                        util.pageLoading("start");
-                        apiSvc.getHospital().$promise.then(function(data){
-                            if (data){
-                                deferred.resolve(data);
-                            } else {
-                                deferred.resolve(undefined);
-                            }
-                            util.pageLoading("stop");
-                        },function(err){
-                            deferred.reject(err);
-                            util.pageLoading("stop");
-                        })
-                        return deferred.promise;
-                    }]
+                    productTypeList:function(){return productTypeList},
+                    hospitalList:function(){return hospitalList}
                 }
             });
             modalInstance.result.then(function(promotionDiscountList) {
@@ -82,7 +64,7 @@
 
 
         $scope.deletePromotionDiscount=function(promotionDiscount){
-            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount}).$promise.then(
+            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.promotionDiscountSearch.ProductTypeName,FHospName:$scope.promotionDiscountSearch.FHospName}).$promise.then(
                 function(data){
                     $scope.promotionDiscountList = data
                 },

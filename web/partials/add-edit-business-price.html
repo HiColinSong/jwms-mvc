@@ -29,25 +29,29 @@
                 <div ng-if="type==='Edit'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{businessPrice.FID}}</div>
           </div>
         </div>
-        <div class="form-group" >
+        <div class="form-group" ng-class="{'has-error':duplicateUserID}">
           <label class="col-sm-3 control-label no-padding-right field-required" for="FHospName"> 医院:</label>
-          <div class="col-sm-6">
-              <select class="chosen-select col-sm-12 form-control"
-                  ng-model="businessPrice.FHospName"
-                  name="FHospName"
-                  ng-options="item as item for item in hospitalList"
-                  >
-                  <option value="">选择医院</option>
-              </select>
-              <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
+          <div class="col-sm-6" ng-class="{'has-error':!businessPrice.FHospName}">
+            <input type='text' class='col-sm-12 form-control'
+                            name='FHospName'
+                            ng-required="true"
+                            ng-blur="uniqueValidation()"
+                            class='full-width form-control'
+                            ng-class="{'submitted':submitted,'error':(!businessPrice.FHospName)}"
+                            ng-model="businessPrice.FHospName"
+                            typeahead="item.FName as item.FName for item in hospitalList|filter:$viewValue|limitTo:12"
+                            placeholder="选择医院"
+                            typeahead-editable="false"
+                            autocomplete="off">
           </div>
         </div>
-        <div class="form-group" >
+        <div class="form-group" ng-class="{'has-error':duplicateUserID}">
           <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 代理商:</label>
                     <div class="col-sm-6" ng-class="{'has-error':!businessPrice.DistributorName}">
                <input type='text' class='col-sm-12 form-control'
                                name='DistributorName'
                                ng-required="true"
+                               ng-blur="uniqueValidation()"
                                class='full-width form-control'
                                ng-class="{'submitted':submitted,'error':(!businessPrice.DistributorName)}"
                                ng-model="businessPrice.DistributorName"
@@ -56,39 +60,25 @@
                                typeahead-editable="false"
                                autocomplete="off">
                     </div>
-          <!-- <div class="col-sm-6">
-              <select class="chosen-select col-sm-12 form-control"
-                  ng-model="businessPrice.DistributorName"
-                  name="DistributorName"
-                  ng-options="item as item for item in agentList"
-                  >
-                  <option value="">选择代理商</option>
-              </select> -->
-
-
-
-              
-              <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
-          </div>
         </div>
-        <div class="form-group" >
+        <div class="form-group" ng-class="{'has-error':duplicateUserID}">
             <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 产品类别:</label>
             <div class="col-sm-6">
                 <select class="chosen-select col-sm-12 form-control"
                     ng-model="businessPrice.ProductTypeName"
+                    ng-blur="uniqueValidation()"
                     name="ProductTypeName"
-                    ng-options="item as item for item in productTypeList"
+                    ng-options="item.FName as item.FName for item in productTypeList"
                     >
                     <option value="">选择产品类别</option>
                 </select>
-                <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
             </div>
           </div>    
-          <div class="form-group">
+          <div class="form-group" ng-class="{'has-error':duplicateUserID}">
             <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
             <div class="col-sm-6">
               <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择日期" 
-                ng-model="businessPrice.Date" is-open="opened" ng-readonly="true"
+                ng-model="businessPrice.Date" ng-blur="uniqueValidation()" is-open="opened" ng-readonly="true"
                 ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
             </div>
           </div>         
@@ -181,12 +171,14 @@
         <div class="clearboth"></div>
       </div>
     </div>
-
+    <div class="modal-body" ng-class="{'has-error':duplicateUserID}">
+        <label class="col-sm-20 no-margin-x margin-top-5" for="name" ng-show="duplicateUserID"> 本月份所对应的医院、代理商、产品类型数据已经存在！</label>
+    </div>
   </div>
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName||!businessPrice.CSPrice||!businessPrice.BARebate||!businessPrice.TTBoot||!businessPrice.Spromotion||!businessPrice.BTBGift||!businessPrice.BNHDAward">
+      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName||!businessPrice.CSPrice||!businessPrice.BARebate||!businessPrice.TTBoot||!businessPrice.Spromotion||!businessPrice.BTBGift||!businessPrice.BNHDAward||duplicateUserID">
       提交
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

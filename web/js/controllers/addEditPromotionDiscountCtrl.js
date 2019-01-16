@@ -5,19 +5,31 @@
     angular.module('jm.controllers')
     .controller('addEditPromotionDiscountCtrl', ['$scope','$rootScope', '$modalInstance','utilSvc','jmService','promotionDiscount','promotionDiscountList','productTypeList','hospitalList','constants',
     	 function($scope,$rootScope,$modalInstance,utilSvc,apiSvc,promotionDiscount,promotionDiscountList,productTypeList,hospitalList,constants){ 
+             
             $scope.type=promotionDiscount?"Edit":"Add";
-             var productTypeArray = new Array();
-             for(var i=0;i<productTypeList.length;i++){
-                productTypeArray.push(productTypeList[i].FName);
-             }
-             $scope.productTypeList=productTypeArray;
+            $scope.productTypeList=productTypeList;
+            $scope.hospitalList=hospitalList;
 
-             var hospitalArray = new Array();
-             for(var i=0;i<hospitalList.length;i++){
-                hospitalArray.push(hospitalList[i].FName);
-             }
-             $scope.hospitalList=hospitalArray;
-
+            $scope.uniqueValidation=function(){
+                $scope.duplicateUserID=false;
+                if ($scope.promotionDiscount.Date != ''){
+                    var date;
+                    if($scope.promotionDiscount.Date.indexOf("年")>-1){
+                        let date_str = $scope.promotionDiscount.Date.replace(/年/g,"/");
+                        date_str = date_str.replace(/月/g,"");
+                        date = new Date(date_str);
+                    } else {
+                        date = new Date($scope.promotionDiscount.Date);
+                    }
+                    var year = date.getFullYear();
+                    var month = date.getMonth()+1;
+                    promotionDiscountList.forEach(_promotionDiscount => {
+                        if (_promotionDiscount.FHospName===$scope.promotionDiscount.FHospName && _promotionDiscount.ProductTypeName===$scope.promotionDiscount.ProductTypeName &&  _promotionDiscount.Year ===year && _promotionDiscount.Month ===month){
+                            $scope.duplicateUserID=true;
+                        }
+                    });
+                }
+            }
     	 	$scope.submit=function(){
                 apiSvc.addEditPromotionDiscount({promotionDiscount:$scope.promotionDiscount})
                 .$promise.then(function(promotionDiscountList){
@@ -34,7 +46,7 @@
     	 	$scope.reset=function(){
                 $scope.promotionDiscount={};
                 angular.copy(promotionDiscount,$scope.promotionDiscount);
-
+                $scope.duplicateUserID=false;
                 if(promotionDiscount){
                     $scope.promotionDiscount.FHospName=promotionDiscount.FHospName;
                     $scope.promotionDiscount.ProductTypeName=promotionDiscount.ProductTypeName;

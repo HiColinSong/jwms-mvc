@@ -15,20 +15,9 @@
             <i class="fa fa-minus-circle"></i> {{error.text}}
           </div>
           
-          <div class="form-group" ng-class="{'has-error':duplicateUserID}">
+          <!-- <div class="form-group" ng-class="{'has-error':duplicateUserID}">
             <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 医院名称 </label>
             <div class="col-sm-6">
-              <!--
-                 <input type='text' class='col-sm-12 form-control'
-                                 name='HospName'
-                                 ng-required="true"
-                                 ng-keyup="uniqueValidation()"
-                                 class='full-width form-control'
-                                 ng-class="{'submitted':submitted,'error':(!saleForecast.HospName)}"
-                                 ng-model="saleForecast.HospName"
-                                 placeholder="医院名称"
-                                 autocomplete="off" ng-if="type==='Add'">
-              -->
               <select class="chosen-select col-sm-12 form-control"
                   ng-model="saleForecast.FHospName"
                   name="FHospName"
@@ -38,36 +27,55 @@
               </select>
                   <div ng-if="type==='Edit'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{saleForecast.HospName}}</div>
             </div>
-            <label class="col-sm-3 no-margin-x margin-top-5" for="name" ng-show="duplicateUserID"> 预测数据重复</label>
-          </div>
+          </div> -->
+          <div class="form-group" ng-class="{'has-error':duplicateUserID}">
+              <label class="col-sm-3 control-label no-padding-right field-required" for="FHospName"> 医院:</label>
+              <div class="col-sm-6" ng-class="{'has-error':!saleForecast.FHospName}">
+                <input type='text' class='col-sm-12 form-control'
+                                name='FHospName'
+                                ng-required="true"
+                                ng-blur="uniqueValidation()"
+                                class='full-width form-control'
+                                ng-class="{'submitted':submitted,'error':(!saleForecast.FHospName)}"
+                                ng-model="saleForecast.FHospName"
+                                typeahead="item.FName as item.FName for item in hospitalList|filter:$viewValue|limitTo:12"
+                                placeholder="选择医院"
+                                typeahead-editable="false"
+                                autocomplete="off">
+              </div>
+            </div>
      
-            <div class="form-group" >
+            <div class="form-group" ng-class="{'has-error':duplicateUserID}">
                 <label class="col-sm-3 control-label no-padding-right field-required" for="saler"> 销售代表:</label>
-                <div class="col-sm-6">
-                    <select class="chosen-select col-sm-12 form-control"
-                        ng-model="saleForecast.FEmpName"
-                        name="saler"
-                        ng-options="item as item for item in salerList"
-                        >
-                        <option value="">选择销售代表</option>
-                    </select>
-                    <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
+                <div class="col-sm-6" ng-class="{'has-error':!saleForecast.FEmpName}">
+                    <input type='text' class='col-sm-12 form-control'
+                                name='FEmpName'
+                                ng-required="true"
+                                ng-blur="uniqueValidation()"
+                                class='full-width form-control'
+                                ng-class="{'submitted':submitted,'error':(!saleForecast.FEmpName)}"
+                                ng-model="saleForecast.FEmpName"
+                                typeahead="item.FName as item.FName for item in salerList|filter:$viewValue|limitTo:12"
+                                placeholder="选择医院"
+                                typeahead-editable="false"
+                                autocomplete="off">
                 </div>
              </div>             
-            <div class="form-group" >
+            <div class="form-group" ng-class="{'has-error':duplicateUserID}">
                   <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 产品类别:</label>
                   <div class="col-sm-6">
                       <select class="chosen-select col-sm-12 form-control"
                           ng-model="saleForecast.ProductTypeName"
+                          ng-blur="uniqueValidation()"
                           name="ProductTypeName"
-                          ng-options="item as item for item in productTypeList"
+                          ng-options="item.FName as item.FName for item in productTypeList"
                           >
                           <option value="">选择产品类别</option>
                       </select>
                       <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
                   </div>
               </div>    
-              <div class="form-group" >
+              <!-- <div class="form-group" >
                   <label class="col-sm-3 control-label no-padding-right field-required" for="year"> 年月:</label>
                   <div class="col-sm-3">
                       <select class="chosen-select col-sm-12 form-control"
@@ -87,9 +95,19 @@
                                 <option value="">选择月</option>
                             </select>
                       </div>      
-                      <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
                   </div>
-              </div>    
+              </div>  -->  
+              <div class="form-group" ng-class="{'has-error':duplicateUserID}">
+                  <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                      datepicker-options="{minMode: 'month'}" 
+                      datepicker-mode="'month'"
+                      ng-blur="uniqueValidation()"
+                      ng-model="saleForecast.Date" is-open="opened" ng-readonly="true"
+                      ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
+                  </div>
+                </div>    
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 预算价格</label>
             <div class="col-sm-6">
@@ -132,12 +150,14 @@
           <div class="clearboth"></div>
         </div>
       </div>
-  
+      <div class="modal-body" ng-class="{'has-error':duplicateUserID}">
+          <label class="col-sm-20 no-margin-x margin-top-5" for="name" ng-show="duplicateUserID"> 本月份所对应的医院、销售代表、产品类型数据已经存在！</label>
+      </div>
     </div>
   
     <div class="modal-footer text-center">
       <button type="submit" class="btn btn-primary" ng-click="submit()" 
-        ng-disabled="!saleForecast.FHospName||!saleForecast.ProductTypeName||!saleForecast.Month||!saleForecast.Year||!saleForecast.Aprice||!saleForecast.Aamout">
+        ng-disabled="!saleForecast.FHospName||!saleForecast.FEmpName||!saleForecast.ProductTypeName||!saleForecast.Date||!saleForecast.Aprice||!saleForecast.Aamout||duplicateUserID">
         提交
       </button>
       <button type="button" class="btn btn-default" ng-click="reset()">
@@ -149,4 +169,3 @@
     </div>
   </form>
   <pre ng-show="debug">{{saleForecast|json}}</pre >
-  fo

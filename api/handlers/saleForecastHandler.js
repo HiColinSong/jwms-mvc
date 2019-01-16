@@ -5,7 +5,7 @@ var Promise = require('Promise').default
 exports.getSaleForecastList=function(req,res){
 	(async function () {
 		try {
-			var list = await dbSaleForecastSvc.getSaleForecastList();
+			var list = await dbSaleForecastSvc.getSaleForecastList(req.body.date,req.body.FHospName,req.body.ProductTypeName);
 			return res.status(200).send(list.recordset);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});
@@ -17,7 +17,7 @@ exports.deleteSaleForecast=function(req,res){
 	(async function () {
 		try {
 			await dbSaleForecastSvc.deleteSaleForecastProfile(req.body.saleForecast.FID);
-			var list = await dbSaleForecastSvc.getSaleForecastList();
+			var list = await dbSaleForecastSvc.getSaleForecastList(req.body.date,req.body.FHospName,req.body.ProductTypeName);
 			return res.status(200).send(list.recordset);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});

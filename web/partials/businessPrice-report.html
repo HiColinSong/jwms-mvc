@@ -1,154 +1,191 @@
 <h2 class="text-center" style="padding-top:60px">商务价格维护</h2>
-	<div class="margin-top-20" style="padding:30px 0 10px 0">
-        <table class="table padding-top table-striped border">
-            <thead> 
-                <tr>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'FHospName'; sortReverse = !sortReverse">
-                    医院
-                    <span ng-show="sortType == 'FHospName' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'FHospName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'DistributorName'; sortReverse = !sortReverse">
-                    经销商
-                    <span ng-show="sortType == 'DistributorName' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'DistributorName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
-                    产品类别
-                    <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Year'; sortReverse = !sortReverse">
-                    年
-                    <span ng-show="sortType == 'Year' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Year' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Month'; sortReverse = !sortReverse">
-                    月
-                    <span ng-show="sortType == 'Month' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Month' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'CSPrice'; sortReverse = !sortReverse">
-                    商务标准价
-                    <span ng-show="sortType == 'CSPrice' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'CSPrice' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'BARebate'; sortReverse = !sortReverse">
-                    商务达成返利
-                    <span ng-show="sortType == 'BARebate' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'BARebate' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'TTBoot'; sortReverse = !sortReverse">
-                    招标价补
-                    <span ng-show="sortType == 'TTBoot' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'TTBoot' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Spromotion'; sortReverse = !sortReverse">
-                    销售促销
-                    <span ng-show="sortType == 'Spromotion' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Spromotion' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'BTBGift'; sortReverse = !sortReverse">
-                    商务买赠
-                    <span ng-show="sortType == 'BTBGift' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'BTBGift' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'BNHDAward'; sortReverse = !sortReverse">
-                    商务新医院开发奖
-                    <span ng-show="sortType == 'BNHDAward' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'BNHDAward' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Fnote'; sortReverse = !sortReverse">
-                    备注
-                    <span ng-show="sortType == 'Fnote' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Fnote' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'FEmpID'; sortReverse = !sortReverse">
-                    维护人
-                    <span ng-show="sortType == 'FEmpID' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'FEmpID' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a class="cursor-pointer" ng-click="sortType = 'Fdate'; sortReverse = !sortReverse">
-                    维护时间
-                    <span ng-show="sortType == 'Fdate' && !sortReverse" class="fa fa-caret-down"></span>
-                    <span ng-show="sortType == 'Fdate' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-                <th class="text-center">
-                    操作
-                </th>
-                <!-- <td width="10%" class="text-center">Action</td> -->
-                    
-                </tr>
-            </thead> 
-            <tbody> 
-                <tr ng-if="businessPriceList&&businessPriceList.length>0" 
-                    ng-repeat="(idx,businessPrice) in businessPriceList | orderBy:sortType:sortReverse">
-
-                <td width="8%" class="text-center">{{businessPrice.FHospName}}</td>
-                <td width="8%" class="text-center">{{businessPrice.DistributorName}}</td>
-                <td width="8%" class="text-center">{{businessPrice.ProductTypeName}}</td>
-                <td width="2%" class="text-center">{{businessPrice.Year}}</td>
-                <td width="2%" class="text-center">{{businessPrice.Month}}</td>
-
-                <td width="8%" class="text-center">{{businessPrice.CSPrice}}</td>
-                <td width="8%" class="text-center">{{businessPrice.BARebate}}</td>
-                <td width="8%" class="text-center">{{businessPrice.TTBoot}}</td>
-                <td width="8%" class="text-center">{{businessPrice.Spromotion}}</td>
-                <td width="8%" class="text-center">{{businessPrice.BTBGift}}</td>
-
-                <td width="8%" class="text-center">{{businessPrice.BNHDAward}}</td>
-                <td width="8%" class="text-center">{{businessPrice.Fnote}}</td>
-                <td width="8%" class="text-center">{{businessPrice.FEmpID}}</td>
-                <td width="8%" class="text-center">{{businessPrice.Fdate}}</td>
-                <td width="8%" class="text-center">
-                    <button type="button" class="btn btn-info btn-xs"  ng-click="addOrEditBusinessPrice(businessPrice)">
-                        编辑 
-                    </button>
-                    <button type="button" class="btn btn-danger btn-xs"  confirm-required="{{businessPrice.fid}}" 
-                            ng-click="deleteBusinessPrice(businessPrice)">
-                        删除 
-                    </button>
-                </td>
+<div class="margin-top-5" style="padding:10px 0 5px 0" ng-if="!businessPriceList">
+        <div class="margin-top-5 col-sm-8 col-sm-offset-2" >
+         <form role="form" name="toNoForm">
+            <div class="form-group" >
+                    <label class="col-sm-3 control-label no-padding-right field-required" for="FHospName"> 医院:</label>
+                        <input type='text' class='col-sm-12 form-control'
+                                        name='FHospName'
+                                        class='full-width form-control'
+                                        ng-class="{'submitted':submitted,'error':(!businessPriceSearch.FHospName)}"
+                                        ng-model="businessPriceSearch.FHospName"
+                                        typeahead="item.FName as item.FName for item in hospitalList|filter:$viewValue|limitTo:12"
+                                        placeholder="选择医院"
+                                        typeahead-editable="false"
+                                        autocomplete="off">
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 产品类别:</label>
+                    <select class="chosen-select col-sm-12 form-control"
+                        ng-model="businessPriceSearch.ProductTypeName"
+                        name="ProductTypeName"
+                        ng-options="item.FName as item.FName for item in productTypeList"
+                        >
+                        <option value="">选择产品类别</option>
+                    </select>
+            </div> 
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right field-required" for="role"> 请选择日期:</label>      
+            <input type="text" class="form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                  datepicker-options="{minMode: 'month'}" 
+                  datepicker-mode="'month'"
+                ng-model="temp.dt" is-open="opened" ng-readonly="true"
+                ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!temp.dt">提交</button>
+        </form>
+      </div>
+      </div>  
+<div class="margin-top-20" style="padding:30px 0 10px 0" ng-if="businessPriceList">
+    <table class="table padding-top table-striped border">
+        <thead> 
+            <tr>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'FHospName'; sortReverse = !sortReverse">
+                医院
+                <span ng-show="sortType == 'FHospName' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'FHospName' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'DistributorName'; sortReverse = !sortReverse">
+                经销商
+                <span ng-show="sortType == 'DistributorName' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'DistributorName' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
+                产品类别
+                <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Year'; sortReverse = !sortReverse">
+                年
+                <span ng-show="sortType == 'Year' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Year' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Month'; sortReverse = !sortReverse">
+                月
+                <span ng-show="sortType == 'Month' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Month' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'CSPrice'; sortReverse = !sortReverse">
+                商务标准价
+                <span ng-show="sortType == 'CSPrice' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'CSPrice' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'BARebate'; sortReverse = !sortReverse">
+                商务达成返利
+                <span ng-show="sortType == 'BARebate' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'BARebate' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'TTBoot'; sortReverse = !sortReverse">
+                招标价补
+                <span ng-show="sortType == 'TTBoot' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'TTBoot' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Spromotion'; sortReverse = !sortReverse">
+                销售促销
+                <span ng-show="sortType == 'Spromotion' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Spromotion' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'BTBGift'; sortReverse = !sortReverse">
+                商务买赠
+                <span ng-show="sortType == 'BTBGift' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'BTBGift' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'BNHDAward'; sortReverse = !sortReverse">
+                商务新医院开发奖
+                <span ng-show="sortType == 'BNHDAward' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'BNHDAward' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Fnote'; sortReverse = !sortReverse">
+                备注
+                <span ng-show="sortType == 'Fnote' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Fnote' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'FEmpID'; sortReverse = !sortReverse">
+                维护人
+                <span ng-show="sortType == 'FEmpID' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'FEmpID' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="cursor-pointer" ng-click="sortType = 'Fdate'; sortReverse = !sortReverse">
+                维护时间
+                <span ng-show="sortType == 'Fdate' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'Fdate' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th class="text-center">
+                操作
+            </th>
+            <!-- <td width="10%" class="text-center">Action</td> -->
+                
             </tr>
-            <tr ng-if="!businessPriceList||businessPriceList.length==0">
-                <td colspan="4" class='empty-message'>没有数据.</td>
-            </tr>
-            </tbody> 
-        </table>
-        <div class="margin-top text-center">
-            <button type="button" class="btn btn-success" ng-click="addOrEditBusinessPrice()">
-                <span class="fa fa-plus-circle fa-lg"></span>
-                添加商务价格
-            </button>
-        </div>
+        </thead> 
+        <tbody> 
+            <tr ng-if="businessPriceList&&businessPriceList.length>0" 
+                ng-repeat="(idx,businessPrice) in businessPriceList | orderBy:sortType:sortReverse">
+
+            <td width="8%" class="text-center">{{businessPrice.FHospName}}</td>
+            <td width="8%" class="text-center">{{businessPrice.DistributorName}}</td>
+            <td width="8%" class="text-center">{{businessPrice.ProductTypeName}}</td>
+            <td width="2%" class="text-center">{{businessPrice.Year}}</td>
+            <td width="2%" class="text-center">{{businessPrice.Month}}</td>
+
+            <td width="8%" class="text-center">{{businessPrice.CSPrice}}</td>
+            <td width="8%" class="text-center">{{businessPrice.BARebate}}</td>
+            <td width="8%" class="text-center">{{businessPrice.TTBoot}}</td>
+            <td width="8%" class="text-center">{{businessPrice.Spromotion}}</td>
+            <td width="8%" class="text-center">{{businessPrice.BTBGift}}</td>
+
+            <td width="8%" class="text-center">{{businessPrice.BNHDAward}}</td>
+            <td width="8%" class="text-center">{{businessPrice.Fnote}}</td>
+            <td width="8%" class="text-center">{{businessPrice.FEmpID}}</td>
+            <td width="8%" class="text-center">{{businessPrice.Fdate}}</td>
+            <td width="8%" class="text-center">
+                <button type="button" class="btn btn-info btn-xs"  ng-click="addOrEditBusinessPrice(businessPrice)">
+                    编辑 
+                </button>
+                <button type="button" class="btn btn-danger btn-xs"  confirm-required="{{businessPrice.fid}}" 
+                        ng-click="deleteBusinessPrice(businessPrice)">
+                    删除 
+                </button>
+            </td>
+        </tr>
+        <tr ng-if="!businessPriceList||businessPriceList.length==0">
+            <td colspan="4" class='empty-message'>没有数据.</td>
+        </tr>
+        </tbody> 
+    </table>
+    <div class="margin-top text-center">
+        <button type="button" class="btn btn-success" ng-click="addOrEditBusinessPrice()">
+            <span class="fa fa-plus-circle fa-lg"></span>
+            添加商务价格
+        </button>
     </div>
+</div>
 
     <pre ng-show="debug">businessPriceList:{{businessPriceList | json}}</pre>	

@@ -5,7 +5,7 @@ var Promise = require('Promise').default
 exports.getPromotionDiscountList=function(req,res){
 	(async function () {
 		try {
-			var list = await dbPromotionDiscountSvc.getPromotionDiscountList();
+			var list = await dbPromotionDiscountSvc.getPromotionDiscountList(req.body.date,req.body.FHospName,req.body.ProductTypeName);
 			return res.status(200).send(list.recordset);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});
@@ -17,7 +17,7 @@ exports.deletePromotionDiscount=function(req,res){
 	(async function () {
 		try {
 			await dbPromotionDiscountSvc.deletePromotionDiscount(req.body.promotionDiscount.FID);
-			var list = await dbPromotionDiscountSvc.getPromotionDiscountList();
+			var list = await dbPromotionDiscountSvc.getPromotionDiscountList(req.body.date,req.body.FHospName,req.body.ProductTypeName);
 			return res.status(200).send(list.recordset);
 		} catch (error) {
 			return res.status(200).send({error:true,message:error.message});
@@ -37,6 +37,7 @@ exports.addEditPromotionDiscount=function(req,res){
 		}
 	})()
 };
+
 
 
 exports.getProductTypeList=function(req,res){

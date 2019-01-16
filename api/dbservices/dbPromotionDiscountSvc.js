@@ -2,10 +2,21 @@
 
 const sqlSvc=require("./sqlService");
 //get user List
-exports.getPromotionDiscountList=function(domain){
-    var stmt = "select * from dbo.t_BOSDocument where ItemType =2";
-    let paramTypes={};
-    let paramValues={};
+exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
+    var stmt = "select * from dbo.t_BOSDocument where ItemType =2 and year = @year and month = @month";
+    var date = new Date(dateStr);
+    let paramTypes={year:'sql.Int',month:'sql.Int'};
+    let paramValues={year:date.getFullYear(),month:date.getMonth()+1};
+    if(FHospName != undefined && FHospName != "undefined"){
+      stmt += " and FHospName = @FHospName";
+      paramTypes["FHospName"] = 'sql.NVarChar(50)';
+      paramValues["FHospName"] = FHospName;
+    }
+    if(ProductTypeName != undefined && ProductTypeName != "undefined"){
+      stmt += " and ProductTypeName = @ProductTypeName";
+      paramTypes["ProductTypeName"] = 'sql.NVarChar(50)';
+      paramValues["ProductTypeName"] = ProductTypeName;
+    }
     return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
   }
 
@@ -22,21 +33,17 @@ exports.getPromotionDiscountList=function(domain){
     //stmt will be something 4like: "exec JM_InsertOrUpdateUserProfile 'yd.zhu','朱亚东','BITSG','admin','1'"
     let stmt=["exec JM_InsertOrUpdatePromotionDiscountProfile"];
     var Year;
-    Year = promotionDiscount.Date.substring(0,4);
     var Month;
+    var date;
     if(promotionDiscount.Date.indexOf("年")>-1){
-      if(promotionDiscount.Date.length==8){
-        Month = promotionDiscount.Date.substring(5,7);
-      } else {
-        Month = promotionDiscount.Date.substring(5,6);
-      }
+      let date_str = promotionDiscount.Date.replace(/年/g,"/");
+      date_str = date_str.replace(/月/g,"");
+      date = new Date(date_str);
     } else {
-      if(promotionDiscount.Date.substring(5,6) == 0){
-        Month = promotionDiscount.Date.substring(6,7);
-      } else {
-        Month = promotionDiscount.Date.substring(5,7);
-      }
+      date = new Date(promotionDiscount.Date);
     }
+    Year = date.getFullYear();
+    Month = date.getMonth()+1;
     if(promotionDiscount.FID == undefined){
       promotionDiscount.FID = -1;
     }
@@ -50,6 +57,8 @@ exports.getPromotionDiscountList=function(domain){
     stmt.push(`'${promotionDiscount.Fnote}'`)
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
+
+
 
   exports.getProductTypeList=function(domain){
     var stmt = "select FName from t_SubMessage where FTypeID = 10008";

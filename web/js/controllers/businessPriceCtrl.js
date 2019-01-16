@@ -3,10 +3,23 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('businessPriceCtrl',['$scope','$rootScope','$interval','$modal','businessPriceList','utilSvc','jmService',
-	function($scope,$rootScope,$interval,$modal,businessPriceList,utilSvc,apiSvc){
-
-        $scope.businessPriceList = businessPriceList;
+    .controller('businessPriceCtrl',['$scope','$rootScope','$location','$interval','$modal','businessPriceList','agentList','hospitalList','productTypeList','utilSvc','jmService',
+	function($scope,$rootScope,$location,$interval,$modal,businessPriceList,agentList,hospitalList,productTypeList,utilSvc,apiSvc){
+        $scope.temp={};
+        $scope.businessPriceSearch={};
+        if (businessPriceList){
+            $scope.businessPriceList = businessPriceList;
+        } else {
+            $scope.productTypeList = productTypeList;
+            $scope.hospitalList = hospitalList;
+              $scope.clear = function () {
+                $scope.temp.dt = null;
+              };
+              $scope.submitForm = function() {
+                //add leading 0 to the scanned order no
+                $location.path("/businessPriceMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.businessPriceSearch.ProductTypeName+"/"+$scope.businessPriceSearch.FHospName);
+            }
+        }
         /* $rootScope.$on("loginStautsChange",function(){
             if (!$rootScope.authUser) return;
             if ($rootScope.authUser.UserRole==="qaAdmin"){
@@ -39,57 +52,9 @@
                 resolve:{
                     businessPrice:function(){return businessPrice;},
                     businessPriceList:function(){return $scope.businessPriceList},
-                    productTypeList:['$q','jmService','utilSvc',
-                        function($q,apiSvc,util){
-                            var deferred = $q.defer();
-                            //util.pageLoading("start");
-                            apiSvc.getProductType().$promise.then(function(data){
-                                if (data){
-                                    deferred.resolve(data);
-                                } else {
-                                    deferred.resolve(undefined);
-                                }
-                                //util.pageLoading("stop");
-                            },function(err){
-                                deferred.reject(err);
-                                //util.pageLoading("stop");
-                            })
-                            return deferred.promise;
-                        }],
-                    agentList:['$q','jmService','utilSvc',
-                    function($q,apiSvc,util){
-                        var deferred = $q.defer();
-                        //util.pageLoading("start");
-                        apiSvc.getAgent().$promise.then(function(data){
-                            if (data){
-                                deferred.resolve(data);
-                            } else {
-                                deferred.resolve(undefined);
-                            }
-                            //util.pageLoading("stop");
-                        },function(err){
-                            deferred.reject(err);
-                            //util.pageLoading("stop");
-                        })
-                        return deferred.promise;
-                    }],
-                    hospitalList:['$q','jmService','utilSvc',
-                    function($q,apiSvc,util){
-                        var deferred = $q.defer();
-                        util.pageLoading("start");
-                        apiSvc.getHospital().$promise.then(function(data){
-                            if (data){
-                                deferred.resolve(data);
-                            } else {
-                                deferred.resolve(undefined);
-                            }
-                            util.pageLoading("stop");
-                        },function(err){
-                            deferred.reject(err);
-                            util.pageLoading("stop");
-                        })
-                        return deferred.promise;
-                    }]
+                    hospitalList:function(){return hospitalList},
+                    agentList:function(){return agentList},
+                    productTypeList:function(){return productTypeList}
                 }
             });
             modalInstance.result.then(function(businessPriceList) {
@@ -97,7 +62,7 @@
             });
         };
         $scope.deleteBusinessPrice=function(businessPrice){
-            apiSvc.deleteBusinessPrice({businessPrice:businessPrice}).$promise.then(
+            apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.businessPriceSearch.ProductTypeName,FHospName:$scope.businessPriceSearch.FHospName}).$promise.then(
                 function(data){
                     $scope.businessPriceList = data
                 },

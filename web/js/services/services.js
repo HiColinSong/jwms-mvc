@@ -32,7 +32,7 @@
             },
             ///获得销售预测列表 colin 
             getSaleForecastList:{
-              method: 'GET',
+              method: 'POST',
               params:{                
                 type: 'get-sale-forecast-list'
               },
@@ -53,14 +53,14 @@
               isArray:true
             },
             getBusinessPriceList:{
-              method: 'GET',
+              method: 'POST',
               params:{
                 type: 'get-business-price-list'
               },
               isArray:true
             },
             getPromotionDiscountList:{
-              method: 'GET',
+              method: 'POST',
               params:{
                 type: 'get-promotion-discount-list'
               },

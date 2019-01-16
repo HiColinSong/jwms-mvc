@@ -11,7 +11,7 @@
                 datepicker-options="{minMode: 'month'}" 
                 datepicker-mode="'month'"
               ng-model="temp.dt" is-open="opened" ng-readonly="true"
-              ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='今天'/>
+              ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
         </div>
         <button type="submit" class="btn btn-default" ng-click="submitForm()" ng-disabled="!temp.dt">提交</button>
       </form>
