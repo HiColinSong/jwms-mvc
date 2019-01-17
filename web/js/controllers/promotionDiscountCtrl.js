@@ -19,6 +19,9 @@
               $scope.submitForm = function() {
                 //add leading 0 to the scanned order no
                 $location.path("/promotionDiscountMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.promotionDiscountSearch.ProductTypeName+"/"+$scope.promotionDiscountSearch.FHospName);
+                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                $rootScope.productTypeNameQuery = $scope.promotionDiscountSearch.ProductTypeName;
+                $rootScope.fHospNameQuery = $scope.promotionDiscountSearch.FHospName;
             }
         }
         /* $rootScope.$on("loginStautsChange",function(){
@@ -64,7 +67,7 @@
 
 
         $scope.deletePromotionDiscount=function(promotionDiscount){
-            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.promotionDiscountSearch.ProductTypeName,FHospName:$scope.promotionDiscountSearch.FHospName}).$promise.then(
+            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.promotionDiscountList = data
                 },

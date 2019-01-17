@@ -18,6 +18,9 @@
               $scope.submitForm = function() {
                 //add leading 0 to the scanned order no
                 $location.path("/businessPriceMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.businessPriceSearch.ProductTypeName+"/"+$scope.businessPriceSearch.FHospName);
+                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                $rootScope.productTypeNameQuery = $scope.businessPriceSearch.ProductTypeName;
+                $rootScope.fHospNameQuery = $scope.businessPriceSearch.FHospName;
             }
         }
         /* $rootScope.$on("loginStautsChange",function(){
@@ -62,7 +65,7 @@
             });
         };
         $scope.deleteBusinessPrice=function(businessPrice){
-            apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.businessPriceSearch.ProductTypeName,FHospName:$scope.businessPriceSearch.FHospName}).$promise.then(
+            apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.businessPriceList = data
                 },

@@ -19,6 +19,9 @@
               $scope.submitForm = function() {
                 //add leading 0 to the scanned order no
                 $location.path("/saleForecast/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
+                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                $rootScope.productTypeNameQuery = $scope.saleForecastSearch.ProductTypeName;
+                $rootScope.fHospNameQuery = $scope.saleForecastSearch.FHospName;
             }
         }
         /*
@@ -85,7 +88,7 @@
             });
         };
         $scope.deleteSaleForecast=function(saleForecast){                    
-            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:utilSvc.formatDate($scope.temp.dt),ProductTypeName:$scope.saleForecastSearch.ProductTypeName,FHospName:$scope.saleForecastSearch.FHospName}).$promise.then(
+            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.saleForecastList = data
                 },
