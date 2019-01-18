@@ -28,7 +28,7 @@
                     var year = date.getFullYear();
                     var month = date.getMonth()+1;
                     businessPriceList.forEach(_businessPrice => {
-                        if (_businessPrice.FID!=$scope.businessPrice.FID && _businessPrice.FHospName===$scope.businessPrice.FHospName && _businessPrice.ProductTypeName===$scope.businessPrice.ProductTypeName &&  _businessPrice.Year ===year && _businessPrice.Month ===month){
+                        if (_businessPrice.FID!=$scope.businessPrice.FID && _businessPrice.FHospName===$scope.businessPrice.FHospName && _businessPrice.DistributorName===$scope.businessPrice.DistributorName && _businessPrice.ProductTypeName===$scope.businessPrice.ProductTypeName &&  _businessPrice.Year ===year && _businessPrice.Month ===month){
                             $scope.duplicateUserID=true;
                         }
                     });

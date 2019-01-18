@@ -64,6 +64,21 @@
                 $scope.businessPriceList = businessPriceList;
             });
         };
+        $scope.copyBusinessPrice=function(){
+            var modalInstance;
+            modalInstance = $modal.open({
+                templateUrl: 'partials/copy-business-price.html',
+                windowClass: "sub-detail-modal",
+                controller: "copyBusinessPriceCtrl",
+                backdrop: "static",
+                resolve:{
+                    productTypeList:function(){return productTypeList}
+                }
+            });
+            modalInstance.result.then(function(businessPriceList) {
+                $scope.businessPriceList = businessPriceList;
+            });
+        };
         $scope.deleteBusinessPrice=function(businessPrice){
             apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){

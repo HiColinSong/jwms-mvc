@@ -108,6 +108,13 @@
               },
               isArray:true
             },
+            copyBusinessPrice:{
+              method: 'POST',
+              params:{
+                type: 'copy-business-price'
+              },
+              isArray:true
+            },
             addEditPromotionDiscount:{
               method: 'POST',
               params:{

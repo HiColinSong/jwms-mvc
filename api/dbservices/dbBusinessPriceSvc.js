@@ -63,3 +63,15 @@ exports.getBusinessPriceList=function(dateStr,FHospName,ProductTypeName){
     stmt.push(`'${businessPrice.maintainerName}'`)
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
+
+
+  exports.copyBusinessPrice=function(businessPrice){
+    let stmt=["exec JM_CopyBusinessPriceProfile"];
+    stmt.push(`'${businessPrice.ProductTypeName}',`),
+    stmt.push(`${businessPrice.year},`),
+    stmt.push(`${businessPrice.month},`),
+    stmt.push(`${businessPrice.yearTarget},`),
+    stmt.push(`${businessPrice.monthTarget},`),
+    stmt.push(`'${businessPrice.maintainerName}'`)
+    return sqlSvc.sqlK3Query(stmt.join(" "))
+  }

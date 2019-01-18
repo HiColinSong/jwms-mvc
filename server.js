@@ -58,6 +58,7 @@ app.get('/jmapi/get-hospital-list.json',auth.dataMaintenanceCheck,commonHandler.
 app.get('/jmapi/get-saler-list.json',auth.dataMaintenanceCheck,saleForecastHandler.getSalerList);
 app.post('/jmapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/jmapi/add-edit-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.addEditBusinessPrice);
+app.post('/jmapi/copy-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.copyBusinessPrice);
 app.post('/jmapi/add-edit-promotion-discount.json',auth.dataMaintenanceCheck,promotionDiscountHandler.addEditPromotionDiscount);
 app.post('/jmapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 app.post('/jmapi/delete-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.deleteBusinessPrice);
