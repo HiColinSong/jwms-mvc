@@ -83,3 +83,13 @@ const sqlSvc=require("./sqlService");
     return sqlSvc.sqlK3Query(stmt,paramTypes,paramValues);
   }
 
+  exports.copySaleForecast=function(saleForecast){
+    let stmt=["exec JM_CopySaleForecastProfile"];
+    stmt.push(`'${saleForecast.ProductTypeName}',`),
+    stmt.push(`${saleForecast.year},`),
+    stmt.push(`${saleForecast.month},`),
+    stmt.push(`${saleForecast.yearTarget},`),
+    stmt.push(`${saleForecast.monthTarget},`),
+    stmt.push(`'${saleForecast.maintainerName}'`)
+    return sqlSvc.sqlK3Query(stmt.join(" "))
+  }

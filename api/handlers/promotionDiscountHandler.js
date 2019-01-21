@@ -37,3 +37,16 @@ exports.addEditPromotionDiscount=function(req,res){
 		}
 	})()
 };
+
+
+exports.copyPromotionDiscount=function(req,res){
+	(async function () {
+		try {
+			var list = await dbPromotionDiscountSvc.copyPromotionDiscount(req.body.promotionDiscount);
+			// var list = await dbCommonSvc.insertOrUpdateUserProfile(req.body.user);
+			return res.status(200).send(list.recordset);
+		} catch (error) {
+			return res.status(200).send({error:true,message:error.message});
+		}
+	})()
+};

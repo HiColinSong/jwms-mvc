@@ -65,6 +65,21 @@
             });
         };
 
+        $scope.copyPromotionDiscount=function(){
+            var modalInstance;
+            modalInstance = $modal.open({
+                templateUrl: 'partials/copy-promotion-discount.html',
+                windowClass: "sub-detail-modal",
+                controller: "copyPromotionDiscountCtrl",
+                backdrop: "static",
+                resolve:{
+                    productTypeList:function(){return productTypeList}
+                }
+            });
+            modalInstance.result.then(function(promotionDiscountList) {
+                $scope.promotionDiscountList = promotionDiscountList;
+            });
+        };
 
         $scope.deletePromotionDiscount=function(promotionDiscount){
             apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(

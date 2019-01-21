@@ -59,6 +59,8 @@ app.get('/jmapi/get-saler-list.json',auth.dataMaintenanceCheck,saleForecastHandl
 app.post('/jmapi/add-edit-user.json',auth.adminCheck,commonHandler.addEditUser);
 app.post('/jmapi/add-edit-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.addEditBusinessPrice);
 app.post('/jmapi/copy-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.copyBusinessPrice);
+app.post('/jmapi/copy-promotion-discount.json',auth.dataMaintenanceCheck,promotionDiscountHandler.copyPromotionDiscount);
+app.post('/jmapi/copy-sale-forecast.json',auth.dataMaintenanceCheck,saleForecastHandler.copySaleForecast);
 app.post('/jmapi/add-edit-promotion-discount.json',auth.dataMaintenanceCheck,promotionDiscountHandler.addEditPromotionDiscount);
 app.post('/jmapi/delete-user.json',auth.adminCheck,commonHandler.deleteUser);
 app.post('/jmapi/delete-business-price.json',auth.dataMaintenanceCheck,businessPriceHandler.deleteBusinessPrice);

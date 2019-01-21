@@ -115,6 +115,20 @@
               },
               isArray:true
             },
+            copyPromotionDiscount:{
+              method: 'POST',
+              params:{
+                type: 'copy-promotion-discount'
+              },
+              isArray:true
+            },
+            copySaleForecast:{
+              method: 'POST',
+              params:{
+                type: 'copy-sale-forecast'
+              },
+              isArray:true
+            },
             addEditPromotionDiscount:{
               method: 'POST',
               params:{

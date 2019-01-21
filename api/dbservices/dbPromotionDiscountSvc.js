@@ -59,3 +59,14 @@ exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
     return sqlSvc.sqlK3Query(stmt.join(" "))
   }
 
+
+  exports.copyPromotionDiscount=function(promotionDiscount){
+    let stmt=["exec JM_CopyPromotionDiscountProfile"];
+    stmt.push(`'${promotionDiscount.ProductTypeName}',`),
+    stmt.push(`${promotionDiscount.year},`),
+    stmt.push(`${promotionDiscount.month},`),
+    stmt.push(`${promotionDiscount.yearTarget},`),
+    stmt.push(`${promotionDiscount.monthTarget},`),
+    stmt.push(`'${promotionDiscount.maintainerName}'`)
+    return sqlSvc.sqlK3Query(stmt.join(" "))
+  }

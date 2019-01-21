@@ -87,6 +87,23 @@
                 $scope.saleForecastList = saleForecastList;
             });
         };
+
+        $scope.copySaleForecast=function(){
+            var modalInstance;
+            modalInstance = $modal.open({
+                templateUrl: 'partials/copy-sale-forcast.html',
+                windowClass: "sub-detail-modal",
+                controller: "copySaleForcastCtrl",
+                backdrop: "static",
+                resolve:{
+                    productTypeList:function(){return productTypeList}
+                }
+            });
+            modalInstance.result.then(function(saleForecastList) {
+                $scope.saleForecastList = saleForecastList;
+            });
+        };
+
         $scope.deleteSaleForecast=function(saleForecast){                    
             apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
