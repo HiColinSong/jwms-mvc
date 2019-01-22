@@ -1,15 +1,35 @@
-/*jm - Controllers.js - Yadong Zhu 2018*/
+/*jm - Controllers.js - zhiqiangsong 2019*/
 (function() {
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('promotionDiscountCtrl',['$scope','$rootScope','$location','$interval','$modal','promotionDiscountList','productTypeList','hospitalList','utilSvc','jmService',
-	function($scope,$rootScope,$location,$interval,$modal,promotionDiscountList,productTypeList,hospitalList,utilSvc,apiSvc){
-
+    .controller('promotionDiscountCtrl',['$scope','$rootScope','$location','$modal','promotionDiscountList','productTypeList','hospitalList','utilSvc','jmService',
+	function($scope,$rootScope,$location,$modal,promotionDiscountList,productTypeList,hospitalList,utilSvc,apiSvc){
         $scope.temp={};
-        $scope.promotionDiscountSearch={};
+        $scope.promotionDiscountSearch={};        
         if (promotionDiscountList){
             $scope.promotionDiscountList = promotionDiscountList;
+            $scope.totalItems = promotionDiscountList.length;
+            $scope.itemPerPage = 6;
+            $scope.currentPage = 1;
+            $scope.pageChanged=function(){
+                $scope.promotionDiscountListByPage=[];
+                var startData = $scope.itemPerPage * ($scope.currentPage-1);
+                var endData = $scope.itemPerPage * $scope.currentPage-1;
+                if(endData>$scope.totalItems){
+                    endData = $scope.totalItems-1
+                }
+                var num = 0;
+                if($scope.promotionDiscountList){
+                    for(var i = startData;i<=endData;i++){
+                        if($scope.promotionDiscountList[i]!=undefined){
+                            $scope.promotionDiscountListByPage[num]=$scope.promotionDiscountList[i];
+                        }
+                        num++;
+                    }
+                }
+            };
+            $scope.pageChanged();
         } else {
             $scope.productTypeList = productTypeList;
             $scope.hospitalList = hospitalList;
@@ -17,34 +37,12 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                //add leading 0 to the scanned order no
                 $location.path("/promotionDiscountMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.promotionDiscountSearch.ProductTypeName+"/"+$scope.promotionDiscountSearch.FHospName);
                 $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
                 $rootScope.productTypeNameQuery = $scope.promotionDiscountSearch.ProductTypeName;
                 $rootScope.fHospNameQuery = $scope.promotionDiscountSearch.FHospName;
             }
         }
-        /* $rootScope.$on("loginStautsChange",function(){
-            if (!$rootScope.authUser) return;
-            if ($rootScope.authUser.UserRole==="qaAdmin"){
-                $scope.roleFilter=function(val){
-                    return val==='qaLab'||val==='qaAdmin';
-                }
-                $scope.roleFilter='qa'
-            } else if ($rootScope.authUser.UserRole==="whAdmin"){
-                $scope.roleFilter="wh"
-            } 
-        }) */
-        /* let waitForUser = $interval(function() {
-            if ($rootScope.authUser) {
-                $interval.cancel(waitForUser);
-                if ($rootScope.authUser.UserRole==="qaAdmin"){
-//                     $scope.roleFilter="qaLab";
-                } else if ($rootScope.authUser.UserRole==="whAdmin"){
-                    $scope.roleFilter="wh"
-                } 
-            }
-          }, 10); */
 
         $scope.addOrEditPromotionDiscount=function(promotionDiscount){
             var modalInstance;
@@ -92,7 +90,7 @@
                     else
                         utilSvc.addAlert(JSON.stringify(err), "fail", false);
                 }) 
-        }
+        };
 
     }])
  }());
