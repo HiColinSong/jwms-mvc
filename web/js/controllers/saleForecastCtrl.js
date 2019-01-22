@@ -7,6 +7,7 @@
 	function($scope,$rootScope,$location,$interval,$modal,saleForecastList,productTypeList,hospitalList,utilSvc,apiSvc){
         $scope.saleForecastList = saleForecastList;
         $scope.temp={};
+        debugger;
         $scope.saleForecastSearch={};
         if (saleForecastList){
             $scope.saleForecastList = saleForecastList;

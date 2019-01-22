@@ -8,7 +8,7 @@ exports.getBudgetAndIncomeReport=function(req,res){
 		try {			
             //let report = await dbCommonSvc.getBudgetAndIncomeReporterList(req.body.date);
             let report ={};
-			let BudgetAndIncomeData = await dbCommonSvc.getBudgetAndIncomeData(req.body.date);			
+			let BudgetAndIncomeData = await dbCommonSvc.getBudgetAndIncomeData(req.body.date,req.body.FHospName,req.body.ProductTypeName);			
 			report.BudgetAndIncomeData = BudgetAndIncomeData.recordset;
 			return res.status(200).send(report);
             /* 

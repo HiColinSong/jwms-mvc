@@ -3,24 +3,33 @@
 const sqlSvc=require("./sqlService");
 
 
-exports.getBudgetAndIncomeData = function(date){
-    /* date = date.substring(0,4);
-    var params={
-      FYEAR:{type:'sql.Int',value:2018},
-      LB:{type:'sql.VarChar(20)',value:'支架系统'},
-      Role:{type:'sql.VarChar(30)',value:'客服部'},
-      UserType:{type:'sql.VarChar(50)',value:'不受限用户'},
-      EmpID:{type:'sql.Int',value:9214}
+exports.getBudgetAndIncomeData = function(date,FHospName,ProductTypeName){  
+    //P_BudgetAndIncomeDetailQuery '2017','12'  ,'支架系统','hospName'  
+    var date = new Date(date);
+    var year =date.getFullYear();
+    var month =date.getMonth()+1;
+    var productTypeName="";
+    var hospName="";
+    if(FHospName != undefined && FHospName != "undefined"){
+      hospName=FHospName;
     }
-    return sqlSvc.callK3StoredProcedure("dbo.PROC_JWsaleYearQuery",params); */
-    date = date.substring(0,4);  
+    if(ProductTypeName != undefined && ProductTypeName != "undefined"){
+      productTypeName=ProductTypeName;
+    }   
+  
     let stmt = ["exec dbo.P_BudgetAndIncomeDetailQuery "];
-    stmt.push("2019")
-    //stmt.push(date+",")
-    // stmt.push("'支架系统',"),
-    // stmt.push("'客服部',"),
-    // stmt.push("'不受限用户',"),
-    // stmt.push("9214")
+   // stmt.push(`${saleForecast.FID},`),
+    stmt.push(`${year},`);
+    stmt.push(`${month},`);
+    stmt.push(`'${productTypeName}',`);
+    stmt.push(`'${hospName}'`);
+    
+    // stmt.push(month);
+    // stmt.push(",");
+    // stmt.push(productTypeName);
+    // stmt.push(",");
+    // stmt.push(hospName);   
+   // stmt.push("");
     return sqlSvc.sqlK3Query(stmt.join(" "));
     /* var params={
       RoleId:{type:'sql.Int',value:1},

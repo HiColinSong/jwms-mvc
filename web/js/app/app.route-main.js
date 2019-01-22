@@ -38,16 +38,50 @@
                         }]
                 }
             })
-            .when('/budgetAndIncomeReport/:date?', {
-                templateUrl: 'partials/budgetAndIncome-report.html',
+            .when('/budgetAndIncomeReport/:date?/:ProductTypeName?/:FHospName?', {
+                templateUrl: 'partials/budget-and-income-report.html',
                 controller: 'budgetAndIncomeReportCtrl',
-                resolve:{
+                resolve:{                    
+                    productTypeList:['$q','$route','jmService','utilSvc',
+                            function($q,$route,apiSvc,util){
+                                var deferred = $q.defer();
+                                //util.pageLoading("start");
+                                apiSvc.getProductType().$promise.then(function(data){
+                                    if (data){
+                                        deferred.resolve(data);
+                                    } else {
+                                        deferred.resolve(undefined);
+                                    }
+                                    //util.pageLoading("stop");
+                                },function(err){
+                                    deferred.reject(err);
+                                    //util.pageLoading("stop");
+                                })
+                                return deferred.promise;
+                            }],
+                            hospitalList:['$q','jmService','utilSvc',
+                            function($q,apiSvc,util){
+                                var deferred = $q.defer();
+                                //util.pageLoading("start");
+                                apiSvc.getHospital().$promise.then(function(data){
+                                    if (data){
+                                        deferred.resolve(data);
+                                    } else {
+                                        deferred.resolve(undefined);
+                                    }
+                                    //util.pageLoading("stop");
+                                },function(err){
+                                    deferred.reject(err);
+                                    //util.pageLoading("stop");
+                                })
+                                return deferred.promise;
+                            }],
                     report:['$q','$route','utilSvc','jmService',
                         function($q,$route,util,apiSvc){
                             var deferred = $q.defer();
                             if ($route.current.params.date){
                                 util.pageLoading("start");
-                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date}).$promise.then(function(data){
+                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date,FHospName:$route.current.params.FHospName,ProductTypeName:$route.current.params.ProductTypeName}).$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
                                 } else {
@@ -66,10 +100,44 @@
                         }]
                 }
             })
-            .when('/budgetAndIncomeDetailReport/:date?', {
-                templateUrl: 'partials/budgetAndIncomeDetail-report.html',
+            .when('/budgetAndIncomeDetailReport/:date?/:ProductTypeName?/:FHospName?', {
+                templateUrl: 'partials/budget-and-income-detail-report.html',
                 controller: 'budgetAndIncomeDetailReportCtrl',
                 resolve:{
+                    productTypeList:['$q','$route','jmService','utilSvc',
+                            function($q,$route,apiSvc,util){
+                                var deferred = $q.defer();
+                                //util.pageLoading("start");
+                                apiSvc.getProductType().$promise.then(function(data){
+                                    if (data){
+                                        deferred.resolve(data);
+                                    } else {
+                                        deferred.resolve(undefined);
+                                    }
+                                    //util.pageLoading("stop");
+                                },function(err){
+                                    deferred.reject(err);
+                                    //util.pageLoading("stop");
+                                })
+                                return deferred.promise;
+                            }],
+                            hospitalList:['$q','jmService','utilSvc',
+                            function($q,apiSvc,util){
+                                var deferred = $q.defer();
+                                //util.pageLoading("start");
+                                apiSvc.getHospital().$promise.then(function(data){
+                                    if (data){
+                                        deferred.resolve(data);
+                                    } else {
+                                        deferred.resolve(undefined);
+                                    }
+                                    //util.pageLoading("stop");
+                                },function(err){
+                                    deferred.reject(err);
+                                    //util.pageLoading("stop");
+                                })
+                                return deferred.promise;
+                            }],
                     report:['$q','$route','utilSvc','jmService',
                         function($q,$route,util,apiSvc){
                             var deferred = $q.defer();
