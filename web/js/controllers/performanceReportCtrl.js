@@ -6,6 +6,8 @@
     .controller('performanceReportCtrl',['$scope','$routeParams','$location', 'report','utilSvc',
         function($scope,$routeParams,$location,report,utilSvc){
           $scope.temp={};
+          $scope.totalItems = 64;
+          $scope.currentPage = 4;
           
           if (report){
             $scope.report=report;
