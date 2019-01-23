@@ -83,7 +83,13 @@
         };
 
         $scope.deletePromotionDiscount=function(promotionDiscount){
-            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
+            var dateHere;
+            if($rootScope.dateQuery==undefined){
+                dateHere = promotionDiscount.Year+"-"+promotionDiscount.Month;
+            } else {
+                dateHere = $rootScope.dateQuery
+            }
+            apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.promotionDiscountList = data
                     $scope.adjustmentData();

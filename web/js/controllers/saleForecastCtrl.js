@@ -7,10 +7,30 @@
 	function($scope,$rootScope,$location,$interval,$modal,saleForecastList,productTypeList,hospitalList,utilSvc,apiSvc){
         $scope.saleForecastList = saleForecastList;
         $scope.temp={};
-        debugger;
         $scope.saleForecastSearch={};
         if (saleForecastList){
             $scope.saleForecastList = saleForecastList;
+            $scope.itemPerPage = 6;
+            $scope.currentPage = 1;
+            $scope.pageChanged=function(){
+                $scope.saleForecastListByPage=[];
+                var startData = $scope.itemPerPage * ($scope.currentPage-1);
+                var endData = $scope.itemPerPage * $scope.currentPage-1;
+                $scope.totalItems = $scope.saleForecastList.length;
+                if(endData>$scope.saleForecastList.length){
+                    endData = $scope.saleForecastList.length-1
+                }
+                var num = 0;
+                if($scope.saleForecastList){
+                    for(var i = startData;i<=endData;i++){
+                        if($scope.saleForecastList[i]!=undefined){
+                            $scope.saleForecastListByPage[num]=$scope.saleForecastList[i];
+                        }
+                        num++;
+                    }
+                }
+            };
+            $scope.pageChanged();
         } else {
             $scope.productTypeList = productTypeList;
             $scope.hospitalList = hospitalList;
@@ -18,38 +38,12 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                //add leading 0 to the scanned order no
                 $location.path("/saleForecast/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
                 $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
                 $rootScope.productTypeNameQuery = $scope.saleForecastSearch.ProductTypeName;
                 $rootScope.fHospNameQuery = $scope.saleForecastSearch.FHospName;
             }
         }
-        /*
-                $rootScope.$on("loginStautsChange",function(){
-            if (!$rootScope.authUser) return;
-            //看样子使用不到 Colin 12/23
-            // if ($rootScope.authUser.UserRole==="qaAdmin"){
-            //     $scope.roleFilter=function(val){
-            //         return val==='qaLab'||val==='qaAdmin';
-            //     }
-            //     $scope.roleFilter='qa'
-            // } else if ($rootScope.authUser.UserRole==="whAdmin"){
-            //     $scope.roleFilter="wh"
-            // } 
-        })
-        
-        let waitForUser = $interval(function() {
-            if ($rootScope.authUser) {
-                $interval.cancel(waitForUser);
-                if ($rootScope.authUser.UserRole==="qaAdmin"){
-//                     $scope.roleFilter="qaLab";
-                } else if ($rootScope.authUser.UserRole==="whAdmin"){
-                    $scope.roleFilter="wh"
-                } 
-            }
-          }, 10);
-          */
 
         
         $scope.addOrEditSaleForecast=function(saleForecast){
@@ -86,6 +80,7 @@
             });
             modalInstance.result.then(function(saleForecastList) {
                 $scope.saleForecastList = saleForecastList;
+                $scope.adjustmentData();
             });
         };
 
@@ -102,13 +97,21 @@
             });
             modalInstance.result.then(function(saleForecastList) {
                 $scope.saleForecastList = saleForecastList;
+                $scope.adjustmentData();
             });
         };
 
-        $scope.deleteSaleForecast=function(saleForecast){                    
-            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
+        $scope.deleteSaleForecast=function(saleForecast){       
+            var dateHere;
+            if($rootScope.dateQuery==undefined){
+                dateHere = saleForecast.Year+"-"+saleForecast.Month;
+            } else {
+                dateHere = $rootScope.dateQuery
+            }
+            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
-                    $scope.saleForecastList = data
+                    $scope.saleForecastList = data;
+                    $scope.adjustmentData();
                 },
                 function(err){
                     if (err.data&&err.data.message)
@@ -116,7 +119,26 @@
                     else
                         utilSvc.addAlert(JSON.stringify(err), "fail", false);
                 }) 
-        }
+        };
+
+        $scope.adjustmentData=function(){
+            $scope.saleForecastListByPage=[];
+            var startData = $scope.itemPerPage * ($scope.currentPage-1);
+            var endData = $scope.itemPerPage * $scope.currentPage-1;
+            $scope.totalItems = $scope.saleForecastList.length;
+            if(endData>$scope.saleForecastList.length){
+                endData = $scope.saleForecastList.length-1
+            }
+            var num = 0;
+            if($scope.saleForecastList){
+                for(var i = startData;i<=endData;i++){
+                    if($scope.saleForecastList[i]!=undefined){
+                        $scope.saleForecastListByPage[num]=$scope.saleForecastList[i];
+                    }
+                    num++;
+                }
+            }
+        };
 
     }])
  }());

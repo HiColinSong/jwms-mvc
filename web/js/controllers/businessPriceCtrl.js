@@ -81,7 +81,13 @@
             });
         };
         $scope.deleteBusinessPrice=function(businessPrice){
-            apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
+            var dateHere;
+            if($rootScope.dateQuery==undefined){
+                dateHere = businessPrice.Year+"-"+businessPrice.Month;
+            } else {
+                dateHere = $rootScope.dateQuery
+            }
+            apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.businessPriceList = data;
                     $scope.adjustmentData();

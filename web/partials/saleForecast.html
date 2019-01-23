@@ -1,5 +1,5 @@
 <h2 class="text-center" style="padding-top:60px">销售预测管理</h2>
-<div class="margin-top-5" style="padding:10px 0 5px 0" ng-if="!saleForecastList">
+<div class="margin-top-5" style="padding:10px 0 5px 0" ng-show="!saleForecastList">
         <div class="margin-top-5 col-sm-8 col-sm-offset-2" >
          <form role="form" name="toNoForm">
             <div class="form-group" >
@@ -36,7 +36,7 @@
         </form>
       </div>
       </div> 
-<div class="margin-top-20" style="padding:30px 0 10px 0" ng-if="saleForecastList">
+<div class="margin-top-20" style="padding:30px 0 10px 0" ng-show="saleForecastList">
     <table class="table padding-top table-striped border">
         <thead> 
             <tr>
@@ -101,8 +101,8 @@
             <tr ng-if="saleForecastList&&saleForecastList.length>0" 
                 ng-repeat="(idx,saleForecast) in saleForecastList | orderBy:sortType:sortReverse|filter:{UserRole:roleFilter}">
             -->
-            <tr ng-if="saleForecastList&&saleForecastList.length>0" 
-                    ng-repeat="(idx,saleForecast) in saleForecastList | orderBy:sortType:sortReverse">
+            <tr ng-if="saleForecastListByPage&&saleForecastListByPage.length>0" 
+                    ng-repeat="(idx,saleForecast) in saleForecastListByPage | orderBy:sortType:sortReverse">
             <td width="20%" class="text-center">{{saleForecast.FHospName}}</td>
             <td width="10%" class="text-center">{{saleForecast.FEmpName}}</td>
             <td width="10%" class="text-center">{{saleForecast.ProductTypeName}}</td>
@@ -130,7 +130,9 @@
         </tr>
         </tbody> 
     </table>
-    
+    <div class="margin-top text-center">
+        <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" items-per-page="itemPerPage" ng-change="pageChanged()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    </div>
     <div class="margin-top text-center">
         <button type="button" class="btn btn-success" ng-click="addOrEditSaleForecast()">
             <span class="fa fa-plus-circle fa-lg"></span>
