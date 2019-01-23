@@ -61,6 +61,7 @@
             });
             modalInstance.result.then(function(businessPriceList) {
                 $scope.businessPriceList = businessPriceList;
+                $scope.adjustmentData();
             });
         };
         $scope.copyBusinessPrice=function(){
@@ -76,12 +77,14 @@
             });
             modalInstance.result.then(function(businessPriceList) {
                 $scope.businessPriceList = businessPriceList;
+                $scope.adjustmentData();
             });
         };
         $scope.deleteBusinessPrice=function(businessPrice){
             apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
-                    $scope.businessPriceList = data
+                    $scope.businessPriceList = data;
+                    $scope.adjustmentData();
                 },
                 function(err){
                     if (err.data&&err.data.message)
@@ -90,6 +93,25 @@
                         utilSvc.addAlert(JSON.stringify(err), "fail", false);
                 }) 
         };
+
+        $scope.adjustmentData=function(){
+            $scope.businessPriceListByPage=[];
+            var startData = $scope.itemPerPage * ($scope.currentPage-1);
+            var endData = $scope.itemPerPage * $scope.currentPage-1;
+            $scope.totalItems = $scope.businessPriceList.length;
+            if(endData>$scope.businessPriceList.length){
+                endData = $scope.businessPriceList.length-1
+            }
+            var num = 0;
+            if($scope.businessPriceList){
+                for(var i = startData;i<=endData;i++){
+                    if($scope.businessPriceList[i]!=undefined){
+                        $scope.businessPriceListByPage[num]=$scope.businessPriceList[i];
+                    }
+                    num++;
+                }
+            }
+        }
 
     }])
  }());

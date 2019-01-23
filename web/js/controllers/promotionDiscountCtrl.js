@@ -9,15 +9,15 @@
         $scope.promotionDiscountSearch={};        
         if (promotionDiscountList){
             $scope.promotionDiscountList = promotionDiscountList;
-            $scope.totalItems = promotionDiscountList.length;
             $scope.itemPerPage = 6;
             $scope.currentPage = 1;
             $scope.pageChanged=function(){
                 $scope.promotionDiscountListByPage=[];
                 var startData = $scope.itemPerPage * ($scope.currentPage-1);
                 var endData = $scope.itemPerPage * $scope.currentPage-1;
-                if(endData>$scope.totalItems){
-                    endData = $scope.totalItems-1
+                $scope.totalItems = $scope.promotionDiscountList.length;
+                if(endData>$scope.promotionDiscountList.length){
+                    endData = $scope.promotionDiscountList.length-1
                 }
                 var num = 0;
                 if($scope.promotionDiscountList){
@@ -60,6 +60,8 @@
             });
             modalInstance.result.then(function(promotionDiscountList) {
                 $scope.promotionDiscountList = promotionDiscountList;
+
+                $scope.adjustmentData();
             });
         };
 
@@ -76,6 +78,7 @@
             });
             modalInstance.result.then(function(promotionDiscountList) {
                 $scope.promotionDiscountList = promotionDiscountList;
+                $scope.adjustmentData();
             });
         };
 
@@ -83,6 +86,7 @@
             apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:$rootScope.dateQuery,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){
                     $scope.promotionDiscountList = data
+                    $scope.adjustmentData();
                 },
                 function(err){
                     if (err.data&&err.data.message)
@@ -92,5 +96,23 @@
                 }) 
         };
 
+        $scope.adjustmentData=function(){
+            $scope.promotionDiscountListByPage=[];
+            var startData = $scope.itemPerPage * ($scope.currentPage-1);
+            var endData = $scope.itemPerPage * $scope.currentPage-1;
+            $scope.totalItems = $scope.promotionDiscountList.length;
+            if(endData>$scope.promotionDiscountList.length){
+                endData = $scope.promotionDiscountList.length-1
+            }
+            var num = 0;
+            if($scope.promotionDiscountList){
+                for(var i = startData;i<=endData;i++){
+                    if($scope.promotionDiscountList[i]!=undefined){
+                        $scope.promotionDiscountListByPage[num]=$scope.promotionDiscountList[i];
+                    }
+                    num++;
+                }
+            }
+        }
     }])
  }());
