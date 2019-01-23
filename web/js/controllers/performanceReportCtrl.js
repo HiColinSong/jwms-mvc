@@ -6,13 +6,31 @@
     .controller('performanceReportCtrl',['$scope','$routeParams','$location', 'report','utilSvc',
         function($scope,$routeParams,$location,report,utilSvc){
           $scope.temp={};
-          $scope.totalItems = 64;
-          $scope.currentPage = 4;
-          
+          $scope.reportByPage={};
           if (report){
             $scope.report=report;
-
-            } else {
+            $scope.itemPerPage = 6;
+            $scope.currentPage = 1;
+            $scope.pageChanged=function(){
+              $scope.reportByPage.SFE_ImplantData=[];
+              var startData = $scope.itemPerPage * ($scope.currentPage-1);
+              var endData = $scope.itemPerPage * $scope.currentPage-1;
+              $scope.totalItems = $scope.report.SFE_ImplantData.length;
+              if(endData>$scope.report.SFE_ImplantData.length){
+                  endData = $scope.report.SFE_ImplantData.length-1
+              }
+              var num = 0;
+              if($scope.report.SFE_ImplantData){
+                  for(var i = startData;i<=endData;i++){
+                      if($scope.report.SFE_ImplantData[i]!=undefined){
+                          $scope.reportByPage.SFE_ImplantData[num]=$scope.report.SFE_ImplantData[i];
+                      }
+                      num++;
+                  }
+              }
+          };
+          $scope.pageChanged();
+          } else {
               $scope.clear = function () {
                 $scope.temp.dt = null;
               };
@@ -20,6 +38,6 @@
                 //add leading 0 to the scanned order no
                 $location.path("/report/"+utilSvc.formatDate($scope.temp.dt));
             }
-            }
+          }
     }])
  }());
