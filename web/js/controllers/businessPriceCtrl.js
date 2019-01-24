@@ -3,15 +3,16 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('businessPriceCtrl',['$scope','$rootScope','$location','$modal','businessPriceList','agentList','hospitalList','productTypeList','utilSvc','jmService',
-	function($scope,$rootScope,$location,$modal,businessPriceList,agentList,hospitalList,productTypeList,utilSvc,apiSvc){
+    .controller('businessPriceCtrl',['$scope','$rootScope','$location','$modal','businessPriceList','agentList','hospitalList','productTypeList','utilSvc','jmService','constants',
+	function($scope,$rootScope,$location,$modal,businessPriceList,agentList,hospitalList,productTypeList,utilSvc,apiSvc,constants){
         $scope.temp={};
         $scope.businessPriceSearch={};
         if (businessPriceList){
             $scope.businessPriceList = businessPriceList;
             $scope.totalItems = businessPriceList.length;
-            $scope.itemPerPage = 6;
-            $scope.currentPage = 1;
+            $scope.itemPerPage = constants.pageMessage.itemPerPage;
+            $scope.currentPage = constants.pageMessage.currentPage;
+            $scope.maxSize = constants.pageMessage.maxSize;
             $scope.pageChanged=function(){
                 $scope.businessPriceListByPage=[];
                 var startData = $scope.itemPerPage * ($scope.currentPage-1);

@@ -3,15 +3,16 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('saleForecastCtrl',['$scope','$rootScope','$location','$interval','$modal','saleForecastList','productTypeList','hospitalList','utilSvc','jmService',
-	function($scope,$rootScope,$location,$interval,$modal,saleForecastList,productTypeList,hospitalList,utilSvc,apiSvc){
+    .controller('saleForecastCtrl',['$scope','$rootScope','$location','$interval','$modal','saleForecastList','productTypeList','hospitalList','utilSvc','jmService','constants',
+	function($scope,$rootScope,$location,$interval,$modal,saleForecastList,productTypeList,hospitalList,utilSvc,apiSvc,constants){
         $scope.saleForecastList = saleForecastList;
         $scope.temp={};
         $scope.saleForecastSearch={};
         if (saleForecastList){
             $scope.saleForecastList = saleForecastList;
-            $scope.itemPerPage = 6;
-            $scope.currentPage = 1;
+            $scope.itemPerPage = constants.pageMessage.itemPerPage;
+            $scope.currentPage = constants.pageMessage.currentPage;
+            $scope.maxSize = constants.pageMessage.maxSize;
             $scope.pageChanged=function(){
                 $scope.saleForecastListByPage=[];
                 var startData = $scope.itemPerPage * ($scope.currentPage-1);

@@ -3,14 +3,15 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('budgetAndIncomeDetailReportCtrl',['$scope','$routeParams','$location', 'report', 'productTypeList','hospitalList','utilSvc',
-        function($scope,$routeParams,$location,report,productTypeList,hospitalList,utilSvc){
+    .controller('budgetAndIncomeDetailReportCtrl',['$scope','$routeParams','$location', 'report', 'productTypeList','hospitalList','utilSvc','constants',
+        function($scope,$routeParams,$location,report,productTypeList,hospitalList,utilSvc,constants){
           $scope.saleForecastSearch={};
           $scope.temp={};
           if (report){
             $scope.report=report.BudgetAndIncomeData;
-            $scope.itemPerPage = 6;
-            $scope.currentPage = 1;
+            $scope.itemPerPage = constants.pageMessage.itemPerPage;
+            $scope.currentPage = constants.pageMessage.currentPage;
+            $scope.maxSize = constants.pageMessage.maxSize;
             $scope.pageChanged=function(){              
                 $scope.reportListByPage=[];
                 var startData = $scope.itemPerPage * ($scope.currentPage-1);

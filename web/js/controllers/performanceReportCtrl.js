@@ -3,14 +3,15 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('performanceReportCtrl',['$scope','$routeParams','$location', 'report','utilSvc',
-        function($scope,$routeParams,$location,report,utilSvc){
+    .controller('performanceReportCtrl',['$scope','$routeParams','$location', 'report','utilSvc','constants',
+        function($scope,$routeParams,$location,report,utilSvc,constants){
           $scope.temp={};
           $scope.reportByPage={};
           if (report){
             $scope.report=report;
-            $scope.itemPerPage = 6;
-            $scope.currentPage = 1;
+            $scope.itemPerPage = constants.pageMessage.itemPerPage;
+            $scope.currentPage = constants.pageMessage.currentPage;
+            $scope.maxSize = constants.pageMessage.maxSize;
             $scope.pageChanged=function(){
               $scope.reportByPage.SFE_ImplantData=[];
               var startData = $scope.itemPerPage * ($scope.currentPage-1);

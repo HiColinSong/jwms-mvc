@@ -3,14 +3,15 @@
     'use strict';
     /* Controllers */
     angular.module('jm.controllers')
-    .controller('promotionDiscountCtrl',['$scope','$rootScope','$location','$modal','promotionDiscountList','productTypeList','hospitalList','utilSvc','jmService',
-	function($scope,$rootScope,$location,$modal,promotionDiscountList,productTypeList,hospitalList,utilSvc,apiSvc){
+    .controller('promotionDiscountCtrl',['$scope','$rootScope','$location','$modal','promotionDiscountList','productTypeList','hospitalList','utilSvc','jmService','constants',
+	function($scope,$rootScope,$location,$modal,promotionDiscountList,productTypeList,hospitalList,utilSvc,apiSvc,constants){
         $scope.temp={};
         $scope.promotionDiscountSearch={};        
         if (promotionDiscountList){
             $scope.promotionDiscountList = promotionDiscountList;
-            $scope.itemPerPage = 6;
-            $scope.currentPage = 1;
+            $scope.itemPerPage = constants.pageMessage.itemPerPage;
+            $scope.currentPage = constants.pageMessage.currentPage;
+            $scope.maxSize = constants.pageMessage.maxSize;
             $scope.pageChanged=function(){
                 $scope.promotionDiscountListByPage=[];
                 var startData = $scope.itemPerPage * ($scope.currentPage-1);

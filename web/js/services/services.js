@@ -315,6 +315,12 @@
           display:"QA Sample"
         }
       ],
+      pageMessage:
+        {
+          itemPerPage:6,
+          currentPage:1,
+          maxSize:8
+        },
       userRoles:["superAdmin","admin","normal","dataMaintenance"],
       units:[
         {id:"IN",display:"inch"},

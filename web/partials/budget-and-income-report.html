@@ -243,7 +243,7 @@
    
 </div>
 <div class="margin-top text-center">
-        <pagination boundary-links="true" total-items="totalItems" max-size="10" ng-model="currentPage" items-per-page="itemPerPage" ng-change="pageChanged()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        <pagination boundary-links="true" max-size="maxSize" total-items="totalItems" max-size="10" ng-model="currentPage" items-per-page="itemPerPage" ng-change="pageChanged()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 </div>
 <pre ng-show="debug">currentPage:{{currentPage | json}}</pre>	
 </div>
