@@ -6,10 +6,30 @@
     .controller('budgetAndIncomeReportCtrl',['$scope','$routeParams','$location', 'report', 'productTypeList','hospitalList','utilSvc',
         function($scope,$routeParams,$location,report,productTypeList,hospitalList,utilSvc){
           $scope.temp={};
-          $scope.saleForecastSearch={};
+          $scope.saleForecastSearch={};          
           if (report){
-            $scope.report=report;
-
+            $scope.report=report.BudgetAndIncomeData;
+            $scope.itemPerPage = 6;
+            $scope.currentPage = 1;
+            $scope.pageChanged=function(){              
+                $scope.reportListByPage=[];
+                var startData = $scope.itemPerPage * ($scope.currentPage-1);
+                var endData = $scope.itemPerPage * $scope.currentPage-1;
+                $scope.totalItems = $scope.report.length;
+                if(endData>$scope.report.length){
+                    endData = $scope.report.length-1
+                }
+                var num = 0;                          
+                if($scope.report){                  
+                    for(var i = startData;i<=endData;i++){                      
+                       if($scope.report[i]!=undefined){                          
+                            $scope.reportListByPage[num]=$scope.report[i];
+                        }
+                        num++;
+                    }
+                }
+            };
+            $scope.pageChanged();
             } else {
              
               $scope.productTypeList = productTypeList;
@@ -24,7 +44,25 @@
                 // $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
                 // $rootScope.productTypeNameQuery = $scope.saleForecastSearch.ProductTypeName;
                 // $rootScope.fHospNameQuery = $scope.saleForecastSearch.FHospName;
+              }
             }
-            }
+          //   $scope.adjustmentData=function(){
+          //     $scope.saleForecastListByPage=[];
+          //     var startData = $scope.itemPerPage * ($scope.currentPage-1);
+          //     var endData = $scope.itemPerPage * $scope.currentPage-1;
+          //     $scope.totalItems = $scope.report.length;
+          //     if(endData>$scope.report.length){
+          //         endData = $scope.report.length-1
+          //     }
+          //     var num = 0;
+          //     if($scope.report){
+          //         for(var i = startData;i<=endData;i++){
+          //             if($scope.report[i]!=undefined){
+          //                 $scope.saleForecastListByPage[num]=$scope.report[i];
+          //             }
+          //             num++;
+          //         }
+          //     }
+          // };
     }])
  }());

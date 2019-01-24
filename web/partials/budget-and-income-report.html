@@ -1,5 +1,5 @@
 <h2 class="text-center" style="padding-top:60px">预算植入收入报表</h2>
-<div class="margin-top-20" style="padding:30px 0 10px 0" ng-if="!report">
+<div class="margin-top-20" style="padding:30px 0 10px 0" ng-show="!report">
 <div class="margin-top-5 col-sm-8 col-sm-offset-2" >
     <form role="form" name="toNoForm">
        <div class="form-group" >
@@ -36,7 +36,7 @@
    </form>
  </div>    
 </div>
-<div class="padding-x-20" ng-init="temp.showTab='BudgetAndIncomeData'" ng-if="report">
+<div class="padding-x-20" ng-init="temp.showTab='BudgetAndIncomeData'" ng-show="report">
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs margin-bottom" role="tablist">
@@ -51,21 +51,100 @@
       <table class="table padding-top table-striped">
           <thead> 
               <tr>                  
-                  <th class="text-center">大区</th> 
-                  <th class="text-center">大区<br/>经理</th> 
-                  <th class="text-center">小区</th> 
-                  <th class="text-center">小区<br/>经理</th> 
-                  <th class="text-center">代表</th> 
-                  <th class="text-center">省</th> 
-                  <th class="text-center">市</th> 
-                  <th class="text-center">分销商<br/>编码</th> 
-                  <th class="text-center">分销商<br/>简称</th> 
-                  <th class="text-center">分销商<br/>名称</th> 
-                  <th class="text-center">医院<br/>辅助<br/>编码</th> 
-                  <th class="text-center">医院<br/>编码</th> 
-                  <th class="text-center">医院<br/>名称</th> 
-                  <th class="text-center">医院<br/>等级</th> 
-                  <th class="text-center">产品类别</th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FBigAreaName'; sortReverse = !sortReverse">
+                      大区
+                        <span ng-show="sortType == 'FBigAreaName' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FBigAreaName' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FBigAreaMgr'; sortReverse = !sortReverse">
+                      大区<br/>经理
+                      <span ng-show="sortType == 'FBigAreaMgr' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FBigAreaMgr' && sortReverse" class="fa fa-caret-up"></span>
+                </th> 
+                <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FAreaName'; sortReverse = !sortReverse">
+                      小区
+                        <span ng-show="sortType == 'FAreaName' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FAreaName' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FMgrName'; sortReverse = !sortReverse">
+                      小区<br/>经理
+                      <span ng-show="sortType == 'FMgrName' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FMgrName' && sortReverse" class="fa fa-caret-up"></span>
+                </th> 
+                <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FSalerName'; sortReverse = !sortReverse">
+                      代表
+                        <span ng-show="sortType == 'FSalerName' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FSalerName' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FProvince'; sortReverse = !sortReverse">
+                      省
+                        <span ng-show="sortType == 'FProvince' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FProvince' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FCity'; sortReverse = !sortReverse">
+                      市
+                        <span ng-show="sortType == 'FCity' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FCity' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FCustNum'; sortReverse = !sortReverse">
+                                分销商<br/>编码
+                        <span ng-show="sortType == 'FCustNum' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FCustNum' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  <!--
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FCustNameShort'; sortReverse = !sortReverse">
+                                分销商<br/>简称
+                        <span ng-show="sortType == 'FCustNameShort' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FCustNameShort' && sortReverse" class="fa fa-caret-up"></span>
+                  </th> 
+                  -->
+                  <th class="text-center">
+                        <a class="cursor-pointer" ng-click="sortType = 'FCity'; sortReverse = !sortReverse">
+                                分销商<br/>名称
+                        <span ng-show="sortType == 'FCity' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'FCity' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>           
+                  <!--
+                  <th class="text-center">                      
+                      <a class="cursor-pointer" ng-click="sortType = 'FHospNum'; sortReverse = !sortReverse">
+                            医院<br/>辅助<br/>编码
+                    <span ng-show="sortType == 'FHospNum' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'FHospNum' && sortReverse" class="fa fa-caret-up"></span>
+                </th> 
+                -->      
+                <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'FHospNumOk'; sortReverse = !sortReverse">
+                              医院<br/>编码
+                      <span ng-show="sortType == 'FHospNumOk' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'FHospNumOk' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>              
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'FHospNameOk'; sortReverse = !sortReverse">
+                              医院<br/>名称
+                      <span ng-show="sortType == 'FHospNameOk' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'FHospNameOk' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>       
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'FHospLevelName'; sortReverse = !sortReverse">
+                              医院<br/>等级
+                      <span ng-show="sortType == 'FHospLevelName' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'FHospLevelName' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>              
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'ProductTypeName'; sortReverse = !sortReverse">
+                                产品类别
+                      <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>                                           
                   <!--
                   <th class="text-center">商务标准价</th> 
                   <th class="text-center">商务达成返利</th> 
@@ -77,16 +156,48 @@
                   <th class="text-center">商务新医院开发奖</th> 
                   <th class="text-center">销售样品</th> 
                   -->
-                  <th class="text-center">实际价格</th> 
-                  <th class="text-center">实际数量</th> 
-                  <th class="text-center">实际金额收入</th> 
-                  <th class="text-center">预算价格</th> 
-                  <th class="text-center">预算数量</th> 
-                  <th class="text-center">预算植入收入</th> 
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'ActTotalPrice'; sortReverse = !sortReverse">
+                                实际价格
+                      <span ng-show="sortType == 'ActTotalPrice' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'ActTotalPrice' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>  
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'ActSaleQty'; sortReverse = !sortReverse">
+                                实际数量
+                      <span ng-show="sortType == 'ActSaleQty' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'ActSaleQty' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>  
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'ActTotalIncome'; sortReverse = !sortReverse">
+                                实际金额收入
+                      <span ng-show="sortType == 'ActTotalIncome' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'ActTotalIncome' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>  
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'Aprice'; sortReverse = !sortReverse">
+                                预算价格
+                      <span ng-show="sortType == 'Aprice' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'Aprice' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>  
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'Aamout'; sortReverse = !sortReverse">
+                                预算数量
+                      <span ng-show="sortType == 'Aamout' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'Aamout' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>  
+                  <th class="text-center">                      
+                        <a class="cursor-pointer" ng-click="sortType = 'ATotalIncome'; sortReverse = !sortReverse">
+                                预算植入收入
+                      <span ng-show="sortType == 'ATotalIncome' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'ATotalIncome' && sortReverse" class="fa fa-caret-up"></span>
+                  </th>                    
               </tr> 
           </thead> 
           <tbody> 
-              <tr ng-repeat="(idx,item) in report.BudgetAndIncomeData">                 
+                
+              <tr ng-show="reportListByPage&&reportListByPage.length>0" 
+                  ng-repeat="(idx,item) in reportListByPage| orderBy:sortType:sortReverse">                 
                   <td class="text-center">{{::item.FBigAreaName}}</td> 
                   <td class="text-center">{{::item.FBigAreaMgr}}</td> 
                   <td class="text-center">{{::item.FAreaName}}</td> 
@@ -95,9 +206,9 @@
                   <td class="text-center">{{::item.FProvince}}</td> 
                   <td class="text-center">{{::item.FCity}}</td> 
                   <td class="text-center">{{::item.FCustNum}}</td> 
-                  <td class="text-center">{{::item.FCustNameShort}}</td> 
+                  <!--<td class="text-center">{{::item.FCustNameShort}}</td> -->
                   <td class="text-center">{{::item.FCustNameOk}}</td> 
-                  <td class="text-center">{{::item.FHospNum}}</td> 
+                  <!--<td class="text-center">{{::item.FHospNum}}</td> -->      
                   <td class="text-center">{{::item.FHospNumOk}}</td> 
                   <td class="text-center">{{::item.FHospNameOk}}</td> 
                   <td class="text-center">{{::item.FHospLevelName}}</td>                                  
@@ -131,8 +242,12 @@
     <!-- businessPrice tab -->
    
 </div>
+<div class="margin-top text-center">
+        <pagination boundary-links="true" total-items="totalItems" max-size="10" ng-model="currentPage" items-per-page="itemPerPage" ng-change="pageChanged()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+</div>
+<pre ng-show="debug">currentPage:{{currentPage | json}}</pre>	
 </div>
 
 <div class="clearboth"></div>
-<pre ng-show="debug">report:{{report | json}}</pre>	
+<pre ng-show="debug">reportListByPage:{{reportListByPage | json}}</pre>	
 <pre ng-show="debug">temp:{{temp | json}}</pre>	

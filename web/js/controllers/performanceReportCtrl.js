@@ -20,6 +20,7 @@
                   endData = $scope.report.SFE_ImplantData.length-1
               }
               var num = 0;
+              debugger;
               if($scope.report.SFE_ImplantData){
                   for(var i = startData;i<=endData;i++){
                       if($scope.report.SFE_ImplantData[i]!=undefined){
