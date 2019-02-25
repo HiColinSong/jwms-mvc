@@ -4,10 +4,19 @@ const sqlSvc=require("./sqlService");
 
   //get user List
   exports.getSaleForecastList=function(dateStr,FHospName,ProductTypeName){
-    var stmt = "select * from dbo.V_BOSDocument_SaleForecast where year = @year and month = @month";
-    var date = new Date(dateStr);
-    let paramTypes={year:'sql.Int',month:'sql.Int'};
-    let paramValues={year:date.getFullYear(),month:date.getMonth()+1};
+    //var stmt = "select * from dbo.V_BOSDocument_SaleForecast where year = @year and month = @month";
+    // var date = new Date(dateStr);
+    // let paramTypes={year:'sql.Int',month:'sql.Int'};
+    // let paramValues={year:date.getFullYear(),month:date.getMonth()+1};
+    var stmt = "select * from dbo.V_BOSDocument_SaleForecast WHere ItemType=@Tmp";   
+    let paramTypes={Tmp:'sql.Int'};
+    let paramValues={Tmp:3};
+   
+    if(dateStr != undefined && dateStr != "undefined"){
+      stmt += " and FDateFrom <= @FDate AND FDateTo>= @FDate";
+      paramTypes["FDate"] = 'sql.NVarChar(50)';
+      paramValues["FDate"] = dateStr;
+    }
     if(FHospName != undefined && FHospName != "undefined"){
       stmt += " and FHospName = @FHospName";
       paramTypes["FHospName"] = 'sql.NVarChar(50)';
@@ -45,27 +54,28 @@ const sqlSvc=require("./sqlService");
   exports.insertOrUpdateSaleForecastProfile=function(saleForecast){
     //stmt will be something 4like: "exec JM_InsertOrUpdateUserProfile 'yd.zhu','朱亚东','BITSG','admin','1'"
     let stmt=["exec JM_InsertOrUpdateSaleForecastProfile"];
-    var Year;
-    var Month;
-    var date;
-    if(saleForecast.Date.indexOf("年")>-1){
-      let date_str = saleForecast.Date.replace(/年/g,"/");
-      date_str = date_str.replace(/月/g,"");
-      date = new Date(date_str);
-    } else {
-      date = new Date(saleForecast.Date);
-    }
-    Year = date.getFullYear();
-    Month = date.getMonth()+1;
+    // var Year;
+    // var Month;
+    // var date;
+    // if(saleForecast.Date.indexOf("年")>-1){
+    //   let date_str = saleForecast.Date.replace(/年/g,"/");
+    //   date_str = date_str.replace(/月/g,"");
+    //   date = new Date(date_str);
+    // } else {
+    //   date = new Date(saleForecast.Date);
+    // }
+    // Year = date.getFullYear();
+    // Month = date.getMonth()+1;
     if(saleForecast.FID == undefined){
       saleForecast.FID = -1;
     }
     if(saleForecast.Fnote == undefined){
       saleForecast.Fnote = '';
     }
+
     stmt.push(`${saleForecast.FID},`),
-    stmt.push(`${Year},`),
-    stmt.push(`${Month},`),
+    stmt.push(`'${saleForecast.FDateFrom}',`),
+    stmt.push(`'${saleForecast.FDateTo}',`),
     stmt.push(`'${saleForecast.FHospName}',`),    
     stmt.push(`'${saleForecast.ProductTypeName}',`),  
     stmt.push(`'${saleForecast.FEmpName}',`),

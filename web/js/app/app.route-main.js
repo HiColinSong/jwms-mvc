@@ -143,7 +143,7 @@
                             var deferred = $q.defer();
                             if ($route.current.params.date){
                                 util.pageLoading("start");
-                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date}).$promise.then(function(data){
+                            apiSvc.getBudgetAndIncomeReport({date:$route.current.params.date,FHospName:$route.current.params.FHospName,ProductTypeName:$route.current.params.ProductTypeName}).$promise.then(function(data){
                                 if (data){
                                     deferred.resolve(data);
                                 } else {

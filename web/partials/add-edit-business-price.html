@@ -75,26 +75,39 @@
             </div>
           </div>    
           <div class="form-group" ng-class="{'has-error':duplicateUserID}">
-            <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
+            <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">选择起始年月:</label>
             <div class="col-sm-6">
               <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
-                datepicker-options="{minMode: 'month'}"
+                datepicker-options="{minMode: 'month'}" 
                 datepicker-mode="'month'"
-                ng-model="businessPrice.Date" ng-blur="uniqueValidation()" is-open="opened" ng-readonly="true"
+                ng-blur="uniqueValidation()"
+                ng-model="businessPrice.FDateFrom" is-open="opened" ng-readonly="true"
                 ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
             </div>
-          </div>         
-        <div class="form-group">
-          <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 商务标准价</label>
-          <div class="col-sm-6">
-               <input type='number' step='0.01' class='col-sm-6 form-control'
-                               name='CSPrice'
-                               ng-required="true"
-                               class='full-width form-control'
-                               ng-class="{'submitted':submitted}"
-                               ng-model="businessPrice.CSPrice">
+          </div>    
+          
+          <div class="form-group" ng-class="{'has-error':duplicateUserID}">
+            <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">选择截至年月:</label>
+            <div class="col-sm-6">
+              <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                datepicker-options="{minMode: 'month'}" 
+                datepicker-mode="'month'"
+                ng-blur="uniqueValidation()"
+                ng-model="businessPrice.FDateTo" is-open="opened2" ng-readonly="true"
+                ng-required="true" close-text="关闭"  ng-click="opened2=true" clear-text="清除" current-text='本月'/>
+            </div>
+          </div>    
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 商务标准价</label>
+            <div class="col-sm-6">
+                 <input type='number' step='0.01' class='col-sm-6 form-control'
+                                 name='CSPrice'
+                                 ng-required="true"
+                                 class='full-width form-control'
+                                 ng-class="{'submitted':submitted}"
+                                 ng-model="businessPrice.CSPrice">
+            </div>
           </div>
-        </div>
           <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 商务达成返利</label>
             <div class="col-sm-6">
@@ -180,7 +193,7 @@
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName||!businessPrice.CSPrice||!businessPrice.BARebate||!businessPrice.TTBoot||!businessPrice.Spromotion||!businessPrice.BTBGift||!businessPrice.BNHDAward||duplicateUserID">
+      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName||!businessPrice.FDateFrom||!businessPrice.FDateTo||!businessPrice.CSPrice||!businessPrice.BARebate||!businessPrice.TTBoot||!businessPrice.Spromotion||!businessPrice.BTBGift||!businessPrice.BNHDAward||duplicateUserID">
       提交
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

@@ -8,6 +8,7 @@
         $scope.temp={};
         $scope.businessPriceSearch={};
         if (businessPriceList){
+           // debugger;
             $scope.businessPriceList = businessPriceList;
             $scope.totalItems = businessPriceList.length;
             $scope.itemPerPage = constants.pageMessage.itemPerPage;
@@ -20,7 +21,7 @@
                 if(endData>$scope.totalItems){
                     endData = $scope.totalItems-1
                 }
-                var num = 0;
+                var num = 0;                
                 if($scope.businessPriceList){
                     for(var i = startData;i<=endData;i++){
                         if($scope.businessPriceList[i]!=undefined){
@@ -38,8 +39,13 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                $location.path("/businessPriceMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.businessPriceSearch.ProductTypeName+"/"+$scope.businessPriceSearch.FHospName);
-                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                 // debugger;
+                var dateQuery=undefined;
+                if($scope.temp.dt!=undefined){
+                    dateQuery=utilSvc.formatDate($scope.temp.dt);
+                }                
+                $location.path("/businessPriceMaintenance/"+dateQuery+"/"+$scope.businessPriceSearch.ProductTypeName+"/"+$scope.businessPriceSearch.FHospName);
+                $rootScope.dateQuery = dateQuery;
                 $rootScope.productTypeNameQuery = $scope.businessPriceSearch.ProductTypeName;
                 $rootScope.fHospNameQuery = $scope.businessPriceSearch.FHospName;
             }
@@ -83,10 +89,8 @@
         };
         $scope.deleteBusinessPrice=function(businessPrice){
             var dateHere;
-            if($rootScope.dateQuery==undefined){
-                dateHere = businessPrice.Year+"-"+businessPrice.Month;
-            } else {
-                dateHere = $rootScope.dateQuery
+            if($rootScope.dateQuery!=undefined){               
+                dateHere = utilSvc.formatDate($rootScope.dateQuery);
             }
             apiSvc.deleteBusinessPrice({businessPrice:businessPrice,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){

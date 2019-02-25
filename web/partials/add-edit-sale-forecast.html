@@ -75,17 +75,31 @@
                       <!-- <div ng-if="authUser.UserRole!=='superAdmin'" class="margin-top-5" style="font-size:16px;font-weight:bold">{{user.UserRole}}</div> -->
                   </div>
               </div>    
+              
               <div class="form-group" ng-class="{'has-error':duplicateUserID}">
-                  <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">请选择日期:</label>
+                  <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">选择起始年月:</label>
                   <div class="col-sm-6">
                     <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
                       datepicker-options="{minMode: 'month'}" 
                       datepicker-mode="'month'"
                       ng-blur="uniqueValidation()"
-                      ng-model="saleForecast.Date" is-open="opened" ng-readonly="true"
+                      ng-model="saleForecast.FDateFrom" is-open="opened" ng-readonly="true"
                       ng-required="true" close-text="关闭"  ng-click="opened=true" clear-text="清除" current-text='本月'/>
                   </div>
                 </div>    
+                
+                <div class="form-group" ng-class="{'has-error':duplicateUserID}">
+                  <label class="col-sm-3 control-label no-padding-right field-required" for="woNo">选择截至年月:</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="col-sm-6 form-control" datepicker-popup="yyyy年M月" placeholder="请选择月份" 
+                      datepicker-options="{minMode: 'month'}" 
+                      datepicker-mode="'month'"
+                      ng-blur="uniqueValidation()"
+                      ng-model="saleForecast.FDateTo" is-open="opened2" ng-readonly="true"
+                      ng-required="true" close-text="关闭"  ng-click="opened2=true" clear-text="清除" current-text='本月'/>
+                  </div>
+                </div>    
+               
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 预算价格</label>
             <div class="col-sm-6">
@@ -135,7 +149,7 @@
   
     <div class="modal-footer text-center">
       <button type="submit" class="btn btn-primary" ng-click="submit()" 
-        ng-disabled="!saleForecast.FHospName||!saleForecast.FEmpName||!saleForecast.ProductTypeName||!saleForecast.Date||!saleForecast.Aprice||!saleForecast.Aamout||duplicateUserID">
+        ng-disabled="!saleForecast.FHospName||!saleForecast.FEmpName||!saleForecast.ProductTypeName||!saleForecast.FDateFrom||!saleForecast.FDateTo||!saleForecast.Aprice||!saleForecast.Aamout||duplicateUserID">
         提交
       </button>
       <button type="button" class="btn btn-default" ng-click="reset()">

@@ -38,15 +38,19 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                $location.path("/promotionDiscountMaintenance/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.promotionDiscountSearch.ProductTypeName+"/"+$scope.promotionDiscountSearch.FHospName);
-                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                var dateQuery=undefined;
+                if($scope.temp.dt!=undefined){
+                    dateQuery=utilSvc.formatDate($scope.temp.dt);
+                }  
+                $location.path("/promotionDiscountMaintenance/"+dateQuery+"/"+$scope.promotionDiscountSearch.ProductTypeName+"/"+$scope.promotionDiscountSearch.FHospName);
+                $rootScope.dateQuery = dateQuery;
                 $rootScope.productTypeNameQuery = $scope.promotionDiscountSearch.ProductTypeName;
                 $rootScope.fHospNameQuery = $scope.promotionDiscountSearch.FHospName;
             }
         }
 
         $scope.addOrEditPromotionDiscount=function(promotionDiscount){
-            var modalInstance;
+            var modalInstance;            
             modalInstance = $modal.open({
                 templateUrl: 'partials/add-edit-promotion-discount.html',
                 windowClass: "sub-detail-modal",
@@ -85,10 +89,8 @@
 
         $scope.deletePromotionDiscount=function(promotionDiscount){
             var dateHere;
-            if($rootScope.dateQuery==undefined){
-                dateHere = promotionDiscount.Year+"-"+promotionDiscount.Month;
-            } else {
-                dateHere = $rootScope.dateQuery
+            if($rootScope.dateQuery!=undefined){               
+                dateHere = utilSvc.formatDate($rootScope.dateQuery);
             }
             apiSvc.deletePromotionDiscount({promotionDiscount:promotionDiscount,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
                 function(data){

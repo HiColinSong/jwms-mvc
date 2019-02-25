@@ -27,7 +27,8 @@ app.use(bodyParser.urlencoded({
 	 rolling:true,//reset expiration to the original maxAage on every response
  	saveUninitialized:true,
  	cookie:{
- 		maxAge:1000*60*10 //ten mins
+		 //maxAge:1000*60*10 //ten mins
+		 maxAge:1000*60*20 
  	}
 
  }))

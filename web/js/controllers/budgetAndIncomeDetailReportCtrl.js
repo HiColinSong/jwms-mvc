@@ -38,7 +38,8 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                //add leading 0 to the scanned order no                
+                //add leading 0 to the scanned order no       
+                debugger;         
                 $location.path("/budgetAndIncomeDetailReport/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
             }
             }

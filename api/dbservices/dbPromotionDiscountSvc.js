@@ -3,10 +3,15 @@
 const sqlSvc=require("./sqlService");
 //get user List
 exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
-    var stmt = "select * from dbo.t_BOSDocument where ItemType =2 and year = @year and month = @month";
-    var date = new Date(dateStr);
-    let paramTypes={year:'sql.Int',month:'sql.Int'};
-    let paramValues={year:date.getFullYear(),month:date.getMonth()+1};
+    var stmt = "select * from dbo.t_BOSDocument  WHere ItemType=@Tmp";   
+    let paramTypes={Tmp:'sql.Int'};
+    let paramValues={Tmp:2};
+
+    if(dateStr != undefined && dateStr != "undefined"){
+      stmt += " and FDateFrom <= @FDate AND FDateTo>= @FDate";
+      paramTypes["FDate"] = 'sql.NVarChar(50)';
+      paramValues["FDate"] = dateStr;
+    }
     if(FHospName != undefined && FHospName != "undefined"){
       stmt += " and FHospName = @FHospName";
       paramTypes["FHospName"] = 'sql.NVarChar(50)';
@@ -32,24 +37,24 @@ exports.getPromotionDiscountList=function(dateStr,FHospName,ProductTypeName){
   exports.addPromotionDiscount=function(promotionDiscount){
     //stmt will be something 4like: "exec JM_InsertOrUpdateUserProfile 'yd.zhu','朱亚东','BITSG','admin','1'"
     let stmt=["exec JM_InsertOrUpdatePromotionDiscountProfile"];
-    var Year;
-    var Month;
-    var date;
-    if(promotionDiscount.Date.indexOf("年")>-1){
-      let date_str = promotionDiscount.Date.replace(/年/g,"/");
-      date_str = date_str.replace(/月/g,"");
-      date = new Date(date_str);
-    } else {
-      date = new Date(promotionDiscount.Date);
-    }
-    Year = date.getFullYear();
-    Month = date.getMonth()+1;
+    // var Year;
+    // var Month;
+    // var date;
+    // if(promotionDiscount.Date.indexOf("年")>-1){
+    //   let date_str = promotionDiscount.Date.replace(/年/g,"/");
+    //   date_str = date_str.replace(/月/g,"");
+    //   date = new Date(date_str);
+    // } else {
+    //   date = new Date(promotionDiscount.Date);
+    // }
+    // Year = date.getFullYear();
+    // Month = date.getMonth()+1;
     if(promotionDiscount.FID == undefined){
       promotionDiscount.FID = -1;
     }
     stmt.push(`${promotionDiscount.FID},`),
-    stmt.push(`${Year},`),
-    stmt.push(`${Month},`),
+    stmt.push(`'${promotionDiscount.FDateFrom}',`),
+    stmt.push(`'${promotionDiscount.FDateTo}',`),
     stmt.push(`'${promotionDiscount.FHospName}',`),
     stmt.push(`'${promotionDiscount.ProductTypeName}',`),
     stmt.push(`${promotionDiscount.Ssample},`),

@@ -140,9 +140,20 @@
                                     产品类别
                           <span ng-show="sortType == 'ProductTypeName' && !sortReverse" class="fa fa-caret-down"></span>
                           <span ng-show="sortType == 'ProductTypeName' && sortReverse" class="fa fa-caret-up"></span>
-                      </th>                                           
-                  <th class="text-center">商务标准价</th> 
-                  <th class="text-center">商务达成返利</th> 
+                      </th>                           
+                      <th class="text-center">                      
+                              <a class="cursor-pointer" ng-click="sortType = 'CSPrice'; sortReverse = !sortReverse">
+                                          商务标准价
+                            <span ng-show="sortType == 'CSPrice' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'CSPrice' && sortReverse" class="fa fa-caret-up"></span>
+                        </th>      
+                        <th class="text-center">                      
+                                    <a class="cursor-pointer" ng-click="sortType = 'BARebate'; sortReverse = !sortReverse">
+                                                商务达成返利
+                                  <span ng-show="sortType == 'BARebate' && !sortReverse" class="fa fa-caret-down"></span>
+                                  <span ng-show="sortType == 'BARebate' && sortReverse" class="fa fa-caret-up"></span>
+                        </th>                    
+                  
                   <th class="text-center">招标价补</th> 
                   <th class="text-center">商务价格1</th> 
                   <th class="text-center">销售促销</th> 

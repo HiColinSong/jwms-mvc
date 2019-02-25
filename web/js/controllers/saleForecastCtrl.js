@@ -39,8 +39,12 @@
                 $scope.temp.dt = null;
               };
               $scope.submitForm = function() {
-                $location.path("/saleForecast/"+utilSvc.formatDate($scope.temp.dt)+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
-                $rootScope.dateQuery = utilSvc.formatDate($scope.temp.dt);
+                var dateQuery=undefined;
+                if($scope.temp.dt!=undefined){
+                    dateQuery=utilSvc.formatDate($scope.temp.dt);
+                }                
+                $location.path("/saleForecast/"+dateQuery+"/"+$scope.saleForecastSearch.ProductTypeName+"/"+$scope.saleForecastSearch.FHospName);
+                $rootScope.dateQuery = dateQuery;
                 $rootScope.productTypeNameQuery = $scope.saleForecastSearch.ProductTypeName;
                 $rootScope.fHospNameQuery = $scope.saleForecastSearch.FHospName;
             }
@@ -104,12 +108,10 @@
 
         $scope.deleteSaleForecast=function(saleForecast){       
             var dateHere;
-            if($rootScope.dateQuery==undefined){
-                dateHere = saleForecast.Year+"-"+saleForecast.Month;
-            } else {
-                dateHere = $rootScope.dateQuery
+            if($rootScope.dateQuery!=undefined){               
+                dateHere = utilSvc.formatDate($rootScope.dateQuery);
             }
-            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(
+            apiSvc.deleteSaleForecast({saleForecast:saleForecast,date:dateHere,ProductTypeName:$rootScope.productTypeNameQuery,FHospName:$rootScope.fHospNameQuery}).$promise.then(              
                 function(data){
                     $scope.saleForecastList = data;
                     $scope.adjustmentData();
