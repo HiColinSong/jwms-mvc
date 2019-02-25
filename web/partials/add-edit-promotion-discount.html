@@ -129,7 +129,10 @@
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!promotionDiscount.FHospName||!promotionDiscount.FDateFrom||!promotionDiscount.FDateTo||!promotionDiscount.ProductTypeName||!promotionDiscount.Ssample||!promotionDiscount.ODActivity||duplicateUserID">
+      ng-disabled="!promotionDiscount.FHospName||!promotionDiscount.FDateFrom||!promotionDiscount.FDateTo||!promotionDiscount.ProductTypeName
+      ||(!promotionDiscount.Ssample&&promotionDiscount.Ssample!==0)
+      ||(!promotionDiscount.ODActivity&&promotionDiscount.ODActivity!==0)
+      ||duplicateUserID">
       提交
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

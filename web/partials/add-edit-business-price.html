@@ -193,7 +193,15 @@
 
   <div class="modal-footer text-center">
     <button type="submit" class="btn btn-primary" ng-click="submit()" 
-      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName||!businessPrice.FDateFrom||!businessPrice.FDateTo||!businessPrice.CSPrice||!businessPrice.BARebate||!businessPrice.TTBoot||!businessPrice.Spromotion||!businessPrice.BTBGift||!businessPrice.BNHDAward||duplicateUserID">
+      ng-disabled="!businessPrice.FHospName||!businessPrice.DistributorName||!businessPrice.ProductTypeName
+      ||!businessPrice.FDateFrom||!businessPrice.FDateTo
+      ||(!businessPrice.CSPrice&&businessPrice.CSPrice!==0)
+      ||(!businessPrice.BARebate&&businessPrice.BARebate!==0)
+      ||(!businessPrice.TTBoot&&businessPrice.TTBoot!==0)
+      ||(!businessPrice.Spromotion&&businessPrice.Spromotion!==0)
+      ||(!businessPrice.BTBGift&&businessPrice.BTBGift!==0)
+      ||(!businessPrice.BNHDAward&&businessPrice.BNHDAward!==0)
+      ||duplicateUserID">
       提交
     </button>
     <button type="button" class="btn btn-default" ng-click="reset()">

@@ -104,7 +104,7 @@
             <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 预算价格</label>
             <div class="col-sm-6">
                   <input type='number' class='col-sm-6 form-control'
-                                  name='remark'
+                                  name='Aprice'
                                   ng-required="true"
                                   class='full-width form-control'
                                   ng-class="{'submitted':submitted}"
@@ -117,7 +117,7 @@
               <label class="col-sm-3 control-label no-padding-right field-required" for="name"> 预算数量</label>
               <div class="col-sm-6">
                    <input type='number' class='col-sm-6 form-control'
-                                   name='remark'
+                                   name='Aamout'
                                    ng-required="true"
                                    class='full-width form-control'
                                    ng-class="{'submitted':submitted}"
@@ -146,12 +146,21 @@
           <label class="col-sm-20 no-margin-x margin-top-5" for="name" ng-show="duplicateUserID"> 本月份所对应的医院、销售代表、产品类型数据已经存在！</label>
       </div>
     </div>
-  
+  <!--
+  <div class="modal-footer text-center">
+      !saleForecast.Aamout:{{!saleForecast.Aamout}}<br/>
+      saleForecast.Aamout:{{saleForecast.Aamout}}<br/>
+      saleForecast.Aamout=='':{{saleForecast.Aamout==''}}<br/>
+      saleForecast.Aamout===0:{{saleForecast.Aamout===0}}<br/>
+      saleForecast.Aamout!==0:{{saleForecast.Aamout!==0}}<br/>
+
+  </div>
+  -->
     <div class="modal-footer text-center">
       <button type="submit" class="btn btn-primary" ng-click="submit()" 
-        ng-disabled="!saleForecast.FHospName||!saleForecast.FEmpName||!saleForecast.ProductTypeName||!saleForecast.FDateFrom||!saleForecast.FDateTo||!saleForecast.Aprice||!saleForecast.Aamout||duplicateUserID">
+        ng-disabled="!saleForecast.FHospName||!saleForecast.FEmpName||!saleForecast.ProductTypeName||!saleForecast.FDateFrom||!saleForecast.FDateTo||(!saleForecast.Aprice&&saleForecast.Aprice!==0)||(!saleForecast.Aamout&&saleForecast.Aamout!==0)||duplicateUserID">
         提交
-      </button>
+      </button>     
       <button type="button" class="btn btn-default" ng-click="reset()">
         重置
       </button>
